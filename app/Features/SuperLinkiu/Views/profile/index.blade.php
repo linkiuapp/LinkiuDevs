@@ -1,14 +1,12 @@
 @extends('shared::layouts.admin')
-
 @section('title', 'Perfil de Administrador')
-
 @section('content')
 <div class="container-fluid">
     <!-- Header con título y botón de acción -->
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-lg font-bold text-black-400">Perfil de Administrador</h1>
     </div>
-
+    
     @if(session('success'))
     <div class="alert-success mb-6">
         <div class="flex items-start gap-3 flex-1">
@@ -24,6 +22,21 @@
     </div>
     @endif
 
+    @if(session('error'))
+    <div class="alert-error mb-6">
+        <div class="flex items-start gap-3 flex-1">
+            <x-solar-close-circle-bold class="w-6 h-6 shrink-0 mt-1" />
+            <div class="flex-1">
+                <h4 class="font-semibold mb-1">Error</h4>
+                <p class="text-sm font-normal opacity-90">{{ session('error') }}</p>
+            </div>
+        </div>
+        <button class="alert-close" onclick="this.parentElement.remove()">
+            <x-solar-close-circle-outline class="w-5 h-5" />
+        </button>
+    </div>
+    @endif
+    
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Columna de información personal -->
         <div class="lg:col-span-1">
@@ -32,7 +45,11 @@
                     <div class="text-center">
                         <div class="profile-pic mb-6">
                             @if($user->avatar_path)
-                                <img src="{{ Storage::disk(config('filesystems.default'))->url($user->avatar_path) }}" alt="Avatar" class="rounded-full mx-auto" width="150">
+                                @if(config('filesystems.default') === 's3')
+                                    <img src="{{ Storage::disk('s3')->url($user->avatar_path) }}" alt="Avatar" class="rounded-full mx-auto" width="150">
+                                @else
+                                    <img src="{{ asset('storage/'.$user->avatar_path) }}" alt="Avatar" class="rounded-full mx-auto" width="150">
+                                @endif
                             @else
                                 <div class="w-32 h-32 bg-primary-200 rounded-full flex items-center justify-center mx-auto">
                                     <span class="text-white-50 text-4xl font-medium">
@@ -181,7 +198,6 @@
         </div>
     </div>
 </div>
-
 @push('scripts')
 <script>
     // Manejo de tabs

@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
@@ -22,7 +25,7 @@ class ProfileController extends Controller
     /**
      * Actualizar la información del perfil
      */
-    public function updateProfile(Request $request)
+    public function update(Request $request)
     {
         $user = Auth::user();
         
@@ -55,33 +58,82 @@ class ProfileController extends Controller
     }
     
     /**
-     * Actualizar la imagen de perfil
+     * Actualizar avatar del usuario
      */
     public function updateAvatar(Request $request)
     {
-        $request->validate([
-            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-        
-        $user = Auth::user();
-        
-        // Eliminar avatar anterior si existe
-        if ($user->avatar_path && Storage::disk(config('filesystems.default'))->exists($user->avatar_path)) {
-            Storage::disk(config('filesystems.default'))->delete($user->avatar_path);
+        try {
+            $user = Auth::user();
+            
+            $validator = Validator::make($request->all(), [
+                'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+            ]);
+
+            if ($validator->fails()) {
+                return back()->withErrors($validator->errors())->with('error', 'Archivo inválido');
+            }
+
+            DB::beginTransaction();
+            
+            try {
+                // Eliminar avatar anterior si existe
+                if ($user->avatar_path) {
+                    // Para desarrollo local
+                    if (Storage::disk('public')->exists($user->avatar_path)) {
+                        Storage::disk('public')->delete($user->avatar_path);
+                    }
+                    // Para producción (S3)
+                    if (config('filesystems.default') === 's3' && Storage::disk('s3')->exists($user->avatar_path)) {
+                        Storage::disk('s3')->delete($user->avatar_path);
+                    }
+                }
+                
+                // Subir nuevo avatar
+                $file = $request->file('avatar');
+                $filename = 'avatar_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+                
+                // Determinar el disco a usar
+                $disk = config('filesystems.default', 'public');
+                
+                // Subir archivo
+                if ($disk === 's3') {
+                    // Para producción con S3
+                    $path = $file->storeAs('avatars', $filename, 's3');
+                    // Hacer público el archivo
+                    Storage::disk('s3')->setVisibility($path, 'public');
+                } else {
+                    // Para desarrollo local
+                    $path = $file->storeAs('avatars', $filename, 'public');
+                }
+                
+                // Actualizar usuario
+                $user->avatar_path = $path;
+                $user->save();
+                
+                DB::commit();
+                
+                return back()->with('success', 'Avatar actualizado correctamente.');
+                
+            } catch (\Exception $e) {
+                DB::rollBack();
+                throw $e;
+            }
+            
+        } catch (\Exception $e) {
+            Log::error('Error al subir avatar', [
+                'user_id' => Auth::id(),
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return back()->with('error', 'Error al subir el avatar. Por favor, intenta nuevamente.');
         }
-        
-        // Guardar nuevo avatar
-        $path = $request->file('avatar')->store('avatars', config('filesystems.default'));
-        $user->avatar_path = $path;
-        $user->save();
-        
-        return redirect()->route('superlinkiu.profile.index')->with('success', 'Imagen de perfil actualizada correctamente.');
     }
     
     /**
      * Actualizar la configuración del sistema
      */
-    public function updateSystemSettings(Request $request)
+    public function updateSystem(Request $request)
     {
         $request->validate([
             'app_name' => 'required|string|max:255',
@@ -89,22 +141,54 @@ class ProfileController extends Controller
             'app_favicon' => 'nullable|image|mimes:ico,png|max:1024',
         ]);
         
-        // Guardar configuración en el archivo .env
-        $this->updateEnvVariable('APP_NAME', $request->app_name);
-        
-        // Procesar logo si se ha subido
-        if ($request->hasFile('app_logo')) {
-            $logoPath = $request->file('app_logo')->store('system', config('filesystems.default'));
-            // Aquí podrías guardar la ruta en una tabla de configuración o en un archivo
+        try {
+            // Guardar configuración en el archivo .env
+            $this->updateEnvVariable('APP_NAME', $request->app_name);
+            
+            $disk = config('filesystems.default', 'public');
+            
+            // Procesar logo si se ha subido
+            if ($request->hasFile('app_logo')) {
+                $logoFile = $request->file('app_logo');
+                $logoFilename = 'logo_' . time() . '.' . $logoFile->getClientOriginalExtension();
+                
+                if ($disk === 's3') {
+                    $logoPath = $logoFile->storeAs('system', $logoFilename, 's3');
+                    Storage::disk('s3')->setVisibility($logoPath, 'public');
+                } else {
+                    $logoPath = $logoFile->storeAs('system', $logoFilename, 'public');
+                }
+                
+                // Aquí podrías guardar la ruta en una tabla de configuración
+                $this->updateEnvVariable('APP_LOGO', $logoPath);
+            }
+            
+            // Procesar favicon si se ha subido
+            if ($request->hasFile('app_favicon')) {
+                $faviconFile = $request->file('app_favicon');
+                $faviconFilename = 'favicon_' . time() . '.' . $faviconFile->getClientOriginalExtension();
+                
+                if ($disk === 's3') {
+                    $faviconPath = $faviconFile->storeAs('system', $faviconFilename, 's3');
+                    Storage::disk('s3')->setVisibility($faviconPath, 'public');
+                } else {
+                    $faviconPath = $faviconFile->storeAs('system', $faviconFilename, 'public');
+                }
+                
+                // Aquí podrías guardar la ruta en una tabla de configuración
+                $this->updateEnvVariable('APP_FAVICON', $faviconPath);
+            }
+            
+            return back()->with('success', 'Configuración del sistema actualizada correctamente.');
+            
+        } catch (\Exception $e) {
+            Log::error('Error al actualizar configuración del sistema', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return back()->with('error', 'Error al actualizar la configuración del sistema.');
         }
-        
-        // Procesar favicon si se ha subido
-        if ($request->hasFile('app_favicon')) {
-            $faviconPath = $request->file('app_favicon')->store('system', config('filesystems.default'));
-            // Aquí podrías guardar la ruta en una tabla de configuración o en un archivo
-        }
-        
-        return redirect()->route('superlinkiu.profile.index')->with('success', 'Configuración del sistema actualizada correctamente.');
     }
     
     /**
@@ -116,6 +200,9 @@ class ProfileController extends Controller
         
         if (file_exists($path)) {
             $content = file_get_contents($path);
+            
+            // Escapar caracteres especiales en el valor
+            $value = addslashes($value);
             
             // Reemplazar la variable si existe
             if (strpos($content, $key . '=') !== false) {
