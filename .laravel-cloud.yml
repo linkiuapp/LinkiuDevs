@@ -11,6 +11,7 @@ environments:
       - 'php artisan view:cache'
     deploy:
       - 'php artisan migrate --force'
+      - 'php artisan storage:link'
     variables:
       - APP_ENV=production
       - APP_DEBUG=false
