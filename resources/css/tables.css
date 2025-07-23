@@ -1,0 +1,69 @@
+/* TODAS las declaraciones @import deben ir primero */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+/* Luego, tus directivas de Tailwind CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos tipográficos personalizados */
+@layer base {
+    body {
+        font-family: 'Inter', sans-serif;
+    }
+}
+
+
+@layer base {
+    .table-container {
+        @apply bg-white-50 rounded-lg px-4 py-8 overflow-hidden;
+    }
+
+    .table-header {
+        @apply text-xs justify-between font-normal tracking-wide text-black-300 uppercase border-b border-white-300 bg-white-50;
+    }
+}
+
+@layer components {
+    .bagde-table-primary {
+        @apply bg-primary-200 text-white-50 px-4 py-1 rounded-full text-sm font-semibold;
+    }
+
+    .bagde-table-success {
+        @apply bg-success-200 text-black-400 px-4 py-1 rounded-full text-sm font-semibold;
+    }
+
+    .bagde-table-warning {
+        @apply bg-warning-200 text-error-50 px-4 py-1 rounded-full text-sm font-semibold;
+    }
+
+    .bagde-table-error {
+        @apply bg-error-200 text-white-50 px-4 py-1 rounded-full text-sm font-semibold;
+    }
+
+    .table-toggle {
+        @apply w-11 h-6 bg-white-200 rounded-full peer-checked:after:translate-x-full peer-checked:after:border-white-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white-50 after:border-white-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200;
+    }
+
+    .table-action-show {
+        @apply bg-primary-50 hover:bg-primary-200 hover:text-white-50 text-primary-300 p-2 rounded-lg transition-colors;
+    }
+
+    .table-action-edit {
+        @apply bg-info-50 hover:bg-info-200 hover:text-white-50 text-info-300 p-2 rounded-lg transition-colors;
+    }
+
+    .table-action-login {
+        @apply bg-success-50 hover:bg-success-200 hover:text-black-400 text-black-400 p-2 rounded-lg transition-colors;
+    }
+
+    .table-action-delete {
+        @apply bg-error-50 hover:bg-error-200 hover:text-white-50 text-error-300 p-2 rounded-lg transition-colors;
+    }
+
+    .table-action-icon {
+        @apply w-5 h-5;
+    }
+}

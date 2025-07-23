@@ -1,0 +1,5 @@
+---
+description: utilizar la escala text-lg como maximo en los sistemas superadmin y admin
+globs:
+alwaysApply: false
+---

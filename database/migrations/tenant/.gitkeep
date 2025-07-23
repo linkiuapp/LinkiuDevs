@@ -1,0 +1,2 @@
+# Esta carpeta contiene las migraciones específicas para cada tenant
+# Por ejemplo: productos, categorías, pedidos, etc. 

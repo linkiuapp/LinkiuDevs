@@ -9,3 +9,64 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* TODAS las declaraciones @import deben ir primero */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import './components.css';
+@import './tables.css';
+
+
+/* Luego, tus directivas de Tailwind CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind tables;
+
+/* Estilos tipográficos personalizados */
+@layer base {
+    body {
+        font-family: 'Inter', sans-serif;
+    }
+}
+
+
+
+/* Sidebar Styles */
+.sidebar {
+    width: 300px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 40;
+}
+
+/* Navbar Styles */
+.navbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: calc(100% - 300px);
+    z-index: 30;
+}
+
+/* Main content */
+.main-content {
+    margin-left: 300px;
+    margin-top: 80px;
+    padding: 1rem;
+    height: calc(100vh - 130px);
+    overflow-y: auto;
+}
+
+
+/* Footer Styles */
+.main-footer {
+    width: calc(100% - 300px);
+    /* Resta el ancho del sidebar */
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 30;
+}

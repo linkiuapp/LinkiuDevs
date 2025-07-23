@@ -1,5 +1,8 @@
 {
+<<<<<<< HEAD
     "$schema": "https://json.schemastore.org/package.json",
+=======
+>>>>>>> eb4d7bce (Agrego archivos del proyecto dentro del repo)
     "private": true,
     "type": "module",
     "scripts": {
@@ -7,11 +10,26 @@
         "dev": "vite"
     },
     "devDependencies": {
+<<<<<<< HEAD
         "@tailwindcss/vite": "^4.0.0",
         "axios": "^1.8.2",
         "concurrently": "^9.0.1",
         "laravel-vite-plugin": "^1.2.0",
         "tailwindcss": "^4.0.0",
         "vite": "^6.2.4"
+=======
+        "autoprefixer": "^10.4.14",
+        "axios": "^1.6.1",
+        "laravel-echo": "^2.1.6",
+        "laravel-vite-plugin": "^1.0.0",
+        "postcss": "^8.4.24",
+        "pusher-js": "^8.4.0",
+        "tailwindcss": "^3.3.0",
+        "vite": "^5.0.0"
+    },
+    "dependencies": {
+        "@alpinejs/collapse": "^3.14.9",
+        "alpinejs": "^3.13.0"
+>>>>>>> eb4d7bce (Agrego archivos del proyecto dentro del repo)
     }
 }

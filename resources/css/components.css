@@ -1,0 +1,1076 @@
+/* TODAS las declaraciones @import deben ir primero */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+/* Luego, tus directivas de Tailwind CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos tipográficos personalizados */
+@layer base {
+    body {
+        font-family: 'Inter', sans-serif;
+    }
+}
+
+@layer components {
+
+    /* Clases de colores personalizadas */
+    .btn-primary {
+        @apply bg-primary-200 hover:bg-primary-300 text-white-50;
+    }
+
+    /* Backgrounds con opacidad */
+    .bg-primary-soft {
+        @apply bg-primary-50 border border-primary-100;
+    }
+
+    .bg-secondary-soft {
+        @apply bg-secondary-50 border border-secondary-100;
+    }
+
+    .bg-success-soft {
+        @apply bg-success-50 border border-success-100;
+    }
+
+    .bg-error-soft {
+        @apply bg-error-50 border border-error-100;
+    }
+
+    .bg-info-soft {
+        @apply bg-info-50 border border-info-100;
+    }
+
+    /* Textos con colores semánticos */
+    .text-primary-main {
+        @apply text-primary-300;
+    }
+
+    .text-secondary-main {
+        @apply text-secondary-300;
+    }
+
+    .text-success-main {
+        @apply text-success-300;
+    }
+
+    .text-error-main {
+        @apply text-error-300;
+    }
+
+    .text-info-main {
+        @apply text-info-300;
+    }
+
+    .item-sidebar {
+        @apply flex items-center text-2xs font-normal px-3 py-2 text-black-200 rounded-lg hover:bg-primary-200 hover:text-primary-50 transition-colors duration-200;
+    }
+
+    .item-sidebar-active {
+        @apply flex items-center text-2xs font-normal px-3 py-2 text-primary-50 bg-primary-200 rounded-lg transition-colors duration-200;
+    }
+
+    .title-group-sidebar {
+        @apply text-xs font-semibold px-2 py-1 text-black-300 uppercase tracking-wide;
+    }
+
+    .navbar {
+        @apply bg-white-50 px-2;
+    }
+
+    .user-name-navbar {
+        @apply text-base font-semibold px-2 py-2 text-black-400;
+    }
+
+    .breadcrumb {
+        @apply text-2xs font-normal px-2 py-1 text-black-400 flex flex-wrap items-center justify-between gap-2 text-xs;
+    }
+
+    .footer {
+        @apply text-2xs font-normal px-4 border-t border-gray-200 bg-white-50 border-gray-700 mt-auto py-2 items-center;
+    }
+
+    .card {
+        @apply bg-white-50 rounded-xl p-1 overflow-hidden;
+    }
+
+    .card-header {
+        @apply border-b border-white-100 bg-white-50 py-4 px-6;
+    }
+
+    .title-card {
+        @apply text-basex font-bold text-black-300;
+    }
+
+    .card-body {
+        @apply p-6;
+    }
+
+}
+
+/* Alerts */
+@layer components {
+    .alert-primary {
+        @apply text-base font-semibold bg-primary-50 text-primary-300 border border-primary-200 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-secondary {
+        @apply text-base font-semibold bg-secondary-50 text-secondary-200 border border-secondary-200 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-success {
+        @apply text-base font-semibold bg-success-50 text-success-300 border border-success-200 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-warning {
+        @apply text-base font-semibold bg-warning-50 text-warning-300 border border-warning-200 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-info {
+        @apply text-base font-semibold bg-info-50 text-info-300 border border-info-200 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-error {
+        @apply text-base font-semibold bg-error-50 text-error-300 border border-error-200 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-close {
+        @apply text-2xl;
+    }
+
+    .alert-outline {
+        @apply bg-transparent;
+    }
+
+    .alert-outline-primary {
+        @apply text-base font-semibold text-primary-300 border border-primary-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-outline-secondary {
+        @apply text-base font-semibold text-secondary-200 border border-secondary-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-outline-success {
+        @apply text-base font-semibold text-success-300 border border-success-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-outline-warning {
+        @apply text-base font-semibold text-warning-300 border border-warning-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-outline-info {
+        @apply text-base font-semibold text-info-300 border border-info-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-outline-error {
+        @apply text-base font-semibold text-error-300 border border-error-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-solid-primary {
+        @apply text-base font-semibold bg-primary-200 text-primary-50 border border-primary-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-solid-secondary {
+        @apply text-base font-semibold bg-secondary-200 text-secondary-50 border border-secondary-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-solid-success {
+        @apply text-base font-semibold bg-success-200 text-black-400 border border-success-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-solid-warning {
+        @apply text-base font-semibold bg-warning-200 text-black-400 border border-warning-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-solid-info {
+        @apply text-base font-semibold bg-info-200 text-info-50 border border-info-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-solid-error {
+        @apply text-base font-semibold bg-error-200 text-error-50 border border-error-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-with-icon-primary {
+        @apply text-base font-semibold bg-primary-50 text-primary-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-with-icon-secondary {
+        @apply text-base font-semibold bg-secondary-50 text-secondary-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-with-icon-success {
+        @apply text-base font-semibold bg-success-50 text-success-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-with-icon-warning {
+        @apply text-base font-semibold bg-warning-50 text-warning-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-with-icon-info {
+        @apply text-base font-semibold bg-info-50 text-info-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-with-icon-error {
+        @apply text-base font-semibold bg-error-50 text-error-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-left-border-primary {
+        @apply text-base font-semibold bg-primary-50 text-primary-300 border-l-4 border-primary-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-left-border-secondary {
+        @apply text-base font-semibold bg-secondary-50 text-secondary-300 border-l-4 border-secondary-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-left-border-success {
+        @apply text-base font-semibold bg-success-50 text-success-300 border-l-4 border-success-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-left-border-warning {
+        @apply text-base font-semibold bg-warning-50 text-warning-300 border-l-4 border-warning-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-left-border-info {
+        @apply text-base font-semibold bg-info-50 text-info-300 border-l-4 border-info-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-left-border-error {
+        @apply text-base font-semibold bg-error-50 text-error-300 border-l-4 border-error-300 px-6 py-3 mb-0 rounded-lg flex items-center justify-between;
+    }
+
+    .alert-with-description-primary {
+        @apply text-base font-semibold bg-primary-50 text-primary-300 px-6 py-3 mb-0 rounded-lg;
+    }
+
+    .alert-with-description-success {
+        @apply text-base font-semibold bg-success-50 text-success-300 px-6 py-3 mb-0 rounded-lg;
+    }
+
+    .alert-with-description-warning {
+        @apply text-base font-semibold bg-warning-50 text-warning-300 px-6 py-3 mb-0 rounded-lg;
+    }
+
+    .alert-with-description-info {
+        @apply text-base font-semibold bg-info-50 text-info-300 px-6 py-3 mb-0 rounded-lg;
+    }
+
+    .alert-with-description-error {
+        @apply text-base font-semibold bg-error-50 text-error-300 px-6 py-3 mb-0 rounded-lg;
+    }
+
+    .alert-with-icon-and-description-primary {
+        @apply text-base font-semibold bg-primary-50 text-primary-300 px-6 py-3 mb-0 rounded-lg;
+    }
+
+    .alert-with-icon-and-description-success {
+        @apply text-base font-semibold bg-success-50 text-success-300 px-6 py-3 mb-0 rounded-lg;
+    }
+
+    .alert-with-icon-and-description-warning {
+        @apply text-base font-semibold bg-warning-50 text-warning-300 px-6 py-3 mb-0 rounded-lg;
+    }
+
+    .alert-with-icon-and-description-info {
+        @apply text-base font-semibold bg-info-50 text-info-300 px-6 py-3 mb-0 rounded-lg;
+    }
+
+    .alert-with-icon-and-description-error {
+        @apply text-base font-semibold bg-error-50 text-error-300 px-6 py-3 mb-0 rounded-lg;
+    }
+
+}
+
+/* Badges */
+@layer components {
+    .badge-primary {
+        @apply text-sm font-semibold bg-primary-200 text-primary-50 px-5 py-1.5 rounded;
+    }
+
+    .badge-secondary {
+        @apply text-sm font-semibold bg-secondary-200 text-secondary-50 px-5 py-1.5 rounded;
+    }
+
+    .badge-success {
+        @apply text-sm font-semibold bg-success-200 text-success-300 px-5 py-1.5 rounded;
+    }
+
+    .badge-info {
+        @apply text-sm font-semibold bg-info-200 text-info-50 px-5 py-1.5 rounded;
+    }
+
+    .badge-warning {
+        @apply text-sm font-semibold bg-warning-200 text-black-400 px-5 py-1.5 rounded;
+    }
+
+    .badge-error {
+        @apply text-sm font-semibold bg-error-200 text-error-50 px-5 py-1.5 rounded;
+    }
+
+    .badge-dark {
+        @apply text-sm font-semibold bg-black-400 text-black-50 px-5 py-1.5 rounded;
+    }
+
+    .badge-outline-primary {
+        @apply text-sm font-semibold bg-transparent text-primary-300 border border-primary-300 px-5 py-1.5 rounded;
+    }
+
+    .badge-outline-secondary {
+        @apply text-sm font-semibold bg-transparent text-secondary-300 border border-secondary-300 px-5 py-1.5 rounded;
+    }
+
+    .badge-outline-success {
+        @apply text-sm font-semibold bg-transparent text-success-300 border border-success-300 px-5 py-1.5 rounded;
+    }
+
+    .badge-outline-info {
+        @apply text-sm font-semibold bg-transparent text-info-300 border border-info-300 px-5 py-1.5 rounded;
+    }
+
+    .badge-outline-warning {
+        @apply text-sm font-semibold bg-transparent text-warning-300 border border-warning-300 px-5 py-1.5 rounded;
+    }
+
+    .badge-outline-error {
+        @apply text-sm font-semibold bg-transparent text-error-300 border border-error-300 px-5 py-1.5 rounded;
+    }
+
+    .badge-outline-dark {
+        @apply text-sm font-semibold bg-transparent text-black-300 border border-black-300 px-5 py-1.5 rounded;
+    }
+
+    .badge-soft-primary {
+        @apply text-sm font-semibold bg-primary-50 text-primary-300 border border-primary-300 px-2 py-1.5 rounded;
+    }
+
+    .badge-soft-secondary {
+        @apply text-sm font-semibold bg-secondary-50 text-secondary-300 border border-secondary-300 px-2 py-1.5 rounded;
+    }
+
+    .badge-soft-success {
+        @apply text-sm font-semibold bg-success-50 text-success-300 border border-success-300 px-2 py-1.5 rounded;
+    }
+
+    .badge-soft-info {
+        @apply text-sm font-semibold bg-info-50 text-info-300 border border-info-300 px-2 py-1.5 rounded;
+    }
+
+    .badge-soft-warning {
+        @apply text-sm font-semibold bg-warning-50 text-warning-300 border border-warning-300 px-2 py-1.5 rounded;
+    }
+
+    .badge-soft-error {
+        @apply text-sm font-semibold bg-error-50 text-error-300 border border-error-300 px-2 py-1.5 rounded;
+    }
+
+    .badge-soft-dark {
+        @apply text-sm font-semibold bg-black-50 text-black-300 border border-black-300 px-2 py-1.5 rounded;
+    }
+
+    .badge-rounded-primary {
+        @apply text-sm font-semibold bg-primary-50 text-primary-300 border border-primary-300 px-5 py-1.5 rounded-full;
+    }
+
+    .badge-rounded-secondary {
+        @apply text-sm font-semibold bg-secondary-50 text-secondary-300 border border-secondary-300 px-5 py-1.5 rounded-full;
+    }
+
+    .badge-rounded-success {
+        @apply text-sm font-semibold bg-success-50 text-success-300 border border-success-300 px-5 py-1.5 rounded-full;
+    }
+
+    .badge-rounded-info {
+        @apply text-sm font-semibold bg-info-50 text-info-300 border border-info-300 px-5 py-1.5 rounded-full;
+    }
+
+    .badge-rounded-warning {
+        @apply text-sm font-semibold bg-warning-50 text-warning-300 border border-warning-300 px-5 py-1.5 rounded-full;
+    }
+
+    .badge-rounded-error {
+        @apply text-sm font-semibold bg-error-50 text-error-300 border border-error-300 px-5 py-1.5 rounded-full;
+    }
+
+    .badge-rounded-dark {
+        @apply text-sm font-semibold bg-black-50 text-black-300 border border-black-300 px-5 py-1.5 rounded-full;
+    }
+
+    .badge-gradient-primary {
+        @apply text-sm font-semibold bg-gradient-to-r from-primary-300 to-primary-200 px-5 py-1.5 rounded text-white-50;
+    }
+
+    .badge-gradient-secondary {
+        @apply text-sm font-semibold bg-gradient-to-r from-secondary-300 to-secondary-200 px-5 py-1.5 rounded text-white-50;
+    }
+
+    .badge-gradient-success {
+        @apply text-sm font-semibold bg-gradient-to-r from-success-300 to-success-200 px-5 py-1.5 rounded text-white-50;
+    }
+
+    .badge-gradient-info {
+        @apply text-sm font-semibold bg-gradient-to-r from-info-300 to-info-200 px-5 py-1.5 rounded text-white-50;
+    }
+
+    .badge-gradient-warning {
+        @apply text-sm font-semibold bg-gradient-to-r from-warning-300 to-warning-200 px-5 py-1.5 rounded text-white-50;
+    }
+
+    .badge-gradient-error {
+        @apply text-sm font-semibold bg-gradient-to-r from-error-300 to-error-200 px-5 py-1.5 rounded text-white-50;
+    }
+
+    .badge-gradient-dark {
+        @apply text-sm font-semibold bg-gradient-to-r from-black-300 to-black-200 px-5 py-1.5 rounded text-white-50;
+    }
+
+    .badge-with-button-primary {
+        @apply text-sm font-semibold bg-primary-300 text-primary-50 px-5 py-1.5 rounded flex items-center gap-2;
+    }
+
+    .badge-with-button-secondary {
+        @apply text-sm font-semibold bg-secondary-200 text-secondary-50 px-5 py-1.5 rounded flex items-center gap-2;
+    }
+
+    .badge-with-button-success {
+        @apply text-sm font-semibold bg-success-300 text-success-50 px-5 py-1.5 rounded flex items-center gap-2;
+    }
+
+    .badge-with-button-info {
+        @apply text-sm font-semibold bg-info-300 text-info-50 px-5 py-1.5 rounded flex items-center gap-2;
+    }
+
+    .badge-with-button-warning {
+        @apply text-sm font-semibold bg-warning-200 text-black-400 px-5 py-1.5 rounded flex items-center gap-2;
+    }
+
+    .badge-with-button-error {
+        @apply text-sm font-semibold bg-error-300 text-error-50 px-5 py-1.5 rounded flex items-center gap-2;
+    }
+
+    .badge-with-button-dark {
+        @apply text-sm font-semibold bg-black-300 text-black-50 px-5 py-1.5 rounded flex items-center gap-2;
+    }
+
+    .badge-span {
+        @apply text-black-400 bg-white-50 w-5 h-5 flex items-center justify-center rounded text-sm;
+    }
+
+    .badge-circle-solid-primary {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-primary-300 text-white-50;
+    }
+
+    .badge-circle-solid-secondary {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-secondary-200 text-white-50;
+    }
+
+    .badge-circle-solid-success {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-success-300 text-white-50;
+    }
+
+    .badge-circle-solid-info {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-info-300 text-white-50;
+    }
+
+    .badge-circle-solid-warning {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-warning-300 text-white-50;
+    }
+
+    .badge-circle-solid-error {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-error-300 text-white-50;
+    }
+
+    .badge-circle-soft-primary {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-primary-50 text-primary-300;
+    }
+
+    .badge-circle-soft-secondary {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-secondary-50 text-secondary-300;
+    }
+
+    .badge-circle-soft-success {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-success-50 text-success-300;
+    }
+
+    .badge-circle-soft-info {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-info-50 text-info-300;
+    }
+
+    .badge-circle-soft-warning {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-warning-50 text-warning-300;
+    }
+
+    .badge-circle-soft-error {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-error-50 text-error-300;
+    }
+
+    .badge-circle-outline-primary {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full border border-primary-300 text-primary-300;
+    }
+
+    .badge-circle-outline-secondary {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full border border-secondary-300 text-secondary-300;
+    }
+
+    .badge-circle-outline-success {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full border border-success-300 text-success-300;
+    }
+
+    .badge-circle-outline-info {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full border border-info-300 text-info-300;
+    }
+
+    .badge-circle-outline-warning {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full border border-warning-300 text-warning-300;
+    }
+
+    .badge-circle-outline-error {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full border border-error-300 text-error-300;
+    }
+
+    .badge-square-solid-primary {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg bg-primary-300 text-white-50;
+    }
+
+    .badge-square-solid-secondary {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg bg-secondary-200 text-white-50;
+    }
+
+    .badge-square-solid-success {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg bg-success-300 text-white-50;
+    }
+
+    .badge-square-solid-info {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg bg-info-300 text-white-50;
+    }
+
+    .badge-square-solid-warning {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg bg-warning-300 text-black-400;
+    }
+
+    .badge-square-solid-error {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg bg-error-300 text-error-50;
+    }
+
+    .badge-square-soft-primary {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg bg-primary-50 text-primary-300;
+    }
+
+    .badge-square-soft-secondary {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg bg-secondary-50 text-secondary-300;
+    }
+
+    .badge-square-soft-success {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg bg-success-50 text-success-300;
+    }
+
+    .badge-square-soft-info {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg bg-info-50 text-info-300;
+    }
+
+    .badge-square-soft-warning {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg bg-warning-50 text-warning-300;
+    }
+
+    .badge-square-soft-error {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg bg-error-50 text-error-300;
+    }
+
+    .badge-square-outline-primary {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg border border-primary-300 text-primary-300;
+    }
+
+    .badge-square-outline-secondary {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg border border-secondary-300 text-secondary-300;
+    }
+
+    .badge-square-outline-success {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg border border-success-300 text-success-300;
+    }
+
+    .badge-square-outline-info {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg border border-info-300 text-info-300;
+    }
+
+    .badge-square-outline-warning {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg border border-warning-300 text-warning-300;
+    }
+
+    .badge-square-outline-error {
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg border border-error-300 text-error-300;
+    }
+
+    .badge-notification-primary {
+        @apply text-2xs font-semibold bg-primary-300 text-white-50 rounded relative px-5 py-2 flex items-center;
+    }
+
+    .badge-notification-secondary {
+        @apply text-2xs font-semibold bg-secondary-200 text-secondary-50 rounded relative px-5 py-2 flex items-center;
+    }
+
+    .badge-notification-counter {
+        @apply absolute top-0 -end-[10px] -translate-y-5 px-2 py-1 rounded-full bg-error-300 border-2 border-white-50 text-2xs;
+    }
+
+    .badge-icon {
+        @apply relative rounded-full flex justify-center items-center;
+    }
+
+    .badge-icon-counter {
+        @apply absolute top-0 -end-[12px] -translate-y-1/2 px-2 py-1 rounded-full bg-error-300 border-2 border-white-50 text-xs text-white-50;
+    }
+
+    .badge-dot-primary {
+        @apply w-2 h-2 bg-primary-300 rounded-full;
+    }
+
+    .badge-dot-secondary {
+        @apply w-2 h-2 bg-secondary-300 rounded-full;
+    }
+
+    .badge-dot-success {
+        @apply w-2 h-2 bg-success-300 rounded-full;
+    }
+
+    .badge-dot-info {
+        @apply w-2 h-2 bg-info-300 rounded-full;
+    }
+
+    .badge-dot-warning {
+        @apply w-2 h-2 bg-warning-300 rounded-full;
+    }
+
+    .badge-dot-error {
+        @apply w-2 h-2 bg-error-300 rounded-full;
+    }
+}
+
+/* Buttons */
+
+@layer components {
+
+    .btn-primary {
+        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-lg px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-secondary {
+        @apply bg-secondary-200 hover:bg-secondary-300 text-white-50 rounded-lg px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-success {
+        @apply bg-success-200 text-black-400 hover:bg-success-300 hover:text-white-50 rounded-lg px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-info {
+        @apply bg-info-200 hover:bg-info-300 text-white-50 rounded-lg px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-warning {
+        @apply bg-warning-200 hover:bg-warning-300 text-black-400 rounded-lg px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-error {
+        @apply bg-error-200 hover:bg-error-300 text-white-50 rounded-lg px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-dark {
+        @apply bg-black-200 hover:bg-black-400 text-white-50 rounded-lg px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-outline-primary {
+        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-white-50 rounded-lg px-5 py-3 text-base font-semibold;
+    }
+
+    .btn-outline-secondary {
+        @apply border border-secondary-300 text-secondary-300 hover:bg-secondary-300 hover:text-white-50 rounded-lg px-5 py-3 text-base font-semibold;
+    }
+
+    .btn-outline-success {
+        @apply border border-success-300 text-success-300 hover:bg-success-300 hover:text-white-50 rounded-lg px-5 py-3 text-base font-semibold;
+    }
+
+    .btn-outline-info {
+        @apply border border-info-300 text-info-300 hover:bg-info-300 hover:text-white-50 rounded-lg px-5 py-3 text-base font-semibold;
+    }
+
+    .btn-outline-warning {
+        @apply border border-warning-300 text-warning-300 hover:bg-warning-300 hover:text-white-50 rounded-lg px-5 py-3 text-base font-semibold;
+    }
+
+    .btn-outline-error {
+        @apply border border-error-300 text-error-300 hover:bg-error-300 hover:text-white-50 rounded-lg px-5 py-3 text-base font-semibold;
+    }
+
+    .btn-outline-dark {
+        @apply border border-black-300 text-black-300 hover:bg-black-300 hover:text-white-50 rounded-lg px-5 py-3 text-base font-semibold;
+    }
+
+    .btn-rounded-primary {
+        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-rounded-secondary {
+        @apply bg-secondary-200 hover:bg-secondary-300 text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-rounded-success {
+        @apply bg-success-200 text-black-400 hover:bg-success-300 hover:text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-rounded-info {
+        @apply bg-info-200 hover:bg-info-300 text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-rounded-warning {
+        @apply bg-warning-200 hover:bg-warning-300 text-black-400 rounded-full px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-rounded-error {
+        @apply bg-error-200 hover:bg-error-300 text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-rounded-dark {
+        @apply bg-black-200 hover:bg-black-400 text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-rounded-outline-primary {
+        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-rounded-outline-secondary {
+        @apply border border-secondary-300 text-secondary-300 hover:bg-secondary-300 hover:text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-rounded-outline-success {
+        @apply border border-success-300 text-success-300 hover:bg-success-300 hover:text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-rounded-outline-info {
+        @apply border border-info-300 text-info-300 hover:bg-info-300 hover:text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-rounded-outline-warning {
+        @apply border border-warning-300 text-warning-300 hover:bg-warning-300 hover:text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-rounded-outline-error {
+        @apply border border-error-300 text-error-300 hover:bg-error-300 hover:text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-rounded-outline-dark {
+        @apply border border-black-300 text-black-300 hover:bg-black-300 hover:text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-soft-primary {
+        @apply bg-primary-50 hover:bg-primary-100 text-primary-300 rounded-lg px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-soft-secondary {
+        @apply bg-secondary-50 hover:bg-secondary-100 text-secondary-300 rounded-lg px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-soft-success {
+        @apply bg-success-50 hover:bg-success-100 text-success-300 rounded-lg px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-soft-info {
+        @apply bg-info-50 hover:bg-info-100 text-info-300 rounded-lg px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-soft-warning {
+        @apply bg-warning-50 hover:bg-warning-100 text-warning-300 rounded-lg px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-soft-error {
+        @apply bg-error-50 hover:bg-error-100 text-error-300 rounded-lg px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-soft-dark {
+        @apply bg-black-50 hover:bg-black-100 text-black-300 rounded-lg px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-text-primary {
+        @apply text-primary-200 hover:text-primary-300 rounded-lg px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-text-secondary {
+        @apply text-secondary-200 hover:text-secondary-300 rounded-lg px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-text-success {
+        @apply text-success-200 hover:text-success-300 rounded-lg px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-text-info {
+        @apply text-info-200 hover:text-info-300 rounded-lg px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-text-warning {
+        @apply text-warning-200 hover:text-warning-300 rounded-lg px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-text-error {
+        @apply text-error-200 hover:text-error-300 rounded-lg px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-text-dark {
+        @apply text-black-200 hover:text-black-300 rounded-lg px-5 py-3 font-semibold text-base;
+    }
+
+    .btn-icon-left {
+        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-lg px-5 py-3 font-semibold text-base flex items-center gap-2;
+    }
+
+    .btn-icon-left-outline {
+        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-white-50 rounded-lg px-5 py-3 font-semibold text-base flex items-center gap-2;
+    }
+
+    .btn-icon-right {
+        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-lg px-5 py-3 font-semibold text-base flex items-center gap-2;
+    }
+
+    .btn-icon-right-outline {
+        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-white-50 rounded-lg px-5 py-3 font-semibold text-base flex items-center gap-2;
+    }
+
+    .btn-icon-only {
+        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-lg px-3 py-3 font-semibold text-base flex items-center gap-2;
+    }
+
+    .btn-icon-only-outline {
+        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-white-50 rounded-lg px-3 py-3 font-semibold text-base flex items-center gap-2;
+    }
+
+    .btn-icon-left-rounded {
+        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-full px-3 py-3 font-semibold text-base flex items-center gap-2;
+    }
+
+    .btn-icon-left-rounded-outline {
+        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-white-50 rounded-full px-3 py-3 font-semibold text-base flex items-center gap-2;
+    }
+
+    .btn-icon-right-rounded {
+        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-full px-3 py-3 font-semibold text-base flex items-center gap-2;
+    }
+
+    .btn-icon-right-rounded-outline {
+        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-white-50 rounded-full px-3 py-3 font-semibold text-base flex items-center gap-2;
+    }
+
+    .btn-icon-only-rounded {
+        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-full px-3 py-3 font-semibold text-base flex items-center gap-2;
+    }
+
+    .btn-icon-only-rounded-outline {
+        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-white-50 rounded-full px-3 py-3 font-semibold text-base flex items-center gap-2;
+    }
+
+    .btn-large {
+        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-lg px-8 py-4 text-base font-semibold;
+    }
+
+    .btn-medium {
+        @apply bg-success-200 hover:bg-success-300 text-black-400 rounded-lg px-5 py-3 text-base font-semibold;
+    }
+
+    .btn-small {
+        @apply bg-warning-200 hover:bg-warning-300 text-black-400 rounded-lg px-3 py-2 text-base font-semibold;
+    }
+
+    .btn-extra-small {
+        @apply bg-error-200 hover:bg-error-300 text-white-50 rounded-lg px-2 py-1 text-2xs font-semibold;
+    }
+
+    .btn-large-soft {
+        @apply bg-primary-50 hover:bg-primary-100 text-primary-300 rounded-lg px-8 py-4 text-base font-semibold;
+    }
+
+    .btn-medium-soft {
+        @apply bg-success-50 hover:bg-success-100 text-success-300 rounded-lg px-5 py-3 text-base font-semibold;
+    }
+
+    .btn-small-soft {
+        @apply bg-warning-50 hover:bg-warning-100 text-warning-300 rounded-lg px-3 py-2 text-base font-semibold;
+    }
+
+    .btn-extra-small-soft {
+        @apply bg-error-50 hover:bg-error-100 text-error-300 rounded-lg px-2 py-1 text-2xs font-semibold;
+    }
+
+    .btn-group-left {
+        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-s-lg px-5 py-3 text-base font-semibold;
+    }
+
+    .btn-group-middle {
+        @apply bg-primary-200 hover:bg-primary-300 text-white-50 px-5 py-3 text-base font-semibold;
+    }
+
+    .btn-group-right {
+        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-e-lg px-5 py-3 text-base font-semibold;
+    }
+
+    .btn-group-left-rounded {
+        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-s-full px-5 py-3 text-base font-semibold;
+    }
+
+    .btn-group-middle-rounded {
+        @apply bg-primary-200 hover:bg-primary-300 text-white-50 px-5 py-3 text-base font-semibold;
+    }
+
+    .btn-group-right-rounded {
+        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-e-full px-5 py-3 text-base font-semibold;
+    }
+
+    .btn-group-icon-left {
+        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-s-lg px-5 py-3 text-base font-semibold;
+    }
+
+    .btn-group-icon-right {
+        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-e-lg px-5 py-3 text-base font-semibold;
+    }
+
+    .btn-group-icon-middle {
+        @apply bg-primary-200 hover:bg-primary-300 text-white-50 px-5 py-3 text-base font-semibold;
+    }
+
+    .loading-state-loading {
+        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-lg px-5 py-3 text-base font-semibold flex items-center gap-2;
+    }
+
+    .btn-state-uploading {
+        @apply bg-success-200 text-black-400 hover:bg-success-300 hover:text-white-50 rounded-lg px-5 py-3 text-base font-semibold flex items-center gap-2;
+    }
+
+    .btn-state-disabled {
+        @apply bg-black-200 hover:bg-black-400 text-white-50 rounded-lg px-5 py-3 text-base font-semibold flex items-center gap-2;
+    }
+
+}
+
+/* Tags */
+
+@layer components {
+
+    .tag-default {
+        @apply text-black-400 border border-white-200 rounded-lg px-3 py-2 text-sm font-semibold flex items-center gap-2;
+    }
+
+    .remove-tag {
+        @apply text-lg flex justify-center items-center hover:text-error-300 transition-colors cursor-pointer;
+    }
+
+    .tag-color-primary {
+        @apply text-white-50 bg-primary-300 border border-primary-300 rounded-lg px-3 py-2 text-sm font-semibold flex items-center gap-2;
+    }
+
+    .tag-color-secondary {
+        @apply text-white-50 bg-secondary-200 border border-secondary-200 rounded-lg px-3 py-2 text-sm font-semibold flex items-center gap-2;
+    }
+
+    .tag-color-success {
+        @apply text-white-50 bg-success-300 border border-success-300 rounded-lg px-3 py-2 text-sm font-semibold flex items-center gap-2;
+    }
+
+    .tag-color-warning {
+        @apply text-black-400 bg-warning-200 border border-warning-200 rounded-lg px-3 py-2 text-sm font-semibold flex items-center gap-2;
+    }
+
+    .tag-color-error {
+        @apply text-white-50 bg-error-300 border border-error-300 rounded-lg px-3 py-2 text-sm font-semibold flex items-center gap-2;
+    }
+
+    .remove-tag-solid {
+        @apply text-error-200 bg-error-50 border rounded-full px-0.5 py-0.5 text-sm font-semibold flex items-center gap-2;
+    }
+
+    .tag-indicator-success {
+        @apply text-success-300 bg-success-50 border rounded-full border-success-300 px-3 py-1 text-sm font-semibold flex items-center gap-2;
+    }
+
+    .tag-indicator-pending {
+        @apply text-black-400 bg-warning-50 border rounded-full border-warning-300 px-3 py-1 text-sm font-semibold flex items-center gap-2;
+    }
+
+    .tag-indicator-error {
+        @apply text-error-300 bg-error-50 border rounded-full border-error-300 px-3 py-1 text-sm font-semibold flex items-center gap-2;
+    }
+
+}
+
+/* Radio */
+
+@layer components {
+
+    .radio-primary {
+        @apply w-4 h-4 appearance-none text-primary-200 bg-white-100 ring-2 ring-white-300 border-white-300 rounded-full checked:bg-primary-300 checked:border-primary-300 checked:text-white-50 checked:ring-primary-300 focus:ring-primary-300 focus:ring-2;
+    }
+
+    .radio-secondary {
+        @apply w-4 h-4 appearance-none text-secondary-200 bg-white-100 ring-2 ring-white-300 border-white-300 rounded-full checked:bg-secondary-200 checked:border-secondary-200 checked:text-white-50 checked:ring-secondary-200 focus:ring-secondary-100 focus:ring-2;
+    }
+
+    .radio-success {
+        @apply w-4 h-4 appearance-none text-success-200 bg-white-100 ring-2 ring-white-300 border-white-300 rounded-full checked:bg-success-200 checked:border-success-200 checked:text-white-50 checked:ring-success-200 focus:ring-success-100 focus:ring-2;
+    }
+
+    .radio-warning {
+        @apply w-4 h-4 appearance-none text-warning-200 bg-white-100 ring-2 ring-white-300 border-white-300 rounded-full checked:bg-warning-200 checked:border-warning-200 checked:text-black-400 checked:ring-warning-200 focus:ring-warning-100 focus:ring-2;
+    }
+
+    .radio-error {
+        @apply w-4 h-4 appearance-none text-error-200 bg-white-100 ring-2 ring-white-300 border-white-300 rounded-full checked:bg-error-200 checked:border-error-200 checked:text-white-50 checked:ring-error-200 focus:ring-error-100 focus:ring-2;
+    }
+
+    .radio-info {
+        @apply w-4 h-4 appearance-none text-info-200 bg-white-100 ring-2 ring-white-300 border-white-300 rounded-full checked:bg-info-200 checked:border-info-200 checked:text-white-50 checked:ring-info-200 focus:ring-info-100 focus:ring-2;
+    }
+
+    .radio-inactive-primary {
+        @apply w-4 h-4 appearance-none text-black-200 bg-primary-50 ring-2 ring-primary-100 border-primary-100 rounded-full checked:bg-primary-100 checked:border-primary-100 checked:text-white-50 checked:ring-primary-100 focus:ring-primary-100 focus:ring-2;
+    }
+
+    .radio-inactive-secondary {
+        @apply w-4 h-4 appearance-none text-black-200 bg-secondary-50 ring-2 ring-secondary-100 border-secondary-100 rounded-full checked:bg-secondary-100 checked:border-secondary-100 checked:text-white-50 checked:ring-secondary-100 focus:ring-secondary-100 focus:ring-2;
+    }
+
+    .radio-inactive-success {
+        @apply w-4 h-4 appearance-none text-black-200 bg-success-50 ring-2 ring-success-100 border-success-100 rounded-full checked:bg-success-100 checked:border-success-100 checked:text-white-50 checked:ring-success-100 focus:ring-success-100 focus:ring-2;
+    }
+
+    .radio-inactive-warning {
+        @apply w-4 h-4 appearance-none text-black-200 bg-warning-50 ring-2 ring-warning-100 border-warning-100 rounded-full checked:bg-warning-100 checked:border-warning-100 checked:text-black-400 checked:ring-warning-100 focus:ring-warning-100 focus:ring-2;
+    }
+
+    .radio-inactive-error {
+        @apply w-4 h-4 appearance-none text-black-200 bg-error-50 ring-2 ring-error-100 border-error-100 rounded-full checked:bg-error-100 checked:border-error-100 checked:text-white-50 checked:ring-error-100 focus:ring-error-100 focus:ring-2;
+    }
+
+    .radio-inactive-info {
+        @apply w-4 h-4 appearance-none text-black-200 bg-info-50 ring-2 ring-info-100 border-info-100 rounded-full checked:bg-info-100 checked:border-info-100 checked:text-white-50 checked:ring-info-100 focus:ring-info-100 focus:ring-2;
+    }
+
+    .radio-button-primary {
+        @apply w-4 h-4 appearance-none bg-primary-100 text-primary-300 border-white-300 focus:ring-primary-300 focus:ring-2 rounded-full checked:bg-primary-300 checked:border-primary-300 checked:text-white-50 checked:ring-primary-300;
+    }
+
+    .radio-button-secondary {
+        @apply w-4 h-4 appearance-none bg-secondary-100 text-secondary-200 border-white-300 focus:ring-secondary-100 focus:ring-2 rounded-full checked:bg-secondary-200 checked:border-secondary-200 checked:text-white-50 checked:ring-secondary-200;
+    }
+
+    .radio-button-success {
+        @apply w-4 h-4 appearance-none bg-success-100 text-success-200 border-white-300 focus:ring-success-100 focus:ring-2 rounded-full checked:bg-success-200 checked:border-success-200 checked:text-white-50 checked:ring-success-200;
+    }
+
+    .radio-button-info {
+        @apply w-4 h-4 appearance-none bg-info-100 text-info-200 border-white-300 focus:ring-info-100 focus:ring-2 rounded-full checked:bg-info-200 checked:border-info-200 checked:text-white-50 checked:ring-info-200;
+    }
+
+    .radio-button-warning {
+        @apply w-4 h-4 appearance-none bg-warning-100 text-warning-200 border-white-300 focus:ring-warning-100 focus:ring-2 rounded-full checked:bg-warning-200 checked:border-warning-200 checked:text-black-400 checked:ring-warning-200;
+    }
+
+    .radio-button-error {
+        @apply w-4 h-4 appearance-none bg-error-100 text-error-200 border-white-300 focus:ring-error-100 focus:ring-2 rounded-full checked:bg-error-200 checked:border-error-200 checked:text-white-50 checked:ring-error-200;
+    }
+
+}

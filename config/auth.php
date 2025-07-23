@@ -62,7 +62,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => env('AUTH_MODEL', App\Shared\Models\User::class),
         ],
 
         // 'users' => [
@@ -112,4 +112,6 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    /* timeout de la session */
+    'session_timeout' => env('AUTH_SESSION_TIMEOUT', 10800),
 ];

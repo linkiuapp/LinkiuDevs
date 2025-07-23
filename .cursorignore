@@ -1,0 +1,29 @@
+# Ignorar dependencias pesadas
+node_modules/
+vendor/
+public/build/
+public/storage/
+
+# Ignorar cachés de Laravel
+storage/
+bootstrap/cache/
+
+# Ignorar archivos de entorno
+.env
+.env.example
+
+# Ignorar carpetas personales o temporales
+.idea/
+.vscode/
+.DS_Store
+
+# Ignorar reportes de testing o coverage
+coverage/
+tests/Browser/screenshots/
+tests/Browser/console/
+
+# Ignorar archivos de salida innecesarios
+*.log
+*.sqlite
+*.tmp
+*.zip

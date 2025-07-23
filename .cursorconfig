@@ -1,0 +1,6 @@
+{
+  "cursor.chat.model": "claude-4-opus",
+  "cursor.composer.model": "claude-4-opus",
+  "cursor.chat.contextLength": 32000,
+  "cursor.chat.includeWorkspaceContext": true
+}
