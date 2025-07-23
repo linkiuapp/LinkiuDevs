@@ -2,7 +2,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "vite build",
+        "build": "ROLLUP_NO_NATIVE=true vite build",
         "dev": "vite"
     },
     "devDependencies": {
