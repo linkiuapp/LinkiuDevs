@@ -1,5 +1,5 @@
-id: your-project-id
-name: Laravel Project
+id: linkiubio
+name: Linkiu Bio
 environments:
   production:
     build:
