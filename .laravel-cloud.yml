@@ -1,0 +1,16 @@
+id: your-project-id
+name: Laravel Project
+environments:
+  production:
+    build:
+      - 'composer install --no-dev --optimize-autoloader'
+      - 'npm ci'
+      - 'npm run build'
+      - 'php artisan config:cache'
+      - 'php artisan route:cache'
+      - 'php artisan view:cache'
+    deploy:
+      - 'php artisan migrate --force'
+    variables:
+      - APP_ENV=production
+      - APP_DEBUG=false

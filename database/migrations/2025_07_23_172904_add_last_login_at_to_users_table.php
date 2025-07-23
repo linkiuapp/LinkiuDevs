@@ -12,10 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            if (!Schema::hasColumn('users', 'role')) {
-                $table->string('role')->default('user')->after('password');
-            }
-            $table->foreignId('store_id')->nullable()->after('role')->constrained('stores')->onDelete('cascade');
+            $table->timestamp('last_login_at')->nullable();
         });
     }
 
@@ -25,8 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['store_id']);
-            $table->dropColumn('store_id');
+            $table->dropColumn('last_login_at');
         });
     }
 };

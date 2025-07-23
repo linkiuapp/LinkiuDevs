@@ -12,11 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('store_designs', function (Blueprint $table) {
-            // Eliminamos las columnas relacionadas con gradientes
-            $table->dropColumn('header_gradient_start_color');
-            $table->dropColumn('header_gradient_end_color');
-            $table->dropColumn('header_gradient_direction');
-            $table->dropColumn('header_background_type'); // Ya no necesitamos el tipo porque solo será sólido
+            // Verificamos si las columnas existen antes de intentar eliminarlas
+            if (Schema::hasColumn('store_designs', 'header_gradient_start_color')) {
+                $table->dropColumn('header_gradient_start_color');
+            }
+            if (Schema::hasColumn('store_designs', 'header_gradient_end_color')) {
+                $table->dropColumn('header_gradient_end_color');
+            }
+            if (Schema::hasColumn('store_designs', 'header_gradient_direction')) {
+                $table->dropColumn('header_gradient_direction');
+            }
+            if (Schema::hasColumn('store_designs', 'header_background_type')) {
+                $table->dropColumn('header_background_type');
+            }
         });
     }
 

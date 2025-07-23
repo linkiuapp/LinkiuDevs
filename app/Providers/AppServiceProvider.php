@@ -19,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Solucionar el problema de "Specified key was too long"
+        \Illuminate\Support\Facades\Schema::defaultStringLength(191);
     }
 }
