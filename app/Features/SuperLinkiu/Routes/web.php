@@ -8,6 +8,7 @@ use App\Features\SuperLinkiu\Controllers\InvoiceController;
 use App\Features\SuperLinkiu\Controllers\TicketController;
 use App\Features\SuperLinkiu\Controllers\AnnouncementController;
 use App\Features\SuperLinkiu\Controllers\EmailConfigurationController;
+use App\Features\SuperLinkiu\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 // Rutas de SuperLinkiu
@@ -68,6 +69,12 @@ Route::prefix('superlinkiu')->name('superlinkiu.')->middleware('web')->group(fun
             ->name('announcements.toggle-active');
         Route::post('announcements/{announcement}/duplicate', [AnnouncementController::class, 'duplicate'])
             ->name('announcements.duplicate');
+            
+        // Perfil de administrador
+        Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+        Route::post('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
+        Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.update-avatar');
+        Route::post('/profile/system', [ProfileController::class, 'updateSystemSettings'])->name('profile.update-system');
 
         // Configuración de Email (dentro de gestión de tickets)
         Route::prefix('email')->name('email.')->group(function () {

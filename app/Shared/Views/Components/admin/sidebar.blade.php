@@ -7,7 +7,11 @@
     <div class="flex h-16 items-center justify-center px-6 border-b dark:border-gray-700 flex-shrink-0">
         <div class="flex items-center">
             <a href="{{ route('superlinkiu.dashboard') }}">
-                <img src="{{ asset('assets/images/logo_Linkiu.svg') }}" alt="Logo" class="w-auto h-10">
+                @if (config('app.logo'))
+                    <img src="{{ config('app.logo') }}" alt="Logo" class="w-auto h-10">
+                @else
+                    <img src="{{ asset('assets/images/') }}" alt="Logo" class="w-auto h-10">
+                @endif
             </a>
         </div>
         <!-- Toggle button for mobile -->
@@ -197,19 +201,30 @@
             <div class="flex-shrink-0">
                 <div class="w-8 h-8 bg-primary-300 rounded-full flex items-center justify-center">
                     <span class="text-white-50 text-sm font-medium">
-                        {{ substr(auth()->user()->name, 0, 1) }}
+                        @if (auth()->user()->avatar_path)
+                            <img src="{{ asset('storage/'.auth()->user()->avatar_path) }}" alt="Avatar" class="w-8 h-8 rounded-full">
+                        @else
+                            {{ substr(auth()->user()->name, 0, 1) }}
+                        @endif
                     </span>
                 </div>
             </div>
             <div class="ml-3 flex-1 min-w-0">
-                <p class="text-sm font-medium text-gray-900 dark:text-white-50 truncate">
-                    {{ auth()->user()->name }}
-                </p>
-                <p class="text-xs text-gray-500 dark:text-gray-400 truncate">
-                    Super Admin
-                </p>
+                <a href="{{ route('superlinkiu.profile.index') }}" class="hover:text-primary-300">
+                    <p class="text-sm font-medium text-gray-900 dark:text-white-50 truncate">
+                        {{ auth()->user()->name }}
+                    </p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 truncate">
+                        Super Admin
+                    </p>
+                </a>
             </div>
-            <div class="flex-shrink-0">
+            <div class="flex-shrink-0 flex space-x-2">
+                <a href="{{ route('superlinkiu.profile.index') }}" 
+                   class="text-gray-400 hover:text-primary-300 transition-colors duration-200"
+                   title="Perfil">
+                    <x-solar-user-circle-outline class="w-5 h-5" />
+                </a>
                 <form method="POST" action="{{ route('superlinkiu.logout') }}">
                     @csrf
                     <button type="submit" 
