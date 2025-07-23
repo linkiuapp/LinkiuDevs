@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('stores', function (Blueprint $table) {
             $table->id();
             $table->string('tenant_id')->nullable(); // Para futura implementación multi-tenant
-            $table->foreignId('plan_id')->constrained();
+            $table->foreignId('plan_id')->constrained()->onDelete('cascade');
             
             // Información básica
             $table->string('name');
