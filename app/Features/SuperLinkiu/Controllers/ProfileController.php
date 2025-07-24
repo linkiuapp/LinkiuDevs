@@ -95,19 +95,17 @@ class ProfileController extends Controller
         ]);
 
         try {
-            // Detectar automáticamente el disk correcto
-            $disk = $this->getStorageDisk();
-            
-            // TODO: Implementar actualización de APP_NAME sin modificar .env directamente
-            // $this->updateEnvVariable('APP_NAME', $request->app_name);
+            // Asegurar que existan los directorios
+            $this->ensureDirectoriesExist();
+            $storagePath = $this->getStoragePath();
 
             // Manejar logo
             if ($request->hasFile('app_logo')) {
                 $logoFile = $request->file('app_logo');
                 $logoFilename = 'logo_' . time() . '.' . $logoFile->getClientOriginalExtension();
                 
-                // GUARDAR DIRECTAMENTE en public/storage/system/
-                $destinationPath = public_path('storage/system');
+                // GUARDAR en el path correcto según entorno
+                $destinationPath = public_path($storagePath . '/system');
                 $logoFile->move($destinationPath, $logoFilename);
                 $logoPath = 'system/' . $logoFilename;
                 
@@ -118,7 +116,7 @@ class ProfileController extends Controller
                 session(['temp_app_logo' => $logoPath]);
                 
                 // Log para debugging
-                \Log::info("Logo guardado DIRECTAMENTE: {$logoPath} en public/storage/");
+                \Log::info("Logo guardado en {$storagePath}: {$logoPath}");
             }
 
             // Manejar favicon
@@ -126,8 +124,8 @@ class ProfileController extends Controller
                 $faviconFile = $request->file('app_favicon');
                 $faviconFilename = 'favicon_' . time() . '.' . $faviconFile->getClientOriginalExtension();
                 
-                // GUARDAR DIRECTAMENTE en public/storage/system/
-                $destinationPath = public_path('storage/system');
+                // GUARDAR en el path correcto según entorno
+                $destinationPath = public_path($storagePath . '/system');
                 $faviconFile->move($destinationPath, $faviconFilename);
                 $faviconPath = 'system/' . $faviconFilename;
                 
@@ -138,7 +136,7 @@ class ProfileController extends Controller
                 session(['temp_app_favicon' => $faviconPath]);
                 
                 // Log para debugging
-                \Log::info("Favicon guardado DIRECTAMENTE: {$faviconPath} en public/storage/");
+                \Log::info("Favicon guardado en {$storagePath}: {$faviconPath}");
             }
 
             return back()->with('status', 'app-settings-updated');
@@ -150,28 +148,43 @@ class ProfileController extends Controller
     }
 
     /**
-     * FORZAR guardado directo en public/storage (sin symlink)
+     * Detectar automáticamente el path correcto según el entorno
      */
-    private function getStorageDisk(): string
+    private function getStoragePath(): string
     {
-        // CREAR directorio si no existe
-        if (!file_exists(public_path('storage/system'))) {
-            mkdir(public_path('storage/system'), 0755, true);
-        }
-        if (!file_exists(public_path('storage/avatars'))) {
-            mkdir(public_path('storage/avatars'), 0755, true);
+        // En Laravel Cloud, usar images/
+        if (str_contains(config('app.url'), 'laravel.cloud')) {
+            return 'images';
         }
         
-        return 'public';
+        // En local y otros entornos, usar storage/
+        return 'storage';
+    }
+
+    /**
+     * Crear directorios necesarios según el entorno
+     */
+    private function ensureDirectoriesExist(): void
+    {
+        $basePath = $this->getStoragePath();
+        
+        if (!file_exists(public_path($basePath . '/system'))) {
+            mkdir(public_path($basePath . '/system'), 0755, true);
+        }
+        if (!file_exists(public_path($basePath . '/avatars'))) {
+            mkdir(public_path($basePath . '/avatars'), 0755, true);
+        }
     }
 
     private function handleAvatarUpload($file, $user)
     {
-        // GUARDAR DIRECTAMENTE EN public/storage (sin symlink)
+        // Asegurar que existan los directorios
+        $this->ensureDirectoriesExist();
+        $storagePath = $this->getStoragePath();
         
         // Eliminar avatar anterior si existe
         if ($user->avatar_path) {
-            $oldPath = public_path('storage/' . $user->avatar_path);
+            $oldPath = public_path($storagePath . '/' . $user->avatar_path);
             if (file_exists($oldPath)) {
                 unlink($oldPath);
             }
@@ -180,8 +193,8 @@ class ProfileController extends Controller
         // Generar nombre único para el archivo
         $filename = 'avatar_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
         
-        // GUARDAR DIRECTAMENTE en public/storage/avatars/
-        $destinationPath = public_path('storage/avatars');
+        // GUARDAR en el path correcto según el entorno
+        $destinationPath = public_path($storagePath . '/avatars');
         $file->move($destinationPath, $filename);
         
         // Actualizar path en el usuario

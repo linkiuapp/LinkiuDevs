@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -53,55 +52,31 @@ class User extends Authenticatable
     }
 
     /**
-     * Detecta automáticamente qué disk usar según el entorno
-     */
-    private function getStorageDisk(): string
-    {
-        // En Laravel Cloud existe el disk 'storage'
-        if (config('filesystems.disks.storage')) {
-            return 'storage';
-        }
-        
-        // En local y otros entornos, usar el disk por defecto o public
-        $defaultDisk = config('filesystems.default', 'public');
-        
-        // Si el disk por defecto es 'local', usar 'public' para URLs públicas
-        if ($defaultDisk === 'local') {
-            return 'public';
-        }
-        
-        return $defaultDisk;
-    }
-
-    /**
-     * Get the avatar URL with fallback to initials
+     * Obtener la URL completa del avatar del usuario
      */
     public function getAvatarUrlAttribute(): string
     {
         if ($this->avatar_path) {
-            // Detectar automáticamente el disk correcto
-            $disk = $this->getStorageDisk();
-            return Storage::disk($disk)->url($this->avatar_path);
+            // Detección automática de path según entorno
+            $storagePath = str_contains(config('app.url'), 'laravel.cloud') ? 'images' : 'storage';
+            return asset($storagePath . '/' . $this->avatar_path);
         }
 
-        // Fallback a UI-Avatars.com con las iniciales del usuario
+        // Avatar por defecto usando UI Avatars
         $initials = $this->getInitialsAttribute();
         return "https://ui-avatars.com/api/?name={$initials}&color=7432F8&background=F1EAFF&size=128";
     }
 
     /**
-     * Get user initials
+     * Get user initials for avatar fallback
      */
     public function getInitialsAttribute(): string
     {
-        $words = explode(' ', trim($this->name));
-        $initials = '';
-        
-        foreach (array_slice($words, 0, 2) as $word) {
-            $initials .= strtoupper(substr($word, 0, 1));
+        $words = explode(' ', $this->name);
+        if (count($words) >= 2) {
+            return strtoupper(substr($words[0], 0, 1) . substr($words[1], 0, 1));
         }
-        
-        return $initials ?: 'U';
+        return strtoupper(substr($this->name, 0, 2));
     }
 
     /**

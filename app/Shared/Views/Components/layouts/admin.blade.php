@@ -12,13 +12,14 @@ use Illuminate\Support\Facades\Storage;
     
     <!-- Favicon -->
     @php
-        // Priorizar favicon temporal de sesión, luego .env, luego fallback  
+        // Detección automática de path según entorno
+        $storagePath = str_contains(config('app.url'), 'laravel.cloud') ? 'images' : 'storage';
+        
         $tempFavicon = session('temp_app_favicon');
         $appFavicon = $tempFavicon ?: env('APP_FAVICON');
     @endphp
-    
     @if($appFavicon)
-        <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . $appFavicon) }}">
+        <link rel="icon" type="image/x-icon" href="{{ asset($storagePath . '/' . $appFavicon) }}">
     @else
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     @endif

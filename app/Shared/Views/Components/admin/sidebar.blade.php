@@ -12,13 +12,15 @@ use Illuminate\Support\Facades\Storage;
         <div class="flex items-center">
             <a href="{{ route('superlinkiu.dashboard') }}">
                 @php
-                    // Priorizar logo temporal de sesión, luego .env, luego fallback
+                    // Detección automática de path según entorno
+                    $storagePath = str_contains(config('app.url'), 'laravel.cloud') ? 'images' : 'storage';
+                    
                     $tempLogo = session('temp_app_logo');
                     $appLogo = $tempLogo ?: env('APP_LOGO');
                 @endphp
                 
                 @if($appLogo)
-                    <img src="{{ asset('storage/' . $appLogo) }}" alt="Logo" class="w-auto h-10">
+                    <img src="{{ asset($storagePath . '/' . $appLogo) }}" alt="Logo" class="w-auto h-10">
                 @else
                     <div class="flex items-center">
                         <div class="w-10 h-10 bg-primary-200 rounded-lg flex items-center justify-center mr-3">
@@ -217,7 +219,7 @@ use Illuminate\Support\Facades\Storage;
                 <div class="w-8 h-8 bg-primary-300 rounded-full flex items-center justify-center">
                     <span class="text-white-50 text-sm font-medium">
                         @if (auth()->user()->avatar_path)
-                            <img src="{{ asset('storage/'.auth()->user()->avatar_path) }}" alt="Avatar" class="w-8 h-8 rounded-full">
+                            <img src="{{ asset($storagePath . '/' . auth()->user()->avatar_path) }}" alt="Avatar" class="w-8 h-8 rounded-full">
                         @else
                             {{ substr(auth()->user()->name, 0, 1) }}
                         @endif

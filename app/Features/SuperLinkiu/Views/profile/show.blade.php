@@ -1,5 +1,6 @@
 @php
-use Illuminate\Support\Facades\Storage;
+    // Detección automática de path según entorno
+    $storagePath = str_contains(config('app.url'), 'laravel.cloud') ? 'images' : 'storage';
 @endphp
 
 @extends('shared::layouts.admin')
@@ -71,9 +72,15 @@ use Illuminate\Support\Facades\Storage;
                     <div class="p-6 text-center">
                         <!-- Avatar Display -->
                         <div class="mb-6">
-                            <img src="{{ asset('storage/' . $user->avatar_path) }}" 
-                                 alt="Avatar de {{ $user->name }}" 
-                                 class="w-32 h-32 rounded-full mx-auto object-cover border-4 border-white-200">
+                            @if($user->avatar_path)
+                                <img src="{{ asset($storagePath . '/' . $user->avatar_path) }}" 
+                                     alt="Avatar de {{ $user->name }}" 
+                                     class="w-32 h-32 rounded-full mx-auto object-cover border-4 border-white-200">
+                            @else
+                                <img src="{{ asset('images/default-avatar.png') }}" 
+                                     alt="Avatar por defecto" 
+                                     class="w-32 h-32 rounded-full mx-auto object-cover border-4 border-white-200">
+                            @endif
                         </div>
 
                         <!-- Avatar Upload Form -->
@@ -286,16 +293,14 @@ use Illuminate\Support\Facades\Storage;
                                     <div>
                                         <label for="app_logo" class="block text-sm text-black-300 mb-2">Logo de la Aplicación</label>
                                         
-                                        <!-- Current Logo Preview -->
                                         @php
-                                            // Priorizar logo temporal de sesión, luego .env
                                             $tempLogo = session('temp_app_logo');
                                             $appLogo = $tempLogo ?: env('APP_LOGO');
                                         @endphp
                                         @if($appLogo)
                                             <div class="mb-3">
                                                 <p class="text-xs text-black-200 mb-2">Logo actual:</p>
-                                                <img src="{{ asset('storage/' . $appLogo) }}" 
+                                                <img src="{{ asset($storagePath . '/' . $appLogo) }}" 
                                                      alt="Logo actual" 
                                                      class="h-12 object-contain border border-white-200 rounded-lg p-2">
                                             </div>
@@ -326,18 +331,16 @@ use Illuminate\Support\Facades\Storage;
                                     <div>
                                         <label for="app_favicon" class="block text-sm text-black-300 mb-2">Favicon</label>
                                         
-                                        <!-- Current Favicon Preview -->
                                         @php
-                                            // Priorizar favicon temporal de sesión, luego .env
                                             $tempFavicon = session('temp_app_favicon');
                                             $appFavicon = $tempFavicon ?: env('APP_FAVICON');
                                         @endphp
                                         @if($appFavicon)
                                             <div class="mb-3">
                                                 <p class="text-xs text-black-200 mb-2">Favicon actual:</p>
-                                                <img src="{{ asset('storage/' . $appFavicon) }}" 
+                                                <img src="{{ asset($storagePath . '/' . $appFavicon) }}" 
                                                      alt="Favicon actual" 
-                                                     class="w-8 h-8 object-contain border border-white-200 rounded p-1">
+                                                     class="w-8 h-8 object-contain border border-white-200 rounded">
                                             </div>
                                         @endif
                                         
