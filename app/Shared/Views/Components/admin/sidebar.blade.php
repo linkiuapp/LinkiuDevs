@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Storage;
         <div class="flex items-center">
             <a href="{{ route('superlinkiu.dashboard') }}">
                 @php
-                    // Detección automática de path según entorno
-                    $storagePath = str_contains(config('app.url'), 'laravel.cloud') ? 'images' : 'storage';
+                    // SIEMPRE usar storage/ - más simple y compatible
+                    $storagePath = 'storage';
                     
                     $tempLogo = session('temp_app_logo');
                     $appLogo = $tempLogo ?: env('APP_LOGO');

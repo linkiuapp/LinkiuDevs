@@ -57,9 +57,8 @@ class User extends Authenticatable
     public function getAvatarUrlAttribute(): string
     {
         if ($this->avatar_path) {
-            // Detección automática de path según entorno
-            $storagePath = str_contains(config('app.url'), 'laravel.cloud') ? 'images' : 'storage';
-            return asset($storagePath . '/' . $this->avatar_path);
+            // SIEMPRE usar storage/ - más simple y compatible
+            return asset('storage/' . $this->avatar_path);
         }
 
         // Avatar por defecto usando UI Avatars

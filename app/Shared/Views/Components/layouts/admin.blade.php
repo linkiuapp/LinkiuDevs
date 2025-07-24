@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Storage;
     
     <!-- Favicon -->
     @php
-        // Detección automática de path según entorno
-        $storagePath = str_contains(config('app.url'), 'laravel.cloud') ? 'images' : 'storage';
+        // SIEMPRE usar storage/ - más simple y compatible
+        $storagePath = 'storage';
         
         $tempFavicon = session('temp_app_favicon');
         $appFavicon = $tempFavicon ?: env('APP_FAVICON');

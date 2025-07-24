@@ -1,6 +1,6 @@
 @php
-    // Detección automática de path según entorno
-    $storagePath = str_contains(config('app.url'), 'laravel.cloud') ? 'images' : 'storage';
+    // SIEMPRE usar storage/ - más simple y compatible
+    $storagePath = 'storage';
 @endphp
 
 @extends('shared::layouts.admin')
