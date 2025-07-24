@@ -143,23 +143,12 @@ class ProfileController extends Controller
 
     /**
      * Detecta automáticamente qué disk usar según el entorno
+     * FORZADO A 'public' para evitar problemas con R2
      */
     private function getStorageDisk(): string
     {
-        // En Laravel Cloud existe el disk 'storage'
-        if (config('filesystems.disks.storage')) {
-            return 'storage';
-        }
-        
-        // En local y otros entornos, usar el disk por defecto o public
-        $defaultDisk = config('filesystems.default', 'public');
-        
-        // Si el disk por defecto es 'local', usar 'public' para URLs públicas
-        if ($defaultDisk === 'local') {
-            return 'public';
-        }
-        
-        return $defaultDisk;
+        // FORZAR 'public' disk para evitar problemas con R2 en Laravel Cloud
+        return 'public';
     }
 
     private function handleAvatarUpload($file, $user)

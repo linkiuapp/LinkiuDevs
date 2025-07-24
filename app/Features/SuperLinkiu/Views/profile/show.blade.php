@@ -291,19 +291,11 @@ use Illuminate\Support\Facades\Storage;
                                             // Priorizar logo temporal de sesión, luego .env
                                             $tempLogo = session('temp_app_logo');
                                             $appLogo = $tempLogo ?: env('APP_LOGO');
-                                            
-                                            // Detectar automáticamente el disk correcto
-                                            $disk = 'public'; // Default para local
-                                            if (config('filesystems.disks.storage')) {
-                                                $disk = 'storage'; // Laravel Cloud
-                                            } elseif (config('filesystems.default') !== 'local') {
-                                                $disk = config('filesystems.default'); // Otros servicios S3
-                                            }
                                         @endphp
-                                        @if($appLogo && Storage::disk($disk)->exists($appLogo))
+                                        @if($appLogo)
                                             <div class="mb-3">
                                                 <p class="text-xs text-black-200 mb-2">Logo actual:</p>
-                                                <img src="{{ Storage::disk($disk)->url($appLogo) }}" 
+                                                <img src="{{ asset('storage/' . $appLogo) }}" 
                                                      alt="Logo actual" 
                                                      class="h-12 object-contain border border-white-200 rounded-lg p-2">
                                             </div>
@@ -339,19 +331,11 @@ use Illuminate\Support\Facades\Storage;
                                             // Priorizar favicon temporal de sesión, luego .env
                                             $tempFavicon = session('temp_app_favicon');
                                             $appFavicon = $tempFavicon ?: env('APP_FAVICON');
-                                            
-                                            // Detectar automáticamente el disk correcto
-                                            $disk = 'public'; // Default para local
-                                            if (config('filesystems.disks.storage')) {
-                                                $disk = 'storage'; // Laravel Cloud
-                                            } elseif (config('filesystems.default') !== 'local') {
-                                                $disk = config('filesystems.default'); // Otros servicios S3
-                                            }
                                         @endphp
-                                        @if($appFavicon && Storage::disk($disk)->exists($appFavicon))
+                                        @if($appFavicon)
                                             <div class="mb-3">
                                                 <p class="text-xs text-black-200 mb-2">Favicon actual:</p>
-                                                <img src="{{ Storage::disk($disk)->url($appFavicon) }}" 
+                                                <img src="{{ asset('storage/' . $appFavicon) }}" 
                                                      alt="Favicon actual" 
                                                      class="w-8 h-8 object-contain border border-white-200 rounded p-1">
                                             </div>

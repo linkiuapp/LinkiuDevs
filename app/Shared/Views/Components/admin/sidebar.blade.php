@@ -15,28 +15,10 @@ use Illuminate\Support\Facades\Storage;
                     // Priorizar logo temporal de sesión, luego .env, luego fallback
                     $tempLogo = session('temp_app_logo');
                     $appLogo = $tempLogo ?: env('APP_LOGO');
-                    
-                    // USAR LA MISMA LÓGICA QUE ProfileController.getStorageDisk()
-                    $disk = 'public'; // Default fallback
-                    
-                    // En Laravel Cloud existe el disk 'storage'
-                    if (config('filesystems.disks.storage')) {
-                        $disk = 'storage';
-                    } else {
-                        // En local y otros entornos, usar el disk por defecto o public
-                        $defaultDisk = config('filesystems.default', 'public');
-                        
-                        // Si el disk por defecto es 'local', usar 'public' para URLs públicas
-                        if ($defaultDisk === 'local') {
-                            $disk = 'public';
-                        } else {
-                            $disk = $defaultDisk;
-                        }
-                    }
                 @endphp
                 
-                @if($appLogo && Storage::disk($disk)->exists($appLogo))
-                    <img src="{{ Storage::disk($disk)->url($appLogo) }}" alt="Logo" class="w-auto h-10">
+                @if($appLogo)
+                    <img src="{{ asset('storage/' . $appLogo) }}" alt="Logo" class="w-auto h-10">
                 @else
                     <div class="flex items-center">
                         <div class="w-10 h-10 bg-primary-200 rounded-lg flex items-center justify-center mr-3">
