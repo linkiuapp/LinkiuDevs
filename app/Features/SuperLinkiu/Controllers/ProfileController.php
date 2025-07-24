@@ -105,7 +105,11 @@ class ProfileController extends Controller
             if ($request->hasFile('app_logo')) {
                 $logoFile = $request->file('app_logo');
                 $logoFilename = 'logo_' . time() . '.' . $logoFile->getClientOriginalExtension();
-                $logoPath = $logoFile->storeAs('system', $logoFilename, $disk);
+                
+                // GUARDAR DIRECTAMENTE en public/storage/system/
+                $destinationPath = public_path('storage/system');
+                $logoFile->move($destinationPath, $logoFilename);
+                $logoPath = 'system/' . $logoFilename;
                 
                 // TODO: Implementar actualización de APP_LOGO sin modificar .env directamente  
                 // $this->updateEnvVariable('APP_LOGO', $logoPath);
@@ -114,14 +118,18 @@ class ProfileController extends Controller
                 session(['temp_app_logo' => $logoPath]);
                 
                 // Log para debugging
-                \Log::info("Logo guardado: {$logoPath} en disk: {$disk}");
+                \Log::info("Logo guardado DIRECTAMENTE: {$logoPath} en public/storage/");
             }
 
             // Manejar favicon
             if ($request->hasFile('app_favicon')) {
                 $faviconFile = $request->file('app_favicon');
                 $faviconFilename = 'favicon_' . time() . '.' . $faviconFile->getClientOriginalExtension();
-                $faviconPath = $faviconFile->storeAs('system', $faviconFilename, $disk);
+                
+                // GUARDAR DIRECTAMENTE en public/storage/system/
+                $destinationPath = public_path('storage/system');
+                $faviconFile->move($destinationPath, $faviconFilename);
+                $faviconPath = 'system/' . $faviconFilename;
                 
                 // TODO: Implementar actualización de APP_FAVICON sin modificar .env directamente
                 // $this->updateEnvVariable('APP_FAVICON', $faviconPath);
@@ -130,7 +138,7 @@ class ProfileController extends Controller
                 session(['temp_app_favicon' => $faviconPath]);
                 
                 // Log para debugging
-                \Log::info("Favicon guardado: {$faviconPath} en disk: {$disk}");
+                \Log::info("Favicon guardado DIRECTAMENTE: {$faviconPath} en public/storage/");
             }
 
             return back()->with('status', 'app-settings-updated');
@@ -142,33 +150,42 @@ class ProfileController extends Controller
     }
 
     /**
-     * Detecta automáticamente qué disk usar según el entorno
-     * FORZADO A 'public' para evitar problemas con R2
+     * FORZAR guardado directo en public/storage (sin symlink)
      */
     private function getStorageDisk(): string
     {
-        // FORZAR 'public' disk para evitar problemas con R2 en Laravel Cloud
+        // CREAR directorio si no existe
+        if (!file_exists(public_path('storage/system'))) {
+            mkdir(public_path('storage/system'), 0755, true);
+        }
+        if (!file_exists(public_path('storage/avatars'))) {
+            mkdir(public_path('storage/avatars'), 0755, true);
+        }
+        
         return 'public';
     }
 
     private function handleAvatarUpload($file, $user)
     {
-        // Detectar automáticamente el disk correcto
-        $disk = $this->getStorageDisk();
+        // GUARDAR DIRECTAMENTE EN public/storage (sin symlink)
         
         // Eliminar avatar anterior si existe
         if ($user->avatar_path) {
-            Storage::disk($disk)->delete($user->avatar_path);
+            $oldPath = public_path('storage/' . $user->avatar_path);
+            if (file_exists($oldPath)) {
+                unlink($oldPath);
+            }
         }
 
         // Generar nombre único para el archivo
         $filename = 'avatar_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
         
-        // Guardar en el disk configurado
-        $path = $file->storeAs('avatars', $filename, $disk);
+        // GUARDAR DIRECTAMENTE en public/storage/avatars/
+        $destinationPath = public_path('storage/avatars');
+        $file->move($destinationPath, $filename);
         
         // Actualizar path en el usuario
-        $user->avatar_path = $path;
+        $user->avatar_path = 'avatars/' . $filename;
     }
 
     /**
