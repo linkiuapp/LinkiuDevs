@@ -95,18 +95,26 @@ class ProfileController extends Controller
         ]);
 
         try {
-            // Usar el disk por defecto del sistema
-            $disk = config('filesystems.default');
+            // Detectar automáticamente el disk correcto
+            $disk = $this->getStorageDisk();
             
-            // Actualizar nombre de la aplicación
-            $this->updateEnvVariable('APP_NAME', $request->app_name);
+            // TODO: Implementar actualización de APP_NAME sin modificar .env directamente
+            // $this->updateEnvVariable('APP_NAME', $request->app_name);
 
             // Manejar logo
             if ($request->hasFile('app_logo')) {
                 $logoFile = $request->file('app_logo');
                 $logoFilename = 'logo_' . time() . '.' . $logoFile->getClientOriginalExtension();
                 $logoPath = $logoFile->storeAs('system', $logoFilename, $disk);
-                $this->updateEnvVariable('APP_LOGO', $logoPath);
+                
+                // TODO: Implementar actualización de APP_LOGO sin modificar .env directamente  
+                // $this->updateEnvVariable('APP_LOGO', $logoPath);
+                
+                // Por ahora, guardamos en sesión para mostrar el cambio temporalmente
+                session(['temp_app_logo' => $logoPath]);
+                
+                // Log para debugging
+                \Log::info("Logo guardado: {$logoPath} en disk: {$disk}");
             }
 
             // Manejar favicon
@@ -114,22 +122,50 @@ class ProfileController extends Controller
                 $faviconFile = $request->file('app_favicon');
                 $faviconFilename = 'favicon_' . time() . '.' . $faviconFile->getClientOriginalExtension();
                 $faviconPath = $faviconFile->storeAs('system', $faviconFilename, $disk);
-                $this->updateEnvVariable('APP_FAVICON', $faviconPath);
+                
+                // TODO: Implementar actualización de APP_FAVICON sin modificar .env directamente
+                // $this->updateEnvVariable('APP_FAVICON', $faviconPath);
+                
+                // Por ahora, guardamos en sesión para mostrar el cambio temporalmente
+                session(['temp_app_favicon' => $faviconPath]);
+                
+                // Log para debugging
+                \Log::info("Favicon guardado: {$faviconPath} en disk: {$disk}");
             }
 
             return back()->with('status', 'app-settings-updated');
         } catch (\Exception $e) {
+            // Log del error para debugging
+            \Log::error('Error en updateAppSettings: ' . $e->getMessage());
             return back()->with('status', 'app-settings-error');
         }
     }
 
     /**
-     * Handle avatar file upload
+     * Detecta automáticamente qué disk usar según el entorno
      */
+    private function getStorageDisk(): string
+    {
+        // En Laravel Cloud existe el disk 'storage'
+        if (config('filesystems.disks.storage')) {
+            return 'storage';
+        }
+        
+        // En local y otros entornos, usar el disk por defecto o public
+        $defaultDisk = config('filesystems.default', 'public');
+        
+        // Si el disk por defecto es 'local', usar 'public' para URLs públicas
+        if ($defaultDisk === 'local') {
+            return 'public';
+        }
+        
+        return $defaultDisk;
+    }
+
     private function handleAvatarUpload($file, $user)
     {
-        // Usar el disk por defecto del sistema (public en local, s3 en producción)
-        $disk = config('filesystems.default');
+        // Detectar automáticamente el disk correcto
+        $disk = $this->getStorageDisk();
         
         // Eliminar avatar anterior si existe
         if ($user->avatar_path) {
@@ -153,21 +189,31 @@ class ProfileController extends Controller
     {
         $path = base_path('.env');
         
-        if (file_exists($path)) {
-            $content = file_get_contents($path);
-            
-            // Escapar caracteres especiales en el valor
-            $value = addslashes($value);
-            
-            // Reemplazar la variable si existe
-            if (strpos($content, $key . '=') !== false) {
-                $content = preg_replace("/$key=(.*)/", "$key=\"$value\"", $content);
-            } else {
-                // Agregar la variable si no existe
-                $content .= "\n$key=\"$value\"";
-            }
-            
-            file_put_contents($path, $content);
+        if (!file_exists($path)) {
+            return false;
         }
+
+        $content = file_get_contents($path);
+        
+        // Escapar valor para uso seguro en .env
+        $escapedValue = str_replace('"', '\"', $value);
+        $newLine = $key . '="' . $escapedValue . '"';
+        
+        // Escapar la clave para usar en regex
+        $escapedKey = preg_quote($key, '/');
+        
+        // Buscar si la variable ya existe
+        $pattern = '/^' . $escapedKey . '=.*$/m';
+        
+        if (preg_match($pattern, $content)) {
+            // Reemplazar la variable existente
+            $content = preg_replace($pattern, $newLine, $content);
+        } else {
+            // Agregar la variable al final del archivo
+            $content = rtrim($content) . "\n" . $newLine . "\n";
+        }
+        
+        // Guardar el archivo
+        return file_put_contents($path, $content) !== false;
     }
 }

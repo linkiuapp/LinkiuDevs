@@ -53,13 +53,34 @@ class User extends Authenticatable
     }
 
     /**
+     * Detecta automáticamente qué disk usar según el entorno
+     */
+    private function getStorageDisk(): string
+    {
+        // En Laravel Cloud existe el disk 'storage'
+        if (config('filesystems.disks.storage')) {
+            return 'storage';
+        }
+        
+        // En local y otros entornos, usar el disk por defecto o public
+        $defaultDisk = config('filesystems.default', 'public');
+        
+        // Si el disk por defecto es 'local', usar 'public' para URLs públicas
+        if ($defaultDisk === 'local') {
+            return 'public';
+        }
+        
+        return $defaultDisk;
+    }
+
+    /**
      * Get the avatar URL with fallback to initials
      */
     public function getAvatarUrlAttribute(): string
     {
         if ($this->avatar_path) {
-            // Usar el disk por defecto del sistema
-            $disk = config('filesystems.default');
+            // Detectar automáticamente el disk correcto
+            $disk = $this->getStorageDisk();
             return Storage::disk($disk)->url($this->avatar_path);
         }
 
