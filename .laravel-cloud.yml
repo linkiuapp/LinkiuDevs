@@ -12,6 +12,7 @@ environments:
     deploy:
       - 'php artisan migrate --force'
       - 'php artisan storage:link'
+      - 'php artisan migrate:images-to-storage'
     variables:
       - APP_ENV=production
       - APP_DEBUG=false
