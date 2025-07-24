@@ -15,4 +15,3 @@ environments:
     variables:
       - APP_ENV=production
       - APP_DEBUG=false
-      - FILESYSTEM_DISK=storage
