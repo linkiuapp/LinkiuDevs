@@ -1,3 +1,7 @@
+@php
+use Illuminate\Support\Facades\Storage;
+@endphp
+
 <!-- Sidebar -->
 <aside class="fixed left-0 top-0 z-40 h-screen sidebar bg-white-50 shadow-lg dark:bg-gray-800 transition-transform duration-300 ease-in-out flex flex-col" 
        x-data="{ sidebarOpen: true }"
@@ -9,9 +13,10 @@
             <a href="{{ route('superlinkiu.dashboard') }}">
                 @php
                     $appLogo = env('APP_LOGO');
+                    $disk = config('filesystems.default');
                 @endphp
-                @if($appLogo && file_exists(public_path('storage/' . $appLogo)))
-                    <img src="{{ asset('storage/' . $appLogo) }}" alt="Logo" class="w-auto h-10">
+                @if($appLogo && Storage::disk($disk)->exists($appLogo))
+                    <img src="{{ Storage::disk($disk)->url($appLogo) }}" alt="Logo" class="w-auto h-10">
                 @else
                     <div class="flex items-center">
                         <div class="w-10 h-10 bg-primary-200 rounded-lg flex items-center justify-center mr-3">

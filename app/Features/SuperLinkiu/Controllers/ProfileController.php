@@ -95,27 +95,29 @@ class ProfileController extends Controller
         ]);
 
         try {
-            // Actualizar nombre de la app
+            // Usar el disk por defecto del sistema
+            $disk = config('filesystems.default');
+            
+            // Actualizar nombre de la aplicación
             $this->updateEnvVariable('APP_NAME', $request->app_name);
 
-            // Procesar logo si se subió
+            // Manejar logo
             if ($request->hasFile('app_logo')) {
                 $logoFile = $request->file('app_logo');
                 $logoFilename = 'logo_' . time() . '.' . $logoFile->getClientOriginalExtension();
-                $logoPath = $logoFile->storeAs('system', $logoFilename, 'public');
+                $logoPath = $logoFile->storeAs('system', $logoFilename, $disk);
                 $this->updateEnvVariable('APP_LOGO', $logoPath);
             }
 
-            // Procesar favicon si se subió
+            // Manejar favicon
             if ($request->hasFile('app_favicon')) {
                 $faviconFile = $request->file('app_favicon');
                 $faviconFilename = 'favicon_' . time() . '.' . $faviconFile->getClientOriginalExtension();
-                $faviconPath = $faviconFile->storeAs('system', $faviconFilename, 'public');
+                $faviconPath = $faviconFile->storeAs('system', $faviconFilename, $disk);
                 $this->updateEnvVariable('APP_FAVICON', $faviconPath);
             }
 
             return back()->with('status', 'app-settings-updated');
-
         } catch (\Exception $e) {
             return back()->with('status', 'app-settings-error');
         }
@@ -126,16 +128,19 @@ class ProfileController extends Controller
      */
     private function handleAvatarUpload($file, $user)
     {
+        // Usar el disk por defecto del sistema (public en local, s3 en producción)
+        $disk = config('filesystems.default');
+        
         // Eliminar avatar anterior si existe
         if ($user->avatar_path) {
-            Storage::disk('public')->delete($user->avatar_path);
+            Storage::disk($disk)->delete($user->avatar_path);
         }
 
         // Generar nombre único para el archivo
         $filename = 'avatar_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
         
-        // Subir archivo usando el disk público
-        $path = $file->storeAs('avatars', $filename, 'public');
+        // Guardar en el disk configurado
+        $path = $file->storeAs('avatars', $filename, $disk);
         
         // Actualizar path en el usuario
         $user->avatar_path = $path;

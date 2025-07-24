@@ -285,11 +285,12 @@
                                         <!-- Current Logo Preview -->
                                         @php
                                             $appLogo = env('APP_LOGO');
+                                            $disk = config('filesystems.default');
                                         @endphp
-                                        @if($appLogo && file_exists(public_path('storage/' . $appLogo)))
+                                        @if($appLogo && Storage::disk($disk)->exists($appLogo))
                                             <div class="mb-3">
                                                 <p class="text-xs text-black-200 mb-2">Logo actual:</p>
-                                                <img src="{{ asset('storage/' . $appLogo) }}" 
+                                                <img src="{{ Storage::disk($disk)->url($appLogo) }}" 
                                                      alt="Logo actual" 
                                                      class="h-12 object-contain border border-white-200 rounded-lg p-2">
                                             </div>
@@ -323,11 +324,12 @@
                                         <!-- Current Favicon Preview -->
                                         @php
                                             $appFavicon = env('APP_FAVICON');
+                                            $disk = config('filesystems.default');
                                         @endphp
-                                        @if($appFavicon && file_exists(public_path('storage/' . $appFavicon)))
+                                        @if($appFavicon && Storage::disk($disk)->exists($appFavicon))
                                             <div class="mb-3">
                                                 <p class="text-xs text-black-200 mb-2">Favicon actual:</p>
-                                                <img src="{{ asset('storage/' . $appFavicon) }}" 
+                                                <img src="{{ Storage::disk($disk)->url($appFavicon) }}" 
                                                      alt="Favicon actual" 
                                                      class="w-8 h-8 object-contain border border-white-200 rounded p-1">
                                             </div>

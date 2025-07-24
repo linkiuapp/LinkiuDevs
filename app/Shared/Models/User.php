@@ -58,10 +58,12 @@ class User extends Authenticatable
     public function getAvatarUrlAttribute(): string
     {
         if ($this->avatar_path) {
-            return Storage::disk('public')->url($this->avatar_path);
+            // Usar el disk por defecto del sistema
+            $disk = config('filesystems.default');
+            return Storage::disk($disk)->url($this->avatar_path);
         }
-        
-        // Fallback: generar avatar con iniciales
+
+        // Fallback a UI-Avatars.com con las iniciales del usuario
         $initials = $this->getInitialsAttribute();
         return "https://ui-avatars.com/api/?name={$initials}&color=7432F8&background=F1EAFF&size=128";
     }

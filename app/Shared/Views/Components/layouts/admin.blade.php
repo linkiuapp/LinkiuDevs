@@ -1,3 +1,7 @@
+@php
+use Illuminate\Support\Facades\Storage;
+@endphp
+
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="light">
 <head>
@@ -9,9 +13,10 @@
     <!-- Favicon -->
     @php
         $appFavicon = env('APP_FAVICON');
+        $disk = config('filesystems.default');
     @endphp
-    @if($appFavicon && file_exists(public_path('storage/' . $appFavicon)))
-        <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . $appFavicon) }}">
+    @if($appFavicon && Storage::disk($disk)->exists($appFavicon))
+        <link rel="icon" type="image/x-icon" href="{{ Storage::disk($disk)->url($appFavicon) }}">
     @else
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     @endif
