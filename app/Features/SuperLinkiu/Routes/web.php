@@ -71,10 +71,12 @@ Route::prefix('superlinkiu')->name('superlinkiu.')->middleware('web')->group(fun
             ->name('announcements.duplicate');
             
         // Rutas del perfil
-        Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-        Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-        Route::post('/profile/update-avatar', [ProfileController::class, 'updateAvatar'])->name('profile.update-avatar');
-        Route::post('/profile/update-system', [ProfileController::class, 'updateSystem'])->name('profile.update-system');
+        // Profile routes
+        Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
+        Route::delete('/profile/avatar', [ProfileController::class, 'deleteAvatar'])->name('profile.delete-avatar');
+        Route::patch('/profile/app-settings', [ProfileController::class, 'updateAppSettings'])->name('profile.update-app-settings');
 
         // Configuración de Email (dentro de gestión de tickets)
         Route::prefix('email')->name('email.')->group(function () {

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -22,9 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar_path',
         'role',
-        'store_id',
-        'tenant_id',
         'last_login_at',
     ];
 
@@ -39,33 +39,67 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array<string, string>
+     * @return array<string, string>
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-        'last_login_at' => 'datetime',
-    ];
-
-    // Relaciones
-    public function store()
+    protected function casts(): array
     {
-        return $this->belongsTo(Store::class);
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'last_login_at' => 'datetime',
+        ];
     }
 
-    // Métodos de ayuda
+    /**
+     * Get the avatar URL with fallback to initials
+     */
+    public function getAvatarUrlAttribute(): string
+    {
+        if ($this->avatar_path) {
+            return Storage::disk('public')->url($this->avatar_path);
+        }
+        
+        // Fallback: generar avatar con iniciales
+        $initials = $this->getInitialsAttribute();
+        return "https://ui-avatars.com/api/?name={$initials}&color=7432F8&background=F1EAFF&size=128";
+    }
+
+    /**
+     * Get user initials
+     */
+    public function getInitialsAttribute(): string
+    {
+        $words = explode(' ', trim($this->name));
+        $initials = '';
+        
+        foreach (array_slice($words, 0, 2) as $word) {
+            $initials .= strtoupper(substr($word, 0, 1));
+        }
+        
+        return $initials ?: 'U';
+    }
+
+    /**
+     * Check if user is super admin
+     */
     public function isSuperAdmin(): bool
     {
         return $this->role === 'super_admin';
     }
 
+    /**
+     * Check if user is store admin
+     */
     public function isStoreAdmin(): bool
     {
         return $this->role === 'store_admin';
     }
 
+    /**
+     * Update last login timestamp
+     */
     public function updateLastLogin(): void
     {
         $this->update(['last_login_at' => now()]);

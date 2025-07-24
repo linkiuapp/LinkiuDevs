@@ -7,10 +7,18 @@
     <div class="flex h-16 items-center justify-center px-6 border-b dark:border-gray-700 flex-shrink-0">
         <div class="flex items-center">
             <a href="{{ route('superlinkiu.dashboard') }}">
-                @if (config('app.logo'))
-                    <img src="{{ config('app.logo') }}" alt="Logo" class="w-auto h-10">
+                @php
+                    $appLogo = env('APP_LOGO');
+                @endphp
+                @if($appLogo && file_exists(public_path('storage/' . $appLogo)))
+                    <img src="{{ asset('storage/' . $appLogo) }}" alt="Logo" class="w-auto h-10">
                 @else
-                    <img src="{{ asset('assets/images/') }}" alt="Logo" class="w-auto h-10">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-primary-200 rounded-lg flex items-center justify-center mr-3">
+                            <span class="text-white-50 text-lg font-bold">L</span>
+                        </div>
+                        <span class="text-lg font-bold text-black-300">{{ config('app.name', 'Linkiu.bio') }}</span>
+                    </div>
                 @endif
             </a>
         </div>
@@ -210,7 +218,7 @@
                 </div>
             </div>
             <div class="ml-3 flex-1 min-w-0">
-                <a href="{{ route('superlinkiu.profile.index') }}" class="hover:text-primary-300">
+                <a href="{{ route('superlinkiu.profile.show') }}" class="hover:text-primary-200">
                     <p class="text-sm font-medium text-gray-900 dark:text-white-50 truncate">
                         {{ auth()->user()->name }}
                     </p>
@@ -220,8 +228,8 @@
                 </a>
             </div>
             <div class="flex-shrink-0 flex space-x-2">
-                <a href="{{ route('superlinkiu.profile.index') }}" 
-                   class="text-gray-400 hover:text-primary-300 transition-colors duration-200"
+                <a href="{{ route('superlinkiu.profile.show') }}" 
+                   class="text-gray-400 hover:text-primary-200 transition-colors duration-200"
                    title="Perfil">
                     <x-solar-user-circle-outline class="w-5 h-5" />
                 </a>
