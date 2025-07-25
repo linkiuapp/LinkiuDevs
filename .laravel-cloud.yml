@@ -11,7 +11,9 @@ environments:
       - 'php artisan view:cache'
     deploy:
       - 'php artisan migrate --force'
-      - 'php artisan storage:link'
+      - 'rm -rf /var/www/html/public/storage'
+      - 'php artisan storage:link --force'
+      - 'php artisan post-deploy:fix-storage'
       - 'php artisan migrate:images-to-storage'
     variables:
       - APP_ENV=production
