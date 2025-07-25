@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -77,6 +78,11 @@ class User extends Authenticatable
     {
         if (!$this->avatar_path) {
             return null;
+        }
+
+        // Verificar si el archivo existe en S3
+        if (!\Storage::disk('s3')->exists($this->avatar_path)) {
+            return null; // Retornar null para mostrar avatar por defecto
         }
 
         return \Storage::disk('s3')->url($this->avatar_path);

@@ -90,7 +90,7 @@ class CategoryController extends Controller
             ->orderBy('name')
             ->get();
         
-        return view('tenant-admin::categories.index', compact(
+        return view('tenant-admin::categories.create', compact(
             'store',
             'icons',
             'parentCategories',
@@ -163,7 +163,7 @@ class CategoryController extends Controller
         $category = Category::create($validated);
         
         return redirect()
-            ->route('categories.index', $store->slug)
+            ->route('tenant.admin.categories.index', $store->slug)
             ->with('success', 'Categoría creada exitosamente');
     }
 
