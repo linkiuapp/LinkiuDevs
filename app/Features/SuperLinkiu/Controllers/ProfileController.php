@@ -156,8 +156,9 @@ class ProfileController extends Controller
         // Guardar en bucket S3
         Storage::disk('s3')->putFileAs('avatars', $file, $filename, 'public');
         
-        // Actualizar path en el usuario
+        // Actualizar path en el usuario y guardar
         $user->avatar_path = 'avatars/' . $filename;
+        $user->save();
     }
 
     /**
