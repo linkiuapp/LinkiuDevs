@@ -4,6 +4,7 @@ namespace App\Features\Tenant\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Shared\Models\Store;
+use App\Shared\Models\Location;
 use App\Features\TenantAdmin\Models\Category;
 use App\Features\TenantAdmin\Models\Product;
 use App\Features\TenantAdmin\Models\Slider;
@@ -196,5 +197,126 @@ class StorefrontController extends Controller
         ];
 
         return $breadcrumbs;
+    }
+
+    /**
+     * Show contact page with store locations
+     */
+    public function contact(Request $request)
+    {
+        // El middleware ya identificó la tienda
+        $store = view()->shared('currentStore');
+
+        // Cargar sedes activas con horarios y redes sociales
+        $locations = $store->locations()
+            ->where('is_active', true)
+            ->with(['schedules', 'socialLinks'])
+            ->orderByDesc('is_main') // Sede principal primero
+            ->orderBy('name')
+            ->get();
+
+        // Calcular estado actual para cada sede
+        foreach ($locations as $location) {
+            $location->currentStatus = $this->calculateLocationStatus($location);
+        }
+
+        return view('tenant::storefront.contact', compact('store', 'locations'));
+    }
+
+    /**
+     * Calculate current status for a location
+     */
+    private function calculateLocationStatus(Location $location): array
+    {
+        $now = \Carbon\Carbon::now();
+        $dayOfWeek = $now->dayOfWeek; // 0=Sunday, 6=Saturday
+        $currentTime = $now->format('H:i');
+
+        // Buscar horario de hoy
+        $todaySchedule = $location->schedules()->where('day_of_week', $dayOfWeek)->first();
+
+        if (!$todaySchedule || $todaySchedule->is_closed) {
+            return [
+                'status' => 'closed',
+                'text' => 'Cerrado hoy',
+                'color' => 'text-error-400',
+                'bg' => 'bg-error-50',
+                'border' => 'border-error-200'
+            ];
+        }
+
+        // Verificar si está abierto ahora
+        $isOpen = false;
+        
+        // Turno 1
+        if ($todaySchedule->open_time_1 && $todaySchedule->close_time_1) {
+            if ($currentTime >= $todaySchedule->open_time_1 && $currentTime <= $todaySchedule->close_time_1) {
+                $isOpen = true;
+            }
+        }
+
+        // Turno 2 (si existe)
+        if (!$isOpen && $todaySchedule->open_time_2 && $todaySchedule->close_time_2) {
+            if ($currentTime >= $todaySchedule->open_time_2 && $currentTime <= $todaySchedule->close_time_2) {
+                $isOpen = true;
+            }
+        }
+
+        if ($isOpen) {
+            return [
+                'status' => 'open',
+                'text' => 'Abierto ahora',
+                'color' => 'text-success-400',
+                'bg' => 'bg-success-50',
+                'border' => 'border-success-200'
+            ];
+        } else {
+            // Está cerrado, calcular próxima apertura
+            $nextOpen = $this->getNextOpenTime($location);
+            
+            return [
+                'status' => 'closed',
+                'text' => $nextOpen ? "Abre {$nextOpen}" : 'Cerrado',
+                'color' => 'text-warning-400',
+                'bg' => 'bg-warning-50',
+                'border' => 'border-warning-200'
+            ];
+        }
+    }
+
+    /**
+     * Get next opening time for a location
+     */
+    private function getNextOpenTime(Location $location): ?string
+    {
+        $now = \Carbon\Carbon::now();
+        
+        // Buscar en los próximos 7 días
+        for ($i = 0; $i < 7; $i++) {
+            $checkDate = $now->copy()->addDays($i);
+            $dayOfWeek = $checkDate->dayOfWeek;
+            
+            $schedule = $location->schedules()->where('day_of_week', $dayOfWeek)->first();
+            
+            if (!$schedule || $schedule->is_closed) {
+                continue;
+            }
+
+            // Si es hoy, verificar si aún puede abrir
+            if ($i === 0) {
+                $currentTime = $now->format('H:i');
+                
+                // Verificar turno 2 si el turno 1 ya pasó
+                if ($schedule->open_time_2 && $schedule->open_time_2 > $currentTime) {
+                    return "hoy a las {$schedule->open_time_2}";
+                }
+            } else {
+                // Días futuros
+                $dayName = $checkDate->locale('es')->dayName;
+                return "{$dayName} a las {$schedule->open_time_1}";
+            }
+        }
+
+        return null;
     }
 } 

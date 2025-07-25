@@ -49,5 +49,8 @@ Route::prefix('pedido')->name('order.')->group(function () {
 Route::get('/categorias', [StorefrontController::class, 'categories'])->name('categories');
 Route::get('/categoria/{categorySlug}', [StorefrontController::class, 'category'])->name('category');
 
+// Ruta de contacto/sedes
+Route::get('/contacto', [StorefrontController::class, 'contact'])->name('contact');
+
 // Más rutas del frontend se añadirán aquí en el futuro...
 // Route::get('/buscar', [StorefrontController::class, 'search'])->name('search'); 
