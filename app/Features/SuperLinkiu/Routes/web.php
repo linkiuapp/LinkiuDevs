@@ -98,6 +98,45 @@ Route::prefix('superlinkiu')->name('superlinkiu.')->middleware('web')->group(fun
         Route::delete('/profile/avatar', [ProfileController::class, 'deleteAvatar'])->name('profile.delete-avatar');
         Route::patch('/profile/app-settings', [ProfileController::class, 'updateAppSettings'])->name('profile.update-app-settings');
 
+        // 🔧 DEBUG ROUTE - Avatar diagnostics (TEMPORAL)
+        Route::get('/debug-avatar', function() {
+            $user = auth()->user();
+            
+            return response()->json([
+                '🔍 USER DATA' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'avatar_path (BD)' => $user->avatar_path,
+                    'avatar_path (getRawOriginal)' => $user->getRawOriginal('avatar_path'),
+                ],
+                '🎯 ACCESSOR TEST' => [
+                    'avatar_url (accessor)' => $user->avatar_url,
+                    'getAvatarUrlAttribute() direct' => $user->getAvatarUrlAttribute(),
+                ],
+                '⚙️ S3 CONFIG' => [
+                    'default_disk' => config('filesystems.default'),
+                    's3_bucket' => config('filesystems.disks.s3.bucket'),
+                    's3_url' => config('filesystems.disks.s3.url'),
+                    's3_region' => config('filesystems.disks.s3.region'),
+                ],
+                '🧪 S3 TESTS' => [
+                    's3_url_direct' => $user->avatar_path ? \Storage::disk('s3')->url($user->avatar_path) : 'No avatar_path',
+                    's3_exists' => $user->avatar_path ? \Storage::disk('s3')->exists($user->avatar_path) : 'No avatar_path',
+                    'local_asset' => $user->avatar_path ? asset('storage/' . $user->avatar_path) : 'No avatar_path',
+                ],
+                '🔄 ATTRIBUTE CAST' => [
+                    'casts' => $user->getCasts(),
+                    'attributes' => $user->getAttributes(),
+                    'mutated_attributes' => $user->getMutatedAttributes(),
+                ],
+                '🌐 ENVIRONMENT' => [
+                    'APP_ENV' => config('app.env'),
+                    'APP_URL' => config('app.url'),
+                    'FILESYSTEM_DISK' => config('filesystems.default'),
+                ]
+            ], JSON_PRETTY_PRINT);
+        })->name('debug.avatar');
+
         // Configuración de Email (dentro de gestión de tickets)
         Route::prefix('email')->name('email.')->group(function () {
             Route::get('/', [EmailConfigurationController::class, 'index'])->name('index');

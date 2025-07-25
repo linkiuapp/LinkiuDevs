@@ -1,5 +1,10 @@
 @extends('shared::layouts.admin')
 @section('title', 'Perfil de Administrador')
+
+@php
+use Illuminate\Support\Facades\Storage;
+@endphp
+
 @section('content')
 <div class="container-fluid">
     <!-- Header con título y botón de acción -->
@@ -44,6 +49,16 @@
                 <div class="card-body">
                     <div class="text-center">
                         <div class="profile-pic mb-6">
+                            {{-- 🔧 DEBUG INFO (TEMPORAL) --}}
+                            <div class="bg-error-50 border border-error-200 rounded p-3 mb-4 text-xs">
+                                <strong>🔍 DEBUG Avatar:</strong><br>
+                                <strong>avatar_path (BD):</strong> {{ $user->avatar_path ?? 'NULL' }}<br>
+                                <strong>avatar_url (accessor):</strong> {{ $user->avatar_url ?? 'NULL' }}<br>
+                                <strong>S3 directo:</strong> {{ $user->avatar_path ? Storage::disk('s3')->url($user->avatar_path) : 'No path' }}<br>
+                                <strong>Local asset:</strong> {{ $user->avatar_path ? asset('storage/' . $user->avatar_path) : 'No path' }}<br>
+                                <strong>Usado en img src:</strong> <code>{{ $user->avatar_url }}</code>
+                            </div>
+                            
                             @if($user->avatar_url)
                                 <img src="{{ $user->avatar_url }}" alt="Avatar" class="rounded-full mx-auto" width="150">
                             @else
