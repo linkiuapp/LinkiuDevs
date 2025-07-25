@@ -1,3 +1,4 @@
+
 @php
 use Illuminate\Support\Facades\Storage;
 @endphp
@@ -250,19 +251,8 @@ use Illuminate\Support\Facades\Storage;
             <div class="flex-shrink-0">
                 <div class="w-8 h-8 bg-primary-300 rounded-full flex items-center justify-center">
                     <span class="text-white-50 text-sm font-medium">
-                        @if (auth()->user()->avatar_path)
-                            @php
-                                try {
-                                    if (config('filesystems.disks.s3.bucket')) {
-                                        $avatarSrc = Storage::disk('s3')->url(auth()->user()->avatar_path);
-                                    } else {
-                                        $avatarSrc = asset('storage/' . auth()->user()->avatar_path);
-                                    }
-                                } catch (\Exception $e) {
-                                    $avatarSrc = asset('storage/' . auth()->user()->avatar_path);
-                                }
-                            @endphp
-                            <img src="{{ $avatarSrc }}" alt="Avatar" class="w-8 h-8 rounded-full">
+                        @if (auth()->user()->avatar_url)
+                            <img src="{{ auth()->user()->avatar_url }}" alt="Avatar" class="w-8 h-8 rounded-full">
                         @else
                             {{ substr(auth()->user()->name, 0, 1) }}
                         @endif

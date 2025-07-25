@@ -1,6 +1,5 @@
 @php
-    // SIEMPRE usar storage/ - más simple y compatible
-    $storagePath = 'storage';
+use Illuminate\Support\Facades\Storage;
 @endphp
 
 @extends('shared::layouts.admin')
@@ -72,14 +71,16 @@
                     <div class="p-6 text-center">
                         <!-- Avatar Display -->
                         <div class="mb-6">
-                            @if($user->avatar_path)
-                                <img src="{{ asset($storagePath . '/' . $user->avatar_path) }}" 
+                            @if($user->avatar_url)
+                                <img src="{{ $user->avatar_url }}" 
                                      alt="Avatar de {{ $user->name }}" 
                                      class="w-32 h-32 rounded-full mx-auto object-cover border-4 border-white-200">
                             @else
-                                <img src="{{ asset('images/default-avatar.png') }}" 
-                                     alt="Avatar por defecto" 
-                                     class="w-32 h-32 rounded-full mx-auto object-cover border-4 border-white-200">
+                                <div class="w-32 h-32 bg-primary-200 rounded-full flex items-center justify-center mx-auto border-4 border-white-200">
+                                    <span class="text-white-50 text-4xl font-medium">
+                                        {{ substr($user->name, 0, 1) }}
+                                    </span>
+                                </div>
                             @endif
                         </div>
 
@@ -296,11 +297,24 @@
                                         @php
                                             $tempLogo = session('temp_app_logo');
                                             $appLogo = $tempLogo ?: env('APP_LOGO');
+                                            
+                                            $logoSrc = null;
+                                            if ($appLogo) {
+                                                try {
+                                                    if (config('filesystems.disks.s3.bucket')) {
+                                                        $logoSrc = Storage::disk('s3')->url($appLogo);
+                                                    } else {
+                                                        $logoSrc = asset('storage/' . $appLogo);
+                                                    }
+                                                } catch (\Exception $e) {
+                                                    $logoSrc = asset('storage/' . $appLogo);
+                                                }
+                                            }
                                         @endphp
-                                        @if($appLogo)
+                                        @if($logoSrc)
                                             <div class="mb-3">
                                                 <p class="text-xs text-black-200 mb-2">Logo actual:</p>
-                                                <img src="{{ asset($storagePath . '/' . $appLogo) }}" 
+                                                <img src="{{ $logoSrc }}" 
                                                      alt="Logo actual" 
                                                      class="h-12 object-contain border border-white-200 rounded-lg p-2">
                                             </div>
@@ -334,11 +348,24 @@
                                         @php
                                             $tempFavicon = session('temp_app_favicon');
                                             $appFavicon = $tempFavicon ?: env('APP_FAVICON');
+                                            
+                                            $faviconSrc = null;
+                                            if ($appFavicon) {
+                                                try {
+                                                    if (config('filesystems.disks.s3.bucket')) {
+                                                        $faviconSrc = Storage::disk('s3')->url($appFavicon);
+                                                    } else {
+                                                        $faviconSrc = asset('storage/' . $appFavicon);
+                                                    }
+                                                } catch (\Exception $e) {
+                                                    $faviconSrc = asset('storage/' . $appFavicon);
+                                                }
+                                            }
                                         @endphp
-                                        @if($appFavicon)
+                                        @if($faviconSrc)
                                             <div class="mb-3">
                                                 <p class="text-xs text-black-200 mb-2">Favicon actual:</p>
-                                                <img src="{{ asset($storagePath . '/' . $appFavicon) }}" 
+                                                <img src="{{ $faviconSrc }}" 
                                                      alt="Favicon actual" 
                                                      class="w-8 h-8 object-contain border border-white-200 rounded">
                                             </div>

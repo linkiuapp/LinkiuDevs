@@ -44,12 +44,8 @@
                 <div class="card-body">
                     <div class="text-center">
                         <div class="profile-pic mb-6">
-                            @if($user->avatar_path)
-                                @if(config('filesystems.default') === 's3')
-                                    <img src="{{ Storage::disk('s3')->url($user->avatar_path) }}" alt="Avatar" class="rounded-full mx-auto" width="150">
-                                @else
-                                    <img src="{{ asset('storage/'.$user->avatar_path) }}" alt="Avatar" class="rounded-full mx-auto" width="150">
-                                @endif
+                            @if($user->avatar_url)
+                                <img src="{{ $user->avatar_url }}" alt="Avatar" class="rounded-full mx-auto" width="150">
                             @else
                                 <div class="w-32 h-32 bg-primary-200 rounded-full flex items-center justify-center mx-auto">
                                     <span class="text-white-50 text-4xl font-medium">

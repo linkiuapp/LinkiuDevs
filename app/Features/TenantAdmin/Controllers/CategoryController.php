@@ -90,7 +90,7 @@ class CategoryController extends Controller
             ->orderBy('name')
             ->get();
         
-        return view('tenant-admin::categories.create', compact(
+        return view('tenant-admin::categories.index', compact(
             'store',
             'icons',
             'parentCategories',

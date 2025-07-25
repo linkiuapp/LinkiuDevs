@@ -23,6 +23,7 @@ class User extends Authenticatable
         'password',
         'role',
         'last_login_at',
+        'avatar_path',
     ];
 
     /**
@@ -67,5 +68,17 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role === 'admin' || $this->role === 'super_admin';
+    }
+
+    /**
+     * Get the avatar URL.
+     */
+    public function getAvatarUrlAttribute(): ?string
+    {
+        if (!$this->avatar_path) {
+            return null;
+        }
+
+        return \Storage::disk('s3')->url($this->avatar_path);
     }
 }

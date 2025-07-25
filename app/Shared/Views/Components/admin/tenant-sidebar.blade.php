@@ -1,3 +1,7 @@
+@php
+use Illuminate\Support\Facades\Storage;
+@endphp
+
 <!-- Sidebar Admin de Tienda -->
 <aside class="fixed left-0 top-0 z-40 h-screen sidebar bg-white-50 shadow-lg dark:bg-gray-800 transition-transform duration-300 ease-in-out flex flex-col" 
        x-data="{ sidebarOpen: true }"
