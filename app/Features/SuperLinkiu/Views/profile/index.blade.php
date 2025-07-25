@@ -54,8 +54,11 @@
                                 </div>
                             @endif
                             <div class="mt-4">
-                                <form action="{{ route('superlinkiu.profile.update-avatar') }}" method="POST" enctype="multipart/form-data">
+                                <form action="{{ route('superlinkiu.profile.update') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
+                                    @method('PATCH')
+                                    <input type="hidden" name="name" value="{{ $user->name }}">
+                                    <input type="hidden" name="email" value="{{ $user->email }}">
                                     <div class="mb-3">
                                         <input type="file" name="avatar" class="block w-full text-sm text-black-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-300 hover:file:bg-primary-100 @error('avatar') border-error-200 @enderror">
                                         @error('avatar')
