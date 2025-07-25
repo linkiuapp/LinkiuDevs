@@ -26,6 +26,148 @@ Route::get('/store/{slug}/status', function($slug) {
     }
 });
 
+// 🖼️ DEBUG ESPECÍFICO PARA IMÁGENES Y STORAGE
+Route::get('/debug-images', function() {
+    $debugInfo = [
+        'timestamp' => now()->toISOString(),
+        'image_debug' => true,
+        'environment' => app()->environment(),
+    ];
+
+    try {
+        // 1. Verificar estructura de directorios
+        $debugInfo['directories'] = [
+            'public_path' => public_path(),
+            'storage_path' => storage_path(),
+            'public_storage_exists' => file_exists(public_path('storage')),
+            'public_storage_is_link' => is_link(public_path('storage')),
+            'public_storage_target' => is_link(public_path('storage')) ? readlink(public_path('storage')) : null,
+        ];
+
+        // 2. Verificar directorios específicos de imágenes
+        $imageDirectories = [
+            'storage/avatars',
+            'storage/system', 
+            'storage/stores/logos',
+            'storage/store-design',
+            'storage/products'
+        ];
+
+        $debugInfo['image_directories'] = [];
+        foreach ($imageDirectories as $dir) {
+            $fullPath = public_path($dir);
+            $debugInfo['image_directories'][$dir] = [
+                'exists' => file_exists($fullPath),
+                'writable' => file_exists($fullPath) ? is_writable($fullPath) : false,
+                'files_count' => file_exists($fullPath) ? count(glob($fullPath . '/*')) : 0,
+                'permissions' => file_exists($fullPath) ? substr(sprintf('%o', fileperms($fullPath)), -4) : null
+            ];
+        }
+
+        // 3. Probar creación de archivo de prueba
+        $testDir = public_path('storage/test');
+        $debugInfo['write_test'] = [
+            'test_dir_created' => false,
+            'test_file_written' => false,
+            'test_file_readable' => false,
+            'test_url' => null,
+            'error' => null
+        ];
+
+        try {
+            if (!file_exists($testDir)) {
+                mkdir($testDir, 0755, true);
+            }
+            $debugInfo['write_test']['test_dir_created'] = true;
+
+            $testFile = $testDir . '/test.txt';
+            file_put_contents($testFile, 'Test file created at ' . now());
+            $debugInfo['write_test']['test_file_written'] = true;
+
+            $debugInfo['write_test']['test_file_readable'] = file_exists($testFile);
+            $debugInfo['write_test']['test_url'] = asset('storage/test/test.txt');
+
+            // Limpiar archivo de prueba
+            if (file_exists($testFile)) {
+                unlink($testFile);
+            }
+            if (file_exists($testDir)) {
+                rmdir($testDir);
+            }
+
+        } catch (\Exception $e) {
+            $debugInfo['write_test']['error'] = $e->getMessage();
+        }
+
+        // 4. Verificar imágenes existentes de usuarios
+        $debugInfo['existing_images'] = [
+            'users_with_avatars' => 0,
+            'avatar_samples' => [],
+            'stores_with_logos' => 0,
+            'logo_samples' => []
+        ];
+
+        // Verificar avatares de usuarios
+        $usersWithAvatars = \App\Shared\Models\User::whereNotNull('avatar_path')->take(3)->get();
+        $debugInfo['existing_images']['users_with_avatars'] = $usersWithAvatars->count();
+        
+        foreach ($usersWithAvatars as $user) {
+            $avatarPath = public_path('storage/' . $user->avatar_path);
+            $debugInfo['existing_images']['avatar_samples'][] = [
+                'user_id' => $user->id,
+                'avatar_path' => $user->avatar_path,
+                'file_exists' => file_exists($avatarPath),
+                'url' => asset('storage/' . $user->avatar_path),
+                'file_size' => file_exists($avatarPath) ? filesize($avatarPath) : null
+            ];
+        }
+
+        // Verificar logos de tiendas
+        $storesWithLogos = \App\Shared\Models\Store::whereNotNull('logo_url')->take(3)->get();
+        $debugInfo['existing_images']['stores_with_logos'] = $storesWithLogos->count();
+
+        foreach ($storesWithLogos as $store) {
+            // Extraer path del logo_url
+            $logoPath = str_replace(asset('storage/'), '', $store->logo_url);
+            $fullLogoPath = public_path('storage/' . $logoPath);
+            
+            $debugInfo['existing_images']['logo_samples'][] = [
+                'store_id' => $store->id,
+                'logo_url' => $store->logo_url,
+                'extracted_path' => $logoPath,
+                'file_exists' => file_exists($fullLogoPath),
+                'file_size' => file_exists($fullLogoPath) ? filesize($fullLogoPath) : null
+            ];
+        }
+
+        // 5. Información del servidor web
+        $debugInfo['server_info'] = [
+            'php_version' => PHP_VERSION,
+            'web_server' => $_SERVER['SERVER_SOFTWARE'] ?? 'unknown',
+            'document_root' => $_SERVER['DOCUMENT_ROOT'] ?? 'unknown',
+            'script_name' => $_SERVER['SCRIPT_NAME'] ?? 'unknown',
+            'app_url' => config('app.url'),
+            'asset_url' => config('app.asset_url', 'not_set')
+        ];
+
+        // 6. Test de asset() helper
+        $debugInfo['asset_test'] = [
+            'asset_storage_test' => asset('storage/test/example.jpg'),
+            'url_helper_test' => url('storage/test/example.jpg'),
+            'config_app_url' => config('app.url')
+        ];
+
+    } catch (\Exception $e) {
+        $debugInfo['critical_error'] = [
+            'message' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine()
+        ];
+    }
+
+    return response()->json($debugInfo, 200, [], JSON_PRETTY_PRINT);
+});
+
 // 🆘 RUTA DE EMERGENCIA - DEBUG SIN MIDDLEWARE
 Route::get('/emergency-debug/{slug?}', function($slug = null) {
     $debugInfo = [
@@ -129,7 +271,4 @@ Route::get('/emergency-debug/{slug?}', function($slug = null) {
     }
     
     return response()->json($debugInfo, 200, [], JSON_PRETTY_PRINT);
-});
-
-// ⚠️ RUTA DE EMERGENCIA - Mantener para futuros problemas de producción
-// Solo usar cuando hay problemas críticos que requieran diagnóstico sin middleware 
+}); 
