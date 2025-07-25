@@ -10,11 +10,15 @@ environments:
       - 'php artisan route:cache'
       - 'php artisan view:cache'
     deploy:
-      - 'php artisan migrate --force'
-      - 'rm -rf /var/www/html/public/storage'
-      - 'php artisan storage:link --force'
-      - 'php artisan post-deploy:fix-storage'
-      - 'php artisan migrate:images-to-storage'
+  - 'php artisan migrate --force'
+  - 'php artisan migrate:images-to-storage'
+
+post-deploy:
+  - 'rm -rf /var/www/html/public/storage'
+  - 'php artisan storage:link --force'
+  - 'php artisan post-deploy:fix-storage'
+  - 'sleep 2'
+  - 'php artisan post-deploy:fix-storage'
     variables:
       - APP_ENV=production
       - APP_DEBUG=false
