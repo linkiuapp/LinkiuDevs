@@ -12,13 +12,15 @@ environments:
     deploy:
   - 'php artisan migrate --force'
   - 'php artisan migrate:images-to-storage'
-
-post-deploy:
-  - 'rm -rf /var/www/html/public/storage'
+  - 'php artisan config:clear'
+  - 'php artisan cache:clear'
+  - 'rm -rf /var/www/html/public/storage || true'
   - 'php artisan storage:link --force'
   - 'php artisan post-deploy:fix-storage'
-  - 'sleep 2'
+  - 'ls -la /var/www/html/public/storage || echo "storage link missing"'
+  - 'sleep 3'
   - 'php artisan post-deploy:fix-storage'
+  - 'ls -la /var/www/html/public/ | grep storage || echo "final check failed"'
     variables:
       - APP_ENV=production
       - APP_DEBUG=false

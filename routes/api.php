@@ -26,8 +26,42 @@ Route::get('/store/{slug}/status', function($slug) {
     }
 });
 
-// 🛠️ REPARACIÓN REMOTA DE STORAGE - Solo para emergencias
-// Nota: La solución permanente está en .laravel-cloud.yml (post-deploy hook)
+// 🆘 REPARACIÓN REMOTA DE STORAGE - EMERGENCIA ACTIVA
+Route::get('/fix-storage-emergency', function() {
+    $results = [
+        'timestamp' => now()->toISOString(),
+        'action' => 'emergency_storage_fix',
+        'environment' => app()->environment(),
+        'steps' => []
+    ];
+
+    try {
+        // Ejecutar el comando directamente
+        \Artisan::call('post-deploy:fix-storage');
+        $commandOutput = \Artisan::output();
+        
+        $results['steps'][] = "✅ Comando post-deploy:fix-storage ejecutado";
+        $results['command_output'] = $commandOutput;
+        
+        // Verificar resultado
+        $publicStorage = public_path('storage');
+        $results['final_verification'] = [
+            'public_storage_exists' => file_exists($publicStorage),
+            'public_storage_is_link' => is_link($publicStorage),
+            'symlink_target' => is_link($publicStorage) ? readlink($publicStorage) : null
+        ];
+        
+        $results['success'] = true;
+        $results['message'] = "Reparación de emergencia completada";
+        
+    } catch (\Exception $e) {
+        $results['success'] = false;
+        $results['error'] = $e->getMessage();
+        $results['steps'][] = "❌ Error: " . $e->getMessage();
+    }
+
+    return response()->json($results, 200, [], JSON_PRETTY_PRINT);
+});
 
 // 🖼️ DEBUG ESPECÍFICO PARA IMÁGENES Y STORAGE
 Route::get('/debug-images', function() {
