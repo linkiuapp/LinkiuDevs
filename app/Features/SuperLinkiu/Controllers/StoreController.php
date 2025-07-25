@@ -149,36 +149,78 @@ class StoreController extends Controller
             return $value !== null && $value !== '';
         })->toArray();
 
-        // Crear la tienda
-        $store = Store::create([
-            ...$storeData,
-            'status' => $validated['status'] ?? 'active',
-            'verified' => false,
-        ]);
+        // 🔒 CREAR TIENDA Y ADMIN EN TRANSACCIÓN ATÓMICA
+        try {
+            \DB::beginTransaction();
 
-        // 🔧 ASEGURAR QUE billing_period esté disponible para el Observer
-        // El Observer usa request('billing_period') para crear la suscripción automática
-        if (!$request->has('billing_period') && isset($validated['billing_period'])) {
-            $request->merge(['billing_period' => $validated['billing_period']]);
+            // Crear la tienda
+            $store = Store::create([
+                ...$storeData,
+                'status' => $validated['status'] ?? 'active',
+                'verified' => false,
+            ]);
+
+            // 🔧 ASEGURAR QUE billing_period esté disponible para el Observer
+            // El Observer usa request('billing_period') para crear la suscripción automática
+            if (!$request->has('billing_period') && isset($validated['billing_period'])) {
+                $request->merge(['billing_period' => $validated['billing_period']]);
+            }
+
+            // 🔧 ASEGURAR QUE initial_payment_status esté disponible para el Observer
+            // El Observer usa request('initial_payment_status') para establecer el estado de la primera factura
+            if (!$request->has('initial_payment_status') && isset($validated['initial_payment_status'])) {
+                $request->merge(['initial_payment_status' => $validated['initial_payment_status']]);
+            }
+
+            // 🔧 PASAR CONTEXTO DE TIENDA CREADA AL UserObserver
+            $request->merge(['_created_store' => $store, 'store_id' => $store->id]);
+
+            // Crear el usuario administrador de la tienda
+            $storeAdmin = User::create([
+                'name' => $validated['owner_name'],
+                'email' => $validated['admin_email'],
+                'password' => bcrypt($validated['admin_password']),
+                'role' => 'store_admin',
+                'store_id' => $store->id,
+            ]);
+
+            // ✅ VERIFICAR QUE EL ADMIN SE CREÓ CORRECTAMENTE
+            if (!$storeAdmin || !$storeAdmin->store_id) {
+                throw new \Exception('Failed to create store admin with store_id');
+            }
+
+            // ✅ VERIFICAR QUE LA TIENDA TIENE AL MENOS UN ADMIN
+            $adminCount = $store->admins()->count();
+            if ($adminCount === 0) {
+                throw new \Exception('Store created but no admin was assigned');
+            }
+
+            \DB::commit();
+
+            // Log de éxito
+            Log::info('Store created successfully with admin', [
+                'store_id' => $store->id,
+                'store_slug' => $store->slug,
+                'admin_id' => $storeAdmin->id,
+                'admin_email' => $storeAdmin->email,
+                'admin_count' => $adminCount
+            ]);
+
+        } catch (\Exception $e) {
+            \DB::rollBack();
+            
+            // Log del error
+            Log::error('Failed to create store with admin', [
+                'error' => $e->getMessage(),
+                'store_data' => $storeData,
+                'admin_email' => $validated['admin_email'],
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return back()
+                ->withErrors(['general' => 'Error al crear la tienda: ' . $e->getMessage()])
+                ->withInput();
         }
-
-        // 🔧 ASEGURAR QUE initial_payment_status esté disponible para el Observer
-        // El Observer usa request('initial_payment_status') para establecer el estado de la primera factura
-        if (!$request->has('initial_payment_status') && isset($validated['initial_payment_status'])) {
-            $request->merge(['initial_payment_status' => $validated['initial_payment_status']]);
-        }
-
-        // 🔧 PASAR CONTEXTO DE TIENDA CREADA AL UserObserver
-        $request->merge(['_created_store' => $store, 'store_id' => $store->id]);
-
-        // Crear el usuario administrador de la tienda
-        $storeAdmin = User::create([
-            'name' => $validated['owner_name'],
-            'email' => $validated['admin_email'],
-            'password' => bcrypt($validated['admin_password']),
-            'role' => 'store_admin',
-            'store_id' => $store->id,
-        ]);
 
         // Preparar datos para el modal de éxito
         $adminCredentials = [

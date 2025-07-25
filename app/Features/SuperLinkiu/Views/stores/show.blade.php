@@ -53,8 +53,8 @@
             <div>
                 <h1 class="text-lg font-bold text-black-400">{{ $store->name }}</h1>
                 <div class="flex items-center gap-2">
-                    <p class="text-sm text-black-300">linkiu.bio/{{ $store->slug }}</p>
-                    <a href="https://linkiu.bio/{{ $store->slug }}" target="_blank" class="text-primary-200 hover:text-primary-300">
+                    <p class="text-sm text-black-300">{{ str_replace(['http://', 'https://'], '', url('/')) }}/{{ $store->slug }}</p>
+                    <a href="{{ url('/' . $store->slug) }}" target="_blank" class="text-primary-200 hover:text-primary-300">
                         <x-solar-square-arrow-right-up-outline class="w-4 h-4" />
                     </a>
                 </div>
@@ -93,8 +93,8 @@
                             <dt class="text-sm font-medium text-black-300">URL de la tienda</dt>
                             <dd class="mt-1 text-sm text-black-400">
                                 <div class="flex items-center gap-2">
-                                    <span>linkiu.bio/{{ $store->slug }}</span>
-                                    <a href="https://linkiu.bio/{{ $store->slug }}" target="_blank" class="text-primary-200 hover:text-primary-300">
+                                    <span>{{ str_replace(['http://', 'https://'], '', url('/')) }}/{{ $store->slug }}</span>
+                                    <a href="{{ url('/' . $store->slug) }}" target="_blank" class="text-primary-200 hover:text-primary-300">
                                         <x-solar-square-arrow-right-up-outline class="w-4 h-4" />
                                     </a>
                                 </div>

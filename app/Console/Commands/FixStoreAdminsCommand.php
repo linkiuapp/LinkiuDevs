@@ -3,165 +3,141 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Shared\Models\User;
 use App\Shared\Models\Store;
+use App\Shared\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class FixStoreAdminsCommand extends Command
 {
-    protected $signature = 'auth:fix-store-admins {--dry-run : Solo mostrar qué se haría sin ejecutar cambios} {--force : Ejecutar sin confirmación}';
-    protected $description = 'Arreglar usuarios store_admin sin store_id asignado';
+    protected $signature = 'fix:store-admins {--store-slug=} {--create-missing} {--dry-run}';
+    protected $description = 'Fix stores without administrators';
 
     public function handle()
     {
-        $this->info("🔧 REPARANDO USUARIOS STORE_ADMIN SIN STORE_ID");
-        $this->line("");
+        $this->info('🔧 ARREGLANDO TIENDAS SIN ADMINISTRADORES');
+        $this->newLine();
 
-        // 1. Encontrar usuarios problemáticos
-        $problematicUsers = User::where('role', 'store_admin')
-            ->whereNull('store_id')
-            ->get();
+        $isDryRun = $this->option('dry-run');
+        $createMissing = $this->option('create-missing');
+        $specificSlug = $this->option('store-slug');
 
-        if ($problematicUsers->isEmpty()) {
-            $this->info("✅ No hay usuarios store_admin sin store_id. Todo está correcto.");
+        if ($isDryRun) {
+            $this->warn('🔍 MODO DRY-RUN - Solo mostrando qué haría');
+            $this->newLine();
+        }
+
+        // Buscar tiendas sin administradores
+        $query = Store::whereDoesntHave('admins');
+        
+        if ($specificSlug) {
+            $query->where('slug', $specificSlug);
+        }
+
+        $storesWithoutAdmins = $query->get();
+
+        if ($storesWithoutAdmins->isEmpty()) {
+            $this->info('✅ Todas las tiendas tienen administradores asignados');
             return 0;
         }
 
-        $this->warn("🚨 Encontrados {$problematicUsers->count()} usuarios store_admin sin store_id:");
-        $this->line("");
+        $this->warn("⚠️  Encontradas {$storesWithoutAdmins->count()} tiendas sin administradores:");
+        $this->newLine();
 
-        // Mostrar usuarios problemáticos
-        $this->table(['ID', 'Nombre', 'Email', 'Store ID', 'Creado'], 
-            $problematicUsers->map(fn($user) => [
-                $user->id,
-                $user->name,
-                $user->email,
-                $user->store_id ?? 'NULL ❌',
-                $user->created_at->format('Y-m-d H:i:s')
-            ])->toArray()
-        );
+        foreach ($storesWithoutAdmins as $store) {
+            $this->line("🏪 Tienda: {$store->name} (slug: {$store->slug}, ID: {$store->id})");
+            
+            if ($createMissing) {
+                if (!$isDryRun) {
+                    $this->createAdminForStore($store);
+                } else {
+                    $this->line("   🔨 Crearía admin para esta tienda");
+                }
+            } else {
+                // Buscar usuarios store_admin sin tienda asignada
+                $orphanAdmins = User::where('role', 'store_admin')
+                    ->whereNull('store_id')
+                    ->get();
 
-        // 2. Analizar tiendas disponibles
-        $storesWithoutAdmin = Store::whereDoesntHave('admins')->get();
-        $allStores = Store::with('admins')->get();
-
-        $this->line("");
-        $this->info("📊 ANÁLISIS DE TIENDAS:");
-        $this->line("• Total tiendas: " . $allStores->count());
-        $this->line("• Tiendas sin admin: " . $storesWithoutAdmin->count());
-        $this->line("• Tiendas con admin: " . ($allStores->count() - $storesWithoutAdmin->count()));
-
-        if ($storesWithoutAdmin->isNotEmpty()) {
-            $this->line("");
-            $this->info("🏪 TIENDAS SIN ADMINISTRADOR:");
-            $this->table(['ID', 'Nombre', 'Slug', 'Status'], 
-                $storesWithoutAdmin->map(fn($store) => [
-                    $store->id,
-                    $store->name,
-                    $store->slug,
-                    $store->status
-                ])->toArray()
-            );
-        }
-
-        // 3. Proponer soluciones
-        $this->line("");
-        $this->info("💡 ESTRATEGIAS DE ASIGNACIÓN:");
-
-        $solutions = $this->proposeSolutions($problematicUsers, $storesWithoutAdmin, $allStores);
-
-        foreach ($solutions as $solution) {
-            $this->line("• Usuario ID {$solution['user']->id} ({$solution['user']->email}) → Tienda ID {$solution['store']->id} ({$solution['store']->name})");
-            $this->line("  Razón: {$solution['reason']}");
-        }
-
-        // 4. Confirmar ejecución
-        if ($this->option('dry-run')) {
-            $this->warn("🔍 MODO DRY-RUN: No se ejecutarán cambios");
-            return 0;
-        }
-
-        if (!$this->option('force')) {
-            if (!$this->confirm('¿Ejecutar las asignaciones propuestas?')) {
-                $this->info("Operación cancelada");
-                return 0;
+                if ($orphanAdmins->isNotEmpty()) {
+                    $this->line("   💡 Usuarios store_admin disponibles para asignar:");
+                    foreach ($orphanAdmins as $admin) {
+                        $this->line("      - {$admin->email} (ID: {$admin->id})");
+                    }
+                    
+                    if ($this->confirm("¿Asignar {$orphanAdmins->first()->email} a {$store->slug}?")) {
+                        if (!$isDryRun) {
+                            $this->assignAdminToStore($orphanAdmins->first(), $store);
+                        } else {
+                            $this->line("   🔨 Asignaría {$orphanAdmins->first()->email} a {$store->slug}");
+                        }
+                    }
+                } else {
+                    $this->line("   ❌ No hay usuarios store_admin disponibles para asignar");
+                    if ($this->confirm("¿Crear nuevo administrador para {$store->slug}?")) {
+                        if (!$isDryRun) {
+                            $this->createAdminForStore($store);
+                        } else {
+                            $this->line("   🔨 Crearía nuevo admin para {$store->slug}");
+                        }
+                    }
+                }
             }
+            $this->newLine();
         }
 
-        // 5. Ejecutar asignaciones
-        $this->line("");
-        $this->info("⚙️ EJECUTANDO ASIGNACIONES...");
-        
-        foreach ($solutions as $solution) {
-            $user = $solution['user'];
-            $store = $solution['store'];
-            
-            $user->update(['store_id' => $store->id]);
-            
-            $this->line("✅ Usuario {$user->email} asignado a tienda {$store->name}");
-        }
-
-        // 6. Verificar resultados
-        $remainingIssues = User::where('role', 'store_admin')->whereNull('store_id')->count();
-        
-        $this->line("");
-        if ($remainingIssues === 0) {
-            $this->info("🎉 ÉXITO: Todos los usuarios store_admin tienen store_id asignado");
+        if (!$isDryRun) {
+            $this->info('✅ Proceso completado');
         } else {
-            $this->warn("⚠️ Quedan {$remainingIssues} usuarios sin asignar (requieren intervención manual)");
+            $this->info('✅ Análisis completado (usar sin --dry-run para ejecutar)');
         }
 
         return 0;
     }
 
-    private function proposeSolutions($problematicUsers, $storesWithoutAdmin, $allStores): array
+    private function createAdminForStore(Store $store): void
     {
-        $solutions = [];
-        $availableStores = $storesWithoutAdmin->toArray();
+        $email = $this->ask("Email para el nuevo administrador de {$store->slug}", "admin@{$store->slug}.com");
+        $name = $this->ask("Nombre del administrador", "Admin {$store->name}");
+        $password = $this->secret("Contraseña (mínimo 8 caracteres)") ?: 'password123';
 
-        foreach ($problematicUsers as $user) {
-            $solution = null;
+        try {
+            DB::beginTransaction();
 
-            // Estrategia 1: Asignar a tienda sin admin
-            if (!empty($availableStores)) {
-                $store = array_shift($availableStores);
-                $solution = [
-                    'user' => $user,
-                    'store' => Store::find($store['id']),
-                    'reason' => 'Tienda sin administrador asignado'
-                ];
-            }
-            // Estrategia 2: Buscar tienda por similitud de email/nombre
-            if (!$solution) {
-                $emailDomain = explode('@', $user->email)[0];
-                $matchingStore = $allStores->first(function ($store) use ($emailDomain, $user) {
-                    return str_contains(strtolower($store->name), strtolower($emailDomain)) ||
-                           str_contains(strtolower($store->slug), strtolower($emailDomain)) ||
-                           str_contains(strtolower($user->name), strtolower($store->name));
-                });
+            $admin = User::create([
+                'name' => $name,
+                'email' => $email,
+                'password' => bcrypt($password),
+                'role' => 'store_admin',
+                'store_id' => $store->id,
+            ]);
 
-                if ($matchingStore) {
-                    $solution = [
-                        'user' => $user,
-                        'store' => $matchingStore,
-                        'reason' => 'Similitud detectada entre nombre/email y tienda'
-                    ];
-                }
-            }
-            
-            // Estrategia 3: Asignar a primera tienda disponible
-            if (!$solution && $allStores->isNotEmpty()) {
-                $solution = [
-                    'user' => $user,
-                    'store' => $allStores->first(),
-                    'reason' => 'Asignación por defecto a primera tienda disponible'
-                ];
-            }
+            DB::commit();
 
-            if ($solution) {
-                $solutions[] = $solution;
-            }
+            $this->info("✅ Usuario {$email} creado y asignado a {$store->slug}");
+            $this->line("   📧 Email: {$email}");
+            $this->line("   🔑 Contraseña: {$password}");
+            $this->line("   🌐 Login: /{$store->slug}/admin/login");
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $this->error("❌ Error creando usuario: " . $e->getMessage());
         }
+    }
 
-        return $solutions;
+    private function assignAdminToStore(User $admin, Store $store): void
+    {
+        try {
+            DB::beginTransaction();
+
+            $admin->update(['store_id' => $store->id]);
+
+            DB::commit();
+
+            $this->info("✅ Usuario {$admin->email} asignado a {$store->slug}");
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $this->error("❌ Error asignando usuario: " . $e->getMessage());
+        }
     }
 }
