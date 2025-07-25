@@ -103,7 +103,8 @@
     <main class="min-h-screen pb-20">
         @yield('content')
     </main>
-    
+    <!-- Carrito flotante -->
+    <x-cart-float :store="$store" />
     <script>
         function verificationBadge() {
             return {
@@ -128,6 +129,8 @@
             }
         }
     </script>
+    
+    
     
     @stack('scripts')
     

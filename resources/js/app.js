@@ -8,6 +8,9 @@ console.log('🟢 Imports loaded successfully');
 
 import Pusher from 'pusher-js'
 
+// Sistema de carrito
+import './cart.js'
+
 console.log('🟢 Pusher imported successfully');
 
 // Configurar Pusher DIRECTAMENTE (sin Laravel Echo para evitar auth automática)

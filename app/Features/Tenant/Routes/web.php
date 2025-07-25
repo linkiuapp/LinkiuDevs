@@ -28,6 +28,7 @@ Route::prefix('carrito')->name('cart.')->group(function () {
     Route::get('/', [StorefrontController::class, 'cart'])->name('index');
     Route::post('/agregar', [OrderController::class, 'addToCart'])->name('add');
     Route::get('/contenido', [OrderController::class, 'getCart'])->name('get');
+    Route::put('/actualizar', [OrderController::class, 'updateCartItem'])->name('update');
     Route::delete('/eliminar', [OrderController::class, 'removeFromCart'])->name('remove');
     Route::delete('/limpiar', [OrderController::class, 'clearCart'])->name('clear');
 });

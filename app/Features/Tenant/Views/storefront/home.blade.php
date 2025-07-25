@@ -155,7 +155,11 @@
                         </div>
                         
                         <!-- Botón agregar -->
-                        <button class="bg-secondary-300 hover:bg-secondary-200 text-white-50 w-8 h-8 rounded-full flex items-center justify-center transition-colors flex-shrink-0">
+                        <button class="add-to-cart-btn bg-secondary-300 hover:bg-secondary-200 text-white-50 w-8 h-8 rounded-full flex items-center justify-center transition-colors flex-shrink-0" 
+                                data-product-id="{{ $product->id }}"
+                                data-product-name="{{ $product->name }}"
+                                data-product-price="{{ $product->price }}"
+                                data-product-image="{{ $product->main_image_url }}">
                             <x-solar-add-circle-outline class="w-5 h-5" />
                         </button>
                     </div>
@@ -205,7 +209,11 @@
                         </div>
                         
                         <!-- Botón agregar -->
-                        <button class="bg-secondary-300 hover:bg-secondary-200 text-white-50 w-8 h-8 rounded-full flex items-center justify-center transition-colors flex-shrink-0">
+                        <button class="add-to-cart-btn bg-secondary-300 hover:bg-secondary-200 text-white-50 w-8 h-8 rounded-full flex items-center justify-center transition-colors flex-shrink-0" 
+                                data-product-id="{{ $product->id }}"
+                                data-product-name="{{ $product->name }}"
+                                data-product-price="{{ $product->price }}"
+                                data-product-image="{{ $product->main_image_url }}">
                             <x-solar-add-circle-outline class="w-5 h-5" />
                         </button>
                     </div>

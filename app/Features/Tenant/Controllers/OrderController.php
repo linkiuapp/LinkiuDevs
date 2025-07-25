@@ -333,6 +333,7 @@ class OrderController extends Controller
         foreach ($cart as $key => $item) {
             $product = Product::where('id', $item['product_id'])
                 ->where('store_id', $store->id)
+                ->with('mainImage')
                 ->first();
                 
             if ($product) {
@@ -415,6 +416,7 @@ class OrderController extends Controller
         foreach ($cart as $item) {
             $product = Product::where('id', $item['product_id'])
                 ->where('store_id', $storeId)
+                ->with('mainImage')
                 ->first();
                 
             if ($product) {
@@ -448,5 +450,34 @@ class OrderController extends Controller
         }
 
         return implode(', ', $display);
+    }
+
+    /**
+     * Update cart item quantity
+     */
+    public function updateCartItem(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'item_key' => 'required|string',
+            'quantity' => 'required|integer|min:1'
+        ]);
+
+        $cart = $request->session()->get('cart', []);
+        
+        if (isset($cart[$validated['item_key']])) {
+            $cart[$validated['item_key']]['quantity'] = $validated['quantity'];
+            $request->session()->put('cart', $cart);
+        }
+
+        $cartCount = array_sum(array_column($cart, 'quantity'));
+        $cartTotal = $this->calculateCartTotal($cart, $request->route('store')->id);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Cantidad actualizada',
+            'cart_count' => $cartCount,
+            'cart_total' => $cartTotal,
+            'formatted_cart_total' => '$' . number_format($cartTotal, 0, ',', '.')
+        ]);
     }
 } 
