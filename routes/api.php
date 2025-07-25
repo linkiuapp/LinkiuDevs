@@ -129,4 +129,143 @@ Route::get('/emergency-debug/{slug?}', function($slug = null) {
     }
     
     return response()->json($debugInfo, 200, [], JSON_PRETTY_PRINT);
+});
+
+// 🔍 SIMULAR TENANT IDENTIFICATION MIDDLEWARE PASO A PASO
+Route::get('/debug-middleware/{slug}', function($slug) {
+    $debugInfo = [
+        'timestamp' => now()->toISOString(),
+        'middleware_simulation' => true,
+        'slug' => $slug,
+        'steps' => []
+    ];
+
+    try {
+        // Paso 1: Buscar tienda básica
+        $debugInfo['steps']['step_1_basic_store'] = 'Starting...';
+        $basicStore = \App\Shared\Models\Store::where('slug', $slug)->first();
+        
+        if (!$basicStore) {
+            $debugInfo['steps']['step_1_basic_store'] = 'FAILED - Store not found';
+            return response()->json($debugInfo, 404);
+        }
+        
+        $debugInfo['steps']['step_1_basic_store'] = 'SUCCESS';
+        $debugInfo['basic_store'] = [
+            'id' => $basicStore->id,
+            'name' => $basicStore->name,
+            'slug' => $basicStore->slug
+        ];
+
+        // Paso 2: Probar withCount individual
+        $debugInfo['steps']['step_2_products_count'] = 'Starting...';
+        try {
+            $productsCount = \App\Shared\Models\Store::where('slug', $slug)->withCount('products')->first();
+            $debugInfo['steps']['step_2_products_count'] = 'SUCCESS';
+            $debugInfo['products_count'] = $productsCount->products_count ?? 0;
+        } catch (\Exception $e) {
+            $debugInfo['steps']['step_2_products_count'] = 'FAILED: ' . $e->getMessage();
+        }
+
+        $debugInfo['steps']['step_3_categories_count'] = 'Starting...';
+        try {
+            $categoriesCount = \App\Shared\Models\Store::where('slug', $slug)->withCount('categories')->first();
+            $debugInfo['steps']['step_3_categories_count'] = 'SUCCESS';
+            $debugInfo['categories_count'] = $categoriesCount->categories_count ?? 0;
+        } catch (\Exception $e) {
+            $debugInfo['steps']['step_3_categories_count'] = 'FAILED: ' . $e->getMessage();
+        }
+
+        $debugInfo['steps']['step_4_variables_count'] = 'Starting...';
+        try {
+            $variablesCount = \App\Shared\Models\Store::where('slug', $slug)->withCount('variables')->first();
+            $debugInfo['steps']['step_4_variables_count'] = 'SUCCESS';
+            $debugInfo['variables_count'] = $variablesCount->variables_count ?? 0;
+        } catch (\Exception $e) {
+            $debugInfo['steps']['step_4_variables_count'] = 'FAILED: ' . $e->getMessage();
+        }
+
+        $debugInfo['steps']['step_5_sliders_count'] = 'Starting...';
+        try {
+            $slidersCount = \App\Shared\Models\Store::where('slug', $slug)->withCount('sliders')->first();
+            $debugInfo['steps']['step_5_sliders_count'] = 'SUCCESS';
+            $debugInfo['sliders_count'] = $slidersCount->sliders_count ?? 0;
+        } catch (\Exception $e) {
+            $debugInfo['steps']['step_5_sliders_count'] = 'FAILED: ' . $e->getMessage();
+        }
+
+        // Paso 6: Probar with('plan')
+        $debugInfo['steps']['step_6_with_plan'] = 'Starting...';
+        try {
+            $storeWithPlan = \App\Shared\Models\Store::where('slug', $slug)->with('plan')->first();
+            $debugInfo['steps']['step_6_with_plan'] = 'SUCCESS';
+            $debugInfo['plan_data'] = $storeWithPlan->plan ? [
+                'id' => $storeWithPlan->plan->id,
+                'name' => $storeWithPlan->plan->name
+            ] : null;
+        } catch (\Exception $e) {
+            $debugInfo['steps']['step_6_with_plan'] = 'FAILED: ' . $e->getMessage();
+        }
+
+        // Paso 7: Probar query completa como en el middleware
+        $debugInfo['steps']['step_7_full_query'] = 'Starting...';
+        try {
+            $fullStore = \App\Shared\Models\Store::where('slug', $slug)
+                ->withCount([
+                    'products',
+                    'categories', 
+                    'variables',
+                    'sliders'
+                ])
+                ->with('plan')
+                ->first();
+            
+            $debugInfo['steps']['step_7_full_query'] = 'SUCCESS';
+            $debugInfo['full_store_data'] = [
+                'id' => $fullStore->id,
+                'name' => $fullStore->name,
+                'products_count' => $fullStore->products_count,
+                'categories_count' => $fullStore->categories_count,
+                'variables_count' => $fullStore->variables_count,
+                'sliders_count' => $fullStore->sliders_count,
+                'plan_name' => $fullStore->plan?->name
+            ];
+        } catch (\Exception $e) {
+            $debugInfo['steps']['step_7_full_query'] = 'FAILED: ' . $e->getMessage();
+            $debugInfo['full_query_error'] = [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ];
+        }
+
+        // Paso 8: Probar TenantService->setTenant()
+        $debugInfo['steps']['step_8_set_tenant'] = 'Starting...';
+        try {
+            $tenantService = app(\App\Shared\Services\TenantService::class);
+            $tenantService->setTenant($basicStore);
+            $debugInfo['steps']['step_8_set_tenant'] = 'SUCCESS';
+        } catch (\Exception $e) {
+            $debugInfo['steps']['step_8_set_tenant'] = 'FAILED: ' . $e->getMessage();
+        }
+
+        // Paso 9: Probar view()->share()
+        $debugInfo['steps']['step_9_view_share'] = 'Starting...';
+        try {
+            view()->share('currentStore', $basicStore);
+            $debugInfo['steps']['step_9_view_share'] = 'SUCCESS';
+        } catch (\Exception $e) {
+            $debugInfo['steps']['step_9_view_share'] = 'FAILED: ' . $e->getMessage();
+        }
+
+    } catch (\Exception $e) {
+        $debugInfo['critical_error'] = [
+            'message' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+            'trace' => $e->getTraceAsString()
+        ];
+    }
+
+    return response()->json($debugInfo, 200, [], JSON_PRETTY_PRINT);
 }); 
