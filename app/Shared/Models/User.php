@@ -101,4 +101,12 @@ class User extends Authenticatable
     {
         $this->update(['last_login_at' => now()]);
     }
+
+    /**
+     * Get the store that owns the user
+     */
+    public function store()
+    {
+        return $this->belongsTo(Store::class);
+    }
 }

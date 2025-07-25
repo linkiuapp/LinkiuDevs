@@ -10,7 +10,7 @@
                 <div class="flex items-center gap-3">
                     <button 
                         x-data
-                        x-on:click="$dispatch('publish-design')"
+                        @click="publishDesign()"
                         class="btn-primary flex items-center gap-2"
                     >
                         <x-solar-check-circle-outline class="w-5 h-5" />
@@ -176,6 +176,89 @@
         // Inicializar el diseño con los datos del servidor
         window.initialDesign = @json($initialDesign);
         
+        // Función para manejar la publicación del diseño (disponible globalmente)
+        window.publishDesign = function() {
+            console.log('=== PUBLISH DESIGN FUNCTION CALLED ===');
+            
+            try {
+                // Get store slug from the URL
+                const storePath = window.location.pathname.split('/')[1];
+                console.log('Store path:', storePath);
+                
+                // Crear FormData para enviar archivos y datos
+                const formData = new FormData();
+                
+                // Obtener colores de los inputs de texto
+                const colorInputs = document.querySelectorAll('input[type="text"]');
+                console.log('Found color inputs:', colorInputs.length);
+                
+                if (colorInputs.length >= 3) {
+                    const bgColor = colorInputs[0].value || '#FFFFFF';
+                    const textColor = colorInputs[1].value || '#000000';
+                    const descriptionColor = colorInputs[2].value || '#666666';
+                    
+                    console.log('Colors found:', { bgColor, textColor, descriptionColor });
+                    
+                    formData.append('header_background_color', bgColor);
+                    formData.append('header_text_color', textColor);
+                    formData.append('header_description_color', descriptionColor);
+                } else {
+                    console.warn('Not enough color inputs found');
+                    // Valores por defecto
+                    formData.append('header_background_color', '#FFFFFF');
+                    formData.append('header_text_color', '#000000');
+                    formData.append('header_description_color', '#666666');
+                }
+                
+                // Realizar petición POST
+                fetch(`/${storePath}/admin/store-design/publish`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Response:', data);
+                    if (data.message) {
+                        showMessage(data.message, 'success');
+                    }
+                    if (data.design) {
+                        console.log('Design updated:', data.design);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showMessage('Error al publicar el diseño', 'error');
+                });
+                
+            } catch (error) {
+                console.error('Publish error:', error);
+                showMessage('Error al publicar el diseño', 'error');
+            }
+        };
+        
+        // Función para mostrar mensajes
+        function showMessage(message, type = 'success') {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2 ${
+                type === 'success' ? 'bg-success-200 text-black-500' : 'bg-error-200 text-error-50'
+            }`;
+            
+            const icon = type === 'success' 
+                ? '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>'
+                : '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
+            
+            messageDiv.innerHTML = `${icon}<span>${message}</span>`;
+            document.body.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 3000);
+        }
+        
         // Inicializar Alpine.js components cuando esté listo
         document.addEventListener('alpine:init', () => {
             // Store de diseño simplificado
@@ -261,112 +344,6 @@
                 }
             }));
         });
-        
-        // Event listener para publish-design directamente aquí
-        document.addEventListener('publish-design', async (e) => {
-            console.log('=== PUBLISH DESIGN EVENT TRIGGERED ===');
-            
-            try {
-                // Get store slug from the URL
-                const storePath = window.location.pathname.split('/')[1];
-                console.log('Store path:', storePath);
-                
-                // Crear FormData para enviar archivos y datos
-                const formData = new FormData();
-                
-                // Obtener colores de los inputs de texto
-                const colorInputs = document.querySelectorAll('input[type="text"]');
-                console.log('Found color inputs:', colorInputs.length);
-                
-                if (colorInputs.length >= 3) {
-                    const bgColor = colorInputs[0].value || '#FFFFFF';
-                    const textColor = colorInputs[1].value || '#000000';
-                    const descriptionColor = colorInputs[2].value || '#666666';
-                    
-                    console.log('Colors found:', { bgColor, textColor, descriptionColor });
-                    
-                    formData.append('header_background_color', bgColor);
-                    formData.append('header_text_color', textColor);
-                    formData.append('header_description_color', descriptionColor);
-                }
-                
-                // Intentar obtener archivos de imagen si existen
-                const fileInputs = document.querySelectorAll('input[type="file"]');
-                fileInputs.forEach((input, index) => {
-                    if (input.files.length > 0) {
-                        const file = input.files[0];
-                        const fieldName = index === 0 ? 'logo' : 'favicon';
-                        formData.append(fieldName, file);
-                        console.log(`${fieldName} file found:`, file.name);
-                    }
-                });
-                
-                const url = `/${storePath}/admin/store-design/publish`;
-                console.log('Publishing to URL:', url);
-                
-                // Mostrar loading en el botón
-                const publishButton = document.querySelector('button[x-on\\:click*="publish-design"]');
-                if (publishButton) {
-                    publishButton.disabled = true;
-                    publishButton.innerHTML = '<div class="w-5 h-5 border-2 border-white-50 border-t-transparent rounded-full animate-spin mr-2"></div>Publicando...';
-                }
-                
-                const response = await fetch(url, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    }
-                });
-
-                console.log('Response status:', response.status);
-                
-                const data = await response.json();
-                console.log('Response data:', data);
-
-                if (!response.ok) {
-                    throw new Error(data.message || 'Error al publicar el diseño');
-                }
-
-                // Mostrar mensaje de éxito
-                showMessage('Diseño publicado correctamente', 'success');
-
-                // Recargar la página para mostrar los cambios
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1500);
-
-            } catch (error) {
-                console.error('=== PUBLISH ERROR ===', error);
-                showMessage(error.message, 'error');
-            } finally {
-                // Restaurar botón
-                const publishButton = document.querySelector('button[x-on\\:click*="publish-design"]');
-                if (publishButton) {
-                    publishButton.disabled = false;
-                    publishButton.innerHTML = '<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Publicar';
-                }
-            }
-        });
-        
-        // Función para mostrar mensajes
-        function showMessage(message, type = 'success') {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2 ${
-                type === 'success' ? 'bg-success-200 text-black-500' : 'bg-error-200 text-error-50'
-            }`;
-            
-            const icon = type === 'success' 
-                ? '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>'
-                : '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
-            
-            messageDiv.innerHTML = `${icon}<span>${message}</span>`;
-            document.body.appendChild(messageDiv);
-            
-            setTimeout(() => {
-                messageDiv.remove();
-            }, 3000);
-        }
     </script>
     @endpush
     @endsection

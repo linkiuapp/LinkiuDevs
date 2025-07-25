@@ -86,6 +86,7 @@ Contraseña: {{ session('admin_credentials')['password'] ?? '' }}
         document.addEventListener('change', function(e) {
     if (e.target.classList.contains('verified-toggle')) {
         const url = e.target.dataset.url;
+        const originalChecked = e.target.checked;
         
         fetch(url, {
             method: 'POST',
@@ -98,18 +99,42 @@ Contraseña: {{ session('admin_credentials')['password'] ?? '' }}
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Opcional: mostrar mensaje de éxito
-                console.log(data.message);
-                // Si quieres evitar el reload, actualiza solo el estado visual
-                window.location.reload();
-                ShowNotification(data.message, 'success');
+                // Actualizar todos los toggles de esta tienda en la página
+                const storeId = e.target.dataset.storeId;
+                const allToggles = document.querySelectorAll(`[data-store-id="${storeId}"].verified-toggle`);
+                allToggles.forEach(toggle => {
+                    toggle.checked = data.verified;
+                });
                 
-
+                // Mostrar notificación de éxito
+                if (typeof ShowNotification === 'function') {
+                    ShowNotification(data.message, 'success');
+                } else {
+                    console.log(data.message);
+                }
             } else {
-                alert(data.message || 'Error al cambiar el estado');
-                e.target.checked = !e.target.checked;
+                // Revertir el estado del toggle en caso de error
+                e.target.checked = !originalChecked;
+                
+                // Mostrar error
+                if (typeof ShowNotification === 'function') {
+                    ShowNotification(data.message || 'Error al cambiar el estado', 'error');
+                } else {
+                    alert(data.message || 'Error al cambiar el estado');
+                }
             }
         })
+        .catch(error => {
+            // Revertir el estado del toggle en caso de error de red
+            e.target.checked = !originalChecked;
+            
+            if (typeof ShowNotification === 'function') {
+                ShowNotification('Error de conexión', 'error');
+            } else {
+                alert('Error de conexión');
+            }
+            console.error('Error:', error);
+        });
     }
 });
 </script>

@@ -31,11 +31,11 @@
                         </div>
                     </div>
                     
-                    <!-- Badge Verificado -->
+                                         <!-- Badge Verificado -->
                      <div class="flex items-center gap-2">
-                        <div class="flex items-center gap-2 px-3 py-1 bg-{{ $store->verified ? 'success' : 'warning' }}-100 rounded-full">
-                            <div class="w-2 h-2 bg-{{ $store->verified ? 'success' : 'warning' }}-300 rounded-full"></div>
-                            <span class="text-xs font-medium text-{{ $store->verified ? 'success' : 'warning' }}-400">
+                        <div id="verification-badge" class="flex items-center gap-2 px-3 py-1 rounded-full {{ $store->verified ? 'bg-success-100' : 'bg-warning-100' }}">
+                            <div id="verification-indicator" class="w-2 h-2 rounded-full {{ $store->verified ? 'bg-success-300' : 'bg-warning-300' }}"></div>
+                            <span id="verification-text" class="text-xs font-medium {{ $store->verified ? 'text-success-400' : 'text-warning-400' }}">
                                 {{ $store->verified ? 'Verificado' : 'No Verificado' }}
                             </span>
                         </div>
@@ -138,98 +138,62 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Función para actualizar los badges de TenantAdmin
-    function updateNotificationBadges(data) {
+    // Función para actualizar badge de verificación
+    function updateVerificationBadge(verified) {
+        const badge = document.getElementById('verification-badge');
+        const indicator = document.getElementById('verification-indicator'); 
+        const text = document.getElementById('verification-text');
         
-        // Actualizar badge de mensajes nuevos del soporte (siempre visible)
-        const messageBadge = document.getElementById('support-messages-badge');
-        if (messageBadge) {
-            messageBadge.textContent = data.new_messages || 0;
-        }
-    }
-    
-    // Configurar WebSocket para TenantAdmin
-    function setupWebSocket() {
-        const storeSlug = window.location.pathname.split('/')[1];
-        console.log(`🔌 Setting up WebSocket for TenantAdmin (${storeSlug})...`);
-        
-        if (window.Echo && storeSlug) {
-            console.log(`✅ Echo available, subscribing to store.${storeSlug}.notifications`);
+        if (badge && indicator && text) {
+            // Remover todas las clases y aplicar las correctas
+            badge.removeAttribute('class');
+            indicator.removeAttribute('class');
+            text.removeAttribute('class');
             
-            // Escuchar en el canal específico de la tienda
-            window.Echo.channel(`store.${storeSlug}.notifications`)
-                .listen('.ticket.response.added', (e) => {
-                    console.log('🔔 NEW SUPPORT RESPONSE RECEIVED IN TENANT:', e);
-                    
-                    // Actualizar contadores inmediatamente
-                    refreshNotificationCounts();
-                    
-                    // Mostrar notificación destacada
-                    if (e.response_from === 'super_admin') {
-                        console.log(`🎯 Super admin responded to ticket ${e.ticket_number}`);
-                        showToast(`Respuesta del soporte en ticket ${e.ticket_number}`, e.message_preview);
-                    }
-                });
+            if (verified) {
+                badge.setAttribute('class', 'flex items-center gap-2 px-3 py-1 rounded-full bg-success-100');
                 
-            console.log(`✅ TenantAdmin WebSocket listeners configured for ${storeSlug}`);
-        } else {
-            console.error('❌ Echo not available or storeSlug missing for TenantAdmin');
-            console.log('🔍 Debug - window.Echo:', window.Echo);
-            console.log('🔍 Debug - window.pusher:', window.pusher);
-            console.log('🔍 Debug - storeSlug:', storeSlug);
-            
-            // Fallback: Usar Pusher directamente si está disponible
-            if (window.pusher && storeSlug) {
-                console.log('🔧 Using direct Pusher connection for tenant');
-                const channel = window.pusher.subscribe(`store.${storeSlug}.notifications`);
-                channel.bind('ticket.response.added', function(e) {
-                    console.log('🔔 NEW TENANT RESPONSE (via Pusher):', e);
-                    refreshNotificationCounts();
-                });
+                indicator.setAttribute('class', 'w-2 h-2 rounded-full bg-success-300');
+                
+                text.setAttribute('class', 'text-xs font-medium text-success-400');
+            } else {
+                badge.setAttribute('class', 'flex items-center gap-2 px-3 py-1 rounded-full bg-warning-100');
+                
+                indicator.setAttribute('class', 'w-2 h-2 rounded-full bg-warning-300');
+                
+                text.setAttribute('class', 'text-xs font-medium text-warning-400');
             }
+            
+            text.textContent = verified ? 'Verificado' : 'No Verificado';
         }
     }
     
-    // Función para refrescar contadores via API (solo cuando sea necesario)
-    function refreshNotificationCounts() {
+    // Función para verificar estado cada 30 segundos
+    function checkVerificationStatus() {
         const storeSlug = window.location.pathname.split('/')[1];
         
-        console.log('Attempting to fetch notifications for store:', storeSlug);
-        
-        fetch(`/api/tenant/${storeSlug}/notifications`, {
+        fetch(`/api/store/${storeSlug}/status`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+                'X-Requested-With': 'XMLHttpRequest'
             }
         })
-        .then(response => {
-            console.log('Response status:', response.status);
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            console.log('Updating tenant badges with:', data);
-            updateNotificationBadges(data);
+            if (data.verified !== undefined) {
+                updateVerificationBadge(data.verified);
+            }
         })
-        .catch(error => {
-            console.log('Error refreshing tenant notifications:', error);
+        .catch(() => {
+            // Silenciar errores de red
         });
     }
     
-    // Función para mostrar toast (opcional)
-    function showToast(title, message) {
-        // Implementar notificación visual si se desea
-        console.log(`🔔 ${title}: ${message}`);
-    }
+    // Verificar estado cada 30 segundos
+    setInterval(checkVerificationStatus, 30000);
     
-    // Inicializar WebSocket
-    setupWebSocket();
-    
-    // Cargar contadores inicial
-    refreshNotificationCounts();
+    // Verificar inmediatamente al cargar
+    checkVerificationStatus();
 });
 </script> 

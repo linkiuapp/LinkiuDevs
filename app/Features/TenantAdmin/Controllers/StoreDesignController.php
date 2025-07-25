@@ -215,7 +215,7 @@ public function update(Request $request)
 }
 
     /**
-     * Maneja una imagen en base64
+     * Manejar imagen base64 (usado para logos y favicons)
      */
     private function handleBase64Image(string $base64, string $type, int $storeId): array
     {
@@ -237,25 +237,28 @@ public function update(Request $request)
             // Limpiar imágenes antiguas
             $this->imageService->cleanOldImages($storeId, $type);
 
+            // Asegurar que existan los directorios
+            $storeDir = public_path('storage/store-design/' . $storeId);
+            if (!file_exists($storeDir)) {
+                mkdir($storeDir, 0755, true);
+            }
+
             // Generar nombre de archivo
             $filename = $type . '_' . time() . '.' . $extension;
-            $path = 'public/stores/' . $storeId . '/' . $filename;
+            
+            // GUARDAR SIEMPRE en public/storage/store-design/{storeId}/
+            $fullPath = $storeDir . '/' . $filename;
+            file_put_contents($fullPath, $imageData);
 
-            // Crear directorio si no existe
-            Storage::makeDirectory('public/stores/' . $storeId);
-
-            // Guardar archivo
-            Storage::put($path, $imageData);
-
-            // Retornar URLs según el tipo
+            // Retornar URLs según el tipo usando asset('storage/...')
             if ($type === 'logo') {
                 return [
-                    'logo_url' => Storage::url($path),
+                    'logo_url' => asset('storage/store-design/' . $storeId . '/' . $filename),
                     'logo_webp_url' => null
                 ];
             } else {
                 return [
-                    'favicon_url' => Storage::url($path)
+                    'favicon_url' => asset('storage/store-design/' . $storeId . '/' . $filename)
                 ];
             }
         } catch (\Exception $e) {

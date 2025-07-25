@@ -3,7 +3,7 @@
 @section('title', 'Crear Nueva Tienda')
 
 @section('content')
-<div class="container-fluid" x-data="createStore()">
+<div class="container-fluid">
     <!-- Header -->
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-lg font-bold text-black-400">Crear Nueva Tienda</h1>
@@ -170,8 +170,8 @@
                             <input type="text"
                                 name="name"
                                 value="{{ old('name') }}"
-                                @input="generateSlug"
                                 class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('name') border-error-200 @enderror"
+                                placeholder="Mi Tienda Online"
                                 required>
                         @error('name')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
@@ -183,8 +183,6 @@
                                 Plan <span class="text-error-300">*</span>
                             </label>
                             <select name="plan_id"
-                                x-model="selectedPlan"
-                                @change="checkPlanType"
                                 class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('plan_id') border-error-200 @enderror"
                                 required>
                                 <option value="">Seleccionar Plan</option>
@@ -210,14 +208,13 @@
                                 <span class="text-sm text-black-300">linkiu.bio/</span>
                                 <input type="text"
                                     name="slug"
-                                    x-model="slug"
-                                    :readonly="isXplorer"
-                                    :class="{'bg-white-100': isXplorer}"
+                                    value="{{ old('slug') }}"
                                     class="flex-1 px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('slug') border-error-200 @enderror"
+                                    placeholder="mi-tienda"
                                     required>
                             </div>
-                            <p class="text-xs text-black-200 mt-1" x-show="isXplorer">
-                                El slug se genera automáticamente para el plan Explorer
+                            <p class="text-xs text-black-300 mt-1">
+                                La URL única de tu tienda. Solo letras, números y guiones.
                             </p>
                             @error('slug')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
@@ -264,12 +261,13 @@
                         </div>
 
                         <!-- Período de facturación para planes de pago -->
-                        <div x-show="!isXplorer && selectedPlan">
+                        <div class="billing-fields">
                             <label class="block text-sm font-medium text-black-300 mb-2">
                                 Período de Facturación <span class="text-error-300">*</span>
                             </label>
                             <select name="billing_period"
                                 class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('billing_period') border-error-200 @enderror">
+                                <option value="">Seleccionar período</option>
                                 <option value="monthly" {{ old('billing_period') == 'monthly' ? 'selected' : '' }}>Mensual</option>
                                 <option value="quarterly" {{ old('billing_period') == 'quarterly' ? 'selected' : '' }}>Trimestral</option>
                                 <option value="biannual" {{ old('billing_period') == 'biannual' ? 'selected' : '' }}>Semestral</option>
@@ -277,6 +275,24 @@
                             @error('billing_period')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
                             @enderror
+                            <p class="text-xs text-black-300 mt-1">
+                                Aplica solo para planes de pago (no Explorer).
+                            </p>
+                        </div>
+
+                        <!-- Estado de pago inicial para planes de pago -->
+                        <div class="billing-fields">
+                            <label class="block text-sm font-medium text-black-300 mb-2">
+                                Estado de Pago Inicial
+                            </label>
+                            <select name="initial_payment_status"
+                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                                <option value="pending" {{ old('initial_payment_status') == 'pending' ? 'selected' : '' }}>Pendiente de Pago</option>
+                                <option value="paid" {{ old('initial_payment_status') == 'paid' ? 'selected' : '' }}>Pagado</option>
+                            </select>
+                            <p class="text-xs text-black-300 mt-1">
+                                Selecciona si la primera factura generada estará marcada como pagada o pendiente. Aplica solo para planes de pago.
+                            </p>
                         </div>
 
                         <div class="md:col-span-2">

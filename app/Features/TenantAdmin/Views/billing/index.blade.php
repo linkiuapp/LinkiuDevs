@@ -645,8 +645,8 @@
                 // Simple alert for now - can be enhanced later
                 alert(`${type.toUpperCase()}: ${message}`);
             }
-        }
-    }
-    </script>
+        }));
+    });
+</script>
     @endpush
 </x-tenant-admin-layout> 

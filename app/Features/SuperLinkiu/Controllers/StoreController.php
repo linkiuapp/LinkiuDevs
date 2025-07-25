@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Features\SuperLinkiu\Exports\StoresExport;
+use Illuminate\Support\Facades\Log;
 
 class StoreController extends Controller
 {
@@ -129,6 +130,7 @@ class StoreController extends Controller
             'status' => 'nullable|in:active,inactive',
             'verified' => 'nullable|boolean',
             'billing_period' => 'nullable|in:monthly,quarterly,biannual',
+            'initial_payment_status' => 'nullable|in:pending,paid',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
             'meta_keywords' => 'nullable|string|max:255',
@@ -153,6 +155,21 @@ class StoreController extends Controller
             'status' => $validated['status'] ?? 'active',
             'verified' => false,
         ]);
+
+        // 🔧 ASEGURAR QUE billing_period esté disponible para el Observer
+        // El Observer usa request('billing_period') para crear la suscripción automática
+        if (!$request->has('billing_period') && isset($validated['billing_period'])) {
+            $request->merge(['billing_period' => $validated['billing_period']]);
+        }
+
+        // 🔧 ASEGURAR QUE initial_payment_status esté disponible para el Observer
+        // El Observer usa request('initial_payment_status') para establecer el estado de la primera factura
+        if (!$request->has('initial_payment_status') && isset($validated['initial_payment_status'])) {
+            $request->merge(['initial_payment_status' => $validated['initial_payment_status']]);
+        }
+
+        // 🔧 PASAR CONTEXTO DE TIENDA CREADA AL UserObserver
+        $request->merge(['_created_store' => $store, 'store_id' => $store->id]);
 
         // Crear el usuario administrador de la tienda
         $storeAdmin = User::create([
@@ -267,7 +284,6 @@ class StoreController extends Controller
     public function toggleVerified(Store $store)
 {
     try {
-        $oldVerified = $store->verified;
         $store->toggleVerified();
         
         return response()->json([
@@ -277,11 +293,6 @@ class StoreController extends Controller
         ]);
         
     } catch (\Exception $e) {
-        \Log::error('Toggle verification error', [
-            'store_id' => $store->id,
-            'error' => $e->getMessage()
-        ]);
-        
         return response()->json([
             'success' => false,
             'message' => 'Error al cambiar verificación: ' . $e->getMessage()

@@ -27,4 +27,23 @@ Route::middleware(['auth'])->group(function () {
     // SuperLinkiu - Ruta movida a web.php para usar autenticación por sesión
     
     // TenantAdmin - Ruta movida a web.php para usar autenticación por sesión
+});
+
+// API simple para obtener estado de verificación de tienda
+Route::get('/store/{slug}/status', function($slug) {
+    try {
+        $store = \App\Shared\Models\Store::where('slug', $slug)->first();
+        
+        if (!$store) {
+            return response()->json(['error' => 'Store not found'], 404);
+        }
+        
+        return response()->json([
+            'verified' => (bool) $store->verified,
+            'status' => $store->status
+        ]);
+        
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Server error'], 500);
+    }
 }); 

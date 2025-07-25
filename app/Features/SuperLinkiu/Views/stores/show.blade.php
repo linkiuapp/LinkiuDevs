@@ -152,10 +152,10 @@
                             <div class="flex items-center gap-3">
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" 
-                                        class="sr-only peer verification-toggle" 
+                                        class="sr-only peer verified-toggle" 
                                         {{ $store->verified ? 'checked' : '' }}
                                         data-store-id="{{ $store->id }}"
-                                        data-url="{{ route('superlinkiu.stores.toggle-verification', $store) }}">
+                                        data-url="{{ route('superlinkiu.stores.toggle-verified', $store) }}">
                                     <div class="w-11 h-6 bg-white-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white-50 after:border-white-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200"></div>
                                 </label>
                                 <span class="text-sm text-black-300">{{ $store->verified ? 'Verificada' : 'No verificada' }}</span>

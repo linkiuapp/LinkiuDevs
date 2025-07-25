@@ -3,14 +3,27 @@
 namespace App\Features\TenantAdmin\Services;
 
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 
 class StoreDesignImageService
 {
     /**
-     * Directorio base para almacenar las imágenes de diseño de la tienda
+     * SIEMPRE usar storage/ - Laravel Cloud debe soportar public/storage/
      */
-    protected string $baseDirectory = 'store-design';
+    private function getStoragePath(): string
+    {
+        return 'storage';
+    }
+
+    /**
+     * Crear directorios necesarios - SIEMPRE en storage/
+     */
+    private function ensureDirectoriesExist(int $storeId): void
+    {
+        $storeDir = public_path('storage/store-design/' . $storeId);
+        if (!file_exists($storeDir)) {
+            mkdir($storeDir, 0755, true);
+        }
+    }
 
     /**
      * Procesa y guarda el logo de la tienda
@@ -21,18 +34,20 @@ class StoreDesignImageService
      */
     public function handleLogo(UploadedFile $file, int $storeId): array
     {
-        $directory = $this->getStoreDirectory($storeId);
+        // Asegurar que existan los directorios
+        $this->ensureDirectoriesExist($storeId);
         
         // Generar nombre único para el archivo
         $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
-        $path = $directory . '/' . $filename;
         
-        // Guardar el archivo directamente
-        $storedPath = Storage::disk('public')->putFileAs($directory, $file, $filename);
-
+        // GUARDAR SIEMPRE en public/storage/store-design/{storeId}/
+        $destinationPath = public_path('storage/store-design/' . $storeId);
+        $file->move($destinationPath, $filename);
+        
+        // Retornar URLs usando asset('storage/...')
         return [
-            'logo_url' => asset('storage/' . $storedPath),
-            'logo_webp_url' => null // Por ahora no generamos WebP sin Intervention Image
+            'logo_url' => asset('storage/store-design/' . $storeId . '/' . $filename),
+            'logo_webp_url' => null // Por ahora no generamos WebP
         ];
     }
 
@@ -45,104 +60,20 @@ class StoreDesignImageService
      */
     public function handleFavicon(UploadedFile $file, int $storeId): array
     {
-        $directory = $this->getStoreDirectory($storeId);
+        // Asegurar que existan los directorios
+        $this->ensureDirectoriesExist($storeId);
         
         // Generar nombre único para el archivo
         $filename = 'favicon_' . time() . '.' . $file->getClientOriginalExtension();
         
-        // Guardar el archivo directamente
-        $storedPath = Storage::disk('public')->putFileAs($directory, $file, $filename);
-
-        return [
-            'favicon_url' => asset('storage/' . $storedPath)
-        ];
-    }
-
-    /**
-     * Obtiene el directorio de almacenamiento para una tienda específica
-     */
-    protected function getStoreDirectory(int $storeId): string
-    {
-        return "{$this->baseDirectory}/{$storeId}";
-    }
-
-    /**
-     * Procesa y guarda una imagen con las opciones especificadas
-     *
-     * @param UploadedFile $file
-     * @param string $directory
-     * @param string $prefix
-     * @param array $options
-     * @return string Ruta relativa del archivo guardado
-     */
-    protected function processAndSaveImage(UploadedFile $file, string $directory, string $prefix, array $options): string
-    {
-        $image = Image::make($file);
+        // GUARDAR SIEMPRE en public/storage/store-design/{storeId}/
+        $destinationPath = public_path('storage/store-design/' . $storeId);
+        $file->move($destinationPath, $filename);
         
-        // Aplicar redimensionamiento si está especificado
-        if (isset($options['resize'])) {
-            [$width, $height] = $options['resize'];
-            if ($height === null) {
-                $image->widen($width, function ($constraint) {
-                    $constraint->upsize();
-                });
-            } else {
-                $image->fit($width, $height);
-            }
-        }
-
-        // Generar nombre único
-        $filename = $prefix . '_' . time() . '.' . ($options['format'] ?? $file->getClientOriginalExtension());
-        $path = $directory . '/' . $filename;
-
-        // Guardar imagen procesada
-        Storage::put(
-            $path,
-            $image->encode(
-                format: $options['format'] ?? null,
-                quality: $options['quality'] ?? 90
-            )->encoded
-        );
-
-        return $path;
-    }
-
-    /**
-     * Convierte y guarda una imagen en formato WebP
-     *
-     * @param UploadedFile $file
-     * @param string $directory
-     * @param string $prefix
-     * @param array $options
-     * @return string Ruta relativa del archivo WebP
-     */
-    protected function convertToWebP(UploadedFile $file, string $directory, string $prefix, array $options): string
-    {
-        $image = Image::make($file);
-
-        // Aplicar redimensionamiento si está especificado
-        if (isset($options['resize'])) {
-            [$width, $height] = $options['resize'];
-            if ($height === null) {
-                $image->widen($width, function ($constraint) {
-                    $constraint->upsize();
-                });
-            } else {
-                $image->fit($width, $height);
-            }
-        }
-
-        // Generar nombre para versión WebP
-        $filename = $prefix . '_' . time() . '.webp';
-        $path = $directory . '/' . $filename;
-
-        // Guardar versión WebP
-        Storage::put(
-            $path,
-            $image->encode('webp', $options['quality'] ?? 90)->encoded
-        );
-
-        return $path;
+        // Retornar URL usando asset('storage/...')
+        return [
+            'favicon_url' => asset('storage/store-design/' . $storeId . '/' . $filename)
+        ];
     }
 
     /**
@@ -155,22 +86,22 @@ class StoreDesignImageService
     public function cleanOldImages(int $storeId, string $prefix): void
     {
         try {
-            $directory = 'public/assets/store-design/' . $storeId;
+            $directory = public_path('storage/store-design/' . $storeId);
 
             // Verificar si el directorio existe
-            if (!Storage::disk('public')->exists($directory)) {
+            if (!is_dir($directory)) {
                 return;
             }
 
             // Obtener todos los archivos que coincidan con el patrón
-            $files = Storage::disk('public')->files($directory);
+            $files = glob($directory . '/' . $prefix . '_*');
             foreach ($files as $file) {
-                if (str_starts_with(basename($file), $prefix . '_')) {
-                    Storage::disk('public')->delete($file);
+                if (file_exists($file)) {
+                    unlink($file);
                 }
             }
         } catch (\Exception $e) {
-            Log::warning('Error cleaning old images:', [
+            \Log::warning('Error cleaning old images:', [
                 'store_id' => $storeId,
                 'prefix' => $prefix,
                 'error' => $e->getMessage()

@@ -40,6 +40,27 @@ class AuthController extends Controller
             ->where('store_id', $store->id)
             ->first();
 
+        // Verificar si existe el usuario pero con problemas de asignación
+        if (!$user) {
+            $userExists = User::where('email', $credentials['email'])
+                ->where('role', 'store_admin')
+                ->first();
+                
+            if ($userExists && !$userExists->store_id) {
+                // Usuario existe pero no tiene store_id asignado
+                \Log::warning('Usuario store_admin sin store_id intentando acceder', [
+                    'email' => $credentials['email'],
+                    'user_id' => $userExists->id,
+                    'store_slug' => $store->slug,
+                    'store_id' => $store->id
+                ]);
+                
+                return back()->withErrors([
+                    'email' => 'Tu cuenta no está correctamente asignada a una tienda. Contacta al administrador del sistema.',
+                ])->withInput();
+            }
+        }
+
         if (!$user || !Hash::check($credentials['password'], $user->password)) {
             return back()->withErrors([
                 'email' => 'Las credenciales no coinciden con nuestros registros para esta tienda.',

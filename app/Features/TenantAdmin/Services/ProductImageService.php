@@ -5,11 +5,21 @@ namespace App\Features\TenantAdmin\Services;
 use App\Features\TenantAdmin\Models\Product;
 use App\Features\TenantAdmin\Models\ProductImage;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ProductImageService
 {
+    /**
+     * Crear directorios necesarios - SIEMPRE en storage/
+     */
+    private function ensureDirectoriesExist(int $productId): void
+    {
+        $productDir = public_path('storage/products/' . $productId . '/images');
+        if (!file_exists($productDir)) {
+            mkdir($productDir, 0755, true);
+        }
+    }
+
     /**
      * Procesar y guardar imágenes de producto
      */
@@ -40,24 +50,23 @@ class ProductImageService
                 return null;
             }
 
+            // Asegurar que existan los directorios
+            $this->ensureDirectoriesExist($product->id);
+
             // Generar nombre único para la imagen
             $filename = $this->generateUniqueFilename($image);
             
-            // Guardar imagen original
-            $path = $image->storeAs(
-                'products/' . $product->id . '/images',
-                $filename,
-                'public'
-            );
-
-            if (!$path) {
-                return null;
-            }
+            // GUARDAR SIEMPRE en public/storage/products/{productId}/images/
+            $destinationPath = public_path('storage/products/' . $product->id . '/images');
+            $image->move($destinationPath, $filename);
+            
+            // Path relativo para guardar en BD
+            $relativePath = 'products/' . $product->id . '/images/' . $filename;
 
             // Crear registro en base de datos
             $productImage = ProductImage::create([
                 'product_id' => $product->id,
-                'image_path' => $path,
+                'image_path' => $relativePath,
                 'thumbnail_path' => null, // Por ahora null, se puede implementar después
                 'medium_path' => null,
                 'large_path' => null,
@@ -93,17 +102,39 @@ class ProductImageService
     public function deleteImage(ProductImage $image): bool
     {
         try {
-            // Eliminar archivo del storage solo si existe el path
-            if (!empty($image->image_path) && Storage::disk('public')->exists($image->image_path)) {
-                Storage::disk('public')->delete($image->image_path);
+            // Eliminar archivo físico
+            $fullPath = public_path('storage/' . $image->image_path);
+            if (file_exists($fullPath)) {
+                unlink($fullPath);
             }
 
-            // Eliminar registro de base de datos
-            $image->delete();
+            // Eliminar thumbnails si existen
+            if ($image->thumbnail_path) {
+                $thumbnailPath = public_path('storage/' . $image->thumbnail_path);
+                if (file_exists($thumbnailPath)) {
+                    unlink($thumbnailPath);
+                }
+            }
 
-            return true;
+            if ($image->medium_path) {
+                $mediumPath = public_path('storage/' . $image->medium_path);
+                if (file_exists($mediumPath)) {
+                    unlink($mediumPath);
+                }
+            }
+
+            if ($image->large_path) {
+                $largePath = public_path('storage/' . $image->large_path);
+                if (file_exists($largePath)) {
+                    unlink($largePath);
+                }
+            }
+
+            // Eliminar registro de BD
+            return $image->delete();
+
         } catch (\Exception $e) {
-            \Log::error('Error eliminando imagen: ' . $e->getMessage());
+            \Log::error('Error eliminando imagen de producto: ' . $e->getMessage());
             return false;
         }
     }

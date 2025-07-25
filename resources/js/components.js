@@ -451,9 +451,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Inicializar Invoice Manager si existe en la página
-    if (document.querySelector('#invoice-table, #invoiceTableBody')) {
-        new InvoiceManager();
-    }
+    // COMENTADO TEMPORALMENTE - InvoiceManager no está definido
+    // if (document.querySelector('#invoice-table, #invoiceTableBody')) {
+    //     new InvoiceManager();
+    // }
 
     // Inicializar Form Wizard Manager si existe en la página
     if (document.querySelector('.form-wizard, .form-wizard-labeled')) {
@@ -463,6 +464,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Exportar para uso global
 window.ImageUploadManager = ImageUploadManager;
-window.InvoiceManager = InvoiceManager;
+// window.InvoiceManager = InvoiceManager; // COMENTADO - no está definido
 window.FormWizardManager = FormWizardManager;
 window.formatFileSize = formatFileSize; 

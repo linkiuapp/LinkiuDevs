@@ -46,10 +46,10 @@
                         <span class="bg-primary-200 text-white-50 px-2 py-1 rounded-full text-xs font-medium">{{ $store->plan->name }}</span>
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" 
-                                class="sr-only peer verification-toggle" 
+                                class="sr-only peer verified-toggle" 
                                 {{ $store->verified ? 'checked' : '' }}
                                 data-store-id="{{ $store->id }}"
-                                data-url="{{ route('superlinkiu.stores.toggle-verification', $store) }}">
+                                data-url="{{ route('superlinkiu.stores.toggle-verified', $store) }}">
                             <div class="w-9 h-5 bg-white-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white-50 after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white-50 after:border-white-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-200"></div>
                         </label>
                     </div>

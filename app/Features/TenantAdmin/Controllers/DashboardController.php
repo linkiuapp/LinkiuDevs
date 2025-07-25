@@ -37,6 +37,7 @@ class DashboardController extends Controller
             'store_name' => $store->name,
             'plan_name' => $store->plan->name,
             'store_status' => $store->status,
+            'store_verified' => $store->verified,
             'admin_name' => $user->name,
             'admin_email' => $user->email,
         ];

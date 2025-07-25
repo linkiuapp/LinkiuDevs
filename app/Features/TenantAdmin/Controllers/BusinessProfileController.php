@@ -66,6 +66,17 @@ class BusinessProfileController extends Controller
         return back()->with('success', 'Información del propietario actualizada correctamente.');
     }
 
+    /**
+     * Crear directorios necesarios - SIEMPRE en storage/
+     */
+    private function ensureDirectoriesExist(): void
+    {
+        $logoDir = public_path('storage/stores/logos');
+        if (!file_exists($logoDir)) {
+            mkdir($logoDir, 0755, true);
+        }
+    }
+
     public function updateStore(Request $request, Store $store)
     {
         $validator = Validator::make($request->all(), [
@@ -87,13 +98,26 @@ class BusinessProfileController extends Controller
 
         // Manejar subida de logo
         if ($request->hasFile('logo')) {
+            // Asegurar que existan los directorios
+            $this->ensureDirectoriesExist();
+            
             // Eliminar logo anterior si existe
             if ($store->logo_url) {
-                Storage::delete($store->logo_url);
+                $oldLogoPath = public_path('storage/' . str_replace(asset('storage/'), '', $store->logo_url));
+                if (file_exists($oldLogoPath)) {
+                    unlink($oldLogoPath);
+                }
             }
             
-            $logoPath = $request->file('logo')->store('logos', 'public');
-            $updateData['logo_url'] = $logoPath;
+            // Generar nombre único para el archivo
+            $filename = 'logo_' . $store->id . '_' . time() . '.' . $request->file('logo')->getClientOriginalExtension();
+            
+            // GUARDAR SIEMPRE en public/storage/stores/logos/
+            $destinationPath = public_path('storage/stores/logos');
+            $request->file('logo')->move($destinationPath, $filename);
+            
+            // Guardar URL usando asset('storage/...')
+            $updateData['logo_url'] = asset('storage/stores/logos/' . $filename);
         }
 
         $store->update($updateData);

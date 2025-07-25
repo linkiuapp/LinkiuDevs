@@ -53,7 +53,7 @@ class ProductImage extends Model
      */
     public function getImageUrlAttribute(): string
     {
-        return Storage::url($this->image_path);
+        return asset('storage/' . $this->image_path);
     }
 
     /**
@@ -61,7 +61,7 @@ class ProductImage extends Model
      */
     public function getThumbnailUrlAttribute(): string
     {
-        return Storage::url($this->thumbnail_path);
+        return $this->thumbnail_path ? asset('storage/' . $this->thumbnail_path) : $this->getImageUrlAttribute();
     }
 
     /**
@@ -69,7 +69,7 @@ class ProductImage extends Model
      */
     public function getMediumUrlAttribute(): string
     {
-        return Storage::url($this->medium_path);
+        return $this->medium_path ? asset('storage/' . $this->medium_path) : $this->getImageUrlAttribute();
     }
 
     /**
@@ -77,7 +77,7 @@ class ProductImage extends Model
      */
     public function getLargeUrlAttribute(): string
     {
-        return Storage::url($this->large_path);
+        return $this->large_path ? asset('storage/' . $this->large_path) : $this->getImageUrlAttribute();
     }
 
     /**
@@ -88,18 +88,21 @@ class ProductImage extends Model
         parent::boot();
 
         static::deleting(function ($image) {
-            // Eliminar archivos físicos
-            if (Storage::exists($image->image_path)) {
-                Storage::delete($image->image_path);
-            }
-            if (Storage::exists($image->thumbnail_path)) {
-                Storage::delete($image->thumbnail_path);
-            }
-            if (Storage::exists($image->medium_path)) {
-                Storage::delete($image->medium_path);
-            }
-            if (Storage::exists($image->large_path)) {
-                Storage::delete($image->large_path);
+            // Eliminar archivos físicos usando el patrón Laravel Cloud
+            $paths = [
+                $image->image_path,
+                $image->thumbnail_path,
+                $image->medium_path,
+                $image->large_path
+            ];
+
+            foreach ($paths as $path) {
+                if ($path) {
+                    $fullPath = public_path('storage/' . $path);
+                    if (file_exists($fullPath)) {
+                        unlink($fullPath);
+                    }
+                }
             }
         });
     }

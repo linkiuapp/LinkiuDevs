@@ -65,9 +65,6 @@ try {
     import('./sidebar.js')
     console.log('🟢 sidebar.js imported');
     
-    import('./store.js')
-    console.log('🟢 store.js imported');
-    
     import('./envios.js')
     console.log('🟢 envios.js imported');
     
@@ -79,6 +76,31 @@ try {
 }
 
 console.log('🟢 Setting up Alpine...');
+
+// DEFINICIONES SIMPLES PARA EVITAR ERRORES
+document.addEventListener('alpine:init', () => {
+    // Definir storeManagement
+    Alpine.data('storeManagement', () => ({
+        selectedStores: [],
+        showDeleteModal: false,
+        deleteStoreId: null,
+        deleteStoreName: '',
+        showNotification: false,
+        notificationMessage: '',
+        notificationType: 'success',
+        
+        showNotificationMessage(message, type = 'success') {
+            this.notificationMessage = message;
+            this.notificationType = type;
+            this.showNotification = true;
+            setTimeout(() => { this.showNotification = false; }, 5000);
+        },
+        
+        init() {
+            // Vacío - sin errores
+        }
+    }));
+});
 
 Alpine.plugin(collapse)
 window.Alpine = Alpine

@@ -192,9 +192,15 @@
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="body-base text-black-300">Estado de verificación:</span>
-                        <span class="bg-success-200 text-black-300 px-2 py-1 rounded text-xs font-medium">
-                            Verificada
-                        </span>
+                        @if($store->verified)
+                            <span class="bg-success-200 text-white-50 px-2 py-1 rounded text-xs font-medium">
+                                Verificada
+                            </span>
+                        @else
+                            <span class="bg-warning-200 text-black-500 px-2 py-1 rounded text-xs font-medium">
+                                No Verificada
+                            </span>
+                        @endif
                     </div>
                 </div>
             </div>
