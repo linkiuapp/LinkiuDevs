@@ -17,6 +17,7 @@ use App\Features\TenantAdmin\Controllers\TicketController;
 use App\Features\TenantAdmin\Controllers\AnnouncementController;
 use App\Features\TenantAdmin\Controllers\OrderController;
 use App\Features\TenantAdmin\Controllers\BillingController;
+use App\Features\TenantAdmin\Controllers\CouponController;
 
 
 /*
@@ -190,6 +191,19 @@ Route::middleware(['auth', 'store.admin'])->group(function () {
             Route::delete('/{zone}', [ShippingMethodController::class, 'destroyZone'])->name('destroy');
             Route::post('/{zone}/toggle-active', [ShippingMethodController::class, 'toggleZoneActive'])->name('toggle-active');
         });
+    });
+
+    // Coupons Routes
+    Route::prefix('coupons')->name('coupons.')->group(function () {
+        Route::get('/', [CouponController::class, 'index'])->name('index');
+        Route::get('/create', [CouponController::class, 'create'])->name('create');
+        Route::post('/', [CouponController::class, 'store'])->name('store');
+        Route::get('/{coupon}', [CouponController::class, 'show'])->name('show');
+        Route::get('/{coupon}/edit', [CouponController::class, 'edit'])->name('edit');
+        Route::put('/{coupon}', [CouponController::class, 'update'])->name('update');
+        Route::delete('/{coupon}', [CouponController::class, 'destroy'])->name('destroy');
+        Route::post('/{coupon}/toggle-status', [CouponController::class, 'toggleStatus'])->name('toggle-status');
+        Route::post('/{coupon}/duplicate', [CouponController::class, 'duplicate'])->name('duplicate');
     });
 
     // Tickets Routes

@@ -52,5 +52,8 @@ Route::get('/categoria/{categorySlug}', [StorefrontController::class, 'category'
 // Ruta de contacto/sedes
 Route::get('/contacto', [StorefrontController::class, 'contact'])->name('contact');
 
+// Ruta de promociones/cupones
+Route::get('/promociones', [StorefrontController::class, 'promotions'])->name('promotions');
+
 // Más rutas del frontend se añadirán aquí en el futuro...
 // Route::get('/buscar', [StorefrontController::class, 'search'])->name('search'); 

@@ -81,7 +81,8 @@
             </a>
             
             <!-- Promos -->
-            <a href="#" class="flex flex-col items-center py-2 px-3 text-gray-500 hover:text-purple-600 transition-colors">
+            <a href="{{ route('tenant.promotions', $store->slug) }}" 
+               class="flex flex-col items-center py-2 px-3 {{ request()->routeIs('tenant.promotions') ? 'text-white bg-purple-600 rounded-2xl' : 'text-gray-500 hover:text-purple-600' }} transition-colors">
                 <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                 </svg>

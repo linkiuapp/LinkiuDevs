@@ -200,7 +200,7 @@ use Illuminate\Support\Facades\Storage;
 
             <!-- Cupones -->
             <li>
-                <a href="#" 
+                <a href="{{ route('tenant.admin.coupons.index', ['store' => $store->slug]) }}" 
                    class="item-sidebar {{ request()->routeIs('tenant.admin.coupons.*') ? 'item-sidebar-active' : '' }}">
                     <x-solar-ticket-outline class="w-4 h-4 mr-2" />
                     Cupones

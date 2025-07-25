@@ -8,6 +8,7 @@ use App\Shared\Models\Location;
 use App\Features\TenantAdmin\Models\Category;
 use App\Features\TenantAdmin\Models\Product;
 use App\Features\TenantAdmin\Models\Slider;
+use App\Features\TenantAdmin\Models\Coupon;
 use Illuminate\Http\Request;
 
 class StorefrontController extends Controller
@@ -314,6 +315,145 @@ class StorefrontController extends Controller
                 // Días futuros
                 $dayName = $checkDate->locale('es')->dayName;
                 return "{$dayName} a las {$schedule->open_time_1}";
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Show the promotions page with all public and active coupons
+     */
+    public function promotions(Request $request)
+    {
+        $store = view()->shared('currentStore');
+        
+        // Si la tienda está inactiva o suspendida, mostrar mensaje
+        if ($store->status !== 'active') {
+            return view('tenant::storefront.inactive', compact('store'));
+        }
+
+        // Obtener cupones públicos, activos y disponibles
+        $coupons = Coupon::where('store_id', $store->id)
+            ->where('is_public', true)
+            ->where('is_active', true)
+            ->where(function ($query) {
+                $now = now();
+                // Verificar fechas de validez
+                $query->where(function ($q) use ($now) {
+                    $q->whereNull('start_date')->orWhere('start_date', '<=', $now);
+                })
+                ->where(function ($q) use ($now) {
+                    $q->whereNull('end_date')->orWhere('end_date', '>=', $now);
+                });
+            })
+            ->where(function ($query) {
+                // Verificar que no esté agotado
+                $query->whereNull('max_uses')->orWhereRaw('current_uses < max_uses');
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Agregar información de estado y formateo a cada cupón
+        foreach ($coupons as $coupon) {
+            $coupon->status_info = $this->getCouponStatusForFrontend($coupon);
+            $coupon->formatted_discount = $this->formatDiscount($coupon);
+            $coupon->conditions_text = $this->getConditionsText($coupon);
+            $coupon->expiry_text = $this->getExpiryText($coupon);
+        }
+
+        return view('tenant::storefront.promotions', compact('store', 'coupons'));
+    }
+
+    /**
+     * Get coupon status information for frontend display
+     */
+    private function getCouponStatusForFrontend(Coupon $coupon): array
+    {
+        $now = now();
+        
+        // Verificar si está próximo a vencer (menos de 3 días)
+        if ($coupon->end_date && $coupon->end_date->diffInDays($now) <= 3) {
+            return [
+                'status' => 'expiring',
+                'text' => '¡Últimos días!',
+                'color' => 'text-warning-300',
+                'bg' => 'bg-warning-50',
+                'border' => 'border-warning-200'
+            ];
+        }
+
+        // Verificar si está próximo a agotarse (menos del 20% de usos)
+        if ($coupon->max_uses && $coupon->current_uses >= ($coupon->max_uses * 0.8)) {
+            return [
+                'status' => 'limited',
+                'text' => '¡Pocas unidades!',
+                'color' => 'text-error-300',
+                'bg' => 'bg-error-50',
+                'border' => 'border-error-200'
+            ];
+        }
+
+        return [
+            'status' => 'available',
+            'text' => 'Disponible',
+            'color' => 'text-success-300',
+            'bg' => 'bg-success-50',
+            'border' => 'border-success-200'
+        ];
+    }
+
+    /**
+     * Format discount value for display
+     */
+    private function formatDiscount(Coupon $coupon): string
+    {
+        if ($coupon->discount_type === 'percentage') {
+            return $coupon->discount_value . '%';
+        } else {
+            return '$' . number_format($coupon->discount_value, 0, ',', '.');
+        }
+    }
+
+    /**
+     * Get conditions text for display
+     */
+    private function getConditionsText(Coupon $coupon): ?string
+    {
+        $conditions = [];
+
+        if ($coupon->min_purchase_amount) {
+            $conditions[] = 'Compra mínima: $' . number_format($coupon->min_purchase_amount, 0, ',', '.');
+        }
+
+        if ($coupon->max_discount_amount && $coupon->discount_type === 'percentage') {
+            $conditions[] = 'Descuento máx: $' . number_format($coupon->max_discount_amount, 0, ',', '.');
+        }
+
+        if ($coupon->max_uses) {
+            $remaining = max(0, $coupon->max_uses - $coupon->current_uses);
+            $conditions[] = "Quedan {$remaining} usos";
+        }
+
+        return empty($conditions) ? null : implode(' • ', $conditions);
+    }
+
+    /**
+     * Get expiry text for display
+     */
+    private function getExpiryText(Coupon $coupon): ?string
+    {
+        if ($coupon->end_date) {
+            $diffInDays = $coupon->end_date->diffInDays(now());
+            
+            if ($diffInDays === 0) {
+                return 'Vence hoy a las ' . $coupon->end_date->format('H:i');
+            } elseif ($diffInDays === 1) {
+                return 'Vence mañana';
+            } elseif ($diffInDays <= 7) {
+                return "Vence en {$diffInDays} días";
+            } else {
+                return 'Válido hasta ' . $coupon->end_date->format('d/m/Y');
             }
         }
 

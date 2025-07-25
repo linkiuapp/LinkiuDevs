@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Carbon\Carbon;
 use App\Shared\Models\Store;
-use App\Shared\Models\Product;
-use App\Shared\Models\Category;
+use App\Features\TenantAdmin\Models\Product;
+use App\Features\TenantAdmin\Models\Category;
 use App\Shared\Models\Order;
 
 class Coupon extends Model
