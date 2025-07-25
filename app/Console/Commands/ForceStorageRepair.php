@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 
 class ForceStorageRepair extends Command
 {
-    protected $signature = 'storage:force-repair {--verbose}';
+    protected $signature = 'storage:force-repair';
     protected $description = 'Aggressively repair storage symlink for Laravel Cloud';
 
     public function handle()
