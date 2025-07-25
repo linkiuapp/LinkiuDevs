@@ -26,6 +26,103 @@ Route::get('/store/{slug}/status', function($slug) {
     }
 });
 
+// 🛠️ REPARACIÓN REMOTA DE STORAGE (temporal)
+Route::get('/fix-storage-remote', function() {
+    $results = [
+        'timestamp' => now()->toISOString(),
+        'action' => 'remote_storage_fix',
+        'environment' => app()->environment(),
+        'steps' => []
+    ];
+
+    try {
+        // Paso 1: Verificar estado actual
+        $publicStorage = public_path('storage');
+        $storagePublic = storage_path('app/public');
+        
+        $results['initial_state'] = [
+            'public_storage_exists' => file_exists($publicStorage),
+            'public_storage_is_link' => is_link($publicStorage),
+            'storage_public_exists' => file_exists($storagePublic)
+        ];
+
+        // Paso 2: Crear storage/app/public si no existe
+        if (!file_exists($storagePublic)) {
+            mkdir($storagePublic, 0755, true);
+            $results['steps'][] = "✅ Creado storage/app/public";
+        }
+
+        // Paso 3: Forzar recreación del symlink
+        if (file_exists($publicStorage)) {
+            if (!is_link($publicStorage)) {
+                // Es un directorio, necesitamos eliminarlo
+                $results['steps'][] = "⚠️ public/storage es directorio, no symlink - eliminando";
+                
+                // Función recursiva para eliminar directorio
+                $deleteDir = function($dir) use (&$deleteDir) {
+                    if (!is_dir($dir)) return false;
+                    $files = array_diff(scandir($dir), ['.', '..']);
+                    foreach ($files as $file) {
+                        $path = $dir . '/' . $file;
+                        if (is_dir($path)) {
+                            $deleteDir($path);
+                        } else {
+                            unlink($path);
+                        }
+                    }
+                    return rmdir($dir);
+                };
+                
+                $deleteDir($publicStorage);
+                $results['steps'][] = "✅ Directorio public/storage eliminado";
+            } else {
+                unlink($publicStorage);
+                $results['steps'][] = "✅ Symlink anterior eliminado";
+            }
+        }
+
+        // Paso 4: Crear symlink
+        symlink($storagePublic, $publicStorage);
+        $results['steps'][] = "✅ Symlink creado: public/storage → storage/app/public";
+
+        // Paso 5: Crear directorios necesarios
+        $directories = [
+            'avatars',
+            'system', 
+            'stores/logos',
+            'store-design',
+            'products'
+        ];
+
+        foreach ($directories as $dir) {
+            $fullPath = $storagePublic . '/' . $dir;
+            if (!file_exists($fullPath)) {
+                mkdir($fullPath, 0755, true);
+                $results['steps'][] = "✅ Creado: {$dir}";
+            } else {
+                $results['steps'][] = "ℹ️ Ya existe: {$dir}";
+            }
+        }
+
+        // Paso 6: Verificar estado final
+        $results['final_state'] = [
+            'public_storage_exists' => file_exists($publicStorage),
+            'public_storage_is_link' => is_link($publicStorage),
+            'symlink_target' => is_link($publicStorage) ? readlink($publicStorage) : null
+        ];
+
+        $results['success'] = true;
+        $results['message'] = "Storage reparado exitosamente";
+
+    } catch (\Exception $e) {
+        $results['success'] = false;
+        $results['error'] = $e->getMessage();
+        $results['steps'][] = "❌ Error: " . $e->getMessage();
+    }
+
+    return response()->json($results, 200, [], JSON_PRETTY_PRINT);
+});
+
 // 🖼️ DEBUG ESPECÍFICO PARA IMÁGENES Y STORAGE
 Route::get('/debug-images', function() {
     $debugInfo = [
