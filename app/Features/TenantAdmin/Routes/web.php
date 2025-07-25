@@ -33,17 +33,127 @@ use App\Features\TenantAdmin\Controllers\BillingController;
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 
-// Ruta de debug
+// Ruta de debug expandida para producción
 Route::get('/debug', function (\Illuminate\Http\Request $request) {
-    return response()->json([
-        'route_store' => $request->route('store'),
-        'segment_1' => $request->segment(1),
-        'segment_2' => $request->segment(2),
-        'full_url' => $request->fullUrl(),
-        'path' => $request->path(),
-        'store_exists' => \App\Shared\Models\Store::where('slug', $request->route('store'))->exists(),
-        'current_store' => view()->shared('currentStore', 'NOT_SET'),
-    ]);
+    $storeSlug = $request->route('store');
+    $debugInfo = [
+        'timestamp' => now()->toISOString(),
+        'environment' => app()->environment(),
+        'debug_mode' => config('app.debug'),
+        
+        // Información de request
+        'request' => [
+            'route_store' => $storeSlug,
+            'segment_1' => $request->segment(1),
+            'segment_2' => $request->segment(2),
+            'full_url' => $request->fullUrl(),
+            'path' => $request->path(),
+            'method' => $request->method(),
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ],
+        
+        // Estado del usuario
+        'auth' => [
+            'is_authenticated' => auth()->check(),
+            'user_id' => auth()->id(),
+            'user_role' => auth()->user()?->role,
+            'user_store_id' => auth()->user()?->store_id,
+        ],
+        
+        // Información de la tienda
+        'store_check' => [
+            'slug_provided' => $storeSlug,
+            'store_exists' => false,
+            'store_info' => null,
+            'admin_count' => 0,
+            'error' => null
+        ],
+        
+        // Estado del middleware
+        'middleware' => [
+            'current_store' => 'NOT_SET',
+            'tenant_service' => 'NOT_TESTED',
+        ],
+        
+        // Estado del sistema
+        'system' => [
+            'database_connected' => false,
+            'storage_writable' => is_writable(storage_path()),
+            'cache_path_writable' => is_writable(storage_path('framework/cache')),
+            'log_path_writable' => is_writable(storage_path('logs')),
+        ]
+    ];
+    
+    try {
+        // Probar conexión a BD
+        \DB::connection()->getPdo();
+        $debugInfo['system']['database_connected'] = true;
+        
+        // Información detallada de la tienda
+        if ($storeSlug) {
+            $store = \App\Shared\Models\Store::where('slug', $storeSlug)->first();
+            if ($store) {
+                $debugInfo['store_check']['store_exists'] = true;
+                $debugInfo['store_check']['store_info'] = [
+                    'id' => $store->id,
+                    'name' => $store->name,
+                    'status' => $store->status,
+                    'verified' => $store->verified,
+                    'plan_id' => $store->plan_id,
+                    'created_at' => $store->created_at?->toISOString(),
+                ];
+                $debugInfo['store_check']['admin_count'] = $store->admins()->count();
+                
+                // Probar TenantService
+                try {
+                    $tenantService = app(\App\Shared\Services\TenantService::class);
+                    $tenantService->setTenant($store);
+                    $debugInfo['middleware']['tenant_service'] = 'OK';
+                } catch (\Exception $e) {
+                    $debugInfo['middleware']['tenant_service'] = 'ERROR: ' . $e->getMessage();
+                }
+            } else {
+                $debugInfo['store_check']['error'] = 'Store not found in database';
+            }
+        }
+        
+        // Información del currentStore del middleware
+        $currentStore = view()->shared('currentStore', null);
+        if ($currentStore && is_object($currentStore)) {
+            $debugInfo['middleware']['current_store'] = [
+                'id' => $currentStore->id ?? 'NO_ID',
+                'slug' => $currentStore->slug ?? 'NO_SLUG',
+                'name' => $currentStore->name ?? 'NO_NAME',
+            ];
+        } else {
+            $debugInfo['middleware']['current_store'] = $currentStore;
+        }
+        
+    } catch (\Exception $e) {
+        $debugInfo['system']['database_connected'] = false;
+        $debugInfo['store_check']['error'] = 'Database error: ' . $e->getMessage();
+    }
+    
+    // Si es una request AJAX o quiere JSON
+    if ($request->wantsJson() || $request->ajax()) {
+        return response()->json($debugInfo, 200, [], JSON_PRETTY_PRINT);
+    }
+    
+    // Sino, mostrar HTML bonito
+    $html = '<html><head><title>Debug Info - ' . ($storeSlug ?? 'No Store') . '</title>';
+    $html .= '<style>body{font-family:monospace;margin:20px;} .ok{color:green;} .error{color:red;} .warn{color:orange;} pre{background:#f5f5f5;padding:10px;border-radius:5px;}</style></head><body>';
+    $html .= '<h1>🔍 Debug Info - ' . ($storeSlug ?? 'No Store') . '</h1>';
+    
+    foreach ($debugInfo as $section => $data) {
+        $html .= '<h2>' . ucfirst($section) . '</h2>';
+        $html .= '<pre>' . json_encode($data, JSON_PRETTY_PRINT) . '</pre>';
+    }
+    
+    $html .= '<hr><p><small>Generated at: ' . $debugInfo['timestamp'] . '</small></p>';
+    $html .= '</body></html>';
+    
+    return response($html)->header('Content-Type', 'text/html');
 })->name('debug');
 
 // Rutas protegidas (con middleware auth)

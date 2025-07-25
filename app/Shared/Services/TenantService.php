@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class TenantService
 {
-    protected ?string $tenantId = null;
+    protected ?int $storeId = null;
     protected ?Store $tenant = null;
     
     /**
@@ -16,24 +16,26 @@ class TenantService
     public function setTenant(?Store $tenant): void
     {
         $this->tenant = $tenant;
-        $this->tenantId = $tenant?->tenant_id;
+        $this->storeId = $tenant?->id;
         
         // Guardar en sesión para persistencia
         if ($tenant) {
-            session(['current_tenant_id' => $this->tenantId]);
             session(['current_store_id' => $tenant->id]);
         } else {
-            session()->forget(['current_tenant_id', 'current_store_id']);
+            session()->forget(['current_store_id']);
         }
     }
     
     /**
-     * Establecer tenant por ID
+     * Establecer tenant por store ID
      */
-    public function setTenantById(string $tenantId): void
+    public function setTenantById(int $storeId): void
     {
-        $this->tenantId = $tenantId;
-        session(['current_tenant_id' => $tenantId]);
+        $this->storeId = $storeId;
+        session(['current_store_id' => $storeId]);
+        
+        // Limpiar el objeto tenant para que se recargue
+        $this->tenant = null;
     }
     
     /**
@@ -41,29 +43,29 @@ class TenantService
      */
     public function getTenant(): ?Store
     {
-        if (!$this->tenant && $this->tenantId) {
-            $this->tenant = Store::where('tenant_id', $this->tenantId)->first();
+        if (!$this->tenant && $this->storeId) {
+            $this->tenant = Store::find($this->storeId);
         }
         
         return $this->tenant;
     }
     
     /**
-     * Obtener el ID del tenant actual
+     * Obtener el ID del store actual
      */
-    public function getTenantId(): ?string
+    public function getStoreId(): ?int
     {
-        // Si no hay tenant en memoria, intentar recuperar de la sesión
-        if (!$this->tenantId) {
-            $this->tenantId = session('current_tenant_id');
+        // Si no hay store en memoria, intentar recuperar de la sesión
+        if (!$this->storeId) {
+            $this->storeId = session('current_store_id');
         }
         
-        // Si el usuario autenticado es store_admin, usar su tenant_id
-        if (!$this->tenantId && Auth::check() && Auth::user()->isStoreAdmin()) {
-            $this->tenantId = Auth::user()->tenant_id;
+        // Si el usuario autenticado es store_admin, usar su store_id
+        if (!$this->storeId && Auth::check() && Auth::user()->isStoreAdmin()) {
+            $this->storeId = Auth::user()->store_id;
         }
         
-        return $this->tenantId;
+        return $this->storeId;
     }
     
     /**
@@ -71,7 +73,7 @@ class TenantService
      */
     public function hasTenant(): bool
     {
-        return $this->getTenantId() !== null;
+        return $this->getStoreId() !== null;
     }
     
     /**
@@ -80,8 +82,8 @@ class TenantService
     public function clearTenant(): void
     {
         $this->tenant = null;
-        $this->tenantId = null;
-        session()->forget(['current_tenant_id', 'current_store_id']);
+        $this->storeId = null;
+        session()->forget(['current_store_id']);
     }
     
     /**
@@ -89,7 +91,7 @@ class TenantService
      */
     public function withoutTenant(callable $callback)
     {
-        $originalTenantId = $this->tenantId;
+        $originalStoreId = $this->storeId;
         $originalTenant = $this->tenant;
         
         $this->clearTenant();
@@ -97,8 +99,17 @@ class TenantService
         try {
             return $callback();
         } finally {
-            $this->tenantId = $originalTenantId;
+            $this->storeId = $originalStoreId;
             $this->tenant = $originalTenant;
         }
+    }
+
+    /**
+     * Métodos de compatibilidad (deprecated)
+     * @deprecated Use getStoreId() instead
+     */
+    public function getTenantId(): ?int
+    {
+        return $this->getStoreId();
     }
 } 
