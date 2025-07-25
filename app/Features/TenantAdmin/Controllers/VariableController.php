@@ -366,11 +366,7 @@ class VariableController extends Controller
      */
     private function getVariableLimit($store)
     {
-        return match($store->plan->name) {
-            'Explorer' => 5,
-            'Master' => 20,
-            'Legend' => 50,
-            default => 5,
-        };
+        // Usar límite específico del plan o fallback a max_products/10
+        return $store->plan->max_variables ?? intval(($store->plan->max_products ?? 50) / 3);
     }
 }

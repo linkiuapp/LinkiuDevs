@@ -321,10 +321,10 @@ class BillingController extends Controller
         return [
             'products' => $plan->max_products,
             'categories' => $plan->max_categories,
-            'variables' => 20, // TODO: Añadir al modelo Plan
+            'variables' => $plan->max_variables ?? intval(($plan->max_products ?? 50) / 3),
             'sliders' => $plan->max_slider,
             'locations' => $plan->max_sedes,
-            'bank_accounts' => 3, // TODO: Añadir al modelo Plan
+            'bank_accounts' => $plan->max_bank_accounts ?? min($plan->max_sedes ?? 1, 3),
             'coupons' => $plan->max_active_coupons,
             'active_promotions' => $plan->max_active_promotions
         ];

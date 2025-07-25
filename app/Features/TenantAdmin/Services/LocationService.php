@@ -28,15 +28,8 @@ class LocationService
      */
     public function getMaxLocations(Store $store): int
     {
-        $planLimits = [
-            'explorer' => 1,
-            'master' => 5,
-            'legend' => 10
-        ];
-        
-        $planSlug = strtolower($store->plan->slug ?? $store->plan->name);
-        
-        return $planLimits[$planSlug] ?? 1; // Default to 1 if plan not found
+        // Usar el límite real del plan desde la base de datos
+        return $store->plan->max_sedes ?? 1;
     }
     
     /**

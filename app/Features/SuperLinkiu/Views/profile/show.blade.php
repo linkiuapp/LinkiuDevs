@@ -121,7 +121,7 @@ use Illuminate\Support\Facades\Storage;
                         </form>
 
                         <!-- Delete Avatar Form (Separate) -->
-                        @if($user->avatar_path)
+                        @if($user->avatar_url)
                             <form action="{{ route('superlinkiu.profile.delete-avatar') }}" method="POST" class="mb-4">
                                 @csrf
                                 @method('DELETE')

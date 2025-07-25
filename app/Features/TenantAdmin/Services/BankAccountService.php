@@ -46,16 +46,17 @@ class BankAccountService
      */
     public function getBankAccountLimit(Store $store): int
     {
-        // Define limits according to requirements 2.1, 2.2, 2.3
-        $planLimits = [
-            'explorer' => 1, // Requirement 2.1: Explorer plan allows max 1 account
-            'master' => 3,   // Requirement 2.2: Master plan allows max 3 accounts
-            'legend' => 5    // Requirement 2.3: Legend plan allows max 5 accounts
-        ];
+        // Usar el límite real del plan desde la base de datos
+        // Si no está definido en el plan, usar valor por defecto basado en max_sedes
+        $maxAccounts = $store->plan->max_bank_accounts ?? null;
         
-        $planSlug = strtolower($store->plan->slug ?? $store->plan->name);
+        if ($maxAccounts === null) {
+            // Fallback: usar max_sedes como referencia si no hay campo específico
+            $maxSedes = $store->plan->max_sedes ?? 1;
+            return min($maxSedes, 3); // Máximo 3 cuentas bancarias
+        }
         
-        return $planLimits[$planSlug] ?? 1; // Default to Explorer plan limit (1) if plan not found
+        return $maxAccounts;
     }
 
     /**

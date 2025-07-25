@@ -80,11 +80,6 @@ class User extends Authenticatable
             return null;
         }
 
-        // Verificar si el archivo existe en S3
-        if (!\Storage::disk('s3')->exists($this->avatar_path)) {
-            return null; // Retornar null para mostrar avatar por defecto
-        }
-
-        return \Storage::disk('s3')->url($this->avatar_path);
+        return Storage::disk('s3')->url($this->avatar_path);
     }
 }

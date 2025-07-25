@@ -327,15 +327,7 @@ class CategoryController extends Controller
      */
     private function getCategoryLimit(Store $store): int
     {
-        $plan = $store->plan;
-        
-        // Límites por plan según la especificación
-        $limits = [
-            'Explorer' => 3,
-            'Master' => 15,
-            'Legend' => 30,
-        ];
-        
-        return $limits[$plan->name] ?? 3;
+        // Usar el límite real del plan desde la base de datos
+        return $store->plan->max_categories ?? 3;
     }
 } 
