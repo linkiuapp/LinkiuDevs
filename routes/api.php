@@ -63,6 +63,38 @@ Route::get('/fix-storage-emergency', function() {
     return response()->json($results, 200, [], JSON_PRETTY_PRINT);
 });
 
+// 🔥 REPARACIÓN SÚPER AGRESIVA - ÚLTIMO RECURSO
+Route::get('/force-storage-repair', function() {
+    $results = [
+        'timestamp' => now()->toISOString(),
+        'action' => 'force_aggressive_repair',
+        'environment' => app()->environment(),
+    ];
+
+    try {
+        // Ejecutar el comando súper agresivo
+        \Artisan::call('storage:force-repair');
+        $commandOutput = \Artisan::output();
+        
+        $results['command_output'] = $commandOutput;
+        $results['success'] = true;
+        
+        // Verificación final
+        $publicStorage = public_path('storage');
+        $results['final_check'] = [
+            'public_storage_exists' => file_exists($publicStorage),
+            'public_storage_is_link' => is_link($publicStorage),
+            'symlink_target' => is_link($publicStorage) ? readlink($publicStorage) : null
+        ];
+        
+    } catch (\Exception $e) {
+        $results['success'] = false;
+        $results['error'] = $e->getMessage();
+    }
+
+    return response()->json($results, 200, [], JSON_PRETTY_PRINT);
+});
+
 // 🖼️ DEBUG ESPECÍFICO PARA IMÁGENES Y STORAGE
 Route::get('/debug-images', function() {
     $debugInfo = [

@@ -14,13 +14,11 @@ environments:
   - 'php artisan migrate:images-to-storage'
   - 'php artisan config:clear'
   - 'php artisan cache:clear'
-  - 'rm -rf /var/www/html/public/storage || true'
-  - 'php artisan storage:link --force'
-  - 'php artisan post-deploy:fix-storage'
-  - 'ls -la /var/www/html/public/storage || echo "storage link missing"'
-  - 'sleep 3'
-  - 'php artisan post-deploy:fix-storage'
-  - 'ls -la /var/www/html/public/ | grep storage || echo "final check failed"'
+  - 'php artisan storage:force-repair'
+  - 'ls -la /var/www/html/public/ | grep storage'
+  - 'sleep 2'
+  - 'php artisan storage:force-repair'
+  - 'ls -la /var/www/html/storage/app/public/'
     variables:
       - APP_ENV=production
       - APP_DEBUG=false
