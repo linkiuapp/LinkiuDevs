@@ -3,12 +3,10 @@
 namespace App\Shared\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Shared\Traits\BelongsToTenant;
 use Carbon\Carbon;
 
 class Location extends Model
 {
-    use BelongsToTenant;
     
     protected $table = 'store_locations';
     
