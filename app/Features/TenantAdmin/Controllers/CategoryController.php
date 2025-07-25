@@ -163,7 +163,7 @@ class CategoryController extends Controller
         $category = Category::create($validated);
         
         return redirect()
-            ->route('tenant-admin.categories.index', $store->slug)
+            ->route('categories.index', $store->slug)
             ->with('success', 'Categoría creada exitosamente');
     }
 

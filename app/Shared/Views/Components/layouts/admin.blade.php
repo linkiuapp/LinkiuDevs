@@ -15,8 +15,6 @@ use Illuminate\Support\Facades\Storage;
         $tempFavicon = session('temp_app_favicon');
         $appFavicon = $tempFavicon ?: env('APP_FAVICON');
         
-        // Fallback seguro para S3
-        $faviconSrc = asset('favicon.ico'); // Default fallback
         if ($appFavicon) {
             try {
                 if (config('filesystems.disks.s3.bucket')) {
@@ -27,6 +25,8 @@ use Illuminate\Support\Facades\Storage;
             } catch (\Exception $e) {
                 $faviconSrc = asset('storage/' . $appFavicon);
             }
+        } else {
+            $faviconSrc = asset('favicon.ico');
         }
     @endphp
     <link rel="icon" type="image/x-icon" href="{{ $faviconSrc }}">

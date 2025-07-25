@@ -8,16 +8,14 @@
         <div class="flex items-center">
             <a href="{{ route('tenant.admin.dashboard', ['store' => $store->slug]) }}">
                 @php
-                    // Obtener logo de la aplicación configurado en SuperAdmin
                     $tempLogo = session('temp_app_logo');
                     $appLogo = $tempLogo ?: env('APP_LOGO');
                     
-                    // Fallback seguro para S3
-                    $logoSrc = asset('assets/images/logo_Linkiu.svg'); // Default fallback
+                    $logoSrc = null;
                     if ($appLogo) {
                         try {
                             if (config('filesystems.disks.s3.bucket')) {
-                                $logoSrc = \Storage::disk('s3')->url($appLogo);
+                                $logoSrc = Storage::disk('s3')->url($appLogo);
                             } else {
                                 $logoSrc = asset('storage/' . $appLogo);
                             }
@@ -26,7 +24,12 @@
                         }
                     }
                 @endphp
-                <img src="{{ $logoSrc }}" alt="{{ config('app.name') }}" class="w-auto h-10 mt-1">
+                
+                @if($logoSrc)
+                    <img src="{{ $logoSrc }}" alt="{{ config('app.name') }}" class="w-auto h-10 mt-1">
+                @else
+                    <img src="{{ asset('assets/images/Logo_Linkiu.svg') }}" alt="{{ config('app.name') }}" class="w-auto h-10 mt-1">
+                @endif
             </a>
         </div>
         <!-- Toggle button for mobile -->
@@ -292,11 +295,22 @@
     <div class="p-4 border-t dark:border-gray-700 flex-shrink-0">
         <div class="flex items-center">
             <div class="flex-shrink-0">
-                <div class="w-8 h-8 bg-primary-300 rounded-full flex items-center justify-center">
-                    <span class="text-white-50 text-sm font-medium">
-                        {{ substr(auth()->user()->name, 0, 1) }}
-                    </span>
-                </div>
+                @php
+                    // Obtener la imagen de perfil del store design (logo de la tienda)
+                    $profileImage = $store->design?->logo_url ?? $store->logo_url;
+                @endphp
+                
+                @if($profileImage)
+                    <img src="{{ $profileImage }}" 
+                         alt="Perfil" 
+                         class="w-8 h-8 rounded-full object-cover border border-white-200">
+                @else
+                    <div class="w-8 h-8 bg-primary-300 rounded-full flex items-center justify-center">
+                        <span class="text-white-50 text-sm font-medium">
+                            {{ substr(auth()->user()->name, 0, 1) }}
+                        </span>
+                    </div>
+                @endif
             </div>
             <div class="ml-3 flex-1 min-w-0">
                 <p class="text-sm font-medium text-gray-900 dark:text-white-50 truncate">

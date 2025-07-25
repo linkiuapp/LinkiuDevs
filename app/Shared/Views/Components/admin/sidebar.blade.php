@@ -12,11 +12,9 @@ use Illuminate\Support\Facades\Storage;
         <div class="flex items-center">
             <a href="{{ route('superlinkiu.dashboard') }}">
                 @php
-                    // Obtener logo de la aplicación configurado en SuperAdmin
                     $tempLogo = session('temp_app_logo');
                     $appLogo = $tempLogo ?: env('APP_LOGO');
                     
-                    // Fallback seguro para S3
                     $logoSrc = null;
                     if ($appLogo) {
                         try {

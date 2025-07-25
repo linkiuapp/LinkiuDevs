@@ -46,7 +46,7 @@
                                     <x-solar-upload-outline class="w-4 h-4" />
                                     Subir Logo
                                 </button>
-                                <button x-show="preview || currentLogo" @click="removeLogo" class="btn-error flex items-center justify-center gap-2 py-2 px-3">
+                                <button x-show="preview || currentLogo" @click="removeImage" class="btn-error flex items-center justify-center gap-2 py-2 px-3">
                                     <x-solar-trash-bin-trash-outline class="w-4 h-4" />
                                     Eliminar
                                 </button>
@@ -75,7 +75,7 @@
                                     <x-solar-upload-outline class="w-4 h-4" />
                                     Subir Favicon
                                 </button>
-                                <button x-show="preview || currentFavicon" @click="removeLogo" class="btn-error flex items-center justify-center gap-2 py-2 px-3">
+                                <button x-show="preview || currentFavicon" @click="removeImage" class="btn-error flex items-center justify-center gap-2 py-2 px-3">
                                     <x-solar-trash-bin-trash-outline class="w-4 h-4" />
                                     Eliminar
                                 </button>
@@ -323,6 +323,8 @@
                             if (this.$store?.design) {
                                 this.$store.design[type] = e.target.result;
                             }
+                            // Enviar automáticamente al servidor
+                            this.updateDesign(e.target.result);
                         };
                         reader.readAsDataURL(file);
                     }
@@ -334,6 +336,53 @@
                     if (this.$store?.design) {
                         this.$store.design[type] = null;
                     }
+                    // Enviar el cambio al servidor (eliminar imagen)
+                    this.updateDesign('');
+                },
+                
+                updateDesign(imageData) {
+                    const storePath = window.location.pathname.split('/')[1];
+                    const formData = new FormData();
+                    
+                    // Agregar colores actuales del store
+                    formData.append('header_background_color', this.$store.design.bgColor || '#FFFFFF');
+                    formData.append('header_text_color', this.$store.design.textColor || '#000000');
+                    formData.append('header_description_color', this.$store.design.descriptionColor || '#666666');
+                    
+                    // Agregar imagen específica
+                    if (type === 'logo') {
+                        formData.append('logo_base64', imageData);
+                    } else if (type === 'favicon') {
+                        formData.append('favicon_base64', imageData);
+                    }
+                    
+                    fetch(`/${storePath}/admin/store-design/update`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json'
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Design updated:', data);
+                        if (data.design) {
+                            // Actualizar las URLs actuales
+                            if (type === 'logo' && data.design.logo_url) {
+                                this.currentImage = data.design.logo_url;
+                                this.$store.design.logo = data.design.logo_url;
+                            } else if (type === 'favicon' && data.design.favicon_url) {
+                                this.currentImage = data.design.favicon_url;
+                                this.$store.design.favicon = data.design.favicon_url;
+                            }
+                            this.preview = null; // Limpiar preview después de guardar
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error updating design:', error);
+                        this.error = 'Error al subir la imagen';
+                    });
                 }
             }));
             

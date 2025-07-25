@@ -8,11 +8,50 @@
     
     <!-- Favicon -->
     @php
-        $tempFavicon = session('temp_app_favicon');
-        $appFavicon = $tempFavicon ?: env('APP_FAVICON');
+        // Función para obtener el favicon más reciente del SuperAdmin
+        $getLatestAppFavicon = function() {
+            try {
+                // Primero verificar sesión temporal
+                $tempFavicon = session('temp_app_favicon');
+                if ($tempFavicon) {
+                    return $tempFavicon;
+                }
+                
+                // Luego verificar variable de entorno
+                $envFavicon = env('APP_FAVICON');
+                if ($envFavicon) {
+                    return $envFavicon;
+                }
+                
+                // Finalmente, buscar el favicon más reciente en S3
+                if (config('filesystems.disks.s3.bucket')) {
+                    $files = Storage::disk('s3')->files('system');
+                    $faviconFiles = array_filter($files, function($file) {
+                        return str_contains(basename($file), 'favicon_');
+                    });
+                    
+                    if (!empty($faviconFiles)) {
+                        // Ordenar por fecha en el nombre del archivo (más reciente primero)
+                        usort($faviconFiles, function($a, $b) {
+                            $timeA = preg_match('/favicon_(\d+)\./', basename($a), $matchesA) ? (int)$matchesA[1] : 0;
+                            $timeB = preg_match('/favicon_(\d+)\./', basename($b), $matchesB) ? (int)$matchesB[1] : 0;
+                            return $timeB - $timeA; // Más reciente primero
+                        });
+                        
+                        return $faviconFiles[0]; // Retornar el más reciente
+                    }
+                }
+                
+                return null;
+            } catch (\Exception $e) {
+                Log::error('Error searching for app favicon: ' . $e->getMessage());
+                return null;
+            }
+        };
         
-        // Fallback seguro para S3
-        $faviconSrc = asset('favicon.ico'); // Default fallback  
+        $appFavicon = $getLatestAppFavicon();
+        $faviconSrc = asset('favicon.ico'); // Default fallback
+        
         if ($appFavicon) {
             try {
                 if (config('filesystems.disks.s3.bucket')) {
