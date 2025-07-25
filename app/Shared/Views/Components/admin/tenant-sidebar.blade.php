@@ -7,7 +7,13 @@
     <div class="flex h-10 mt-6 items-center justify-center px-6 flex-shrink-0">
         <div class="flex items-center">
             <a href="{{ route('tenant.admin.dashboard', ['store' => $store->slug]) }}">
-                <img src="{{ asset('assets/images/logo_Linkiu.svg') }}" alt="Logo" class="w-auto h-10 mt-1">
+                @php
+                    // Obtener logo de la aplicación configurado en SuperAdmin
+                    $tempLogo = session('temp_app_logo');
+                    $appLogo = $tempLogo ?: env('APP_LOGO');
+                    $logoSrc = $appLogo ? asset('storage/' . $appLogo) : asset('assets/images/logo_Linkiu.svg');
+                @endphp
+                <img src="{{ $logoSrc }}" alt="{{ config('app.name') }}" class="w-auto h-10 mt-1">
             </a>
         </div>
         <!-- Toggle button for mobile -->

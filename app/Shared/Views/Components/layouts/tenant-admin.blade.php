@@ -7,7 +7,12 @@
     <title>@yield('title', 'Admin') - {{ $store->name }}</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ $store->design && $store->design->is_published && $store->design->favicon_url ? $store->design->favicon_url : asset('favicon.ico') }}">
+    @php
+        $tempFavicon = session('temp_app_favicon');
+        $appFavicon = $tempFavicon ?: env('APP_FAVICON');
+        $faviconSrc = $appFavicon ? asset('storage/' . $appFavicon) : asset('favicon.ico');
+    @endphp
+    <link rel="icon" type="image/x-icon" href="{{ $store->design && $store->design->is_published && $store->design->favicon_url ? $store->design->favicon_url : $faviconSrc }}">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

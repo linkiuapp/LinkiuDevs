@@ -12,17 +12,11 @@ use Illuminate\Support\Facades\Storage;
     
     <!-- Favicon -->
     @php
-        // SIEMPRE usar storage/ - más simple y compatible
-        $storagePath = 'storage';
-        
         $tempFavicon = session('temp_app_favicon');
         $appFavicon = $tempFavicon ?: env('APP_FAVICON');
+        $faviconSrc = $appFavicon ? asset('storage/' . $appFavicon) : asset('favicon.ico');
     @endphp
-    @if($appFavicon)
-        <link rel="icon" type="image/x-icon" href="{{ asset($storagePath . '/' . $appFavicon) }}">
-    @else
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-    @endif
+    <link rel="icon" type="image/x-icon" href="{{ $faviconSrc }}">
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
