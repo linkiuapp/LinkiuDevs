@@ -1,19 +1,63 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-<div class="px-2 py-6">
+<div class="px-4 py-6 space-y-6">
     <!-- Slider de Novedades -->
     @if($sliders->count() > 0)
-        <div class="mb-8">
-            <h2 class="text-xl font-bold text-black-500 mb-4">Novedades</h2>
-            
-            <div class="slider-container relative" x-data="sliderComponent({{ $sliders->toJson() }}, {{ $sliders->first()->transition_duration ?? 5 }})">
-                                <!-- Slider principal -->
-                <div class="overflow-hidden rounded-lg">
-                    <div class="flex gap-8 transition-transform duration-500 ease-in-out" 
-                         :style="`transform: translateX(-${currentSlide * 33.333}%)`">
-                        
-                        @foreach($sliders as $index => $slider)
+        <div class="slider-container relative" x-data="sliderComponent({{ $sliders->toJson() }}, {{ $sliders->first()->transition_duration ?? 5 }})">
+            <!-- Slider principal -->
+            <div class="overflow-hidden rounded-lg">
+                <div class="flex gap-8 transition-transform duration-500 ease-in-out" 
+                     :style="`transform: translateX(-${currentSlide * 33.333}%)`">
+                    
+                    @foreach($sliders as $index => $slider)
+                        <div class="w-1/3 flex-shrink-0 relative flex justify-center px-1">
+                            @if($slider->url && $slider->url_type !== 'none')
+                                @if($slider->url_type === 'external')
+                                    <a href="{{ $slider->url }}" 
+                                       target="_blank" 
+                                       rel="noopener noreferrer"
+                                       class="block relative group">
+                                @else
+                                    <a href="{{ $slider->url_type === 'internal' ? url($store->slug . '/' . ltrim($slider->url, '/')) : '#' }}" 
+                                       class="block relative group">
+                                @endif
+                            @else
+                                <div class="block relative group">
+                            @endif
+                            
+                            <!-- Imagen del slider -->
+                            <div class="w-[170px] h-[100px] bg-white-100 rounded-lg overflow-hidden relative">
+                                @if($slider->image_path)
+                                    <img src="{{ Storage::disk('s3')->url($slider->image_path) }}" 
+                                         alt="{{ $slider->name }}" 
+                                         class="w-[170px] h-[100px] object-cover object-center transition-transform duration-300 group-hover:scale-105">
+                                @endif
+                                
+                                <!-- Overlay suave (solo si tiene enlace) -->
+                                @if($slider->url && $slider->url_type !== 'none')
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black-500/20 via-transparent to-transparent"></div>
+                                @endif
+                                
+                                <!-- Indicador de enlace -->
+                                @if($slider->url && $slider->url_type !== 'none')
+                                    <div class="absolute top-1 right-1 bg-white-50/20 backdrop-blur-sm rounded-full p-0.5 opacity-70 group-hover:opacity-100 transition-opacity">
+                                        <x-solar-arrow-right-outline class="w-2 h-2 text-white-50" />
+                                    </div>
+                                @endif
+                            </div>
+                            
+                            @if($slider->url && $slider->url_type !== 'none')
+                                </a>
+                            @else
+                                </div>
+                            @endif
+                        </div>
+                    @endforeach
+                    
+                    <!-- Duplicar los primeros slides para efecto infinito -->
+                    @if($sliders->count() > 1)
+                        @foreach($sliders->take(3) as $index => $slider)
                             <div class="w-1/3 flex-shrink-0 relative flex justify-center px-1">
                                 @if($slider->url && $slider->url_type !== 'none')
                                     @if($slider->url_type === 'external')
@@ -57,146 +101,162 @@
                                 @endif
                             </div>
                         @endforeach
-                        
-                        <!-- Duplicar los primeros slides para efecto infinito -->
-                        @if($sliders->count() > 1)
-                            @foreach($sliders->take(3) as $index => $slider)
-                                <div class="w-1/3 flex-shrink-0 relative flex justify-center px-1">
-                                    @if($slider->url && $slider->url_type !== 'none')
-                                        @if($slider->url_type === 'external')
-                                            <a href="{{ $slider->url }}" 
-                                               target="_blank" 
-                                               rel="noopener noreferrer"
-                                               class="block relative group">
-                                        @else
-                                            <a href="{{ $slider->url_type === 'internal' ? url($store->slug . '/' . ltrim($slider->url, '/')) : '#' }}" 
-                                               class="block relative group">
-                                        @endif
-                                    @else
-                                        <div class="block relative group">
-                                    @endif
-                                    
-                                    <!-- Imagen del slider -->
-                                    <div class="w-[170px] h-[100px] bg-white-100 rounded-lg overflow-hidden relative">
-                                        @if($slider->image_path)
-                                            <img src="{{ Storage::disk('s3')->url($slider->image_path) }}" 
-                                                 alt="{{ $slider->name }}" 
-                                                 class="w-[170px] h-[100px] object-cover object-center transition-transform duration-300 group-hover:scale-105">
-                                        @endif
-                                        
-                                        <!-- Overlay suave (solo si tiene enlace) -->
-                                        @if($slider->url && $slider->url_type !== 'none')
-                                            <div class="absolute inset-0 bg-gradient-to-t from-black-500/20 via-transparent to-transparent"></div>
-                                        @endif
-                                        
-                                        <!-- Indicador de enlace -->
-                                        @if($slider->url && $slider->url_type !== 'none')
-                                            <div class="absolute top-1 right-1 bg-white-50/20 backdrop-blur-sm rounded-full p-0.5 opacity-70 group-hover:opacity-100 transition-opacity">
-                                                <x-solar-arrow-right-outline class="w-2 h-2 text-white-50" />
-                                            </div>
-                                        @endif
-                                    </div>
-                                    
-                                    @if($slider->url && $slider->url_type !== 'none')
-                                        </a>
-                                    @else
-                                        </div>
-                                    @endif
-                                </div>
-                            @endforeach
-                        @endif
-                    </div>
+                    @endif
                 </div>
-                
-                <!-- Indicadores (dots) - Solo si hay más de 1 slide -->
-                @if($sliders->count() > 1)
-                    <div class="flex justify-center mt-4 space-x-2">
-                        @foreach($sliders as $index => $slider)
-                            <button @click="goToSlide({{ $index }})"
-                                    class="w-2 h-2 rounded-full transition-all duration-300"
-                                    :class="currentSlide === {{ $index }} ? 'bg-primary-400 w-6' : 'bg-white-300 hover:bg-white-400'">
-                            </button>
-                        @endforeach
-                    </div>
-                @endif
             </div>
+            
+            <!-- Indicadores (dots) - Solo si hay más de 1 slide -->
+            @if($sliders->count() > 1)
+                <div class="flex justify-center mt-4 space-x-2">
+                    @foreach($sliders as $index => $slider)
+                        <button @click="goToSlide({{ $index }})"
+                                class="w-2 h-2 rounded-full transition-all duration-300"
+                                :class="currentSlide === {{ $index }} ? 'bg-primary-300 w-6' : 'bg-white-300 hover:bg-white-400'">
+                        </button>
+                    @endforeach
+                </div>
+            @endif
         </div>
     @endif
 
-    <!-- Contenido principal del home -->
-    <div class="space-y-6 px-2">
-        <!-- Mensaje de bienvenida -->
-        <div class="text-center bg-white-50 rounded-xl p-6 border border-white-200">
-            <h2 class="text-2xl font-bold text-black-500 mb-3">
-                ¡Bienvenido a {{ $store->name }}!
-            </h2>
-            <p class="text-black-300 leading-relaxed">
-                {{ $store->description ?? 'Descubre nuestros productos y servicios' }}
-            </p>
-        </div>
+    <!-- Top 3 más vendidos -->
+    <div>
+        <h2 class="text-lg font-bold text-black-400 mb-4">Top 3 más vendidos</h2>
         
-        <!-- Sección de productos destacados -->
-        <div class="bg-white-50 rounded-xl p-6 border border-white-200">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-black-500">Productos Destacados</h3>
-                <span class="text-sm text-black-300">Próximamente</span>
+        @if($topProducts->count() > 0)
+            <div class="space-y-3">
+                @foreach($topProducts as $product)
+                                         <div class="bg-white-50 rounded-lg p-3 flex items-center gap-3 border border-white-200 hover:shadow-sm transition-shadow relative">
+                         <!-- Badge MÁS VENDIDO -->
+                         <div class="absolute -top-1 -left-1 bg-error-300 text-white-50 text-xs px-2 py-1 rounded-full font-bold z-10">
+                             🔥 MÁS VENDIDO
+                         </div>
+                         
+                         <!-- Imagen del producto -->
+                         <div class="w-16 h-16 bg-white-100 rounded-lg flex-shrink-0 overflow-hidden">
+                             @if($product->mainImage)
+                                 <img src="{{ $product->main_image_url }}" 
+                                      alt="{{ $product->name }}" 
+                                      class="w-16 h-16 object-cover">
+                             @else
+                                 <div class="w-16 h-16 flex items-center justify-center text-black-200">
+                                     <x-solar-gallery-outline class="w-6 h-6" />
+                                 </div>
+                             @endif
+                         </div>
+                        
+                        <!-- Información del producto -->
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-semibold text-black-400 text-sm">{{ $product->name }}</h3>
+                            <p class="text-xs text-black-300 mt-1 line-clamp-2">{{ $product->description }}</p>
+                            <div class="mt-2 text-lg font-bold text-black-500">
+                                ${{ number_format($product->price, 0, ',', '.') }}
+                            </div>
+                        </div>
+                        
+                        <!-- Botón agregar -->
+                        <button class="bg-secondary-300 hover:bg-secondary-200 text-white-50 w-8 h-8 rounded-full flex items-center justify-center transition-colors flex-shrink-0">
+                            <x-solar-add-circle-outline class="w-5 h-5" />
+                        </button>
+                    </div>
+                @endforeach
             </div>
-            
-            <div class="text-center text-black-300 py-6">
+        @else
+            <div class="text-center py-8 text-black-300">
                 <x-solar-box-outline class="w-12 h-12 mx-auto mb-3 text-black-200" />
-                <p class="text-sm">Aquí aparecerán nuestros productos más populares</p>
-                <div class="mt-3 text-xs text-black-300 bg-white-100 rounded-lg px-3 py-2 inline-block">
-                    En desarrollo
-                </div>
+                <p class="text-sm">No hay productos disponibles</p>
             </div>
-        </div>
+        @endif
+    </div>
+
+    <!-- Lo más nuevo -->
+    <div>
+        <h2 class="text-lg font-bold text-black-400 mb-4">Lo más nuevo</h2>
         
-        <!-- Sección de categorías -->
-        <div class="bg-white-50 rounded-xl p-6 border border-white-200">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-black-500">Categorías</h3>
-                <a href="{{ route('tenant.categories', $store->slug) }}" 
-                   class="text-sm text-primary-400 hover:text-primary-300 font-medium flex items-center gap-1">
-                    Ver todas
-                    <x-solar-arrow-right-outline class="w-4 h-4" />
-                </a>
+        @if($newProducts->count() > 0)
+            <div class="space-y-3">
+                @foreach($newProducts as $product)
+                                         <div class="bg-white-50 rounded-lg p-3 flex items-center gap-3 border border-white-200 hover:shadow-sm transition-shadow relative">
+                         <!-- Badge NUEVO -->
+                         <div class="absolute -top-1 -left-1 bg-success-300 text-white-50 text-xs px-2 py-1 rounded-full font-bold z-10">
+                             ✨ NUEVO
+                         </div>
+                         
+                         <!-- Imagen del producto -->
+                         <div class="w-16 h-16 bg-white-100 rounded-lg flex-shrink-0 overflow-hidden">
+                             @if($product->mainImage)
+                                 <img src="{{ $product->main_image_url }}" 
+                                      alt="{{ $product->name }}" 
+                                      class="w-16 h-16 object-cover">
+                             @else
+                                 <div class="w-16 h-16 flex items-center justify-center text-black-200">
+                                     <x-solar-gallery-outline class="w-6 h-6" />
+                                 </div>
+                             @endif
+                         </div>
+                        
+                        <!-- Información del producto -->
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-semibold text-black-400 text-sm">{{ $product->name }}</h3>
+                            <p class="text-xs text-black-300 mt-1 line-clamp-2">{{ $product->description }}</p>
+                            <div class="mt-2 text-lg font-bold text-black-500">
+                                ${{ number_format($product->price, 0, ',', '.') }}
+                            </div>
+                        </div>
+                        
+                        <!-- Botón agregar -->
+                        <button class="bg-secondary-300 hover:bg-secondary-200 text-white-50 w-8 h-8 rounded-full flex items-center justify-center transition-colors flex-shrink-0">
+                            <x-solar-add-circle-outline class="w-5 h-5" />
+                        </button>
+                    </div>
+                @endforeach
             </div>
-            
-            <div class="text-center text-black-300 py-6">
+        @else
+            <div class="text-center py-8 text-black-300">
+                <x-solar-box-outline class="w-12 h-12 mx-auto mb-3 text-black-200" />
+                <p class="text-sm">No hay productos nuevos disponibles</p>
+            </div>
+        @endif
+    </div>
+
+    <!-- Categorías -->
+    <div>
+        <h2 class="text-lg font-bold text-black-400 mb-4">Categorías</h2>
+        
+        @if($categories->count() > 0)
+            <div class="grid grid-cols-4 gap-4">
+                @foreach($categories as $category)
+                    <a href="{{ route('tenant.category', ['store' => $store->slug, 'categorySlug' => $category->slug]) }}" 
+                       class="flex flex-col items-center p-3 bg-white-50 rounded-lg border border-white-200 hover:shadow-sm hover:border-primary-200 transition-all group">
+                        
+                                                 <!-- Icono de la categoría -->
+                         <div class="w-12 h-12 mb-2 flex items-center justify-center rounded-lg bg-white-100 group-hover:bg-primary-50 transition-colors">
+                             @if($category->icon && $category->icon->image_url)
+                                 <img src="{{ $category->icon->image_url }}" 
+                                      alt="{{ $category->name }}" 
+                                      class="w-8 h-8 object-contain">
+                             @else
+                                 <x-solar-gallery-outline class="w-6 h-6 text-black-300 group-hover:text-primary-300" />
+                             @endif
+                         </div>
+                        
+                        <!-- Nombre de la categoría -->
+                        <span class="text-xs text-center text-black-400 font-medium group-hover:text-primary-300 transition-colors">
+                            {{ $category->name }}
+                        </span>
+                    </a>
+                @endforeach
+            </div>
+        @else
+            <div class="text-center py-8 text-black-300">
                 <x-solar-gallery-outline class="w-12 h-12 mx-auto mb-3 text-black-200" />
-                <p class="text-sm">Explora nuestras categorías de productos</p>
+                <p class="text-sm">No hay categorías disponibles</p>
                 <a href="{{ route('tenant.categories', $store->slug) }}" 
-                   class="inline-flex items-center mt-3 px-4 py-2 bg-primary-400 text-white-50 rounded-lg text-sm hover:bg-primary-300 transition-colors">
+                   class="inline-flex items-center mt-3 px-4 py-2 bg-primary-300 text-white-50 rounded-lg text-sm hover:bg-primary-200 transition-colors">
                     <x-solar-gallery-outline class="w-4 h-4 mr-2" />
-                    Ver categorías
+                    Explorar
                 </a>
             </div>
-        </div>
-        
-        <!-- Información de contacto -->
-        @if($store->email || $store->phone)
-        <div class="bg-primary-50 rounded-xl p-6 border border-primary-100">
-            <h3 class="text-lg font-semibold text-primary-500 mb-4 text-center">
-                ¿Necesitas ayuda?
-            </h3>
-            <div class="flex flex-col gap-3">
-                @if($store->email)
-                    <a href="mailto:{{ $store->email }}" 
-                       class="flex items-center justify-center gap-2 bg-white-50 text-primary-400 py-3 px-4 rounded-xl hover:bg-primary-100 hover:text-primary-500 transition-colors border border-primary-100">
-                        <x-solar-letter-outline class="w-5 h-5" />
-                        {{ $store->email }}
-                    </a>
-                @endif
-                
-                @if($store->phone)
-                    <a href="tel:{{ $store->phone }}" 
-                       class="flex items-center justify-center gap-2 bg-white-50 text-primary-400 py-3 px-4 rounded-xl hover:bg-primary-100 hover:text-primary-500 transition-colors border border-primary-100">
-                        <x-solar-phone-outline class="w-5 h-5" />
-                        {{ $store->phone }}
-                    </a>
-                @endif
-            </div>
-        </div>
         @endif
     </div>
 </div>

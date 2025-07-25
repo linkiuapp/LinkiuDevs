@@ -35,7 +35,32 @@ class StorefrontController extends Controller
             ->ordered()
             ->get();
 
-        return view('tenant::storefront.home', compact('store', 'sliders'));
+        // Top 3 productos más vendidos
+        // TODO: Implementar lógica real cuando tengamos sistema de ventas
+        // Por ahora obtenemos los 3 primeros productos activos
+        $topProducts = Product::where('store_id', $store->id)
+            ->where('is_active', true)
+            ->with('mainImage')
+            ->orderBy('created_at', 'desc')
+            ->limit(3)
+            ->get();
+
+        // Lo más nuevo: últimos 3 productos agregados
+        $newProducts = Product::where('store_id', $store->id)
+            ->where('is_active', true)
+            ->with('mainImage')
+            ->orderBy('created_at', 'desc')
+            ->limit(3)
+            ->get();
+
+        // Categorías activas con sus iconos
+        $categories = Category::where('store_id', $store->id)
+            ->where('is_active', true)
+            ->with('icon')
+            ->orderBy('name')
+            ->get();
+
+        return view('tenant::storefront.home', compact('store', 'sliders', 'topProducts', 'newProducts', 'categories'));
     }
 
     /**
@@ -147,7 +172,7 @@ class StorefrontController extends Controller
             })
             ->where('store_id', $store->id)
             ->where('is_active', true)
-            ->with(['images', 'categories'])
+            ->with(['mainImage', 'categories'])
             ->orderBy('name')
             ->get();
 

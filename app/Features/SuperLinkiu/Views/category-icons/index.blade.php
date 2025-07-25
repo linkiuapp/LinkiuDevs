@@ -85,9 +85,15 @@
                             
                             <!-- Icon Preview -->
                             <div class="aspect-square bg-white-50 rounded-lg p-3 mb-3 flex items-center justify-center overflow-hidden group-hover:bg-primary-50 transition-colors">
-                                <img src="{{ $icon->image_url }}" 
-                                     alt="{{ $icon->display_name }}" 
-                                     class="w-full h-full object-contain">
+                                @if($icon->image_url)
+                                    <img src="{{ $icon->image_url }}" 
+                                         alt="{{ $icon->display_name }}" 
+                                         class="w-full h-full object-contain">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center text-black-200">
+                                        <x-solar-gallery-outline class="w-8 h-8" />
+                                    </div>
+                                @endif
                             </div>
 
                             <!-- Icon Info -->

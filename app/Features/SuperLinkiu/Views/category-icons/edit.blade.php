@@ -61,11 +61,19 @@
                                 </label>
                                 <div class="bg-white-100 rounded-xl p-6 text-center border-2 border-white-200">
                                     <div class="w-32 h-32 mx-auto bg-white-50 rounded-xl p-4 flex items-center justify-center shadow-inner mb-4">
-                                        <img src="{{ $categoryIcon->image_url }}" 
-                                             class="max-w-full max-h-full object-contain" 
-                                             alt="{{ $categoryIcon->display_name }}">
+                                        @if($categoryIcon->image_url)
+                                            <img src="{{ $categoryIcon->image_url }}" 
+                                                 class="max-w-full max-h-full object-contain" 
+                                                 alt="{{ $categoryIcon->display_name }}">
+                                        @else
+                                            <div class="w-full h-full flex items-center justify-center text-black-200">
+                                                <x-solar-gallery-outline class="w-12 h-12" />
+                                            </div>
+                                        @endif
                                     </div>
-                                    <p class="text-sm font-medium text-black-400">{{ basename($categoryIcon->image_path) }}</p>
+                                    <p class="text-sm font-medium text-black-400">
+                                        {{ $categoryIcon->image_path ? basename($categoryIcon->image_path) : 'Sin imagen' }}
+                                    </p>
                                     <p class="text-xs text-black-300 mt-1">Archivo actual</p>
                                 </div>
                             </div>

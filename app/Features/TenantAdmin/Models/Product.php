@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Shared\Models\Store;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -181,8 +182,8 @@ class Product extends Model
      */
     public function getMainImageUrlAttribute(): string
     {
-        if ($this->mainImage) {
-            return asset('storage/' . $this->mainImage->image_path);
+        if ($this->mainImage && $this->mainImage->image_path) {
+            return Storage::disk('s3')->url($this->mainImage->image_path);
         }
         
         return asset('images/product-placeholder.jpg');
@@ -194,7 +195,7 @@ class Product extends Model
     public function getMainImageThumbnailAttribute(): string
     {
         if ($this->mainImage && $this->mainImage->thumbnail_path) {
-            return asset('storage/' . $this->mainImage->thumbnail_path);
+            return Storage::disk('s3')->url($this->mainImage->thumbnail_path);
         }
         
         return asset('images/product-placeholder-thumb.jpg');

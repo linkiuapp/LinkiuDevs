@@ -32,6 +32,14 @@ class CategoryIcon extends Model
      */
     public function getImageUrlAttribute()
     {
-        return Storage::disk('s3')->url($this->image_path);
+        if (!$this->image_path) {
+            return null;
+        }
+        
+        try {
+            return Storage::disk('s3')->url($this->image_path);
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 } 
