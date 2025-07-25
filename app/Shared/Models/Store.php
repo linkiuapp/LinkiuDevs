@@ -299,6 +299,22 @@ class Store extends Model
     }
 
     /**
+     * Get the active coupons for this store.
+     */
+    public function activeCoupons()
+    {
+        return $this->hasMany(\App\Features\TenantAdmin\Models\Coupon::class)->where('is_active', true);
+    }
+
+    /**
+     * Get the active coupons count accessor.
+     */
+    public function getActiveCouponsCountAttribute()
+    {
+        return $this->activeCoupons()->count();
+    }
+
+    /**
      * Get the subscription for this store.
      */
     public function subscription()

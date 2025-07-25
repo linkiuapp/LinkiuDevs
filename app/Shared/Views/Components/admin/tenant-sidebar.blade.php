@@ -183,12 +183,7 @@ use Illuminate\Support\Facades\Storage;
                     Métodos de Envío
                     @php
                         $shippingZonesCount = $store->shippingZones()->count();
-                        $maxShippingZones = match($store->plan->slug) {
-                            'explorer' => 1,
-                            'master' => 2,
-                            'legend' => 4,
-                            default => 1
-                        };
+                        $maxShippingZones = $store->plan->max_delivery_zones ?? 1;
                         $shippingPercent = $maxShippingZones > 0 ? ($shippingZonesCount / $maxShippingZones) * 100 : 0;
                         $shippingBadgeColor = $shippingPercent >= 90 ? 'bg-error-300' : ($shippingPercent >= 70 ? 'bg-warning-300 text-black-500' : 'bg-info-300');
                     @endphp
@@ -247,7 +242,7 @@ use Illuminate\Support\Facades\Storage;
                     Sedes
                     @php
                         $locationsUsed = $store->locations_count ?? 0;
-                        $locationsLimit = $store->plan->max_locations ?? 5;
+                        $locationsLimit = $store->plan->max_sedes ?? 1;
                         $locationsPercent = $locationsLimit > 0 ? ($locationsUsed / $locationsLimit) * 100 : 0;
                         $locationsBadgeColor = $locationsPercent >= 90 ? 'bg-error-300' : ($locationsPercent >= 70 ? 'bg-warning-300 text-black-500' : 'bg-info-300');
                     @endphp

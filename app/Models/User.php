@@ -80,6 +80,12 @@ class User extends Authenticatable
             return null;
         }
 
-        return Storage::disk('s3')->url($this->avatar_path);
+        try {
+            return Storage::disk('s3')->url($this->avatar_path);
+        } catch (\Exception $e) {
+            // Si hay error con S3, limpiar avatar_path y retornar null
+            $this->update(['avatar_path' => null]);
+            return null;
+        }
     }
 }
