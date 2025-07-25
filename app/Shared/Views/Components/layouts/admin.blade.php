@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Storage;
     @php
         $tempFavicon = session('temp_app_favicon');
         $appFavicon = $tempFavicon ?: env('APP_FAVICON');
-        $faviconSrc = $appFavicon ? asset('storage/' . $appFavicon) : asset('favicon.ico');
+        $faviconSrc = $appFavicon ? Storage::disk('s3')->url($appFavicon) : asset('favicon.ico');
     @endphp
     <link rel="icon" type="image/x-icon" href="{{ $faviconSrc }}">
     

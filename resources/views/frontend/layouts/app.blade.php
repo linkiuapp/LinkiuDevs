@@ -62,15 +62,17 @@
             </a>
             
             <!-- Menú -->
-            <a href="#" class="flex flex-col items-center py-2 px-3 text-gray-500 hover:text-purple-600 transition-colors">
+            <a href="{{ route('tenant.categories', $store->slug) }}" 
+               class="flex flex-col items-center py-2 px-3 {{ request()->routeIs('tenant.categories', 'tenant.category') ? 'text-white bg-purple-600 rounded-2xl' : 'text-gray-500 hover:text-purple-600' }} transition-colors">
                 <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
-                <span class="text-xs">Menú</span>
+                <span class="text-xs">Categorías</span>
             </a>
             
-            <!-- Inicio (Activo) -->
-            <a href="#" class="flex flex-col items-center py-2 px-3 text-white bg-purple-600 rounded-2xl transition-colors">
+            <!-- Inicio -->
+            <a href="{{ route('tenant.home', $store->slug) }}" 
+               class="flex flex-col items-center py-2 px-3 {{ request()->routeIs('tenant.home') ? 'text-white bg-purple-600 rounded-2xl' : 'text-gray-500 hover:text-purple-600' }} transition-colors">
                 <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path>
                 </svg>
@@ -124,6 +126,8 @@
             }
         }
     </script>
+    
+    @stack('scripts')
     
 </body>
 </html> 

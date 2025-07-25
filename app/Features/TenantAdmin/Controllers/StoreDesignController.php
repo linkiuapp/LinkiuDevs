@@ -237,28 +237,22 @@ public function update(Request $request)
             // Limpiar imágenes antiguas
             $this->imageService->cleanOldImages($storeId, $type);
 
-            // Asegurar que existan los directorios
-            $storeDir = public_path('storage/store-design/' . $storeId);
-            if (!file_exists($storeDir)) {
-                mkdir($storeDir, 0755, true);
-            }
-
             // Generar nombre de archivo
             $filename = $type . '_' . time() . '.' . $extension;
+            $path = 'store-design/' . $storeId . '/' . $filename;
             
-            // GUARDAR SIEMPRE en public/storage/store-design/{storeId}/
-            $fullPath = $storeDir . '/' . $filename;
-            file_put_contents($fullPath, $imageData);
+            // Guardar en bucket S3
+            Storage::disk('s3')->put($path, $imageData, 'public');
 
-            // Retornar URLs según el tipo usando asset('storage/...')
+            // Retornar URLs según el tipo usando bucket S3
             if ($type === 'logo') {
                 return [
-                    'logo_url' => asset('storage/store-design/' . $storeId . '/' . $filename),
+                    'logo_url' => Storage::disk('s3')->url($path),
                     'logo_webp_url' => null
                 ];
             } else {
                 return [
-                    'favicon_url' => asset('storage/store-design/' . $storeId . '/' . $filename)
+                    'favicon_url' => Storage::disk('s3')->url($path)
                 ];
             }
         } catch (\Exception $e) {

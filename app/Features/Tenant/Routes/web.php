@@ -45,6 +45,9 @@ Route::prefix('pedido')->name('order.')->group(function () {
     Route::get('/seguimiento', [OrderController::class, 'tracking'])->name('tracking');
 });
 
+// Rutas de categorías
+Route::get('/categorias', [StorefrontController::class, 'categories'])->name('categories');
+Route::get('/categoria/{categorySlug}', [StorefrontController::class, 'category'])->name('category');
+
 // Más rutas del frontend se añadirán aquí en el futuro...
-// Route::get('/categoria/{categorySlug}', [StorefrontController::class, 'category'])->name('category');
 // Route::get('/buscar', [StorefrontController::class, 'search'])->name('search'); 

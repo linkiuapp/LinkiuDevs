@@ -23,21 +23,15 @@ class SliderImageService
             // Generar nombre único
             $filename = $this->generateUniqueFilename($image);
             
-            // Crear directorio si no existe
-            $directory = 'sliders/' . $slider->store_id;
-            if (!Storage::disk('public')->exists($directory)) {
-                Storage::disk('public')->makeDirectory($directory);
-            }
-
             // Procesar imagen con funciones nativas de PHP
             $processedImage = $this->processImageWithGD($image);
             if (!$processedImage) {
                 return null;
             }
             
-            // Guardar imagen
-            $path = $directory . '/' . $filename;
-            Storage::disk('public')->put($path, $processedImage);
+            // Guardar imagen en bucket S3
+            $path = 'sliders/' . $slider->store_id . '/' . $filename;
+            Storage::disk('s3')->put($path, $processedImage, 'public');
 
             return $path;
 

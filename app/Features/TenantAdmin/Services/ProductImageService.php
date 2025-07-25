@@ -6,19 +6,11 @@ use App\Features\TenantAdmin\Models\Product;
 use App\Features\TenantAdmin\Models\ProductImage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class ProductImageService
 {
-    /**
-     * Crear directorios necesarios - SIEMPRE en storage/
-     */
-    private function ensureDirectoriesExist(int $productId): void
-    {
-        $productDir = public_path('storage/products/' . $productId . '/images');
-        if (!file_exists($productDir)) {
-            mkdir($productDir, 0755, true);
-        }
-    }
+
 
     /**
      * Procesar y guardar imágenes de producto
@@ -50,18 +42,14 @@ class ProductImageService
                 return null;
             }
 
-            // Asegurar que existan los directorios
-            $this->ensureDirectoriesExist($product->id);
-
             // Generar nombre único para la imagen
             $filename = $this->generateUniqueFilename($image);
             
-            // GUARDAR SIEMPRE en public/storage/products/{productId}/images/
-            $destinationPath = public_path('storage/products/' . $product->id . '/images');
-            $image->move($destinationPath, $filename);
+            // Guardar en bucket S3
+            $path = Storage::disk('s3')->putFileAs('products/' . $product->id . '/images', $image, $filename, 'public');
             
-            // Path relativo para guardar en BD
-            $relativePath = 'products/' . $product->id . '/images/' . $filename;
+            // Path para guardar en BD (será usado para generar URL)
+            $relativePath = $path;
 
             // Crear registro en base de datos
             $productImage = ProductImage::create([

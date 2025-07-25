@@ -3,27 +3,11 @@
 namespace App\Features\TenantAdmin\Services;
 
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class StoreDesignImageService
 {
-    /**
-     * SIEMPRE usar storage/ - Laravel Cloud debe soportar public/storage/
-     */
-    private function getStoragePath(): string
-    {
-        return 'storage';
-    }
 
-    /**
-     * Crear directorios necesarios - SIEMPRE en storage/
-     */
-    private function ensureDirectoriesExist(int $storeId): void
-    {
-        $storeDir = public_path('storage/store-design/' . $storeId);
-        if (!file_exists($storeDir)) {
-            mkdir($storeDir, 0755, true);
-        }
-    }
 
     /**
      * Procesa y guarda el logo de la tienda
@@ -34,19 +18,16 @@ class StoreDesignImageService
      */
     public function handleLogo(UploadedFile $file, int $storeId): array
     {
-        // Asegurar que existan los directorios
-        $this->ensureDirectoriesExist($storeId);
-        
         // Generar nombre único para el archivo
         $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
+        $path = 'store-design/' . $storeId . '/' . $filename;
         
-        // GUARDAR SIEMPRE en public/storage/store-design/{storeId}/
-        $destinationPath = public_path('storage/store-design/' . $storeId);
-        $file->move($destinationPath, $filename);
+        // Guardar en bucket S3
+        Storage::disk('s3')->putFileAs('store-design/' . $storeId, $file, $filename, 'public');
         
-        // Retornar URLs usando asset('storage/...')
+        // Retornar URLs usando bucket S3
         return [
-            'logo_url' => asset('storage/store-design/' . $storeId . '/' . $filename),
+            'logo_url' => Storage::disk('s3')->url($path),
             'logo_webp_url' => null // Por ahora no generamos WebP
         ];
     }
@@ -60,19 +41,16 @@ class StoreDesignImageService
      */
     public function handleFavicon(UploadedFile $file, int $storeId): array
     {
-        // Asegurar que existan los directorios
-        $this->ensureDirectoriesExist($storeId);
-        
         // Generar nombre único para el archivo
         $filename = 'favicon_' . time() . '.' . $file->getClientOriginalExtension();
+        $path = 'store-design/' . $storeId . '/' . $filename;
         
-        // GUARDAR SIEMPRE en public/storage/store-design/{storeId}/
-        $destinationPath = public_path('storage/store-design/' . $storeId);
-        $file->move($destinationPath, $filename);
+        // Guardar en bucket S3
+        Storage::disk('s3')->putFileAs('store-design/' . $storeId, $file, $filename, 'public');
         
-        // Retornar URL usando asset('storage/...')
+        // Retornar URL usando bucket S3
         return [
-            'favicon_url' => asset('storage/store-design/' . $storeId . '/' . $filename)
+            'favicon_url' => Storage::disk('s3')->url($path)
         ];
     }
 
@@ -86,22 +64,19 @@ class StoreDesignImageService
     public function cleanOldImages(int $storeId, string $prefix): void
     {
         try {
-            $directory = public_path('storage/store-design/' . $storeId);
+            $directory = 'store-design/' . $storeId;
 
-            // Verificar si el directorio existe
-            if (!is_dir($directory)) {
-                return;
-            }
-
-            // Obtener todos los archivos que coincidan con el patrón
-            $files = glob($directory . '/' . $prefix . '_*');
+            // Obtener todos los archivos que coincidan con el patrón en el bucket S3
+            $files = Storage::disk('s3')->files($directory);
+            
             foreach ($files as $file) {
-                if (file_exists($file)) {
-                    unlink($file);
+                $filename = basename($file);
+                if (str_starts_with($filename, $prefix . '_')) {
+                    Storage::disk('s3')->delete($file);
                 }
             }
         } catch (\Exception $e) {
-            \Log::warning('Error cleaning old images:', [
+            \Log::warning('Error cleaning old images from S3:', [
                 'store_id' => $storeId,
                 'prefix' => $prefix,
                 'error' => $e->getMessage()

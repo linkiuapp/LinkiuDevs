@@ -73,8 +73,8 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         if ($user->avatar_path) {
-            // Eliminar archivo del storage público
-            Storage::disk('public')->delete($user->avatar_path);
+            // Eliminar archivo del bucket S3
+            Storage::disk('s3')->delete($user->avatar_path);
             
             // Limpiar campo en BD
             $user->update(['avatar_path' => null]);
@@ -95,18 +95,14 @@ class ProfileController extends Controller
         ]);
 
         try {
-            // Asegurar que existan los directorios
-            $this->ensureDirectoriesExist();
-
             // Manejar logo
             if ($request->hasFile('app_logo')) {
                 $logoFile = $request->file('app_logo');
                 $logoFilename = 'logo_' . time() . '.' . $logoFile->getClientOriginalExtension();
-                
-                // GUARDAR SIEMPRE en public/storage/system/
-                $destinationPath = public_path('storage/system');
-                $logoFile->move($destinationPath, $logoFilename);
                 $logoPath = 'system/' . $logoFilename;
+                
+                // Guardar en bucket S3
+                Storage::disk('s3')->putFileAs('system', $logoFile, $logoFilename, 'public');
                 
                 // TODO: Implementar actualización de APP_LOGO sin modificar .env directamente  
                 // $this->updateEnvVariable('APP_LOGO', $logoPath);
@@ -115,18 +111,17 @@ class ProfileController extends Controller
                 session(['temp_app_logo' => $logoPath]);
                 
                 // Log para debugging
-                \Log::info("Logo guardado en storage/: {$logoPath}");
+                \Log::info("Logo guardado en bucket S3: {$logoPath}");
             }
 
             // Manejar favicon
             if ($request->hasFile('app_favicon')) {
                 $faviconFile = $request->file('app_favicon');
                 $faviconFilename = 'favicon_' . time() . '.' . $faviconFile->getClientOriginalExtension();
-                
-                // GUARDAR SIEMPRE en public/storage/system/
-                $destinationPath = public_path('storage/system');
-                $faviconFile->move($destinationPath, $faviconFilename);
                 $faviconPath = 'system/' . $faviconFilename;
+                
+                // Guardar en bucket S3
+                Storage::disk('s3')->putFileAs('system', $faviconFile, $faviconFilename, 'public');
                 
                 // TODO: Implementar actualización de APP_FAVICON sin modificar .env directamente
                 // $this->updateEnvVariable('APP_FAVICON', $faviconPath);
@@ -135,7 +130,7 @@ class ProfileController extends Controller
                 session(['temp_app_favicon' => $faviconPath]);
                 
                 // Log para debugging
-                \Log::info("Favicon guardado en storage/: {$faviconPath}");
+                \Log::info("Favicon guardado en bucket S3: {$faviconPath}");
             }
 
             return back()->with('status', 'app-settings-updated');
@@ -146,46 +141,20 @@ class ProfileController extends Controller
         }
     }
 
-    /**
-     * SIEMPRE usar storage/ - Laravel Cloud debe soportar public/storage/
-     */
-    private function getStoragePath(): string
-    {
-        return 'storage';
-    }
 
-    /**
-     * Crear directorios necesarios - SIEMPRE en storage/
-     */
-    private function ensureDirectoriesExist(): void
-    {
-        if (!file_exists(public_path('storage/system'))) {
-            mkdir(public_path('storage/system'), 0755, true);
-        }
-        if (!file_exists(public_path('storage/avatars'))) {
-            mkdir(public_path('storage/avatars'), 0755, true);
-        }
-    }
 
     private function handleAvatarUpload($file, $user)
     {
-        // Asegurar que existan los directorios
-        $this->ensureDirectoriesExist();
-        
         // Eliminar avatar anterior si existe
         if ($user->avatar_path) {
-            $oldPath = public_path('storage/' . $user->avatar_path);
-            if (file_exists($oldPath)) {
-                unlink($oldPath);
-            }
+            Storage::disk('s3')->delete($user->avatar_path);
         }
 
         // Generar nombre único para el archivo
         $filename = 'avatar_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
         
-        // GUARDAR SIEMPRE en public/storage/avatars/
-        $destinationPath = public_path('storage/avatars');
-        $file->move($destinationPath, $filename);
+        // Guardar en bucket S3
+        Storage::disk('s3')->putFileAs('avatars', $file, $filename, 'public');
         
         // Actualizar path en el usuario
         $user->avatar_path = 'avatars/' . $filename;

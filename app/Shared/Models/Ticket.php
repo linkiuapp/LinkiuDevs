@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 class Ticket extends Model
@@ -41,11 +42,8 @@ class Ticket extends Model
     // Helper para generar URLs de attachments
     public function getAttachmentUrl($attachment): string
     {
-        // Extraer el filename del path
-        $filename = basename($attachment['path']);
-        
-        // Generar URL usando nuestra ruta personalizada
-        return url("/storage/tickets/{$this->store->slug}/{$this->id}/{$filename}");
+        // Usar la URL directa del bucket S3
+        return Storage::disk('s3')->url($attachment['path']);
     }
 
     // Verificar si hay respuestas nuevas del soporte (para TenantAdmin)

@@ -11,7 +11,7 @@
                     // Obtener logo de la aplicación configurado en SuperAdmin
                     $tempLogo = session('temp_app_logo');
                     $appLogo = $tempLogo ?: env('APP_LOGO');
-                    $logoSrc = $appLogo ? asset('storage/' . $appLogo) : asset('assets/images/logo_Linkiu.svg');
+                    $logoSrc = $appLogo ? \Storage::disk('s3')->url($appLogo) : asset('assets/images/logo_Linkiu.svg');
                 @endphp
                 <img src="{{ $logoSrc }}" alt="{{ config('app.name') }}" class="w-auto h-10 mt-1">
             </a>

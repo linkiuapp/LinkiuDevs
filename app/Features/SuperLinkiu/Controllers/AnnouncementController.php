@@ -289,8 +289,8 @@ class AnnouncementController extends Controller
         // Generar nombre único
         $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
 
-        // Guardar archivo
-        $file->storeAs('announcements/banners', $filename, 'public');
+        // Guardar archivo en bucket S3
+        $file->storeAs('announcements/banners', $filename, 's3');
 
         return $filename;
     }
@@ -300,7 +300,7 @@ class AnnouncementController extends Controller
      */
     private function deleteBannerImage(string $filename): void
     {
-        Storage::disk('public')->delete('announcements/banners/' . $filename);
+        Storage::disk('s3')->delete('announcements/banners/' . $filename);
     }
 
     /**
@@ -310,7 +310,7 @@ class AnnouncementController extends Controller
     {
         $originalPath = 'announcements/banners/' . $originalFilename;
         
-        if (!Storage::disk('public')->exists($originalPath)) {
+        if (!Storage::disk('s3')->exists($originalPath)) {
             throw new \Exception('Archivo original no encontrado');
         }
 
@@ -318,7 +318,7 @@ class AnnouncementController extends Controller
         $newFilename = time() . '_' . Str::random(10) . '.' . $extension;
         $newPath = 'announcements/banners/' . $newFilename;
 
-        Storage::disk('public')->copy($originalPath, $newPath);
+        Storage::disk('s3')->copy($originalPath, $newPath);
 
         return $newFilename;
     }

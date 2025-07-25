@@ -3,6 +3,7 @@
 namespace App\Shared\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryIcon extends Model
 {
@@ -31,6 +32,6 @@ class CategoryIcon extends Model
      */
     public function getImageUrlAttribute()
     {
-        return asset($this->image_path);
+        return Storage::disk('s3')->url($this->image_path);
     }
 } 

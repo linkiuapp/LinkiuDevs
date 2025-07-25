@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Storage;
                 @endphp
                 
                 @if($appLogo)
-                    <img src="{{ asset('storage/' . $appLogo) }}" alt="{{ config('app.name') }}" class="w-auto h-10">
+                    <img src="{{ Storage::disk('s3')->url($appLogo) }}" alt="{{ config('app.name') }}" class="w-auto h-10">
                 @else
                     <div class="flex items-center">
                         <div class="w-10 h-10 bg-primary-200 rounded-lg flex items-center justify-center mr-3">
@@ -205,6 +205,28 @@ use Illuminate\Support\Facades\Storage;
                 </a>
             </li>
 
+            <!-- Configuración de Tiendas -->
+            <h3 class="title-group-sidebar mt-6">
+                Configuración
+            </h3>
+
+            <!-- Iconos de Categorías -->
+            <li>
+                <a href="{{ route('superlinkiu.category-icons.index') }}" class="item-sidebar {{ request()->routeIs('superlinkiu.category-icons.*') ? 'item-sidebar-active' : '' }}">
+                    <x-solar-gallery-outline class="w-4 h-4 mr-2" />
+                    Iconos de Categorías
+                    @php
+                        $totalIcons = \App\Shared\Models\CategoryIcon::count();
+                        $activeIcons = \App\Shared\Models\CategoryIcon::where('is_active', true)->count();
+                    @endphp
+                    @if($totalIcons > 0)
+                        <span class="ml-auto text-xs bg-info-300 text-white-50 px-2 py-1 rounded-full">
+                            {{ $activeIcons }}/{{ $totalIcons }}
+                        </span>
+                    @endif
+                </a>
+            </li>
+
 
             
         </ul>
@@ -216,8 +238,8 @@ use Illuminate\Support\Facades\Storage;
             <div class="flex-shrink-0">
                 <div class="w-8 h-8 bg-primary-300 rounded-full flex items-center justify-center">
                     <span class="text-white-50 text-sm font-medium">
-                        @if (auth()->user()->avatar_path)
-                            <img src="{{ asset('storage/' . auth()->user()->avatar_path) }}" alt="Avatar" class="w-8 h-8 rounded-full">
+                                        @if (auth()->user()->avatar_path)
+                    <img src="{{ Storage::disk('s3')->url(auth()->user()->avatar_path) }}" alt="Avatar" class="w-8 h-8 rounded-full">
                         @else
                             {{ substr(auth()->user()->name, 0, 1) }}
                         @endif

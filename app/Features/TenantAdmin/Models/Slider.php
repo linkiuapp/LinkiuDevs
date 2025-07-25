@@ -90,8 +90,8 @@ class Slider extends Model
 
         // Eliminar imagen al eliminar slider
         static::deleting(function ($slider) {
-            if ($slider->image_path && Storage::disk('public')->exists($slider->image_path)) {
-                Storage::disk('public')->delete($slider->image_path);
+            if ($slider->image_path && Storage::disk('s3')->exists($slider->image_path)) {
+                Storage::disk('s3')->delete($slider->image_path);
             }
         });
     }

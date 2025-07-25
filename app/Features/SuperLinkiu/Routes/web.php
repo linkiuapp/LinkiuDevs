@@ -69,6 +69,26 @@ Route::prefix('superlinkiu')->name('superlinkiu.')->middleware('web')->group(fun
             ->name('announcements.toggle-active');
         Route::post('announcements/{announcement}/duplicate', [AnnouncementController::class, 'duplicate'])
             ->name('announcements.duplicate');
+
+        // Gestión de iconos de categorías
+        Route::prefix('category-icons')->name('category-icons.')->group(function () {
+            Route::get('/', [\App\Features\SuperLinkiu\Controllers\CategoryIconController::class, 'index'])
+                ->name('index');
+            Route::get('/create', [\App\Features\SuperLinkiu\Controllers\CategoryIconController::class, 'create'])
+                ->name('create');
+            Route::post('/', [\App\Features\SuperLinkiu\Controllers\CategoryIconController::class, 'store'])
+                ->name('store');
+            Route::get('/{categoryIcon}/edit', [\App\Features\SuperLinkiu\Controllers\CategoryIconController::class, 'edit'])
+                ->name('edit');
+            Route::put('/{categoryIcon}', [\App\Features\SuperLinkiu\Controllers\CategoryIconController::class, 'update'])
+                ->name('update');
+            Route::delete('/{categoryIcon}', [\App\Features\SuperLinkiu\Controllers\CategoryIconController::class, 'destroy'])
+                ->name('destroy');
+            Route::post('/{categoryIcon}/toggle-active', [\App\Features\SuperLinkiu\Controllers\CategoryIconController::class, 'toggleActive'])
+                ->name('toggle-active');
+            Route::post('/update-order', [\App\Features\SuperLinkiu\Controllers\CategoryIconController::class, 'updateOrder'])
+                ->name('update-order');
+        });
             
         // Rutas del perfil
         // Profile routes

@@ -16,25 +16,25 @@ class CategoryIconsSeeder extends Seeder
             [
                 'name' => 'desgranado',
                 'display_name' => 'Desgranado',
-                'image_path' => 'assets/icons/categories/Desgranado.svg',
+                'image_path' => 'category-icons/desgranado.svg',
                 'sort_order' => 1,
             ],
             [
                 'name' => 'pizza',
                 'display_name' => 'Pizza',
-                'image_path' => 'assets/icons/categories/Pizza.svg',
+                'image_path' => 'category-icons/pizza.svg',
                 'sort_order' => 2,
             ],
             [
                 'name' => 'perro_caliente',
                 'display_name' => 'Perro Caliente',
-                'image_path' => 'assets/icons/categories/Perro caliente.svg',
+                'image_path' => 'category-icons/perro_caliente.svg',
                 'sort_order' => 3,
             ],
             [
                 'name' => 'hamburguesa',
                 'display_name' => 'Hamburguesa',
-                'image_path' => 'assets/icons/categories/Hamburguesa.svg',
+                'image_path' => 'category-icons/hamburguesa.svg',
                 'sort_order' => 4,
             ],
         ];

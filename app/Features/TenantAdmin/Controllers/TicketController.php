@@ -232,7 +232,7 @@ class TicketController extends Controller
                 $path .= "/responses/{$responseId}";
             }
 
-            $filePath = $file->storeAs($path, $filename, 'public');
+            $filePath = $file->storeAs($path, $filename, 's3');
 
             $attachments[] = [
                 'original_name' => $file->getClientOriginalName(),

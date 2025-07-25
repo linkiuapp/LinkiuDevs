@@ -10,15 +10,9 @@ environments:
       - 'php artisan route:cache'
       - 'php artisan view:cache'
     deploy:
-  - 'php artisan migrate --force'
-  - 'php artisan migrate:images-to-storage'
-  - 'php artisan config:clear'
-  - 'php artisan cache:clear'
-  - 'php artisan storage:force-repair'
-  - 'ls -la /var/www/html/public/ | grep storage'
-  - 'sleep 2'
-  - 'php artisan storage:force-repair'
-  - 'ls -la /var/www/html/storage/app/public/'
+      - 'php artisan migrate --force'
+      - 'php artisan config:clear'
+      - 'php artisan cache:clear'
     variables:
       - APP_ENV=production
       - APP_DEBUG=false
