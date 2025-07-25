@@ -15,10 +15,24 @@ use Illuminate\Support\Facades\Storage;
                     // Obtener logo de la aplicación configurado en SuperAdmin
                     $tempLogo = session('temp_app_logo');
                     $appLogo = $tempLogo ?: env('APP_LOGO');
+                    
+                    // Fallback seguro para S3
+                    $logoSrc = null;
+                    if ($appLogo) {
+                        try {
+                            if (config('filesystems.disks.s3.bucket')) {
+                                $logoSrc = Storage::disk('s3')->url($appLogo);
+                            } else {
+                                $logoSrc = asset('storage/' . $appLogo);
+                            }
+                        } catch (\Exception $e) {
+                            $logoSrc = asset('storage/' . $appLogo);
+                        }
+                    }
                 @endphp
                 
-                @if($appLogo)
-                    <img src="{{ Storage::disk('s3')->url($appLogo) }}" alt="{{ config('app.name') }}" class="w-auto h-10">
+                @if($logoSrc)
+                    <img src="{{ $logoSrc }}" alt="{{ config('app.name') }}" class="w-auto h-10">
                 @else
                     <div class="flex items-center">
                         <div class="w-10 h-10 bg-primary-200 rounded-lg flex items-center justify-center mr-3">
@@ -238,8 +252,19 @@ use Illuminate\Support\Facades\Storage;
             <div class="flex-shrink-0">
                 <div class="w-8 h-8 bg-primary-300 rounded-full flex items-center justify-center">
                     <span class="text-white-50 text-sm font-medium">
-                                        @if (auth()->user()->avatar_path)
-                    <img src="{{ Storage::disk('s3')->url(auth()->user()->avatar_path) }}" alt="Avatar" class="w-8 h-8 rounded-full">
+                        @if (auth()->user()->avatar_path)
+                            @php
+                                try {
+                                    if (config('filesystems.disks.s3.bucket')) {
+                                        $avatarSrc = Storage::disk('s3')->url(auth()->user()->avatar_path);
+                                    } else {
+                                        $avatarSrc = asset('storage/' . auth()->user()->avatar_path);
+                                    }
+                                } catch (\Exception $e) {
+                                    $avatarSrc = asset('storage/' . auth()->user()->avatar_path);
+                                }
+                            @endphp
+                            <img src="{{ $avatarSrc }}" alt="Avatar" class="w-8 h-8 rounded-full">
                         @else
                             {{ substr(auth()->user()->name, 0, 1) }}
                         @endif

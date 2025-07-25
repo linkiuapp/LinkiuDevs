@@ -11,7 +11,20 @@
                     // Obtener logo de la aplicación configurado en SuperAdmin
                     $tempLogo = session('temp_app_logo');
                     $appLogo = $tempLogo ?: env('APP_LOGO');
-                    $logoSrc = $appLogo ? \Storage::disk('s3')->url($appLogo) : asset('assets/images/logo_Linkiu.svg');
+                    
+                    // Fallback seguro para S3
+                    $logoSrc = asset('assets/images/logo_Linkiu.svg'); // Default fallback
+                    if ($appLogo) {
+                        try {
+                            if (config('filesystems.disks.s3.bucket')) {
+                                $logoSrc = \Storage::disk('s3')->url($appLogo);
+                            } else {
+                                $logoSrc = asset('storage/' . $appLogo);
+                            }
+                        } catch (\Exception $e) {
+                            $logoSrc = asset('storage/' . $appLogo);
+                        }
+                    }
                 @endphp
                 <img src="{{ $logoSrc }}" alt="{{ config('app.name') }}" class="w-auto h-10 mt-1">
             </a>

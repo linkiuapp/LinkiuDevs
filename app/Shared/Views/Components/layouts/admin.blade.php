@@ -14,7 +14,20 @@ use Illuminate\Support\Facades\Storage;
     @php
         $tempFavicon = session('temp_app_favicon');
         $appFavicon = $tempFavicon ?: env('APP_FAVICON');
-        $faviconSrc = $appFavicon ? Storage::disk('s3')->url($appFavicon) : asset('favicon.ico');
+        
+        // Fallback seguro para S3
+        $faviconSrc = asset('favicon.ico'); // Default fallback
+        if ($appFavicon) {
+            try {
+                if (config('filesystems.disks.s3.bucket')) {
+                    $faviconSrc = Storage::disk('s3')->url($appFavicon);
+                } else {
+                    $faviconSrc = asset('storage/' . $appFavicon);
+                }
+            } catch (\Exception $e) {
+                $faviconSrc = asset('storage/' . $appFavicon);
+            }
+        }
     @endphp
     <link rel="icon" type="image/x-icon" href="{{ $faviconSrc }}">
     

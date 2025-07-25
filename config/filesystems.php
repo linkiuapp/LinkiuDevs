@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DISK', 'local'),
+    'default' => env('AWS_BUCKET') ? 's3' : env('FILESYSTEM_DISK', 'local'),
 
     /*
     |--------------------------------------------------------------------------
