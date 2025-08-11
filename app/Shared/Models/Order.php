@@ -313,13 +313,14 @@ class Order extends Model
      */
     public function getStatusDisplayAttribute(): array
     {
+        $status = (string) $this->status;
         return [
-            'value' => $this->status->value,
-            'name' => $this->status->getDisplayName(),
-            'icon' => $this->status->getIcon(),
-            'color' => $this->status->getColor(),
-            'description' => $this->status->getDescription(),
-            'estimated_time' => $this->status->getEstimatedTimeMessage($this->delivery_type),
+            'value' => $status,
+            'name' => self::STATUSES[$status] ?? ucfirst($status),
+            'icon' => $this->status_icon,
+            'color' => $this->status_color_class,
+            'description' => '',
+            'estimated_time' => optional($this->getEstimatedDeliveryTime())->toDateTimeString(),
         ];
     }
 
