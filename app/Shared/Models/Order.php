@@ -401,17 +401,28 @@ class Order extends Model
      */
     public function getStatusLabelAttribute(): string
     {
-        return $this->status->getDisplayName();
+        // Evitar error 500: $this->status es un string desde DB
+        return self::STATUSES[$this->status] ?? ucfirst((string) $this->status);
     }
 
     public function getStatusColorAttribute(): string
     {
-        return $this->status->getColor();
+        // Compatibilidad con código previo que esperaba un método getColor() en un enum
+        return $this->getStatusColorClassAttribute();
     }
 
     public function getStatusIconAttribute(): string
     {
-        return $this->status->getIcon();
+        // Iconos por estado (Solar Icons) – opcional, seguro por defecto
+        return match ($this->status) {
+            self::STATUS_PENDING => 'clock',
+            self::STATUS_CONFIRMED => 'check-circle',
+            self::STATUS_PREPARING => 'gear',
+            self::STATUS_SHIPPED => 'box',
+            self::STATUS_DELIVERED => 'check-circle',
+            self::STATUS_CANCELLED => 'close-circle',
+            default => 'dot',
+        };
     }
 
     public function getDeliveryTypeLabelAttribute(): string
@@ -422,6 +433,22 @@ class Order extends Model
     public function getPaymentMethodLabelAttribute(): string
     {
         return self::PAYMENT_METHODS[$this->payment_method] ?? $this->payment_method;
+    }
+
+    /**
+     * Tailwind color class for status badges used in views
+     */
+    public function getStatusColorClassAttribute(): string
+    {
+        return match ($this->status) {
+            self::STATUS_PENDING => 'bg-warning-300 text-black-500',
+            self::STATUS_CONFIRMED => 'bg-info-400 text-white-50',
+            self::STATUS_PREPARING => 'bg-secondary-300 text-white-50',
+            self::STATUS_SHIPPED => 'bg-primary-400 text-white-50',
+            self::STATUS_DELIVERED => 'bg-success-400 text-white-50',
+            self::STATUS_CANCELLED => 'bg-error-400 text-white-50',
+            default => 'bg-black-50 text-black-500',
+        };
     }
 
     public function getFormattedSubtotalAttribute(): string
