@@ -181,34 +181,43 @@ class OrderController extends Controller
             // Limpiar carrito
             $request->session()->forget('cart');
 
+            // Guardar datos del pedido en sesión para la página de éxito
+            $request->session()->put('last_order', [
+                'id' => $order->id,
+                'order_number' => $order->order_number,
+                'customer_name' => $order->customer_name,
+                'customer_phone' => $order->customer_phone,
+                'customer_address' => $order->customer_address,
+                'delivery_type' => $order->delivery_type,
+                'payment_method' => $order->payment_method,
+                'subtotal' => $order->subtotal,
+                'shipping_cost' => $order->shipping_cost,
+                'discount_amount' => $order->coupon_discount,
+                'total' => $order->total,
+                'items' => $order->items->load('product')
+            ]);
+
             DB::commit();
 
             return redirect()
-                ->route('tenant.order.success', ['store' => $store->slug, 'order' => $order->order_number])
+                ->route('tenant.checkout.success', $store->slug)
                 ->with('success', 'Pedido creado exitosamente');
 
         } catch (\Exception $e) {
             DB::rollback();
-            return back()
-                ->withErrors(['error' => 'Error al procesar el pedido: ' . $e->getMessage()])
-                ->withInput();
+            
+            // Guardar error en sesión
+            $request->session()->put('checkout_error', 'Error al procesar el pedido: ' . $e->getMessage());
+            if (config('app.debug')) {
+                $request->session()->put('technical_error', $e->getTraceAsString());
+            }
+            
+            return redirect()
+                ->route('tenant.checkout.error', $store->slug);
         }
     }
 
-    /**
-     * Show order success page
-     */
-    public function success(Request $request, $storeSlug, $orderNumber): View
-    {
-        $store = $request->route('store');
-        
-        $order = Order::where('order_number', $orderNumber)
-            ->where('store_id', $store->id)
-            ->with(['items.product', 'statusHistory'])
-            ->firstOrFail();
 
-        return view('tenant::checkout.success', compact('order', 'store'));
-    }
 
     /**
      * Show order tracking page
@@ -480,4 +489,85 @@ class OrderController extends Controller
             'formatted_cart_total' => '$' . number_format($cartTotal, 0, ',', '.')
         ]);
     }
+
+    /**
+     * Apply coupon code
+     */
+    public function applyCoupon(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'coupon_code' => 'required|string|max:50',
+            'subtotal' => 'required|numeric|min:0'
+        ]);
+
+        $store = $request->route('store');
+        
+        // Buscar cupón activo
+        $coupon = \App\Features\TenantAdmin\Models\Coupon::where('code', $validated['coupon_code'])
+            ->where('store_id', $store->id)
+            ->active()
+            ->first();
+
+        if (!$coupon) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cupón no válido o expirado'
+            ]);
+        }
+
+        // Verificar si el cupón es aplicable al subtotal
+        if (!$coupon->isApplicable($validated['subtotal'])) {
+            return response()->json([
+                'success' => false,
+                'message' => $coupon->getNotApplicableMessage($validated['subtotal'])
+            ]);
+        }
+
+        // Calcular descuento
+        $discountAmount = $coupon->calculateDiscount($validated['subtotal']);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Cupón aplicado exitosamente',
+            'coupon' => [
+                'id' => $coupon->id,
+                'code' => $coupon->code,
+                'name' => $coupon->name,
+                'type' => $coupon->type,
+                'value' => $coupon->value
+            ],
+            'discount_amount' => $discountAmount,
+            'formatted_discount' => '$' . number_format($discountAmount, 0, ',', '.'),
+            'new_total' => $validated['subtotal'] - $discountAmount,
+            'formatted_new_total' => '$' . number_format($validated['subtotal'] - $discountAmount, 0, ',', '.')
+        ]);
+    }
+
+    /**
+     * Show checkout success page
+     */
+    public function success(Request $request): View
+    {
+        $store = $request->route('store');
+        
+        // Obtener datos del pedido desde la sesión o parámetros
+        $orderData = $request->session()->get('last_order', []);
+        
+        return view('tenant::checkout.success', compact('store', 'orderData'));
+    }
+
+    /**
+     * Show checkout error page
+     */
+    public function error(Request $request): View
+    {
+        $store = $request->route('store');
+        
+        $errorMessage = $request->session()->get('checkout_error', 'Ocurrió un error inesperado');
+        $technicalError = $request->session()->get('technical_error');
+        
+        return view('tenant::checkout.error', compact('store', 'errorMessage', 'technicalError'));
+    }
+
+
 } 

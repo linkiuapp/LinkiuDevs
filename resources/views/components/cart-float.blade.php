@@ -23,11 +23,15 @@
                 </p>
             </div>
             
-            <!-- Botón Ver carrito -->
-            <div class="flex-shrink-0">
+            <!-- Botones de acción -->
+            <div class="flex-shrink-0 flex gap-2">
                 <a href="{{ route('tenant.cart.index', $store->slug ?? 'store') }}" 
-                   class="view-cart-btn bg-secondary-300 hover:bg-secondary-200 text-white-50 px-6 py-3 rounded-xl text-sm font-semibold transition-colors flex items-center gap-2">
-                    <span>Ver carrito</span>
+                   class="view-cart-btn bg-white-200 hover:bg-white-300 text-black-500 px-4 py-3 rounded-xl text-sm font-medium transition-colors flex items-center gap-1">
+                    <span>Ver</span>
+                </a>
+                <a href="{{ route('tenant.checkout.create', $store->slug ?? 'store') }}" 
+                   class="checkout-btn bg-secondary-300 hover:bg-secondary-200 text-white-50 px-4 py-3 rounded-xl text-sm font-semibold transition-colors flex items-center gap-1">
+                    <span>Comprar</span>
                     <x-solar-arrow-right-outline class="w-4 h-4" />
                 </a>
             </div>

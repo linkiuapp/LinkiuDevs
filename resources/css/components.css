@@ -64,18 +64,6 @@
         @apply text-info-300;
     }
 
-    .item-sidebar {
-        @apply flex items-center text-2xs font-normal px-3 py-2 text-black-200 rounded-lg hover:bg-primary-200 hover:text-primary-50 transition-colors duration-200;
-    }
-
-    .item-sidebar-active {
-        @apply flex items-center text-2xs font-normal px-3 py-2 text-primary-50 bg-primary-200 rounded-lg transition-colors duration-200;
-    }
-
-    .title-group-sidebar {
-        @apply text-xs font-semibold px-2 py-1 text-black-300 uppercase tracking-wide;
-    }
-
     .navbar {
         @apply bg-white-50 px-2;
     }

@@ -1,0 +1,32 @@
+/* TODAS las declaraciones @import deben ir primero */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+
+/* Luego, tus directivas de Tailwind CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos tipográficos personalizados */
+@layer base {
+    body {
+        font-family: 'Inter', sans-serif;
+    }
+}
+
+
+@layer components {
+
+    .item-sidebar {
+        @apply flex items-center text-body-small font-medium px-4 py-2 text-black-300 rounded-lg hover:bg-info-300 hover:text-accent-300 transition-colors duration-200;
+    }
+
+    .item-sidebar-active {
+        @apply flex items-center text-body-small font-medium px-4 py-2 text-accent-300 bg-info-300 rounded-lg transition-colors duration-200;
+    }
+
+    .title-group-sidebar {
+        @apply text-caption font-regular px-2 text-accent-500;
+    }
+}

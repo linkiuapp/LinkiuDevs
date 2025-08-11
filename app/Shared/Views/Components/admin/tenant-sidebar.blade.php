@@ -3,55 +3,66 @@ use Illuminate\Support\Facades\Storage;
 @endphp
 
 <!-- Sidebar Admin de Tienda -->
-<aside class="fixed left-0 top-0 z-40 h-screen sidebar bg-white-50 shadow-lg dark:bg-gray-800 transition-transform duration-300 ease-in-out flex flex-col" 
+<aside class="fixed left-0 top-0 z-40 h-screen sidebar bg-accent-75 shadow-2xl transition-transform duration-300 ease-in-out flex flex-col" 
        x-data="{ sidebarOpen: true }"
        :class="{ '-translate-x-full': !sidebarOpen }">
-    
-    <!-- Logo/Header -->
-    <div class="flex h-10 mt-6 items-center justify-center px-6 flex-shrink-0">
-        <div class="flex items-center">
-            <a href="{{ route('tenant.admin.dashboard', ['store' => $store->slug]) }}">
-                @php
-                    $tempLogo = session('temp_app_logo');
-                    $appLogo = $tempLogo ?: env('APP_LOGO');
+
+    <!-- User section -->
+        <div class="px-6 pt-6 pb-2 flex-shrink-0">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    @php
+                        // Obtener la imagen de perfil del store design (logo de la tienda)
+                        $profileImage = $store->design?->logo_url ?? $store->logo_url;
+                    @endphp
                     
-                    $logoSrc = null;
-                    if ($appLogo) {
-                        try {
-                            if (config('filesystems.disks.s3.bucket')) {
-                                $logoSrc = Storage::disk('s3')->url($appLogo);
-                            } else {
-                                $logoSrc = asset('storage/' . $appLogo);
-                            }
-                        } catch (\Exception $e) {
-                            $logoSrc = asset('storage/' . $appLogo);
-                        }
-                    }
-                @endphp
-                
-                @if($logoSrc)
-                    <img src="{{ $logoSrc }}" alt="{{ config('app.name') }}" class="w-auto h-10 mt-1">
-                @else
-                    <img src="{{ asset('assets/images/Logo_Linkiu.svg') }}" alt="{{ config('app.name') }}" class="w-auto h-10 mt-1">
-                @endif
-            </a>
+                    @if($profileImage)
+                        <img src="{{ $profileImage }}" 
+                            alt="Perfil" 
+                            class="w-8 h-8 rounded-full object-cover border border-white-200">
+                    @else
+                        <div class="w-8 h-8 bg-primary-300 rounded-full flex items-center justify-center">
+                            <span class="text-white-50 text-body-small font-bold">
+                                {{ substr(auth()->user()->name, 0, 1) }}
+                            </span>
+                        </div>
+                    @endif
+                </div>
+                <div class="ml-3 flex-1 min-w-0">
+                    <p class="text-body-small font-bold text-black-300 truncate">
+                        {{ auth()->user()->name }}
+                    </p>
+                    <p class="text-caption text-regular text-black-300 truncate">
+                        Admin de Tienda
+                    </p>
+                </div>
+                <div class="flex-shrink-0 items-center justify-center">
+                    <form method="POST" action="{{ route('tenant.admin.logout', $store->slug) }}">
+                        @csrf
+                        <button type="submit" 
+                                class="text-error-300 hover:text-error-400 transition-colors duration-200"
+                                title="Cerrar sesión">
+                                <x-lucide-log-out class="w-5 h-5" />
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
-        <!-- Toggle button for mobile -->
-        <button @click="sidebarOpen = !sidebarOpen" 
-                class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 lg:hidden">
-                <x-solar-widget-2-outline class="w-4 h-4" />
-        </button>
-    </div>
+    <!--End User section -->
+    
     <!-- Navigation -->
-    <nav class="flex-1 overflow-y-auto px-4 py-6">
+    <nav class="flex-1 overflow-y-auto px-6 py-4">
         <ul class="space-y-1">
-            <!-- 🎯 ÁREA DE CONTROL -->
+        <!-- Favoritos-->
+            <h3 class="title-group-sidebar">
+                Favoritos
+            </h3>
             
             <!-- Dashboard -->
             <li>
                 <a href="{{ route('tenant.admin.dashboard', ['store' => $store->slug]) }}" 
                    class="item-sidebar {{ request()->routeIs('tenant.admin.dashboard') ? 'item-sidebar-active' : '' }}">
-                    <x-solar-widget-2-outline class="w-4 h-4 mr-2" />
+                    <x-lucide-layout-dashboard class="w-4 h-4 mr-2" />
                     Dashboard
                 </a>
             </li>
@@ -60,19 +71,170 @@ use Illuminate\Support\Facades\Storage;
             <li>
                 <a href="{{ route('tenant.admin.orders.index', ['store' => $store->slug]) }}" 
                    class="item-sidebar {{ request()->routeIs('tenant.admin.orders.*') ? 'item-sidebar-active' : '' }}">
-                    <x-solar-clipboard-list-outline class="w-4 h-4 mr-2" />
+                    <x-lucide-party-popper class="w-4 h-4 mr-2" />
                     Pedidos
                     @if(($store->pending_orders_count ?? 0) > 0)
-                        <span class="ml-auto text-xs bg-warning-300 text-black-500 px-2 py-1 rounded-full font-medium">
+                        <span class="ml-auto text-caption bg-error-300 text-accent-300 px-2 py-1 rounded-full font-medium">
                             {{ $store->pending_orders_count }}
+                        </span>
+                    @else
+                        <span class="ml-auto text-small bg-black-50 text-black-500 px-2 py-1 rounded-full font-medium">
+                            0
                         </span>
                     @endif
                 </a>
             </li>
 
-            <!-- 🏪 GESTIÓN DE TIENDA -->
-            <h3 class="title-group-sidebar mt-6">
-                Tienda
+        <!-- Tienda y productos-->
+            <h3 class="title-group-sidebar">
+                Tienda y productos
+            </h3>
+
+            <!-- Categorías -->
+            <li>
+                <a href="{{ route('tenant.admin.categories.index', ['store' => $store->slug]) }}" 
+                   class="item-sidebar {{ request()->routeIs('tenant.admin.categories.*') ? 'item-sidebar-active' : '' }}">
+                    <x-lucide-layout-list class="w-4 h-4 mr-2" />
+                    Categorías
+                    @php
+                        $categoriesUsed = $store->categories_count ?? 0;
+                        $categoriesLimit = $store->plan->max_categories;
+                        $categoriesPercent = $categoriesLimit > 0 ? ($categoriesUsed / $categoriesLimit) * 100 : 0;
+                        $categoriesBadgeColor = $categoriesPercent >= 90 ? 'bg-error-300 text-accent-300' : ($categoriesPercent >= 70 ? 'bg-warning-300 text-black-500' : 'bg-black-50 text-black-500');
+                    @endphp
+                    <span class="ml-auto text-small {{ $categoriesBadgeColor }} px-2 py-1 rounded-full font-medium tracking-widest">
+                        {{ $categoriesUsed }}/{{ $categoriesLimit }}
+                    </span>
+                </a>
+            </li>
+            <!-- Variables -->
+            <li>
+                <a href="{{ route('tenant.admin.variables.index', ['store' => $store->slug]) }}" 
+                   class="item-sidebar {{ request()->routeIs('tenant.admin.variables.*') ? 'item-sidebar-active' : '' }}">
+                    <x-lucide-tag class="w-4 h-4 mr-2" />
+                    Variables
+                    @php
+                        $variablesUsed = $store->variables_count ?? 0;
+                        $variablesLimit = $store->plan->max_variables ?? 50;
+                        $variablesPercent = $variablesLimit > 0 ? ($variablesUsed / $variablesLimit) * 100 : 0;
+                        $variablesBadgeColor = $variablesPercent >= 90 ? 'bg-error-300 text-accent-300' : ($variablesPercent >= 70 ? 'bg-warning-300 text-black-500' : 'bg-black-50 text-black-500');
+                    @endphp
+                    <span class="ml-auto text-small {{ $variablesBadgeColor }} px-2 py-1 rounded-full font-medium tracking-widest">
+                        {{ $variablesUsed }}/{{ $variablesLimit }}
+                    </span>
+                </a>
+            </li>
+            <!-- Productos -->
+            <li>
+                <a href="{{ route('tenant.admin.products.index', ['store' => $store->slug]) }}" 
+                   class="item-sidebar {{ request()->routeIs('tenant.admin.products.*') ? 'item-sidebar-active' : '' }}">
+                    <x-lucide-package class="w-4 h-4 mr-2" />
+                    Productos
+                    @php
+                        $productsUsed = $store->products_count ?? 0;
+                        $productsLimit = $store->plan->max_products;
+                        $productsPercent = $productsLimit > 0 ? ($productsUsed / $productsLimit) * 100 : 0;
+                        $productsBadgeColor = $productsPercent >= 90 ? 'bg-error-300 text-accent-300' : ($productsPercent >= 70 ? 'bg-warning-300 text-black-500' : 'bg-black-50 text-black-500');
+                    @endphp
+                    <span class="ml-auto text-small {{ $productsBadgeColor }} px-2 py-1 rounded-full font-medium tracking-widest">
+                        {{ $productsUsed }}/{{ $productsLimit }}
+                    </span>
+                </a>
+            </li>
+            <!-- Métodos de Envío -->
+            <li>
+                <a href="{{ route('tenant.admin.shipping-methods.index', ['store' => $store->slug]) }}" 
+                   class="item-sidebar {{ request()->routeIs('tenant.admin.shipping-methods.*') ? 'item-sidebar-active' : '' }}">
+                    <x-lucide-map class="w-4 h-4 mr-2" />
+                    Métodos de Envío
+                    @php
+                        $shippingZonesCount = $store->shippingZones()->count();
+                        $maxShippingZones = $store->plan->max_delivery_zones ?? 1;
+                        $shippingPercent = $maxShippingZones > 0 ? ($shippingZonesCount / $maxShippingZones) * 100 : 0;
+                        $shippingBadgeColor = $shippingPercent >= 90 ? 'bg-error-300 text-accent-300' : ($shippingPercent >= 70 ? 'bg-warning-300 text-black-500' : 'bg-black-50 text-black-500');
+                    @endphp
+                    <span class="ml-auto text-small {{ $shippingBadgeColor }} px-2 py-1 rounded-full font-medium tracking-widest">
+                        {{ $shippingZonesCount }}/{{ $maxShippingZones }}
+                    </span>
+                </a>
+            </li>
+            <!-- Métodos de Pago -->
+            <li>
+                <a href="{{ route('tenant.admin.payment-methods.index', ['store' => $store->slug]) }}" 
+                   class="item-sidebar {{ request()->routeIs('tenant.admin.payment-methods.*') ? 'item-sidebar-active' : '' }}">
+                    <x-lucide-dock class="w-4 h-4 mr-2" />
+                    Métodos de Pago
+                </a>
+            </li>
+            <!-- Sedes -->
+            <li>
+                <a href="{{ route('tenant.admin.locations.index', ['store' => $store->slug]) }}" 
+                   class="item-sidebar {{ request()->routeIs('tenant.admin.locations.*') ? 'item-sidebar-active' : '' }}">
+                    <x-lucide-store class="w-4 h-4 mr-2" />
+                    Sedes
+                    @php
+                        $locationsUsed = $store->locations_count ?? 0;
+                        $locationsLimit = $store->plan->max_sedes ?? 1;
+                        $locationsPercent = $locationsLimit > 0 ? ($locationsUsed / $locationsLimit) * 100 : 0;
+                        $locationsBadgeColor = $locationsPercent >= 90 ? 'bg-error-300 text-accent-300' : ($locationsPercent >= 70 ? 'bg-warning-300 text-black-500' : 'bg-black-50 text-black-500');
+                    @endphp
+                    <span class="ml-auto text-small {{ $locationsBadgeColor }} px-2 py-1 rounded-full font-medium tracking-widest">
+                        {{ $locationsUsed }}/{{ $locationsLimit }}
+                    </span>
+                </a>
+            </li>
+
+        <!-- Marketing-->
+            <h3 class="title-group-sidebar">
+                Marketing
+            </h3>
+
+            <!-- Cupones -->
+            <li>
+                <a href="{{ route('tenant.admin.coupons.index', ['store' => $store->slug]) }}" 
+                   class="item-sidebar {{ request()->routeIs('tenant.admin.coupons.*') ? 'item-sidebar-active' : '' }}">
+                    <x-lucide-ticket-percent class="w-4 h-4 mr-2" />
+                    Cupones
+                    @php
+                        $couponsUsed = $store->active_coupons_count ?? 0;
+                        $couponsLimit = $store->plan->max_active_coupons;
+                        $couponsPercent = $couponsLimit > 0 ? ($couponsUsed / $couponsLimit) * 100 : 0;
+                        $couponsBadgeColor = $couponsPercent >= 90 ? 'bg-error-300 text-accent-300' : ($couponsPercent >= 70 ? 'bg-warning-300 text-black-500' : 'bg-black-50 text-black-500');
+                    @endphp
+                    <span class="ml-auto text-small {{ $couponsBadgeColor }} px-2 py-1 rounded-full font-medium tracking-widest">
+                        {{ $couponsUsed }}/{{ $couponsLimit }}
+                    </span>
+                </a>
+            </li>
+            <!-- Slider -->
+            <li>
+                <a href="{{ route('tenant.admin.sliders.index', ['store' => $store->slug]) }}" 
+                   class="item-sidebar {{ request()->routeIs('tenant.admin.sliders.*') ? 'item-sidebar-active' : '' }}">
+                    <x-lucide-images class="w-4 h-4 mr-2" />
+                    Slider
+                    @php
+                        $slidersUsed = $store->sliders_count ?? 0;
+                        $slidersLimit = $store->plan->max_slider;
+                        $slidersPercent = $slidersLimit > 0 ? ($slidersUsed / $slidersLimit) * 100 : 0;
+                        $slidersBadgeColor = $slidersPercent >= 90 ? 'bg-error-300 text-accent-300' : ($slidersPercent >= 70 ? 'bg-warning-300 text-black-500' : 'bg-black-50 text-black-500');
+                    @endphp
+                    <span class="ml-auto text-small {{ $slidersBadgeColor }} px-2 py-1 rounded-full font-medium tracking-widest">
+                        {{ $slidersUsed }}/{{ $slidersLimit }}
+                    </span>
+                </a>
+            </li>
+            <!-- Integrcion ADS -->
+            <!-- <li>
+                <a href="#" 
+                   class="item-sidebar">
+                    <x-lucide-unplug class="w-4 h-4 mr-2" />
+                    Integración ADS
+                </a>
+            </li> -->
+
+        <!-- Perfil y facturación-->
+            <h3 class="title-group-sidebar">
+                Perfil y facturación
             </h3>
 
             <!-- Perfil del Negocio -->
@@ -102,166 +264,18 @@ use Illuminate\Support\Facades\Storage;
                 </a>
             </li>
 
-            <!-- 📦 PRODUCTOS -->
-            <h3 class="title-group-sidebar mt-6">
-                Productos
+
+        <!-- Anuncios y soporte-->
+            <h3 class="title-group-sidebar">
+                Anuncios y soporte
             </h3>
 
-            <!-- Categorías -->
-            <li>
-                <a href="{{ route('tenant.admin.categories.index', ['store' => $store->slug]) }}" 
-                   class="item-sidebar {{ request()->routeIs('tenant.admin.categories.*') ? 'item-sidebar-active' : '' }}">
-                    <x-solar-folder-outline class="w-4 h-4 mr-2" />
-                    Categorías
-                    @php
-                        $categoriesUsed = $store->categories_count ?? 0;
-                        $categoriesLimit = $store->plan->max_categories;
-                        $categoriesPercent = $categoriesLimit > 0 ? ($categoriesUsed / $categoriesLimit) * 100 : 0;
-                        $categoriesBadgeColor = $categoriesPercent >= 90 ? 'bg-error-300' : ($categoriesPercent >= 70 ? 'bg-warning-300 text-black-500' : 'bg-info-300');
-                    @endphp
-                    <span class="ml-auto text-xs {{ $categoriesBadgeColor }} text-white-50 px-2 py-1 rounded-full font-medium">
-                        {{ $categoriesUsed }}/{{ $categoriesLimit }}
-                    </span>
-                </a>
-            </li>
-
-            <!-- Variables -->
-            <li>
-                <a href="{{ route('tenant.admin.variables.index', ['store' => $store->slug]) }}" 
-                   class="item-sidebar {{ request()->routeIs('tenant.admin.variables.*') ? 'item-sidebar-active' : '' }}">
-                    <x-solar-settings-outline class="w-4 h-4 mr-2" />
-                    Variables
-                    @php
-                        $variablesUsed = $store->variables_count ?? 0;
-                        $variablesLimit = $store->plan->max_variables ?? 50;
-                        $variablesPercent = $variablesLimit > 0 ? ($variablesUsed / $variablesLimit) * 100 : 0;
-                        $variablesBadgeColor = $variablesPercent >= 90 ? 'bg-error-300' : ($variablesPercent >= 70 ? 'bg-warning-300 text-black-500' : 'bg-info-300');
-                    @endphp
-                    <span class="ml-auto text-xs {{ $variablesBadgeColor }} text-white-50 px-2 py-1 rounded-full font-medium">
-                        {{ $variablesUsed }}/{{ $variablesLimit }}
-                    </span>
-                </a>
-            </li>
-
-            <!-- Productos -->
-            <li>
-                <a href="{{ route('tenant.admin.products.index', ['store' => $store->slug]) }}" 
-                   class="item-sidebar {{ request()->routeIs('tenant.admin.products.*') ? 'item-sidebar-active' : '' }}">
-                    <x-solar-box-outline class="w-4 h-4 mr-2" />
-                    Productos
-                    @php
-                        $productsUsed = $store->products_count ?? 0;
-                        $productsLimit = $store->plan->max_products;
-                        $productsPercent = $productsLimit > 0 ? ($productsUsed / $productsLimit) * 100 : 0;
-                        $productsBadgeColor = $productsPercent >= 90 ? 'bg-error-300' : ($productsPercent >= 70 ? 'bg-warning-300 text-black-500' : 'bg-info-300');
-                    @endphp
-                    <span class="ml-auto text-xs {{ $productsBadgeColor }} text-white-50 px-2 py-1 rounded-full font-medium">
-                        {{ $productsUsed }}/{{ $productsLimit }}
-                    </span>
-                </a>
-            </li>
-
-            <!-- 💰 VENTAS -->
-            <h3 class="title-group-sidebar mt-6">
-                Ventas
-            </h3>
-
-            <!-- Métodos de Pago -->
-            <li>
-                <a href="{{ route('tenant.admin.payment-methods.index', ['store' => $store->slug]) }}" 
-                   class="item-sidebar {{ request()->routeIs('tenant.admin.payment-methods.*') ? 'item-sidebar-active' : '' }}">
-                    <x-solar-card-outline class="w-4 h-4 mr-2" />
-                    Métodos de Pago
-                </a>
-            </li>
-
-            <!-- Métodos de Envío -->
-            <li>
-                <a href="{{ route('tenant.admin.shipping-methods.index', ['store' => $store->slug]) }}" 
-                   class="item-sidebar {{ request()->routeIs('tenant.admin.shipping-methods.*') ? 'item-sidebar-active' : '' }}">
-                    <x-solar-delivery-outline class="w-4 h-4 mr-2" />
-                    Métodos de Envío
-                    @php
-                        $shippingZonesCount = $store->shippingZones()->count();
-                        $maxShippingZones = $store->plan->max_delivery_zones ?? 1;
-                        $shippingPercent = $maxShippingZones > 0 ? ($shippingZonesCount / $maxShippingZones) * 100 : 0;
-                        $shippingBadgeColor = $shippingPercent >= 90 ? 'bg-error-300' : ($shippingPercent >= 70 ? 'bg-warning-300 text-black-500' : 'bg-info-300');
-                    @endphp
-                    <span class="ml-auto text-xs {{ $shippingBadgeColor }} text-white-50 px-2 py-1 rounded-full font-medium">
-                        {{ $shippingZonesCount }}/{{ $maxShippingZones }}
-                    </span>
-                </a>
-            </li>
-
-            <!-- 📢 MARKETING -->
-            <h3 class="title-group-sidebar mt-6">
-                Marketing
-            </h3>
-
-            <!-- Cupones -->
-            <li>
-                <a href="{{ route('tenant.admin.coupons.index', ['store' => $store->slug]) }}" 
-                   class="item-sidebar {{ request()->routeIs('tenant.admin.coupons.*') ? 'item-sidebar-active' : '' }}">
-                    <x-solar-ticket-outline class="w-4 h-4 mr-2" />
-                    Cupones
-                    @php
-                        $couponsUsed = $store->active_coupons_count ?? 0;
-                        $couponsLimit = $store->plan->max_active_coupons;
-                        $couponsPercent = $couponsLimit > 0 ? ($couponsUsed / $couponsLimit) * 100 : 0;
-                        $couponsBadgeColor = $couponsPercent >= 90 ? 'bg-error-300' : ($couponsPercent >= 70 ? 'bg-warning-300 text-black-500' : 'bg-info-300');
-                    @endphp
-                    <span class="ml-auto text-xs {{ $couponsBadgeColor }} text-white-50 px-2 py-1 rounded-full font-medium">
-                        {{ $couponsUsed }}/{{ $couponsLimit }}
-                    </span>
-                </a>
-            </li>
-
-            <!-- Slider -->
-            <li>
-                <a href="{{ route('tenant.admin.sliders.index', ['store' => $store->slug]) }}" 
-                   class="item-sidebar {{ request()->routeIs('tenant.admin.sliders.*') ? 'item-sidebar-active' : '' }}">
-                    <x-solar-gallery-outline class="w-4 h-4 mr-2" />
-                    Slider
-                    @php
-                        $slidersUsed = $store->sliders_count ?? 0;
-                        $slidersLimit = $store->plan->max_slider;
-                        $slidersPercent = $slidersLimit > 0 ? ($slidersUsed / $slidersLimit) * 100 : 0;
-                        $slidersBadgeColor = $slidersPercent >= 90 ? 'bg-error-300' : ($slidersPercent >= 70 ? 'bg-warning-300 text-black-500' : 'bg-info-300');
-                    @endphp
-                    <span class="ml-auto text-xs {{ $slidersBadgeColor }} text-white-50 px-2 py-1 rounded-full font-medium">
-                        {{ $slidersUsed }}/{{ $slidersLimit }}
-                    </span>
-                </a>
-            </li>
-
-            <!-- Sedes -->
-            <li>
-                <a href="{{ route('tenant.admin.locations.index', ['store' => $store->slug]) }}" 
-                   class="item-sidebar {{ request()->routeIs('tenant.admin.locations.*') ? 'item-sidebar-active' : '' }}">
-                    <x-solar-buildings-outline class="w-4 h-4 mr-2" />
-                    Sedes
-                    @php
-                        $locationsUsed = $store->locations_count ?? 0;
-                        $locationsLimit = $store->plan->max_sedes ?? 1;
-                        $locationsPercent = $locationsLimit > 0 ? ($locationsUsed / $locationsLimit) * 100 : 0;
-                        $locationsBadgeColor = $locationsPercent >= 90 ? 'bg-error-300' : ($locationsPercent >= 70 ? 'bg-warning-300 text-black-500' : 'bg-info-300');
-                    @endphp
-                    <span class="ml-auto text-xs {{ $locationsBadgeColor }} text-white-50 px-2 py-1 rounded-full font-medium">
-                        {{ $locationsUsed }}/{{ $locationsLimit }}
-                    </span>
-                </a>
-            </li>
-
-            <!-- 🛠️ SOPORTE -->
-            <h3 class="title-group-sidebar mt-6">
-                Soporte
-            </h3>
 
             <!-- Soporte y Tickets -->
             <li>
                 <a href="{{ route('tenant.admin.tickets.index', ['store' => $store->slug]) }}" 
                    class="item-sidebar {{ request()->routeIs('tenant.admin.tickets.*') ? 'item-sidebar-active' : '' }}">
-                    <x-solar-chat-round-call-outline class="w-4 h-4 mr-2" />
+                    <x-lucide-server-crash class="w-4 h-4 mr-2" />
                     Soporte y Tickets
                     @php
                         $openTicketsCount = $store->tickets()->whereIn('status', ['open', 'in_progress'])->count();
@@ -278,7 +292,7 @@ use Illuminate\Support\Facades\Storage;
             <li>
                 <a href="{{ route('tenant.admin.announcements.index', ['store' => $store->slug]) }}" 
                    class="item-sidebar {{ request()->routeIs('tenant.admin.announcements.*') ? 'item-sidebar-active' : '' }}">
-                    <x-solar-bell-bing-outline class="w-4 h-4 mr-2" />
+                    <x-lucide-megaphone class="w-4 h-4 mr-2" />
                     Anuncios de Linkiu
                     @if(($store->unread_announcements_count ?? 0) > 0)
                         <span class="ml-auto text-xs bg-warning-300 text-black-500 px-2 py-1 rounded-full font-medium">
@@ -290,47 +304,76 @@ use Illuminate\Support\Facades\Storage;
         </ul>
     </nav>
 
-    <!-- User section -->
-    <div class="p-4 border-t dark:border-gray-700 flex-shrink-0">
-        <div class="flex items-center">
-            <div class="flex-shrink-0">
-                @php
-                    // Obtener la imagen de perfil del store design (logo de la tienda)
-                    $profileImage = $store->design?->logo_url ?? $store->logo_url;
-                @endphp
-                
-                @if($profileImage)
-                    <img src="{{ $profileImage }}" 
-                         alt="Perfil" 
-                         class="w-8 h-8 rounded-full object-cover border border-white-200">
-                @else
-                    <div class="w-8 h-8 bg-primary-300 rounded-full flex items-center justify-center">
-                        <span class="text-white-50 text-sm font-medium">
-                            {{ substr(auth()->user()->name, 0, 1) }}
-                        </span>
+    <!-- Banner consumo de plan-->
+    <div class="px-6 pb-6 flex-shrink-0">
+        @php
+            $planName = strtolower($store->plan->name ?? 'explorer');
+
+            // Fondo del banner por plan usando paleta oficial
+            $bannerClasses = match ($planName) {
+                'explorer' => 'bg-gradient-to-r from-primary-200 to-primary-300 text-black-500',
+                'master'   => 'bg-gradient-to-r from-secondary-200 to-secondary-300 text-accent-300',
+                'legend'   => 'bg-gradient-to-r from-warning-200 to-warning-300 text-black-500',
+                default    => 'bg-gradient-to-r from-white-50 to-white-100 text-black-500',
+            };
+
+            // Cálculo simple de consumo: tomamos el mayor porcentaje de uso entre recursos clave
+            $productsUsed = $store->products_count ?? 0;
+            $productsLimit = $store->plan->max_products ?? 1;
+            $productsPercent = $productsLimit > 0 ? ($productsUsed / $productsLimit) * 100 : 0;
+
+            $categoriesUsed = method_exists($store, 'categories') ? $store->categories()->count() : 0;
+            $categoriesLimit = $store->plan->max_categories ?? 1;
+            $categoriesPercent = $categoriesLimit > 0 ? ($categoriesUsed / $categoriesLimit) * 100 : 0;
+
+            $zonesUsed = method_exists($store, 'shippingZones') ? $store->shippingZones()->count() : 0;
+            $zonesLimit = $store->plan->max_delivery_zones ?? 1;
+            $zonesPercent = $zonesLimit > 0 ? ($zonesUsed / $zonesLimit) * 100 : 0;
+
+            $usagePercent = min(100, max($productsPercent, $categoriesPercent, $zonesPercent));
+
+            // Color dinámico para la barra de progreso
+            $progressBgTrack = 'bg-success-50';
+            $progressFill = 'bg-success-400';
+            if ($usagePercent >= 90) {
+                $progressBgTrack = 'bg-error-50';
+                $progressFill = 'bg-error-400';
+            } elseif ($usagePercent >= 70) {
+                $progressBgTrack = 'bg-warning-50';
+                $progressFill = 'bg-warning-300';
+            }
+        @endphp
+
+        <div class="rounded-xl p-4 {{ $bannerClasses }}">
+            <div class="flex items-start gap-3">
+                <div class="flex-1">
+                    <p class="text-small text-medium">Has consumido de tu plan</p>
+                    <div class="w-full {{ $progressBgTrack }} rounded-full h-2 mt-2">
+                        <div class="{{ $progressFill }} h-2 rounded-full transition-all duration-500" style="width: {{ number_format($usagePercent, 0) }}%"></div>
                     </div>
-                @endif
+
+                    <div class="flex-1 flex items-center justify-between">
+                    <p class="mt-3 text-caption font-medium leading-none">
+                        Tu plan activo es el <br>
+                        <span class="text-body-large font-bold">{{ 'Plan ' . ucfirst($planName) }}</span>
+                    </p>
+                    <div class="shrink-0">
+                    @if($planName === 'explorer')
+                        <img src="{{ asset('images/img_plan_explorer.png') }}" alt="Plan Explorer" class="w-5 h-5 opacity-90">
+                    @elseif($planName === 'master')
+                        <img src="{{ asset('images/img_plan_master.png') }}" alt="Plan Master" class="w-5 h-5 opacity-90">
+                    @else
+                        <img src="{{ asset('images/img_plan_legend.png') }}" alt="Plan Legend" class="w-5 h-5 opacity-90">
+                    @endif
+                    </div>
+                </div>
+                </div>
             </div>
-            <div class="ml-3 flex-1 min-w-0">
-                <p class="text-sm font-medium text-gray-900 dark:text-white-50 truncate">
-                    {{ auth()->user()->name }}
-                </p>
-                <p class="text-xs text-gray-500 dark:text-gray-400 truncate">
-                    Admin de Tienda
-                </p>
-            </div>
-            <div class="flex-shrink-0">
-                <form method="POST" action="{{ route('tenant.admin.logout', $store->slug) }}">
-                    @csrf
-                    <button type="submit" 
-                            class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors duration-200"
-                            title="Cerrar sesión">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                        </svg>
-                    </button>
-                </form>
-            </div>
+
+            <!-- <a href="{{ route('tenant.admin.billing.index', ['store' => $store->slug]) }}" class="mt-4 inline-flex items-center justify-center w-full btn-primary py-3 rounded-lg">
+                Mejorar Plan
+                <x-lucide-arrow-up-right class="w-4 h-4 ml-2" />
+            </a> -->
         </div>
     </div>
 </aside>

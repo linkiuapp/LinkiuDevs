@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
+
 use Carbon\Carbon;
 
 class Order extends Model
@@ -94,13 +95,25 @@ class Order extends Model
 
         // Registrar cambio de estado en el historial
         static::created(function ($order) {
-            $order->recordStatusChange(null, $order->status, 'Sistema', null, 'Pedido creado');
+            OrderStatusHistory::createEntry(
+                $order->id,
+                $order->status,
+                null,
+                'Pedido creado',
+                null
+            );
         });
 
         static::updating(function ($order) {
             if ($order->isDirty('status')) {
-                $oldStatus = $order->getOriginal('status');
-                $order->recordStatusChange($oldStatus, $order->status, auth()->user()->name ?? 'Sistema', auth()->id());
+                $previousStatus = OrderStatus::fromString($order->getOriginal('status'));
+                OrderStatusHistory::createEntry(
+                    $order->id,
+                    $order->status,
+                    $previousStatus,
+                    null,
+                    auth()->id()
+                );
             }
         });
     }
@@ -200,19 +213,114 @@ class Order extends Model
     }
 
     /**
-     * Registrar cambio de estado en el historial
+     * Update order status with history tracking and broadcasting
      */
-    public function recordStatusChange(?string $oldStatus, string $newStatus, string $changedBy, ?int $userId = null, ?string $notes = null): void
+    public function updateStatus(
+        OrderStatus $newStatus, 
+        ?string $comment = null, 
+        ?\App\Models\User $changedBy = null
+    ): void {
+        $previousStatus = $this->status;
+        
+        // Update the order status
+        $this->update(['status' => $newStatus]);
+        
+        // Create history entry
+        OrderStatusHistory::createEntry(
+            $this->id,
+            $newStatus,
+            $previousStatus,
+            $comment,
+            $changedBy?->id
+        );
+        
+        // Broadcast status change (will be implemented later)
+        // broadcast(new OrderStatusUpdated($this, $previousStatus, $newStatus));
+    }
+
+    /**
+     * Get current status
+     */
+    public function getCurrentStatus(): OrderStatus
     {
-        OrderStatusHistory::create([
-            'order_id' => $this->id,
-            'old_status' => $oldStatus,
-            'new_status' => $newStatus,
-            'changed_by' => $changedBy,
-            'user_id' => $userId,
-            'notes' => $notes,
-            'created_at' => now()
-        ]);
+        return $this->status;
+    }
+
+    /**
+     * Check if order can be cancelled
+     */
+    public function canBeCancelled(): bool
+    {
+        return $this->status->canBeCancelled();
+    }
+
+    /**
+     * Get estimated delivery time
+     */
+    public function getEstimatedDeliveryTime(): ?Carbon
+    {
+        if ($this->status === OrderStatus::DELIVERED || $this->status === OrderStatus::CANCELLED) {
+            return null;
+        }
+
+        $baseTime = now();
+        
+        return match($this->status) {
+            OrderStatus::PENDING => $baseTime->addMinutes(15),
+            OrderStatus::CONFIRMED => $baseTime->addMinutes(45),
+            OrderStatus::PREPARING => $this->delivery_type === 'pickup' 
+                ? $baseTime->addMinutes(60) 
+                : $baseTime->addMinutes(90),
+            OrderStatus::READY_FOR_PICKUP => $baseTime, // Available now
+            OrderStatus::SHIPPED => $baseTime->addHours(2),
+            OrderStatus::OUT_FOR_DELIVERY => $baseTime->addMinutes(30),
+            default => null
+        };
+    }
+
+    /**
+     * Get next possible statuses
+     */
+    public function getNextPossibleStatuses(): array
+    {
+        return $this->status->getNextPossibleStatuses($this->delivery_type);
+    }
+
+    /**
+     * Get status timeline for display
+     */
+    public function getStatusTimeline(): array
+    {
+        $history = $this->statusHistory()
+            ->with('changedBy:id,name')
+            ->chronological()
+            ->get();
+
+        $timeline = [];
+        $currentStatus = $this->status;
+        
+        foreach ($history as $entry) {
+            $timelineData = $entry->timeline_data;
+            $timelineData['is_current'] = $entry->status === $currentStatus;
+            $timeline[] = $timelineData;
+        }
+
+        return $timeline;
+    }
+
+    /**
+     * Get status display information
+     */
+    public function getStatusDisplayAttribute(): array
+    {
+        return [
+            'value' => $this->status->value,
+            'name' => $this->status->getDisplayName(),
+            'icon' => $this->status->getIcon(),
+            'color' => $this->status->getColor(),
+            'description' => $this->status->getDescription(),
+            'estimated_time' => $this->status->getEstimatedTimeMessage($this->delivery_type),
+        ];
     }
 
     /**
@@ -220,42 +328,52 @@ class Order extends Model
      */
     public function isPending(): bool
     {
-        return $this->status === self::STATUS_PENDING;
+        return $this->status === OrderStatus::PENDING;
     }
 
     public function isConfirmed(): bool
     {
-        return $this->status === self::STATUS_CONFIRMED;
+        return $this->status === OrderStatus::CONFIRMED;
     }
 
     public function isPreparing(): bool
     {
-        return $this->status === self::STATUS_PREPARING;
+        return $this->status === OrderStatus::PREPARING;
+    }
+
+    public function isReadyForPickup(): bool
+    {
+        return $this->status === OrderStatus::READY_FOR_PICKUP;
     }
 
     public function isShipped(): bool
     {
-        return $this->status === self::STATUS_SHIPPED;
+        return $this->status === OrderStatus::SHIPPED;
+    }
+
+    public function isOutForDelivery(): bool
+    {
+        return $this->status === OrderStatus::OUT_FOR_DELIVERY;
     }
 
     public function isDelivered(): bool
     {
-        return $this->status === self::STATUS_DELIVERED;
+        return $this->status === OrderStatus::DELIVERED;
     }
 
     public function isCancelled(): bool
     {
-        return $this->status === self::STATUS_CANCELLED;
+        return $this->status === OrderStatus::CANCELLED;
     }
 
     public function canBeEdited(): bool
     {
-        return in_array($this->status, [self::STATUS_PENDING, self::STATUS_CONFIRMED]);
+        return in_array($this->status, [OrderStatus::PENDING, OrderStatus::CONFIRMED]);
     }
 
-    public function canBeCancelled(): bool
+    public function isFinalStatus(): bool
     {
-        return !in_array($this->status, [self::STATUS_DELIVERED, self::STATUS_CANCELLED]);
+        return $this->status->isFinal();
     }
 
     /**
@@ -283,20 +401,17 @@ class Order extends Model
      */
     public function getStatusLabelAttribute(): string
     {
-        return self::STATUSES[$this->status] ?? $this->status;
+        return $this->status->getDisplayName();
     }
 
     public function getStatusColorAttribute(): string
     {
-        return match($this->status) {
-            self::STATUS_PENDING => 'warning',
-            self::STATUS_CONFIRMED => 'info',
-            self::STATUS_PREPARING => 'primary',
-            self::STATUS_SHIPPED => 'secondary',
-            self::STATUS_DELIVERED => 'success',
-            self::STATUS_CANCELLED => 'error',
-            default => 'black'
-        };
+        return $this->status->getColor();
+    }
+
+    public function getStatusIconAttribute(): string
+    {
+        return $this->status->getIcon();
     }
 
     public function getDeliveryTypeLabelAttribute(): string

@@ -50,10 +50,11 @@
 
         <!-- Action buttons -->
         <div id="cart-actions" class="space-y-3 hidden">
-            <button id="checkout-btn" 
-                    class="w-full bg-success-300 hover:bg-success-200 text-white-50 py-3 rounded-lg font-semibold transition-colors">
+            <a href="{{ route('tenant.checkout.create', $store->slug) }}" 
+               id="checkout-btn" 
+               class="block w-full bg-success-300 hover:bg-success-200 text-white-50 py-3 rounded-lg font-semibold transition-colors text-center">
                 Proceder al Checkout
-            </button>
+            </a>
             <button id="clear-cart-btn" 
                     class="w-full bg-error-300 hover:bg-error-200 text-white-50 py-2 rounded-lg font-medium transition-colors">
                 Vaciar Carrito
@@ -281,10 +282,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Event listener para checkout
-    document.getElementById('checkout-btn').addEventListener('click', function() {
-        window.location.href = '{{ route("tenant.checkout.create", $store->slug) }}';
-    });
+    // Checkout button is now a direct link - no JavaScript needed
 
     function formatPrice(price) {
         return new Intl.NumberFormat('es-CO', {

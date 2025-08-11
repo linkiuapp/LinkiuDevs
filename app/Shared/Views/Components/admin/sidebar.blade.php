@@ -31,14 +31,9 @@ use Illuminate\Support\Facades\Storage;
                 @endphp
                 
                 @if($logoSrc)
-                    <img src="{{ $logoSrc }}" alt="{{ config('app.name') }}" class="w-auto h-10">
+                    <img src="{{ $logoSrc }}" alt="{{ config('app.name') }}" class="w-auto h-10 mt-1">
                 @else
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 bg-primary-200 rounded-lg flex items-center justify-center mr-3">
-                            <span class="text-white-50 text-lg font-bold">L</span>
-                        </div>
-                        <span class="text-lg font-bold text-black-300">{{ config('app.name', 'Linkiu.bio') }}</span>
-                    </div>
+                    <img src="{{ asset('assets/images/Logo_Linkiu.svg') }}" alt="{{ config('app.name') }}" class="w-auto h-10 mt-1">
                 @endif
             </a>
         </div>
