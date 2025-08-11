@@ -307,15 +307,15 @@ use Illuminate\Support\Facades\Storage;
     <!-- Banner consumo de plan-->
     <div class="px-6 pb-6 flex-shrink-0">
         @php
-            $planName = strtolower($store->plan->name ?? 'explorer');
+            $planName = strtolower($store->plan?->name ?? 'explorer');
 
-            // Fondo del banner por plan usando paleta oficial
-            $bannerClasses = match ($planName) {
+            // Fondo del banner por plan usando paleta oficial (evitar "match" por compatibilidad)
+            $planToClasses = [
                 'explorer' => 'bg-gradient-to-r from-primary-200 to-primary-300 text-black-500',
                 'master'   => 'bg-gradient-to-r from-secondary-200 to-secondary-300 text-accent-300',
                 'legend'   => 'bg-gradient-to-r from-warning-200 to-warning-300 text-black-500',
-                default    => 'bg-gradient-to-r from-white-50 to-white-100 text-black-500',
-            };
+            ];
+            $bannerClasses = $planToClasses[$planName] ?? 'bg-gradient-to-r from-white-50 to-white-100 text-black-500';
 
             // Cálculo simple de consumo: tomamos el mayor porcentaje de uso entre recursos clave
             $productsUsed = $store->products_count ?? 0;
