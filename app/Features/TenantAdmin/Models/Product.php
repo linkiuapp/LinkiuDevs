@@ -29,6 +29,14 @@ class Product extends Model
         'is_active' => 'boolean',
     ];
 
+    /**
+     * Atributos que siempre se incluyen en JSON
+     */
+    protected $appends = [
+        'main_image_url',
+        'image_url'  // Para retrocompatibilidad
+    ];
+
     // Constantes para tipos de productos
     const TYPE_SIMPLE = 'simple';
     const TYPE_VARIABLE = 'variable';
@@ -182,11 +190,18 @@ class Product extends Model
      */
     public function getMainImageUrlAttribute(): string
     {
+        // Prioridad 1: Imagen principal configurada
         if ($this->mainImage && $this->mainImage->image_path) {
-            return Storage::disk('s3')->url($this->mainImage->image_path);
+            return asset('storage/' . $this->mainImage->image_path);
         }
         
-        return asset('images/product-placeholder.jpg');
+        // Prioridad 2: Primera imagen disponible
+        $firstImage = $this->images()->first();
+        if ($firstImage && $firstImage->image_path) {
+            return asset('storage/' . $firstImage->image_path);
+        }
+        
+        return asset('assets/images/placeholder-product.svg');
     }
 
     /**
@@ -194,11 +209,31 @@ class Product extends Model
      */
     public function getMainImageThumbnailAttribute(): string
     {
+        // Prioridad 1: Thumbnail de imagen principal configurada
         if ($this->mainImage && $this->mainImage->thumbnail_path) {
-            return Storage::disk('s3')->url($this->mainImage->thumbnail_path);
+            return asset('storage/' . $this->mainImage->thumbnail_path);
         }
         
-        return asset('images/product-placeholder-thumb.jpg');
+        // Prioridad 2: Thumbnail de primera imagen disponible
+        $firstImage = $this->images()->first();
+        if ($firstImage && $firstImage->thumbnail_path) {
+            return asset('storage/' . $firstImage->thumbnail_path);
+        }
+        
+        // Prioridad 3: Imagen original si no hay thumbnail
+        if ($firstImage && $firstImage->image_path) {
+            return asset('storage/' . $firstImage->image_path);
+        }
+        
+        return asset('assets/images/placeholder-product.svg');
+    }
+
+    /**
+     * Alias para retrocompatibilidad con frontend
+     */
+    public function getImageUrlAttribute(): string
+    {
+        return $this->getMainImageUrlAttribute();
     }
 
     /**

@@ -143,7 +143,8 @@ class PlatformAnnouncement extends Model
             return null;
         }
 
-        return Storage::disk('s3')->url('announcements/banners/' . $this->banner_image);
+        // ✅ Usar método estándar para generar URLs
+        return asset('storage/announcements/banners/' . $this->banner_image);
     }
 
     public function getIsExpiredAttribute(): bool

@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Storage;
                     if ($appLogo) {
                         try {
                             if (config('filesystems.disks.s3.bucket')) {
-                                $logoSrc = Storage::disk('s3')->url($appLogo);
+                                $logoSrc = Storage::disk('public')->url($appLogo);
                             } else {
                                 $logoSrc = asset('storage/' . $appLogo);
                             }

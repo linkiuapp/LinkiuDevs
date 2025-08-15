@@ -315,7 +315,7 @@ use Illuminate\Support\Facades\Storage;
                 'master'   => 'bg-gradient-to-r from-secondary-200 to-secondary-300 text-accent-300',
                 'legend'   => 'bg-gradient-to-r from-warning-200 to-warning-300 text-black-500',
             ];
-            $bannerClasses = $planToClasses[$planName] ?? 'bg-gradient-to-r from-white-50 to-white-100 text-black-500';
+            $bannerClasses = $planToClasses[$planName] ?? 'bg-gradient-to-r from-secondary-200 to-secondary-300 text-accent-300';
 
             // Cálculo simple de consumo: tomamos el mayor porcentaje de uso entre recursos clave
             $productsUsed = $store->products_count ?? 0;
@@ -359,11 +359,11 @@ use Illuminate\Support\Facades\Storage;
                     </p>
                     <div class="shrink-0">
                     @if($planName === 'explorer')
-                        <img src="{{ asset('images/img_plan_explorer.png') }}" alt="Plan Explorer" class="w-5 h-5 opacity-90">
+                        <img src="{{ asset('assets/images/img_plan_explorer.png') }}" alt="Plan Explorer" class="w-12 h-12">
                     @elseif($planName === 'master')
-                        <img src="{{ asset('images/img_plan_master.png') }}" alt="Plan Master" class="w-5 h-5 opacity-90">
+                        <img src="{{ asset('assets/images/img_plan_master.png') }}" alt="Plan Master" class="w-12 h-12">
                     @else
-                        <img src="{{ asset('images/img_plan_legend.png') }}" alt="Plan Legend" class="w-5 h-5 opacity-90">
+                        <img src="{{ asset('assets/images/img_plan_legend.png') }}" alt="Plan Legend" class="w-12 h-12">
                     @endif
                     </div>
                 </div>

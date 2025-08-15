@@ -4,129 +4,130 @@
             <div class="flex items-center justify-between">
                 <div class="inline-block items-center justify-start">
                     <span class="user-name-navbar">
-                       Hola, {{ auth()->user()->name }} - Bienvenido a {{ $store->name }}
+                       Hola, {{ auth()->user()->name }}! Bienvenido a {{ $store->name }}
                     </span>
                     <div class="breadcrumb">
                         <ul class="flex items-center gap-[2px]">
                             <li>
                                 <a href="{{ route('tenant.admin.dashboard', ['store' => $store->slug]) }}" class="flex items-center gap-2 hover:text-primary-600 dark:text-white-50">
-                                    <x-solar-widget-2-outline class="w-3 h-3" />
+                                    <x-lucide-layout-dashboard class="w-3 h-3" />
                                     Dashboard
                                 </a>
                             </li>
-                            <li class="dark:text-white-50"> > </li>
-                            <li class="font-medium dark:text-white-50">@yield('title')</li>
+                            <li class="text-black-300"> > </li>
+                            <li class="text-black-300">@yield('title')</li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="flex items-center justify-end gap-2">
-                    <!-- Store Status -->
-                    <div class="hidden md:flex items-center">
-                        <div class="flex items-center gap-2 px-3 py-1 bg-{{ $store->status === 'active' ? 'success' : 'warning' }}-100 rounded-full">
-                            <div class="w-2 h-2 bg-{{ $store->status === 'active' ? 'success' : 'warning' }}-300 rounded-full"></div>
-                            <span class="text-xs font-medium text-{{ $store->status === 'active' ? 'success' : 'warning' }}-400">
-                                {{ $store->status === 'active' ? 'Tienda Activa' : 'Tienda Inactiva' }}
-                            </span>
-                        </div>
-                    </div>
-                    
-                                         <!-- Badge Verificado -->
+
+                <!-- Badge Verificado -->
                      <div class="flex items-center gap-2">
-                        <div id="verification-badge" class="flex items-center gap-2 px-3 py-1 rounded-full {{ $store->verified ? 'bg-success-100' : 'bg-warning-100' }}">
-                            <div id="verification-indicator" class="w-2 h-2 rounded-full {{ $store->verified ? 'bg-success-300' : 'bg-warning-300' }}"></div>
-                            <span id="verification-text" class="text-xs font-medium {{ $store->verified ? 'text-success-400' : 'text-warning-400' }}">
+                        <div id="verification-badge" class="flex items-center gap-2 px-3 py-2 rounded-full {{ $store->verified ? 'bg-info-50 border border-info-300' : 'bg-secondary-50 border border-secondary-100' }}">
+                            <span id="verification-text" class="text-caption font-regular {{ $store->verified ? 'text-info-300' : 'text-secondary-100' }}">
                                 {{ $store->verified ? 'Verificado' : 'No Verificado' }}
                             </span>
+                            @if($store->verified)
+                                <div id="verification-indicator">
+                                    <x-lucide-badge-check class="w-4 h-4 text-info-300" />
+                                </div>
+                            @else
+                                <div id="verification-indicator">
+                                    <x-lucide-shield-off class="w-4 h-4 text-secondary-100" />
+                                </div>
+                            @endif
                         </div>
                      </div>
 
-                     <!-- Ver tienda -->
-                     <div class="flex items-center gap-2">
-                     <a href="#" 
-                        class="flex items-center gap-2 px-3 py-1 text-xs font-medium text-primary-300 bg-primary-100 rounded-full hover:bg-primary-200 transition-colors">
-                        <x-solar-eye-outline class="w-3 h-3" />
-                        Ver Tienda
-                     </a>
-
-                     <a href="#" 
-                        class="flex items-center gap-2 px-3 py-1 text-xs font-medium text-secondary-300 bg-secondary-100 rounded-full hover:bg-secondary-200 transition-colors">
-                        <x-solar-add-circle-outline class="w-3 h-3" />
-                        Crear Producto
-                    </a>
-
+                    <!-- Badge Store Status -->
+                    <div class="flex items-center gap-2">
+                        @php
+                            // Determinar clases y textos según el estado
+                            $status = $store->status;
+                            switch ($status) {
+                                case 'active':
+                                default:
+                                    $badgeClasses = 'bg-success-50 border border-success-500';
+                                    $textClasses = 'text-success-500';
+                                    $label = 'Tienda Activa';
+                                    $iconComponent = 'shield-check';
+                                    $iconColor = 'text-success-500';
+                                    break;
+                                case 'inactive':
+                                    $badgeClasses = 'bg-secondary-50 border border-secondary-100';
+                                    $textClasses = 'text-secondary-100';
+                                    $label = 'Tienda Inactiva';
+                                    $iconComponent = 'shield-off';
+                                    $iconColor = 'text-secondary-100';
+                                    break;
+                                case 'suspended':
+                                    $badgeClasses = 'bg-warning-50 border border-warning-500';
+                                    $textClasses = 'text-warning-500';
+                                    $label = 'Tienda Suspendida';
+                                    $iconComponent = 'shield-off';
+                                    $iconColor = 'text-warning-500';
+                                    break;
+                            }
+                        @endphp
+                        <div class="flex items-center gap-2 px-3 py-2 rounded-full {{ $badgeClasses }}">
+                            <span class="text-caption font-regular {{ $textClasses }}">
+                                {{ $label }}
+                            </span>
+                            <div>
+                                @if($iconComponent === 'shield-check')
+                                    <x-lucide-shield-check class="w-4 h-4 {{ $iconColor }}" />
+                                @elseif($iconComponent === 'shield-off')
+                                    <x-lucide-shield-off class="w-4 h-4 {{ $iconColor }}" />
+                                @endif
+                            </div>
+                        </div>
                     </div>
-                
 
-
-                    <!-- Search mobile -->
-                    <button type="button" class="p-2 text-gray-500 rounded-lg lg:hidden hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white-50">
-                        <x-solar-magnifer-outline class="w-6 h-6" />
-                    </button>
+                    <!-- Ver tienda -->
+                    <div class="flex items-center gap-2">
+                        <a href="https://linkiu.bio/{{ $store->slug }}" target="_blank" 
+                            class="flex items-center gap-2 px-4 py-2 text-caption font-regular text-accent-300 bg-primary-300 rounded-full hover:bg-primary-500 transition-colors">
+                            Ver mi tienda
+                            <x-lucide-external-link class="w-4 h-4" />
+                        </a>
+                    </div>
 
                     <!-- Notifications -->
                     <div class="flex items-center gap-4">
                         <!-- Pending Orders -->
-                        @if(($store->pending_orders_count ?? 0) > 0)
-                            <a href="{{ route('tenant.admin.orders.index', $store->slug) }}" 
-                               class="pt-2 items-center text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white-50 dark:hover:bg-gray-700">
-                                <span class="sr-only">Pedidos pendientes</span>
-                                <div class="relative">
-                                    <x-solar-clipboard-list-outline class="w-6 h-6" />
-                                    <div class="absolute inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white-50 bg-warning-300 border-2 border-white-50 rounded-full -top-2 -end-2 dark:border-gray-900">
-                                        {{ $store->pending_orders_count }}
-                                    </div>
+                        <a href="{{ route('tenant.admin.orders.index', $store->slug) }}" 
+                           class="pt-2 items-center text-black-300 hover:text-accent-300">
+                            <span class="sr-only">Pedidos pendientes</span>
+                            <div class="relative">
+                                <x-lucide-party-popper class="w-10 h-10 bg-secondary-50 hover:bg-secondary-300 p-2 rounded-lg transition-colors" />
+                                <div class="absolute inline-flex items-center justify-center w-5 h-5 text-small font-medium text-accent-300 bg-error-300 border-2 border-white-50 rounded-full -top-2 -end-2 dark:border-gray-900">
+                                    {{ $store->pending_orders_count ?? 0 }}
                                 </div>
-                            </a>
-                        @endif
+                            </div>
+                        </a>
 
                         <!-- Support Tickets -->
-                        @if(($store->open_tickets_count ?? 0) > 0)
-                            <a href="{{ route('tenant.admin.support.index', $store->slug) }}" 
-                               class="pt-2 items-center text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white-50 dark:hover:bg-gray-700">
-                                <span class="sr-only">Tickets de soporte</span>
-                                <div class="relative">
-                                    <x-solar-chat-round-call-outline class="w-6 h-6" />
-                                    <div class="absolute inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white-50 bg-info-300 border-2 border-white-50 rounded-full -top-2 -end-2 dark:border-gray-900">
-                                        {{ $store->open_tickets_count }}
-                                    </div>
-                                </div>
-                            </a>
-                        @endif
-
-                        <!-- Support Messages (New responses from SuperLinkiu) -->
-                        <a href="{{ route('tenant.admin.tickets.index', ['store' => $store->slug]) }}" 
-                           class="pt-2 items-center text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white-50 dark:hover:bg-gray-700"
-                           data-support-messages-link>
-                            <span class="sr-only">Mensajes del soporte</span>
+                        <a href="{{ route('tenant.admin.tickets.index', $store->slug) }}" 
+                           class="pt-2 items-center text-black-300 hover:text-accent-300">
+                            <span class="sr-only">Tickets de soporte</span>
                             <div class="relative">
-                                <x-solar-chat-round-dots-outline class="w-6 h-6" data-badge="support-messages" />
-                                <div class="absolute inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white-50 bg-primary-300 border-2 border-white-50 rounded-full -top-2 -end-2 dark:border-gray-900" id="support-messages-badge">
-                                    {{ max($store->unread_support_responses_count, 0) }}
+                                <x-lucide-message-square-more class="w-10 h-10 bg-secondary-50 hover:bg-secondary-300 p-2 rounded-lg transition-colors" />
+                                <div class="absolute inline-flex items-center justify-center w-5 h-5 text-small font-medium text-accent-300 bg-info-300 border-2 border-white-50 rounded-full -top-2 -end-2 dark:border-gray-900">
+                                    {{ $store->open_tickets_count ?? 0 }}
                                 </div>
                             </div>
                         </a>
 
                         <!-- Announcements -->
-                        @if(($store->unread_announcements_count ?? 0) > 0)
-                            <a href="{{ route('tenant.admin.announcements.index', $store->slug) }}" 
-                               class="pt-2 items-center text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white-50 dark:hover:bg-gray-700">
-                                <span class="sr-only">Anuncios sin leer</span>
-                                <div class="relative">
-                                    <x-solar-siren-rounded-outline class="w-6 h-6" />
-                                    <div class="absolute inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white-50 bg-error-300 border-2 border-white-50 rounded-full -top-2 -end-2 dark:border-gray-900">
-                                        {{ $store->unread_announcements_count }}
-                                    </div>
-                                </div>
-                            </a>
-                        @endif
-
-                        <!-- Profile Settings -->
-                        <a href="#" 
-                           class="pt-2 items-center text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white-50 dark:hover:bg-gray-700">
-                            <span class="sr-only">Configurar perfil</span>
+                        <a href="{{ route('tenant.admin.announcements.index', $store->slug) }}" 
+                           class="pt-2 items-center text-black-300 hover:text-accent-300">
+                            <span class="sr-only">Anuncios sin leer</span>
                             <div class="relative">
-                                <x-solar-settings-outline class="w-6 h-6" />
+                                <x-lucide-megaphone class="w-10 h-10 bg-secondary-50 hover:bg-secondary-300 p-2 rounded-lg transition-colors" />
+                                <div class="absolute inline-flex items-center justify-center w-5 h-5 text-small font-medium text-accent-300 bg-warning-300 border-2 border-white-50 rounded-full -top-2 -end-2 dark:border-gray-900">
+                                    {{ $store->unread_announcements_count ?? 0 }}
+                                </div>
                             </div>
                         </a>
                     </div>
@@ -151,17 +152,17 @@ document.addEventListener('DOMContentLoaded', function() {
             text.removeAttribute('class');
             
             if (verified) {
-                badge.setAttribute('class', 'flex items-center gap-2 px-3 py-1 rounded-full bg-success-100');
+                badge.setAttribute('class', 'flex items-center gap-2 px-3 py-2 rounded-full bg-info-50 border border-info-300');
                 
-                indicator.setAttribute('class', 'w-2 h-2 rounded-full bg-success-300');
+                /*indicator.setAttribute('class', 'w-4 h-4 bg-info-300');*/
                 
-                text.setAttribute('class', 'text-xs font-medium text-success-400');
+                text.setAttribute('class', 'text-caption font-regular text-info-300');
             } else {
-                badge.setAttribute('class', 'flex items-center gap-2 px-3 py-1 rounded-full bg-warning-100');
+                badge.setAttribute('class', 'flex items-center gap-2 px-3 py-2 rounded-full bg-secondary-50 border border-secondary-100');
                 
-                indicator.setAttribute('class', 'w-2 h-2 rounded-full bg-warning-300');
+                /*indicator.setAttribute('class', 'w-4 h-4 bg-secondary-100');*/
                 
-                text.setAttribute('class', 'text-xs font-medium text-warning-400');
+                text.setAttribute('class', 'text-caption font-regular text-secondary-100');
             }
             
             text.textContent = verified ? 'Verificado' : 'No Verificado';
@@ -196,4 +197,5 @@ document.addEventListener('DOMContentLoaded', function() {
     // Verificar inmediatamente al cargar
     checkVerificationStatus();
 });
+
 </script> 

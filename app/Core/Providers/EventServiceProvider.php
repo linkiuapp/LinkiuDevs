@@ -10,6 +10,8 @@ use App\Features\TenantAdmin\Events\StorePlanChanged;
 use App\Features\TenantAdmin\Listeners\HandleBankAccountsOnPlanChange;
 use App\Shared\Models\Store;
 use App\Shared\Observers\StoreObserver;
+use App\Shared\Models\User;
+use App\Observers\UserObserver;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -33,6 +35,7 @@ class EventServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Store::observe(StoreObserver::class);
+        User::observe(UserObserver::class);
     }
 
     /**

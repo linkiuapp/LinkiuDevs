@@ -73,8 +73,11 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         if ($user->avatar_path) {
-            // Eliminar archivo del bucket S3
-            Storage::disk('s3')->delete($user->avatar_path);
+            // ✅ Eliminar archivo usando método estándar
+            $filePath = public_path('storage/' . $user->avatar_path);
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
             
             // Limpiar campo en BD
             $user->update(['avatar_path' => null]);
@@ -101,8 +104,8 @@ class ProfileController extends Controller
                 $logoFilename = 'logo_' . time() . '.' . $logoFile->getClientOriginalExtension();
                 $logoPath = 'system/' . $logoFilename;
                 
-                // Guardar en bucket S3
-                Storage::disk('s3')->putFileAs('system', $logoFile, $logoFilename, 'public');
+                // Guardar en almacenamiento local
+                Storage::disk('public')->putFileAs('system', $logoFile, $logoFilename);
                 
                 // TODO: Implementar actualización de APP_LOGO sin modificar .env directamente  
                 // $this->updateEnvVariable('APP_LOGO', $logoPath);
@@ -120,8 +123,8 @@ class ProfileController extends Controller
                 $faviconFilename = 'favicon_' . time() . '.' . $faviconFile->getClientOriginalExtension();
                 $faviconPath = 'system/' . $faviconFilename;
                 
-                // Guardar en bucket S3
-                Storage::disk('s3')->putFileAs('system', $faviconFile, $faviconFilename, 'public');
+                // Guardar en almacenamiento local
+                Storage::disk('public')->putFileAs('system', $faviconFile, $faviconFilename);
                 
                 // TODO: Implementar actualización de APP_FAVICON sin modificar .env directamente
                 // $this->updateEnvVariable('APP_FAVICON', $faviconPath);
@@ -143,18 +146,31 @@ class ProfileController extends Controller
 
 
 
+    /**
+     * Handle the avatar upload using STANDARD method.
+     * ✅ Follows ESTANDAR_IMAGENES.md - Compatible with Laravel Cloud
+     */
     private function handleAvatarUpload($file, $user)
     {
         // Eliminar avatar anterior si existe
         if ($user->avatar_path) {
-            Storage::disk('s3')->delete($user->avatar_path);
+            $oldFile = public_path('storage/' . $user->avatar_path);
+            if (file_exists($oldFile)) {
+                unlink($oldFile);
+            }
+        }
+
+        // Crear directorio si no existe
+        $destinationPath = public_path('storage/avatars');
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
         }
 
         // Generar nombre único para el archivo
         $filename = 'avatar_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
         
-        // Guardar en bucket S3
-        Storage::disk('s3')->putFileAs('avatars', $file, $filename, 'public');
+        // ✅ GUARDAR con move() - Método estándar obligatorio
+        $file->move($destinationPath, $filename);
         
         // Actualizar path en el usuario y guardar
         $user->avatar_path = 'avatars/' . $filename;

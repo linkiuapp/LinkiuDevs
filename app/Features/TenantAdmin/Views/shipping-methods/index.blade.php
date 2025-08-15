@@ -244,12 +244,10 @@
                                     </label>
                                     <select x-model="pickupData.preparation_time" 
                                             class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200">
-                                        <option value="30 minutos">30 minutos</option>
-                                        <option value="1 hora">1 hora</option>
-                                        <option value="2 horas">2 horas</option>
-                                        <option value="3 horas">3 horas</option>
-                                        <option value="4 horas">4 horas</option>
-                                        <option value="1 día">1 día</option>
+                                        <option value="30min">30 minutos</option>
+                                        <option value="1h">1 hora</option>
+                                        <option value="2h">2 horas</option>
+                                        <option value="4h">4 horas</option>
                                     </select>
                                 </div>
                                 
@@ -312,7 +310,7 @@
             
             init() {
                 this.initSortable();
-                this.initToggleListeners();
+                // ✅ Eliminado initToggleListeners() - evita conflicto con Alpine.js @change
             },
             
             initSortable() {
@@ -328,14 +326,8 @@
                 }
             },
             
-            initToggleListeners() {
-                // Listener para toggles de métodos
-                document.addEventListener('change', (e) => {
-                    if (e.target.classList.contains('method-toggle')) {
-                        this.toggleMethod(e.target.dataset.methodId, e.target.checked);
-                    }
-                });
-            },
+            // ✅ ELIMINADO initToggleListeners() - Causaba conflicto con Alpine.js @change
+            // Solo usamos el @change="toggleMethod(...)" del HTML
             
             toggleMethod(methodId, isActive) {
                 fetch(`/{{ $store->slug }}/admin/shipping-methods/toggle-active/${methodId}`, {
@@ -349,9 +341,8 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Mostrar mensaje de éxito y recargar
+                        // ✅ Mostrar mensaje sin recargar página
                         this.showToast(data.message || 'Estado actualizado correctamente', 'success');
-                        setTimeout(() => window.location.reload(), 1000);
                     } else {
                         // Revertir el toggle si hay error
                         const toggle = document.querySelector(`[data-method-id="${methodId}"]`);
@@ -426,7 +417,7 @@
                     if (data.success) {
                         this.showPickupModal = false;
                         this.showToast('Configuración actualizada', 'success');
-                        setTimeout(() => window.location.reload(), 1000);
+                        // ✅ Eliminado reload automático - ya no necesario
                     } else {
                         this.showToast(data.message || 'Error al actualizar', 'error');
                     }

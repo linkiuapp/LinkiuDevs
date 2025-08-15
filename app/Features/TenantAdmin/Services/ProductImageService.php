@@ -45,8 +45,8 @@ class ProductImageService
             // Generar nombre único para la imagen
             $filename = $this->generateUniqueFilename($image);
             
-            // Guardar en bucket S3
-            $path = Storage::disk('s3')->putFileAs('products/' . $product->id . '/images', $image, $filename, 'public');
+            // Guardar en almacenamiento local
+            $path = Storage::disk('public')->putFileAs('products/' . $product->id . '/images', $image, $filename, 'public');
             
             // Path para guardar en BD (será usado para generar URL)
             $relativePath = $path;

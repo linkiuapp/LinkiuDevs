@@ -85,15 +85,28 @@
                                     name="slug"
                                     x-model="slug"
                                     :readonly="!canEditSlug"
-                                    :class="{'bg-white-100': !canEditSlug}"
+                                    :class="{'bg-white-100 cursor-not-allowed': !canEditSlug, 'bg-white-50': canEditSlug}"
                                     class="flex-1 px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('slug') border-error-200 @enderror">
                             </div>
-                            <p class="text-xs text-black-200 mt-1" x-show="!canEditSlug && !isUpgrading">
-                                El slug no se puede modificar
+                            
+                            <!-- Mensaje para planes que NO permiten personalización -->
+                            <p class="text-xs text-warning-300 mt-1 flex items-center gap-1" x-show="!canEditSlug && !isUpgrading">
+                                <x-solar-lock-outline class="w-3 h-3" />
+                                Este plan no permite personalizar la URL. Actualiza a un plan superior para editarla.
                             </p>
-                            <p class="text-xs text-success-300 mt-1" x-show="isUpgrading">
-                                ¡Ahora puedes personalizar tu URL!
+                            
+                            <!-- Mensaje para planes que SÍ permiten personalización -->
+                            <p class="text-xs text-success-300 mt-1 flex items-center gap-1" x-show="canEditSlug && !isUpgrading">
+                                <x-solar-check-circle-outline class="w-3 h-3" />
+                                Puedes personalizar tu URL con este plan.
                             </p>
+                            
+                            <!-- Mensaje para upgrade -->
+                            <p class="text-xs text-primary-300 mt-1 flex items-center gap-1" x-show="isUpgrading">
+                                <x-solar-star-outline class="w-3 h-3" />
+                                ¡Felicidades! Ahora puedes personalizar tu URL.
+                            </p>
+                            
                             @error('slug')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
                             @enderror

@@ -29,6 +29,7 @@ class CategoryIcon extends Model
 
     /**
      * Obtener la URL completa de la imagen
+     * ✅ Follows ESTANDAR_IMAGENES.md - Compatible with Laravel Cloud
      */
     public function getImageUrlAttribute()
     {
@@ -36,10 +37,7 @@ class CategoryIcon extends Model
             return null;
         }
         
-        try {
-            return Storage::disk('s3')->url($this->image_path);
-        } catch (\Exception $e) {
-            return null;
-        }
+        // ✅ Usar método estándar para generar URLs
+        return asset('storage/' . $this->image_path);
     }
 } 

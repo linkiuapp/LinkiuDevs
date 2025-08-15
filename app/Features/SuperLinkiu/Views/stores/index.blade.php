@@ -58,17 +58,58 @@
 
 @push('scripts')
 <script>
+console.log('🟢 STORES INDEX: Scripts cargados correctamente');
+
 // Funciones helper específicas para la vista
 function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(() => {
-        // Usar el sistema de notificaciones de Alpine
-        Alpine.store('notifications').show('Contraseña copiada al portapapeles', 'success');
-    }).catch(() => {
-        Alpine.store('notifications').show('Error al copiar al portapapeles', 'error');
-    });
+    console.log('📋 COPY: Intentando copiar texto al portapapeles');
+    
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+            console.log('✅ COPY: Texto copiado exitosamente');
+            try {
+                if (window.Alpine && Alpine.store && Alpine.store('notifications')) {
+                    Alpine.store('notifications').show('Contraseña copiada al portapapeles', 'success');
+                } else {
+                    alert('Contraseña copiada al portapapeles');
+                }
+            } catch (error) {
+                console.error('❌ COPY: Error mostrando notificación:', error);
+                alert('Contraseña copiada al portapapeles');
+            }
+        }).catch((error) => {
+            console.error('❌ COPY: Error copiando al portapapeles:', error);
+            // Fallback para navegadores que no soportan clipboard API
+            fallbackCopy(text);
+        });
+    } else {
+        console.warn('⚠️ COPY: Clipboard API no disponible, usando fallback');
+        fallbackCopy(text);
+    }
+}
+
+function fallbackCopy(text) {
+    try {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        console.log('✅ COPY FALLBACK: Texto copiado exitosamente');
+        alert('Contraseña copiada al portapapeles');
+    } catch (error) {
+        console.error('❌ COPY FALLBACK: Error en fallback:', error);
+        alert('Error al copiar. Selecciona y copia manualmente.');
+    }
 }
 
 function copyCredentials() {
+    console.log('📋 COPY CREDENTIALS: Iniciando copia de credenciales');
     const credentials = `
 Tienda: {{ session('admin_credentials')['store_name'] ?? '' }}
 URL: {{ session('admin_credentials')['store_slug'] ?? '' }}

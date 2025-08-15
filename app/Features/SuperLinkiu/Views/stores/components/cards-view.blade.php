@@ -80,7 +80,7 @@
                         class="flex-1 bg-success-50 hover:bg-success-200 hover:text-white-50 text-success-300 p-2 rounded-lg transition-colors">
                         <x-solar-login-3-outline class="w-4 h-4 mx-auto" />
                     </button>
-                    <button @click="openDeleteModal({{ $store->id }}, '{{ $store->name }}')"
+                    <button @click="openDeleteModal('{{ $store->slug }}', '{{ $store->name }}')"
                         class="flex-1 bg-error-50 hover:bg-error-200 hover:text-white-50 text-error-300 p-2 rounded-lg transition-colors">
                         <x-solar-trash-bin-trash-outline class="w-4 h-4 mx-auto" />
                     </button>

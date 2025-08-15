@@ -95,7 +95,7 @@
                 
                 @if($slider->image_path)
                     <div class="text-center">
-                        <img src="{{ Storage::disk('s3')->url($slider->image_path) }}" 
+                        <img src="{{ Storage::disk('public')->url($slider->image_path) }}" 
                              alt="{{ $slider->name }}" 
                              class="max-w-full h-auto mx-auto rounded-lg shadow-sm border border-white-200">
                         <p class="text-xs text-black-300 mt-2">170x100px</p>

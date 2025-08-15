@@ -3,7 +3,19 @@
 {{-- ================================================================ --}}
 
 @if(session('admin_credentials'))
-<div x-data="{ showSuccessModal: true }" 
+{{-- Debug script para verificar que se ejecute --}}
+<script>
+console.log('🟢 SUCCESS MODAL: Modal de éxito detectado en DOM');
+console.log('📊 SUCCESS MODAL: Credenciales disponibles:', @json(session('admin_credentials')));
+</script>
+
+<div x-data="{ 
+        showSuccessModal: true,
+        init() {
+            console.log('🟢 ALPINE SUCCESS MODAL: Inicializado correctamente');
+            console.log('📊 ALPINE SUCCESS MODAL: showSuccessModal =', this.showSuccessModal);
+        }
+     }" 
      x-show="showSuccessModal" 
      x-transition:enter="transition ease-out duration-300"
      x-transition:enter-start="opacity-0"
@@ -11,7 +23,9 @@
      x-transition:leave="transition ease-in duration-200"
      x-transition:leave-start="opacity-100"
      x-transition:leave-end="opacity-0"
-     class="fixed inset-0 z-50 overflow-y-auto">
+     class="fixed inset-0 z-50 overflow-y-auto"
+     style="display: none;"
+     x-cloak>
     
     <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         {{-- Background overlay --}}
@@ -143,7 +157,7 @@
                         <x-solar-copy-outline class="w-4 h-4" />
                         Copiar Credenciales
                     </button>
-                    <button @click="showSuccessModal = false" 
+                    <button @click="showSuccessModal = false; console.log('🟢 SUCCESS MODAL: Modal cerrado por el usuario');" 
                             class="btn-primary px-6 py-2 rounded-lg text-sm">
                         Entendido
                     </button>

@@ -305,7 +305,7 @@
                     <h2 class="text-lg font-semibold text-black-400 mb-0">Acciones Rápidas</h2>
                 </div>
                 <div class="p-6 space-y-3">
-                    <button @click="openDeleteModal({{ $store->id }}, '{{ $store->name }}')"
+                    <button @click="openDeleteModal('{{ $store->slug }}', '{{ $store->name }}')"
                         class="w-full btn-outline-error px-4 py-2 rounded-lg flex items-center justify-center gap-2">
                         <x-solar-trash-bin-trash-outline class="w-5 h-5" />
                         Eliminar Tienda

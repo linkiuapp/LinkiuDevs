@@ -43,7 +43,7 @@ class Ticket extends Model
     public function getAttachmentUrl($attachment): string
     {
         // Usar la URL directa del bucket S3
-        return Storage::disk('s3')->url($attachment['path']);
+        return Storage::disk('public')->url($attachment['path']);
     }
 
     // Verificar si hay respuestas nuevas del soporte (para TenantAdmin)

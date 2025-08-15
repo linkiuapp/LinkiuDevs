@@ -82,7 +82,7 @@
                                 <td class="px-1 py-4">
                                     <div class="flex items-center text-sm">
                                                                 @if($slider->image_path)
-                            <img src="{{ Storage::disk('s3')->url($slider->image_path) }}" 
+                            <img src="{{ Storage::disk('public')->url($slider->image_path) }}" 
                                                  alt="{{ $slider->name }}"
                                                  class="w-24 h-auto mr-3 object-cover rounded-lg border border-white-200">
                                         @else

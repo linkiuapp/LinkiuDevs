@@ -25,6 +25,8 @@ class Order extends Model
         'delivery_type',
         'shipping_cost',
         'payment_method',
+        'payment_method_id',
+        'cash_amount',
         'payment_proof_path',
         'subtotal',
         'coupon_discount',
@@ -38,6 +40,7 @@ class Order extends Model
         'subtotal' => 'decimal:2',
         'coupon_discount' => 'decimal:2',
         'total' => 'decimal:2',
+        'cash_amount' => 'decimal:2',
         'created_at' => 'datetime',
         'updated_at' => 'datetime'
     ];
@@ -46,7 +49,9 @@ class Order extends Model
     const STATUS_PENDING = 'pending';
     const STATUS_CONFIRMED = 'confirmed';
     const STATUS_PREPARING = 'preparing';
+    const STATUS_READY_FOR_PICKUP = 'ready_for_pickup';
     const STATUS_SHIPPED = 'shipped';
+    const STATUS_OUT_FOR_DELIVERY = 'out_for_delivery';
     const STATUS_DELIVERED = 'delivered';
     const STATUS_CANCELLED = 'cancelled';
 
@@ -54,7 +59,9 @@ class Order extends Model
         self::STATUS_PENDING => 'Pendiente',
         self::STATUS_CONFIRMED => 'Confirmado',
         self::STATUS_PREPARING => 'Preparando',
+        self::STATUS_READY_FOR_PICKUP => 'Listo para Recoger',
         self::STATUS_SHIPPED => 'Enviado',
+        self::STATUS_OUT_FOR_DELIVERY => 'En Ruta de Entrega',
         self::STATUS_DELIVERED => 'Entregado',
         self::STATUS_CANCELLED => 'Cancelado'
     ];
@@ -106,7 +113,7 @@ class Order extends Model
 
         static::updating(function ($order) {
             if ($order->isDirty('status')) {
-                $previousStatus = OrderStatus::fromString($order->getOriginal('status'));
+                $previousStatus = $order->getOriginal('status');
                 OrderStatusHistory::createEntry(
                     $order->id,
                     $order->status,
@@ -216,7 +223,7 @@ class Order extends Model
      * Update order status with history tracking and broadcasting
      */
     public function updateStatus(
-        OrderStatus $newStatus, 
+        string $newStatus, 
         ?string $comment = null, 
         ?\App\Models\User $changedBy = null
     ): void {
@@ -241,7 +248,7 @@ class Order extends Model
     /**
      * Get current status
      */
-    public function getCurrentStatus(): OrderStatus
+    public function getCurrentStatus(): string
     {
         return $this->status;
     }
@@ -259,21 +266,21 @@ class Order extends Model
      */
     public function getEstimatedDeliveryTime(): ?Carbon
     {
-        if ($this->status === OrderStatus::DELIVERED || $this->status === OrderStatus::CANCELLED) {
+        if ($this->status === self::STATUS_DELIVERED || $this->status === self::STATUS_CANCELLED) {
             return null;
         }
 
         $baseTime = now();
         
         return match($this->status) {
-            OrderStatus::PENDING => $baseTime->addMinutes(15),
-            OrderStatus::CONFIRMED => $baseTime->addMinutes(45),
-            OrderStatus::PREPARING => $this->delivery_type === 'pickup' 
+            self::STATUS_PENDING => $baseTime->addMinutes(15),
+            self::STATUS_CONFIRMED => $baseTime->addMinutes(45),
+            self::STATUS_PREPARING => $this->delivery_type === 'pickup' 
                 ? $baseTime->addMinutes(60) 
                 : $baseTime->addMinutes(90),
-            OrderStatus::READY_FOR_PICKUP => $baseTime, // Available now
-            OrderStatus::SHIPPED => $baseTime->addHours(2),
-            OrderStatus::OUT_FOR_DELIVERY => $baseTime->addMinutes(30),
+            self::STATUS_READY_FOR_PICKUP => $baseTime, // Available now
+            self::STATUS_SHIPPED => $baseTime->addHours(2),
+            self::STATUS_OUT_FOR_DELIVERY => $baseTime->addMinutes(30),
             default => null
         };
     }
@@ -292,8 +299,7 @@ class Order extends Model
     public function getStatusTimeline(): array
     {
         $history = $this->statusHistory()
-            ->with('changedBy:id,name')
-            ->chronological()
+            ->orderBy('created_at', 'asc')
             ->get();
 
         $timeline = [];
@@ -329,52 +335,52 @@ class Order extends Model
      */
     public function isPending(): bool
     {
-        return $this->status === OrderStatus::PENDING;
+        return $this->status === self::STATUS_PENDING;
     }
 
     public function isConfirmed(): bool
     {
-        return $this->status === OrderStatus::CONFIRMED;
+        return $this->status === self::STATUS_CONFIRMED;
     }
 
     public function isPreparing(): bool
     {
-        return $this->status === OrderStatus::PREPARING;
+        return $this->status === self::STATUS_PREPARING;
     }
 
     public function isReadyForPickup(): bool
     {
-        return $this->status === OrderStatus::READY_FOR_PICKUP;
+        return $this->status === self::STATUS_READY_FOR_PICKUP;
     }
 
     public function isShipped(): bool
     {
-        return $this->status === OrderStatus::SHIPPED;
+        return $this->status === self::STATUS_SHIPPED;
     }
 
     public function isOutForDelivery(): bool
     {
-        return $this->status === OrderStatus::OUT_FOR_DELIVERY;
+        return $this->status === self::STATUS_OUT_FOR_DELIVERY;
     }
 
     public function isDelivered(): bool
     {
-        return $this->status === OrderStatus::DELIVERED;
+        return $this->status === self::STATUS_DELIVERED;
     }
 
     public function isCancelled(): bool
     {
-        return $this->status === OrderStatus::CANCELLED;
+        return $this->status === self::STATUS_CANCELLED;
     }
 
     public function canBeEdited(): bool
     {
-        return in_array($this->status, [OrderStatus::PENDING, OrderStatus::CONFIRMED]);
+        return in_array($this->status, [self::STATUS_PENDING, self::STATUS_CONFIRMED]);
     }
 
     public function isFinalStatus(): bool
     {
-        return $this->status->isFinal();
+        return in_array($this->status, [self::STATUS_DELIVERED, self::STATUS_CANCELLED]);
     }
 
     /**
@@ -419,7 +425,9 @@ class Order extends Model
             self::STATUS_PENDING => 'clock',
             self::STATUS_CONFIRMED => 'check-circle',
             self::STATUS_PREPARING => 'gear',
-            self::STATUS_SHIPPED => 'box',
+            self::STATUS_READY_FOR_PICKUP => 'box',
+            self::STATUS_SHIPPED => 'truck',
+            self::STATUS_OUT_FOR_DELIVERY => 'navigation',
             self::STATUS_DELIVERED => 'check-circle',
             self::STATUS_CANCELLED => 'close-circle',
             default => 'dot',
@@ -445,7 +453,9 @@ class Order extends Model
             self::STATUS_PENDING => 'bg-warning-300 text-black-500',
             self::STATUS_CONFIRMED => 'bg-info-400 text-white-50',
             self::STATUS_PREPARING => 'bg-secondary-300 text-white-50',
+            self::STATUS_READY_FOR_PICKUP => 'bg-primary-300 text-white-50',
             self::STATUS_SHIPPED => 'bg-primary-400 text-white-50',
+            self::STATUS_OUT_FOR_DELIVERY => 'bg-accent-300 text-white-50',
             self::STATUS_DELIVERED => 'bg-success-400 text-white-50',
             self::STATUS_CANCELLED => 'bg-error-400 text-white-50',
             default => 'bg-black-50 text-black-500',

@@ -110,7 +110,7 @@
                                     title="Entrar como admin">
                                     <x-solar-login-3-outline class="table-action-icon" />
                                 </button>
-                                <button @click="openDeleteModal({{ $store->id }}, '{{ $store->name }}')"
+                                <button @click="openDeleteModal('{{ $store->slug }}', '{{ $store->name }}')"
                                     class="table-action-delete"
                                     title="Eliminar">
                                     <x-solar-trash-bin-trash-outline class="table-action-icon" />

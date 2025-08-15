@@ -89,21 +89,30 @@ class BusinessProfileController extends Controller
 
         // Manejar subida de logo
         if ($request->hasFile('logo')) {
-            // Eliminar logo anterior si existe
-            if ($store->logo_url) {
-                // Extraer path del URL del bucket
-                $oldPath = str_replace(Storage::disk('s3')->url(''), '', $store->logo_url);
-                Storage::disk('s3')->delete($oldPath);
+            // ✅ Eliminar logo anterior si existe
+            if ($store->logo_url && str_contains($store->logo_url, '/storage/')) {
+                // Extraer path relativo del URL
+                $oldPath = str_replace(asset('storage/'), '', $store->logo_url);
+                $oldFile = public_path('storage/' . $oldPath);
+                if (file_exists($oldFile)) {
+                    unlink($oldFile);
+                }
             }
             
             // Generar nombre único para el archivo
             $filename = 'logo_' . $store->id . '_' . time() . '.' . $request->file('logo')->getClientOriginalExtension();
             
-            // Guardar en bucket S3
-            $path = Storage::disk('s3')->putFileAs('stores/logos', $request->file('logo'), $filename, 'public');
+            // ✅ Crear directorio si no existe
+            $destinationPath = public_path('storage/stores/logos');
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
             
-            // Guardar URL del bucket
-            $updateData['logo_url'] = Storage::disk('s3')->url($path);
+            // ✅ GUARDAR con move() - Método estándar obligatorio
+            $request->file('logo')->move($destinationPath, $filename);
+            
+            // ✅ Generar URL usando método estándar
+            $updateData['logo_url'] = asset('storage/stores/logos/' . $filename);
         }
 
         $store->update($updateData);
@@ -161,8 +170,19 @@ class BusinessProfileController extends Controller
 
         // Manejar subida de imagen OG
         if ($request->hasFile('og_image')) {
-            $ogImagePath = $request->file('og_image')->store('og-images', 'public');
-            $updateData['header_short_description'] = $ogImagePath; // Usar este campo para OG image
+            // ✅ Crear directorio si no existe
+            $destinationPath = public_path('storage/og-images');
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+            
+            // Generar nombre único
+            $filename = 'og_' . $store->id . '_' . time() . '.' . $request->file('og_image')->getClientOriginalExtension();
+            
+            // ✅ GUARDAR con move() - Método estándar obligatorio
+            $request->file('og_image')->move($destinationPath, $filename);
+            
+            $updateData['header_short_description'] = 'og-images/' . $filename; // Usar este campo para OG image
         }
 
         $store->update($updateData);

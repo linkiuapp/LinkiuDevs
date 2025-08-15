@@ -289,8 +289,14 @@ class AnnouncementController extends Controller
         // Generar nombre único
         $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
 
-        // Guardar archivo en bucket S3
-        $file->storeAs('announcements/banners', $filename, 's3');
+        // ✅ Crear directorio si no existe
+        $destinationPath = public_path('storage/announcements/banners');
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
+
+        // ✅ GUARDAR con move() - Método estándar obligatorio
+        $file->move($destinationPath, $filename);
 
         return $filename;
     }
@@ -300,7 +306,11 @@ class AnnouncementController extends Controller
      */
     private function deleteBannerImage(string $filename): void
     {
-        Storage::disk('s3')->delete('announcements/banners/' . $filename);
+        // ✅ Eliminar archivo usando método estándar
+        $filePath = public_path('storage/announcements/banners/' . $filename);
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
     }
 
     /**
@@ -308,17 +318,25 @@ class AnnouncementController extends Controller
      */
     private function duplicateBannerImage(string $originalFilename): string
     {
-        $originalPath = 'announcements/banners/' . $originalFilename;
+        // ✅ Verificar archivo original usando método estándar
+        $originalPath = public_path('storage/announcements/banners/' . $originalFilename);
         
-        if (!Storage::disk('s3')->exists($originalPath)) {
+        if (!file_exists($originalPath)) {
             throw new \Exception('Archivo original no encontrado');
         }
 
         $extension = pathinfo($originalFilename, PATHINFO_EXTENSION);
         $newFilename = time() . '_' . Str::random(10) . '.' . $extension;
-        $newPath = 'announcements/banners/' . $newFilename;
+        $newPath = public_path('storage/announcements/banners/' . $newFilename);
 
-        Storage::disk('s3')->copy($originalPath, $newPath);
+        // ✅ Crear directorio si no existe
+        $destinationDir = dirname($newPath);
+        if (!file_exists($destinationDir)) {
+            mkdir($destinationDir, 0755, true);
+        }
+
+        // ✅ Copiar archivo usando método estándar
+        copy($originalPath, $newPath);
 
         return $newFilename;
     }

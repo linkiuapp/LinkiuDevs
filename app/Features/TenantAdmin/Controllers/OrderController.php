@@ -27,7 +27,7 @@ class OrderController extends Controller
         
         // Query base con relaciones
         $query = Order::byStore($store->id)
-            ->with(['items.product', 'statusHistory'])
+            ->with(['items.product']) // TODO: , 'statusHistory' cuando se implemente
             ->orderBy('created_at', 'desc');
 
         // Filtros
@@ -132,7 +132,7 @@ class OrderController extends Controller
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.variants' => 'nullable|array',
             'shipping_zone_id' => 'nullable|exists:shipping_zones,id',
-            'payment_proof' => 'nullable|image|mimes:jpeg,png,jpg,pdf|max:5120' // 5MB
+            'payment_proof' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120' // 5MB
         ]);
 
         try {
@@ -220,10 +220,8 @@ class OrderController extends Controller
 
         // Cargar relaciones
         $order->load([
-            'items.product.mainImage',
-            'statusHistory' => function($query) {
-                $query->orderBy('created_at', 'desc');
-            }
+            'items.product.mainImage'
+            // TODO: 'statusHistory' cuando se implemente
         ]);
 
         // Obtener métodos de envío para cambios
@@ -309,7 +307,7 @@ class OrderController extends Controller
             'delivery_type' => 'required|in:domicilio,pickup',
             'payment_method' => 'required|in:transferencia,contra_entrega,efectivo',
             'notes' => 'nullable|string|max:1000',
-            'payment_proof' => 'nullable|image|mimes:jpeg,png,jpg,pdf|max:5120',
+            'payment_proof' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
             'remove_payment_proof' => 'boolean'
         ]);
 
@@ -361,7 +359,7 @@ class OrderController extends Controller
     /**
      * Remove the specified order
      */
-    public function destroy(Request $request, $storeSlug, Order $order): RedirectResponse
+    public function destroy(Request $request, $storeSlug, Order $order)
     {
         $store = $request->route('store');
         
@@ -372,6 +370,13 @@ class OrderController extends Controller
 
         // Solo permitir eliminación en estado pendiente
         if ($order->status !== Order::STATUS_PENDING) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Solo se pueden eliminar pedidos en estado pendiente'
+                ], 422);
+            }
+            
             return redirect()
                 ->route('tenant.admin.orders.index', $store->slug)
                 ->with('error', 'Solo se pueden eliminar pedidos en estado pendiente');
@@ -386,11 +391,25 @@ class OrderController extends Controller
             $orderNumber = $order->order_number;
             $order->delete();
 
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => "Pedido {$orderNumber} eliminado exitosamente"
+                ]);
+            }
+
             return redirect()
                 ->route('tenant.admin.orders.index', $store->slug)
                 ->with('success', "Pedido {$orderNumber} eliminado exitosamente");
 
         } catch (\Exception $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error al eliminar el pedido: ' . $e->getMessage()
+                ], 500);
+            }
+            
             return redirect()
                 ->route('tenant.admin.orders.index', $store->slug)
                 ->with('error', 'Error al eliminar el pedido: ' . $e->getMessage());
@@ -418,10 +437,10 @@ class OrderController extends Controller
             $oldStatus = $order->status;
             $order->update(['status' => $validated['status']]);
 
-            // El historial se registra automáticamente en el boot del modelo
-            if ($validated['notes']) {
-                $order->statusHistory()->latest()->first()->update(['notes' => $validated['notes']]);
-            }
+            // TODO: El historial se registra automáticamente en el boot del modelo
+            // if ($validated['notes']) {
+            //     $order->statusHistory()->latest()->first()->update(['notes' => $validated['notes']]);
+            // }
 
             return response()->json([
                 'success' => true,
@@ -518,15 +537,15 @@ class OrderController extends Controller
     {
         $filename = $orderNumber . '_' . time() . '.' . $file->getClientOriginalExtension();
         $file->storeAs('orders/payment-proofs', $filename, 'public');
-        return $filename;
+        return 'orders/payment-proofs/' . $filename; // Devolver path completo como en frontend
     }
 
     /**
      * Delete payment proof file
      */
-    private function deletePaymentProof(string $filename): void
+    private function deletePaymentProof(string $filePath): void
     {
-        Storage::disk('public')->delete('orders/payment-proofs/' . $filename);
+        Storage::disk('public')->delete($filePath); // Asumir que $filePath ya contiene el path completo
     }
 
     /**
@@ -541,7 +560,7 @@ class OrderController extends Controller
             abort(404);
         }
 
-        $filePath = storage_path('app/public/orders/payment-proofs/' . $order->payment_proof_path);
+        $filePath = storage_path('app/public/' . $order->payment_proof_path);
         
         if (!file_exists($filePath)) {
             abort(404);

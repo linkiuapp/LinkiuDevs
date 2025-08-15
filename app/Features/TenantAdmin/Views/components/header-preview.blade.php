@@ -32,14 +32,14 @@
                 <h1 
                     class="text-xl font-black mb-1"
                     :style="{ color: $store.design.textColor }"
+                    x-text="$store.design.storeName || '{{ $store->name }}'"
                 >
-                    {{ $store->name }}
                 </h1>
                 <p 
                     class="text-base font-semibold text-center"
                     :style="{ color: $store.design.descriptionColor }"
+                    x-text="$store.design.storeDescription || '{{ $store->description ?? 'Descripción de la tienda' }}'"
                 >
-                    {{ $store->description ?? 'Descripción de la tienda' }}
                 </p>
             </div>
         </div>

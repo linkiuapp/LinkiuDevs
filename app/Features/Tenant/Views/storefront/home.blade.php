@@ -29,7 +29,7 @@
                             <!-- Imagen del slider -->
                             <div class="w-[170px] h-[100px] bg-white-100 rounded-lg overflow-hidden relative">
                                 @if($slider->image_path)
-                                    <img src="{{ Storage::disk('s3')->url($slider->image_path) }}" 
+                                    <img src="{{ Storage::disk('public')->url($slider->image_path) }}" 
                                          alt="{{ $slider->name }}" 
                                          class="w-[170px] h-[100px] object-cover object-center transition-transform duration-300 group-hover:scale-105">
                                 @endif
@@ -76,7 +76,7 @@
                                 <!-- Imagen del slider -->
                                 <div class="w-[170px] h-[100px] bg-white-100 rounded-lg overflow-hidden relative">
                                     @if($slider->image_path)
-                                        <img src="{{ Storage::disk('s3')->url($slider->image_path) }}" 
+                                        <img src="{{ Storage::disk('public')->url($slider->image_path) }}" 
                                              alt="{{ $slider->name }}" 
                                              class="w-[170px] h-[100px] object-cover object-center transition-transform duration-300 group-hover:scale-105">
                                     @endif

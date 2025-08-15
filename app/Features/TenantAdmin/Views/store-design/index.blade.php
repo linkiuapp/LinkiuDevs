@@ -118,6 +118,54 @@
                                 />
                             </div>
                         </div>
+
+                        {{-- Nueva Sección: Información de la Tienda --}}
+                        <div class="mt-8 pt-6 border-t border-white-200">
+                            <h2 class="text-base font-semibold text-black-500 mb-3">Información de la Tienda</h2>
+                            <div class="space-y-4">
+                                {{-- Nombre de la Tienda --}}
+                                <div class="space-y-2">
+                                    <label class="text-sm font-medium text-black-400">Nombre de la Tienda</label>
+                                    <div class="relative">
+                                        <input 
+                                            type="text" 
+                                            name="store_name"
+                                            id="store_name_input"
+                                            x-model="storeName"
+                                            @input="updatePreview"
+                                            maxlength="40"
+                                            class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none text-sm"
+                                            placeholder="Nombre de tu tienda"
+                                        >
+                                        <div class="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-black-300">
+                                            <span x-text="(storeName || '').length"></span>/40
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-black-300">Letras, números, espacios, guiones y acentos permitidos</p>
+                                </div>
+
+                                {{-- Descripción de la Tienda --}}
+                                <div class="space-y-2">
+                                    <label class="text-sm font-medium text-black-400">Descripción de la Tienda</label>
+                                    <div class="relative">
+                                        <input 
+                                            type="text" 
+                                            name="store_description"
+                                            id="store_description_input"
+                                            x-model="storeDescription"
+                                            @input="updatePreview"
+                                            maxlength="50"
+                                            class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none text-sm"
+                                            placeholder="Breve descripción de tu tienda"
+                                        >
+                                        <div class="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-black-300">
+                                            <span x-text="(storeDescription || '').length"></span>/50
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-black-300">Describe brevemente qué ofrece tu tienda</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -188,27 +236,30 @@
                 // Crear FormData para enviar archivos y datos
                 const formData = new FormData();
                 
-                // Obtener colores de los inputs de texto
-                const colorInputs = document.querySelectorAll('input[type="text"]');
-                console.log('Found color inputs:', colorInputs.length);
+                // Colores: leer primero de los inputs visibles; fallback al store
+                const designStore = window.Alpine?.store('design') || {};
+                const bgInput = document.getElementById('color_input_bgColor');
+                const textInput = document.getElementById('color_input_textColor');
+                const descInputColor = document.getElementById('color_input_descriptionColor');
+                const bgColor = (bgInput?.value || designStore.bgColor || '#FFFFFF');
+                const textColor = (textInput?.value || designStore.textColor || '#000000');
+                const descriptionColor = (descInputColor?.value || designStore.descriptionColor || '#666666');
+                console.log('Colors to publish:', { bgColor, textColor, descriptionColor });
+                formData.append('header_background_color', bgColor);
+                formData.append('header_text_color', textColor);
+                formData.append('header_description_color', descriptionColor);
                 
-                if (colorInputs.length >= 3) {
-                    const bgColor = colorInputs[0].value || '#FFFFFF';
-                    const textColor = colorInputs[1].value || '#000000';
-                    const descriptionColor = colorInputs[2].value || '#666666';
-                    
-                    console.log('Colors found:', { bgColor, textColor, descriptionColor });
-                    
-                    formData.append('header_background_color', bgColor);
-                    formData.append('header_text_color', textColor);
-                    formData.append('header_description_color', descriptionColor);
-                } else {
-                    console.warn('Not enough color inputs found');
-                    // Valores por defecto
-                    formData.append('header_background_color', '#FFFFFF');
-                    formData.append('header_text_color', '#000000');
-                    formData.append('header_description_color', '#666666');
-                }
+                // Nombre/Descripción: inputs visibles primero; fallback al store
+                const storeDesign = window.Alpine?.store('design');
+                const nameInput = document.getElementById('store_name_input');
+                const descInput = document.getElementById('store_description_input');
+                let nameToSend = (nameInput?.value ?? '').toString().trim();
+                let descToSend = (descInput?.value ?? '').toString();
+                if (!nameToSend && storeDesign) nameToSend = (storeDesign.storeName ?? '').toString().trim();
+                if (!descToSend && storeDesign) descToSend = (storeDesign.storeDescription ?? '').toString();
+                formData.append('store_name', nameToSend);
+                formData.append('store_description', descToSend);
+                console.log('Store info found:', { name: nameToSend, description: descToSend });
                 
                 // Realizar petición POST
                 fetch(`/${storePath}/admin/store-design/publish`, {
@@ -267,7 +318,9 @@
                 textColor: window.initialDesign?.textColor || '#000000',
                 descriptionColor: window.initialDesign?.descriptionColor || '#666666',
                 logo: window.initialDesign?.logo || null,
-                favicon: window.initialDesign?.favicon || null
+                favicon: window.initialDesign?.favicon || null,
+                storeName: @json($store->name),
+                storeDescription: @json($store->description)
             });
             
             // Color picker simplificado
@@ -388,8 +441,39 @@
             
             // Header design component
             Alpine.data('headerDesign', () => ({
+                storeName: @json($store->name),
+                storeDescription: @json($store->description),
+                
                 init() {
-                    // Solo inicialización
+                    // Inicializar datos en el store global para la vista previa
+                    if (this.$store && this.$store.design) {
+                        this.$store.design.storeName = this.storeName;
+                        this.$store.design.storeDescription = this.storeDescription;
+                    }
+                },
+                
+                updatePreview() {
+                    // Validar caracteres permitidos para nombre
+                    this.storeName = this.sanitizeName(this.storeName);
+                    
+                    // Validar caracteres permitidos para descripción
+                    this.storeDescription = this.sanitizeDescription(this.storeDescription);
+                    
+                    // Actualizar el store global para vista previa
+                    if (this.$store && this.$store.design) {
+                        this.$store.design.storeName = this.storeName;
+                        this.$store.design.storeDescription = this.storeDescription;
+                    }
+                },
+                
+                sanitizeName(text) {
+                    const safe = (text ?? '').toString();
+                    return safe.replace(/[^a-zA-Z0-9\s\-áéíóúñÁÉÍÓÚÑüÜ\.]/g, '');
+                },
+                
+                sanitizeDescription(text) {
+                    const safe = (text ?? '').toString();
+                    return safe.replace(/[^a-zA-Z0-9\s\-áéíóúñÁÉÍÓÚÑüÜ\.,¿?!:]/g, '');
                 }
             }));
         });

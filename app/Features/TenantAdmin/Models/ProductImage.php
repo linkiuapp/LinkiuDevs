@@ -53,7 +53,7 @@ class ProductImage extends Model
      */
     public function getImageUrlAttribute(): string
     {
-        return Storage::disk('s3')->url($this->image_path);
+        return asset('storage/' . $this->image_path);
     }
 
     /**
@@ -61,7 +61,7 @@ class ProductImage extends Model
      */
     public function getThumbnailUrlAttribute(): string
     {
-        return $this->thumbnail_path ? Storage::disk('s3')->url($this->thumbnail_path) : $this->getImageUrlAttribute();
+        return $this->thumbnail_path ? asset('storage/' . $this->thumbnail_path) : $this->getImageUrlAttribute();
     }
 
     /**
@@ -69,7 +69,7 @@ class ProductImage extends Model
      */
     public function getMediumUrlAttribute(): string
     {
-        return $this->medium_path ? Storage::disk('s3')->url($this->medium_path) : $this->getImageUrlAttribute();
+        return $this->medium_path ? asset('storage/' . $this->medium_path) : $this->getImageUrlAttribute();
     }
 
     /**
@@ -77,7 +77,7 @@ class ProductImage extends Model
      */
     public function getLargeUrlAttribute(): string
     {
-        return $this->large_path ? Storage::disk('s3')->url($this->large_path) : $this->getImageUrlAttribute();
+        return $this->large_path ? asset('storage/' . $this->large_path) : $this->getImageUrlAttribute();
     }
 
     /**
@@ -97,8 +97,8 @@ class ProductImage extends Model
             ];
 
             foreach ($paths as $path) {
-                if ($path && Storage::disk('s3')->exists($path)) {
-                    Storage::disk('s3')->delete($path);
+                if ($path && Storage::disk('public')->exists($path)) {
+                    Storage::disk('public')->delete($path);
                 }
             }
         });
@@ -129,8 +129,8 @@ class ProductImage extends Model
      */
     public function getFileSize(): int
     {
-        if (Storage::disk('s3')->exists($this->image_path)) {
-            return Storage::disk('s3')->size($this->image_path);
+        if (Storage::disk('public')->exists($this->image_path)) {
+            return Storage::disk('public')->size($this->image_path);
         }
         return 0;
     }

@@ -34,17 +34,7 @@ use App\Features\TenantAdmin\Controllers\CouponController;
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 
-// Ruta de debug simple (mantener para casos de emergencia)
-Route::get('/debug', function (\Illuminate\Http\Request $request) {
-    return response()->json([
-        'timestamp' => now()->toISOString(),
-        'store_slug' => $request->route('store'),
-        'authenticated' => auth()->check(),
-        'user_role' => auth()->user()?->role,
-        'environment' => app()->environment(),
-        'message' => 'Debug route active - use /api/emergency-debug/{slug} for detailed diagnosis'
-    ]);
-})->name('debug');
+
 
 // Rutas protegidas (con middleware auth)
 Route::middleware(['auth', 'store.admin'])->group(function () {

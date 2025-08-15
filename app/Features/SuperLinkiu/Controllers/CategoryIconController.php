@@ -73,10 +73,16 @@ class CategoryIconController extends Controller
                 $file = $request->file('icon_file');
                 $filename = $name . '.' . $file->getClientOriginalExtension();
                 
-                // Guardar en bucket S3
-                $path = 'category-icons/' . $filename;
-                Storage::disk('s3')->putFileAs('category-icons', $file, $filename, 'public');
-                $imagePath = $path;
+                // ✅ Guardar con método estándar ESTANDAR_IMAGENES.md
+                // Crear directorio si no existe
+                $destinationPath = public_path('storage/category-icons');
+                if (!file_exists($destinationPath)) {
+                    mkdir($destinationPath, 0755, true);
+                }
+                
+                // GUARDAR con move() - Método estándar obligatorio
+                $file->move($destinationPath, $filename);
+                $imagePath = 'category-icons/' . $filename;
             } else {
                 throw new \Exception('No se recibió el archivo de imagen');
             }
@@ -141,18 +147,27 @@ class CategoryIconController extends Controller
 
             // Manejar nuevo archivo si se sube
             if ($request->hasFile('icon_file')) {
-                // Eliminar archivo anterior del bucket S3
-                if ($categoryIcon->image_path && Storage::disk('s3')->exists($categoryIcon->image_path)) {
-                    Storage::disk('s3')->delete($categoryIcon->image_path);
+                // ✅ Eliminar archivo anterior usando método estándar
+                if ($categoryIcon->image_path) {
+                    $oldFile = public_path('storage/' . $categoryIcon->image_path);
+                    if (file_exists($oldFile)) {
+                        unlink($oldFile);
+                    }
                 }
 
                 // Subir nuevo archivo al bucket S3
                 $file = $request->file('icon_file');
                 $filename = $request->name . '.' . $file->getClientOriginalExtension();
                 
-                $path = 'category-icons/' . $filename;
-                Storage::disk('s3')->putFileAs('category-icons', $file, $filename, 'public');
-                $data['image_path'] = $path;
+                // ✅ Crear directorio si no existe
+                $destinationPath = public_path('storage/category-icons');
+                if (!file_exists($destinationPath)) {
+                    mkdir($destinationPath, 0755, true);
+                }
+                
+                // GUARDAR con move() - Método estándar obligatorio
+                $file->move($destinationPath, $filename);
+                $data['image_path'] = 'category-icons/' . $filename;
             }
 
             $categoryIcon->update($data);
@@ -238,9 +253,12 @@ class CategoryIconController extends Controller
                     ->with('error', "No se puede eliminar el icono porque está siendo usado por {$categoriesCount} categoría(s).");
             }
 
-            // Eliminar archivo del bucket S3
-            if ($categoryIcon->image_path && Storage::disk('s3')->exists($categoryIcon->image_path)) {
-                Storage::disk('s3')->delete($categoryIcon->image_path);
+            // ✅ Eliminar archivo usando método estándar
+            if ($categoryIcon->image_path) {
+                $filePath = public_path('storage/' . $categoryIcon->image_path);
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
             }
 
             // Eliminar registro

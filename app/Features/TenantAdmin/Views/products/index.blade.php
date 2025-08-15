@@ -449,7 +449,9 @@
                         const data = await response.json();
 
                         if (response.ok) {
-                            window.location.reload();
+                            // ✅ Reload con delay para evitar modal automático
+                            setTimeout(() => window.location.reload(), 1500);
+                            alert('Producto eliminado correctamente');
                         } else {
                             alert(data.error || 'Error al eliminar el producto');
                         }
@@ -494,7 +496,9 @@
                         const data = await response.json();
 
                         if (response.ok) {
-                            window.location.reload();
+                            // ✅ Reload con delay para evitar modal automático  
+                            setTimeout(() => window.location.reload(), 1500);
+                            alert('Producto duplicado correctamente');
                         } else {
                             alert(data.error || 'Error al duplicar el producto');
                         }
@@ -549,8 +553,8 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Recargar la página para actualizar el estado
-                        window.location.reload();
+                        // ✅ Sin reload automático - el toggle ya se actualizó visualmente
+                        console.log('Estado actualizado correctamente');
                     } else {
                         alert(data.error || 'Error al cambiar el estado');
                         // Revertir el toggle si hay error

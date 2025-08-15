@@ -31,7 +31,7 @@ class SliderImageService
             
             // Guardar imagen en bucket S3
             $path = 'sliders/' . $slider->store_id . '/' . $filename;
-            Storage::disk('s3')->put($path, $processedImage, 'public');
+            Storage::disk('public')->put($path, $processedImage, 'public');
 
             return $path;
 

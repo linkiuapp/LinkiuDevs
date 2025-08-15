@@ -152,6 +152,16 @@ module.exports = {
         500: '#929292',
       },
 
+      // Paleta White (Grises claros/Blancos)
+      white: {
+        50: '#FBFDFF',
+        100: '#EFF6FD',
+        200: '#E8F2FC',
+        300: '#DEECFB',
+        400: '#D7E8FA',
+        600: '#3A4550',
+      },
+
       // Paleta Accent (Blanco nuevo)
       accent: {
         50: '#fdfdff',
@@ -163,22 +173,22 @@ module.exports = {
         500: '#8e8c99',
       },
 
+      // Paleta Gray (Alias que combina white/black según reglas de diseño)
+      gray: {
+        50: '#F0F0F0',   // Del sistema black
+        100: '#EFF6FD',  // Del sistema white
+        200: '#E8F2FC',  // Del sistema white
+        300: '#DEECFB',  // Del sistema white
+        400: '#7b7b7d',  // Del sistema black
+        500: '#434344',  // Del sistema black
+        600: '#3A4550',  // Del sistema white
+        700: '#1c1c1e',  // Del sistema black
+        800: '#141415',  // Del sistema black
+        900: '#111112',  // Del sistema black
+      },
 
-        // Paleta Warning (Amarillo/Gris)
-        warning: {
-          50: '#FFF9E5',
-          100: '#FFDE73',
-          200: '#FFC300',
-          300: '#997500',
-        },
-        // Paleta White (Grises claros)
-        white: {
-          50: '#FBFDFF',
-          100: '#EFF6FD',
-          200: '#E8F2FC',
-          300: '#DEECFB',
-          400: '#D7E8FA',
-        },
+
+
       },
     },
   },

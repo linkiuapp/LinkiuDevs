@@ -91,7 +91,7 @@ class DiagnoseStorageCommand extends Command
         
         // Buscar en S3/R2
         try {
-            $s3Files = Storage::disk('s3')->allFiles();
+            $s3Files = Storage::disk('public')->allFiles();
             $imageFiles = array_filter($s3Files, function($file) {
                 return preg_match('/\.(jpg|jpeg|png|gif|webp)$/i', $file);
             });
@@ -121,7 +121,7 @@ class DiagnoseStorageCommand extends Command
         
         try {
             $testPath = 'test-image.jpg';
-            $s3Url = Storage::disk('s3')->url($testPath);
+            $s3Url = Storage::disk('public')->url($testPath);
             $this->line("   S3/R2 URL: {$s3Url}");
         } catch (\Exception $e) {
             $this->line("   ❌ S3/R2 URL error: " . $e->getMessage());

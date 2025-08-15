@@ -195,8 +195,9 @@ class PaymentMethodController extends Controller
             'available_for_delivery' => 'nullable|boolean',
             'is_default' => 'nullable|boolean',
             'cash_change_available' => 'nullable|boolean',
-            'require_proof' => 'nullable|boolean',
-            'accepted_cards' => 'nullable|string|max:255',
+            // ✅ CORREGIDO - Removed validaciones de campos que no existen en BD
+            // 'require_proof' => 'nullable|boolean',
+            // 'accepted_cards' => 'nullable|string|max:255',
         ]);
         
         if ($validator->fails()) {
@@ -215,12 +216,9 @@ class PaymentMethodController extends Controller
                 'store_id' => $store->id,
             ];
             
-            // Add type-specific fields
-            if ($request->type === 'bank_transfer') {
-                $data['require_proof'] = $request->has('require_proof');
-            } elseif ($request->type === 'card_terminal') {
-                $data['accepted_cards'] = $request->accepted_cards;
-            }
+            // ✅ CORREGIDO - Removed campos que no existen en BD
+            // Campos 'require_proof' y 'accepted_cards' no están en la tabla payment_methods
+            // Se pueden manejar en una tabla separada de configuración si es necesario
             
             // Create payment method
             $paymentMethod = $this->paymentMethodService->createPaymentMethod($data);
@@ -341,8 +339,9 @@ class PaymentMethodController extends Controller
             'available_for_delivery' => 'nullable|boolean',
             'is_default' => 'nullable|boolean',
             'cash_change_available' => 'nullable|boolean',
-            'require_proof' => 'nullable|boolean',
-            'accepted_cards' => 'nullable|string|max:255',
+            // ✅ CORREGIDO - Removed validaciones de campos que no existen en BD
+            // 'require_proof' => 'nullable|boolean',
+            // 'accepted_cards' => 'nullable|string|max:255',
         ]);
         
         if ($validator->fails()) {
@@ -359,12 +358,9 @@ class PaymentMethodController extends Controller
                 'available_for_delivery' => $request->has('available_for_delivery'),
             ];
             
-            // Add type-specific fields
-            if ($paymentMethod->isBankTransfer()) {
-                $data['require_proof'] = $request->has('require_proof');
-            } elseif ($paymentMethod->isCardTerminal()) {
-                $data['accepted_cards'] = $request->accepted_cards;
-            }
+            // ✅ CORREGIDO - Removed campos que no existen en BD
+            // Campos 'require_proof' y 'accepted_cards' no están en la tabla payment_methods
+            // Se pueden manejar en una tabla separada de configuración si es necesario
             
             // Update payment method
             $this->paymentMethodService->updatePaymentMethod($paymentMethod, $data);

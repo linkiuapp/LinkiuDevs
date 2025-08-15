@@ -1,6 +1,27 @@
-<footer class="footer main-footer">
+<footer class="footer main-footer items-center">
     <div class="flex justify-between">
-        <p class="mb-0">© {{ date('Y') }} Linkiu.bio. Todos los derechos reservados.</p>
-        <p class="mb-0">Desarrollado por <a href="https://soymr.com" target="_blank" class=" text-sm font-semibold text-primary-300">Soy Mr SAS ♥️</a></p>
+        <p class="mb-0">© {{ date('Y') }} <strong>Linkiu.bio</strong>. Todos los derechos reservados | Desarrollado por <strong>Linkiu Devs ♥️</strong></p>
+        <div class="flex items-center gap-2">
+            <a href="#" target="_blank" class="text-caption font-regular text-black-300 flex items-center gap-2 hover:text-info-300 transition-colors">
+                <span>Acerca de <strong>Linkiu</strong></span>
+                <x-lucide-arrow-up-right class="w-4 h-4" />
+            </a>
+            <a href="#" target="_blank" class="text-caption font-regular text-black-300 flex items-center gap-2 hover:text-info-300 transition-colors">
+                <span>Términos y condiciones</span>
+                <x-lucide-arrow-up-right class="w-4 h-4" />
+            </a>
+            <a href="#" target="_blank" class="text-caption font-regular text-black-300 flex items-center gap-2 hover:text-info-300 transition-colors">
+                <span>Política de privacidad</span>
+                <x-lucide-arrow-up-right class="w-4 h-4" />
+            </a>
+            <a href="#" target="_blank" class="text-caption font-regular text-black-300 flex items-center gap-2 hover:text-info-300 transition-colors">
+                <span>Política de cookies</span>
+                <x-lucide-arrow-up-right class="w-4 h-4" />
+            </a>
+            <a href="#" target="_blank" class="text-caption font-regular text-black-300 flex items-center gap-2 hover:text-info-300 transition-colors">
+                <span>Políticas de envío y devoluciones</span>
+                <x-lucide-arrow-up-right class="w-4 h-4" />
+            </a>
+        </div>
     </div>
 </footer>

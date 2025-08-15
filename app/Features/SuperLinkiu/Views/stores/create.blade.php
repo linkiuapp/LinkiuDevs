@@ -203,23 +203,24 @@
                         <div>
                             <label class="block text-sm font-medium text-black-300 mb-2">
                                 URL de la Tienda (Slug) <span class="text-error-300">*</span>
-                        </label>
+                            </label>
                             <div class="flex items-center gap-2">
                                 <span class="text-sm text-black-300">linkiu.bio/</span>
                                 <input type="text"
                                     name="slug"
+                                    id="slug-input"
                                     value="{{ old('slug') }}"
                                     class="flex-1 px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('slug') border-error-200 @enderror"
                                     placeholder="mi-tienda"
                                     required>
                             </div>
-                            <p class="text-xs text-black-300 mt-1">
+                            <p class="text-xs text-black-300 mt-1" id="slug-help-text">
                                 La URL única de tu tienda. Solo letras, números y guiones.
                             </p>
                             @error('slug')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                            @enderror
+                        </div>
 
                     <div>
                             <label class="block text-sm font-medium text-black-300 mb-2">
@@ -470,4 +471,140 @@
     </div>
 
 
-@endsection 
+@endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const planSelect = document.querySelector('select[name="plan_id"]');
+    const slugInput = document.getElementById('slug-input');
+    const slugHelpText = document.getElementById('slug-help-text');
+    const storeNameInput = document.querySelector('input[name="name"]');
+    
+    // Datos de planes (pasados desde el servidor)
+    const plansData = @json($plans->mapWithKeys(function($plan) {
+        return [$plan->id => [
+            'allow_custom_slug' => $plan->allow_custom_slug,
+            'name' => $plan->name
+        ]];
+    }));
+
+    function generateRandomSlug() {
+        const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        let result = 'tienda-';
+        for (let i = 0; i < 8; i++) {
+            result += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        return result;
+    }
+
+    function generateSlugFromName(name) {
+        if (!name) return generateRandomSlug();
+        
+        return name
+            .toLowerCase()
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Eliminar acentos
+            .replace(/[^a-z0-9\s-]/g, '') // Eliminar caracteres especiales
+            .trim()
+            .replace(/\s+/g, '-') // Espacios a guiones
+            .replace(/-+/g, '-') // Múltiples guiones a uno solo
+            .replace(/^-+|-+$/g, '') // Eliminar guiones al inicio/final
+            .slice(0, 50); // Limitar longitud
+    }
+
+    function sanitizeSlugInput(slug) {
+        return slug
+            .toLowerCase()
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Eliminar acentos
+            .replace(/[^a-z0-9\s-]/g, '') // Eliminar caracteres especiales excepto espacios y guiones
+            .replace(/\s+/g, '-') // Espacios a guiones
+            .replace(/-+/g, '-') // Múltiples guiones a uno solo
+            .replace(/^-+|-+$/g, ''); // Eliminar guiones al inicio/final
+    }
+
+    function updateSlugField() {
+        const selectedPlanId = planSelect.value;
+        
+        if (!selectedPlanId || !plansData[selectedPlanId]) {
+            return;
+        }
+
+        const planData = plansData[selectedPlanId];
+        
+        if (planData.allow_custom_slug) {
+            // Plan permite slug personalizado
+            slugInput.removeAttribute('readonly');
+            slugInput.classList.remove('bg-white-100', 'cursor-not-allowed');
+            slugInput.classList.add('bg-white-50');
+            slugInput.placeholder = 'mi-tienda-personalizada';
+            slugHelpText.innerHTML = '✅ Este plan permite URLs personalizadas. Elige la URL que prefieras.';
+            slugHelpText.className = 'text-xs text-success-300 mt-1';
+            
+            // Si el slug actual parece ser automático, limpiarlo
+            if (slugInput.value.startsWith('tienda-') && slugInput.value.length === 14) {
+                slugInput.value = '';
+            }
+        } else {
+            // Plan NO permite slug personalizado - generar aleatorio
+            slugInput.setAttribute('readonly', 'readonly');
+            slugInput.classList.add('bg-white-100', 'cursor-not-allowed');
+            slugInput.classList.remove('bg-white-50');
+            
+            const randomSlug = generateRandomSlug();
+            slugInput.value = randomSlug;
+            slugInput.placeholder = randomSlug;
+            
+            slugHelpText.innerHTML = `⚠️ Plan "${planData.name}": URL asignada automáticamente. <strong>Actualiza a un plan superior</strong> para elegir tu propia URL.`;
+            slugHelpText.className = 'text-xs text-warning-300 mt-1';
+        }
+    }
+
+    // Auto-generar slug basado en nombre de tienda (solo si plan permite personalización)
+    function updateSlugFromName() {
+        const selectedPlanId = planSelect.value;
+        
+        if (!selectedPlanId || !plansData[selectedPlanId] || !plansData[selectedPlanId].allow_custom_slug) {
+            return;
+        }
+
+        // Solo auto-generar si el campo está vacío o tiene el valor anterior autogenerado
+        if (!slugInput.value || slugInput.value === slugInput.getAttribute('data-prev-generated')) {
+            const newSlug = generateSlugFromName(storeNameInput.value);
+            slugInput.value = newSlug;
+            slugInput.setAttribute('data-prev-generated', newSlug);
+        }
+    }
+
+    // Event listeners
+    planSelect.addEventListener('change', updateSlugField);
+    storeNameInput.addEventListener('input', updateSlugFromName);
+    
+    // Sanitizar slug en tiempo real cuando el usuario escriba (solo para planes personalizados)
+    slugInput.addEventListener('input', function() {
+        const selectedPlanId = planSelect.value;
+        
+        if (selectedPlanId && plansData[selectedPlanId] && plansData[selectedPlanId].allow_custom_slug) {
+            const cursorPosition = this.selectionStart;
+            const originalValue = this.value;
+            const sanitizedValue = sanitizeSlugInput(originalValue);
+            
+            if (originalValue !== sanitizedValue) {
+                this.value = sanitizedValue;
+                // Mantener posición del cursor ajustada
+                const newPosition = Math.min(cursorPosition, sanitizedValue.length);
+                this.setSelectionRange(newPosition, newPosition);
+                
+                // Mostrar feedback visual
+                this.classList.add('border-warning-200');
+                setTimeout(() => {
+                    this.classList.remove('border-warning-200');
+                }, 500);
+            }
+        }
+    });
+    
+    // Inicializar en carga de página
+    updateSlugField();
+});
+</script>
+@endpush 

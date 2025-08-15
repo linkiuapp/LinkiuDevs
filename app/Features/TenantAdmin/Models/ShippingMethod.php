@@ -159,6 +159,10 @@ class ShippingMethod extends Model
      */
     public function getTypeLabel(): string
     {
+        if (!$this->type) {
+            return 'Tipo no especificado';
+        }
+        
         return self::TYPES[$this->type] ?? $this->type;
     }
 
@@ -167,7 +171,14 @@ class ShippingMethod extends Model
      */
     public function getPreparationTimeLabel(): string
     {
-        return self::PREPARATION_TIMES[$this->preparation_time] ?? $this->preparation_time;
+        if (!$this->preparation_time) {
+            return 'No especificado';
+        }
+        
+        $label = self::PREPARATION_TIMES[$this->preparation_time] ?? $this->preparation_time;
+        
+        // Asegurar que siempre devolvemos un string
+        return $label ?? 'Tiempo personalizado';
     }
 
     /**

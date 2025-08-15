@@ -24,6 +24,7 @@ class User extends Authenticatable
         'password',
         'avatar_path',
         'role',
+        'store_id',
         'last_login_at',
     ];
 
@@ -57,7 +58,7 @@ class User extends Authenticatable
     public function getAvatarUrlAttribute(): string
     {
         if ($this->avatar_path) {
-            // SIEMPRE usar storage/ - más simple y compatible
+            // Usar storage local público
             return asset('storage/' . $this->avatar_path);
         }
 
@@ -92,6 +93,14 @@ class User extends Authenticatable
     public function isStoreAdmin(): bool
     {
         return $this->role === 'store_admin';
+    }
+
+    /**
+     * Check if the user is an admin (either super_admin or store_admin)
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin' || $this->role === 'super_admin';
     }
 
     /**

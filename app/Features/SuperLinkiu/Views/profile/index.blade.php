@@ -54,7 +54,7 @@ use Illuminate\Support\Facades\Storage;
                                 <strong>🔍 DEBUG Avatar:</strong><br>
                                 <strong>avatar_path (BD):</strong> {{ $user->avatar_path ?? 'NULL' }}<br>
                                 <strong>avatar_url (accessor):</strong> {{ $user->avatar_url ?? 'NULL' }}<br>
-                                <strong>S3 directo:</strong> {{ $user->avatar_path ? Storage::disk('s3')->url($user->avatar_path) : 'No path' }}<br>
+                                <strong>Storage local:</strong> {{ $user->avatar_path ? Storage::disk('public')->url($user->avatar_path) : 'No path' }}<br>
                                 <strong>Local asset:</strong> {{ $user->avatar_path ? asset('storage/' . $user->avatar_path) : 'No path' }}<br>
                                 <strong>Usado en img src:</strong> <code>{{ $user->avatar_url }}</code>
                             </div>

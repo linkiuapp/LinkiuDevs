@@ -22,12 +22,18 @@ class StoreDesignImageService
         $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
         $path = 'store-design/' . $storeId . '/' . $filename;
         
-        // Guardar en bucket S3
-        Storage::disk('s3')->putFileAs('store-design/' . $storeId, $file, $filename, 'public');
+        // ✅ Crear directorio si no existe
+        $destinationPath = public_path('storage/store-design/' . $storeId);
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
         
-        // Retornar URLs usando bucket S3
+        // ✅ GUARDAR con move() - Método estándar obligatorio
+        $file->move($destinationPath, $filename);
+        
+        // ✅ Retornar URLs usando método estándar
         return [
-            'logo_url' => Storage::disk('s3')->url($path),
+            'logo_url' => asset('storage/' . $path),
             'logo_webp_url' => null // Por ahora no generamos WebP
         ];
     }
@@ -45,12 +51,18 @@ class StoreDesignImageService
         $filename = 'favicon_' . time() . '.' . $file->getClientOriginalExtension();
         $path = 'store-design/' . $storeId . '/' . $filename;
         
-        // Guardar en bucket S3
-        Storage::disk('s3')->putFileAs('store-design/' . $storeId, $file, $filename, 'public');
+        // ✅ Crear directorio si no existe
+        $destinationPath = public_path('storage/store-design/' . $storeId);
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
         
-        // Retornar URL usando bucket S3
+        // ✅ GUARDAR con move() - Método estándar obligatorio
+        $file->move($destinationPath, $filename);
+        
+        // ✅ Retornar URL usando método estándar
         return [
-            'favicon_url' => Storage::disk('s3')->url($path)
+            'favicon_url' => asset('storage/' . $path)
         ];
     }
 
@@ -66,13 +78,15 @@ class StoreDesignImageService
         try {
             $directory = 'store-design/' . $storeId;
 
-            // Obtener todos los archivos que coincidan con el patrón en el bucket S3
-            $files = Storage::disk('s3')->files($directory);
-            
-            foreach ($files as $file) {
-                $filename = basename($file);
-                if (str_starts_with($filename, $prefix . '_')) {
-                    Storage::disk('s3')->delete($file);
+            // ✅ Obtener archivos usando método estándar
+            $directoryPath = public_path('storage/' . $directory);
+            if (is_dir($directoryPath)) {
+                $files = glob($directoryPath . '/' . $prefix . '_*');
+                
+                foreach ($files as $filePath) {
+                    if (file_exists($filePath)) {
+                        unlink($filePath);
+                    }
                 }
             }
         } catch (\Exception $e) {

@@ -302,7 +302,7 @@ use Illuminate\Support\Facades\Storage;
                                             if ($appLogo) {
                                                 try {
                                                     if (config('filesystems.disks.s3.bucket')) {
-                                                        $logoSrc = Storage::disk('s3')->url($appLogo);
+                                                        $logoSrc = Storage::disk('public')->url($appLogo);
                                                     } else {
                                                         $logoSrc = asset('storage/' . $appLogo);
                                                     }
@@ -353,7 +353,7 @@ use Illuminate\Support\Facades\Storage;
                                             if ($appFavicon) {
                                                 try {
                                                     if (config('filesystems.disks.s3.bucket')) {
-                                                        $faviconSrc = Storage::disk('s3')->url($appFavicon);
+                                                        $faviconSrc = Storage::disk('public')->url($appFavicon);
                                                     } else {
                                                         $faviconSrc = asset('storage/' . $appFavicon);
                                                     }

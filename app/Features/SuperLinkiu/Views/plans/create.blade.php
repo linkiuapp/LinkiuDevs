@@ -378,6 +378,17 @@
                                class="w-4 h-4 text-primary-300 border-white-200 rounded focus:ring-primary-200">
                         <span class="ml-2 text-sm text-black-400">Plan destacado</span>
                     </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" 
+                               name="allow_custom_slug" 
+                               value="1"
+                               {{ old('allow_custom_slug') ? 'checked' : '' }}
+                               class="w-4 h-4 text-primary-300 border-white-200 rounded focus:ring-primary-200">
+                        <span class="ml-2 text-sm text-black-400">
+                            Permitir slug personalizado
+                            <span class="block text-xs text-black-300 mt-1">Los usuarios podrán elegir su propia URL (ej: linkiu.bio/mi-tienda)</span>
+                        </span>
+                    </label>
                 </div>
             </div>
 

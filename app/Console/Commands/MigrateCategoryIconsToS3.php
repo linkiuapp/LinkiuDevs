@@ -45,7 +45,7 @@ class MigrateCategoryIconsToS3 extends Command
                 
                 // Subir al bucket S3
                 $s3Path = 'category-icons/' . $newName;
-                Storage::disk('s3')->put($s3Path, $fileContent, 'public');
+                Storage::disk('public')->put($s3Path, $fileContent, 'public');
                 
                 $this->info("Migrated: {$originalName} → {$s3Path}");
                 $migratedCount++;

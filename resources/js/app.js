@@ -74,6 +74,9 @@ try {
     import('./tickets.js')
     console.log('🟢 tickets.js imported');
     
+    import('./store.js')
+    console.log('🟢 store.js imported');
+    
 } catch (error) {
     console.error('❌ Error importing component files:', error);
 }
@@ -99,8 +102,80 @@ document.addEventListener('alpine:init', () => {
             setTimeout(() => { this.showNotification = false; }, 5000);
         },
         
+        openDeleteModal(storeIdentifier, storeName) {
+            console.log('🗑️ MODAL DELETE: Abriendo modal para tienda:', storeName, 'Identifier:', storeIdentifier);
+            this.deleteStoreId = storeIdentifier; // Puede ser ID o slug
+            this.deleteStoreName = storeName;
+            this.showDeleteModal = true;
+        },
+        
+        closeDeleteModal() {
+            console.log('🗑️ MODAL DELETE: Cerrando modal');
+            this.showDeleteModal = false;
+            this.deleteStoreId = null;
+            this.deleteStoreName = '';
+        },
+        
+        confirmDelete() {
+            console.log('🗑️ MODAL DELETE: Confirmando eliminación de tienda ID:', this.deleteStoreId);
+            if (this.deleteStoreId) {
+                // Crear y enviar formulario de eliminación
+                const form = document.createElement('form');
+                form.method = 'POST';
+                
+                // Corregir URL: debe ir a /superlinkiu/stores/{id} no /stores/{id}
+                const baseUrl = window.location.origin;
+                form.action = `${baseUrl}/superlinkiu/stores/${this.deleteStoreId}`;
+                
+                console.log('🗑️ MODAL DELETE: URL generada:', form.action);
+                
+                // Token CSRF
+                const csrfToken = document.querySelector('meta[name="csrf-token"]');
+                console.log('🔐 CSRF TOKEN: Meta tag encontrado:', csrfToken ? 'SÍ' : 'NO');
+                if (csrfToken) {
+                    console.log('🔐 CSRF TOKEN: Valor:', csrfToken.content);
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = '_token';
+                    csrfInput.value = csrfToken.content;
+                    form.appendChild(csrfInput);
+                } else {
+                    console.error('❌ MODAL DELETE: Token CSRF no encontrado en meta tag');
+                    // Intentar obtener de otro lugar
+                    const altToken = document.querySelector('input[name="_token"]');
+                    if (altToken) {
+                        console.log('🔐 CSRF TOKEN: Encontrado en input alternativo');
+                        const csrfInput = document.createElement('input');
+                        csrfInput.type = 'hidden';
+                        csrfInput.name = '_token';
+                        csrfInput.value = altToken.value;
+                        form.appendChild(csrfInput);
+                    } else {
+                        console.error('❌ MODAL DELETE: No se encontró token CSRF en ningún lugar');
+                        alert('Error: Token CSRF no encontrado. Recarga la página e intenta de nuevo.');
+                        return;
+                    }
+                }
+                
+                // Método DELETE
+                const methodInput = document.createElement('input');
+                methodInput.type = 'hidden';
+                methodInput.name = '_method';
+                methodInput.value = 'DELETE';
+                form.appendChild(methodInput);
+                
+                document.body.appendChild(form);
+                form.submit();
+            }
+        },
+        
+        loginAsStore(storeId) {
+            console.log('🔑 LOGIN AS STORE: Función llamada para tienda ID:', storeId);
+            alert('Funcionalidad "Login como Admin de Tienda" aún no implementada.\n\nPROXIMO TODO: Implementar ruta y controlador para esta función.');
+        },
+        
         init() {
-            // Vacío - sin errores
+            console.log('🟢 STORE MANAGEMENT: Componente Alpine inicializado correctamente');
         }
     }));
 });

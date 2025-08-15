@@ -84,7 +84,7 @@
                         <p class="text-sm text-black-300">Sube la imagen del slider (170x100px)</p>
                     </div>
                     
-                    <div class="border-2 border-dashed border-white-200 rounded-lg p-6 text-center" x-data="{ imagePreview: '{{ $slider->image_path ? Storage::disk('s3')->url($slider->image_path) : null }}' }">
+                    <div class="border-2 border-dashed border-white-200 rounded-lg p-6 text-center" x-data="{ imagePreview: '{{ $slider->image_path ? Storage::disk('public')->url($slider->image_path) : null }}' }">
                         <input type="file" name="image" accept="image/*"
                                class="hidden" id="image-upload"
                                @change="

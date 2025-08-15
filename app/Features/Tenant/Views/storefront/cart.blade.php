@@ -81,18 +81,21 @@
             
             <!-- Controles de cantidad -->
             <div class="flex items-center gap-2 flex-shrink-0">
-                <button class="quantity-decrease bg-white-200 hover:bg-white-300 w-8 h-8 rounded-full flex items-center justify-center transition-colors">
+                <button class="quantity-decrease bg-white-200 hover:bg-white-300 w-8 h-8 rounded-full flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                     <x-solar-square-alt-arrow-left-outline class="w-4 h-4 text-black-400" />
+                    <div class="loading-spinner hidden w-4 h-4 border-2 border-black-200 border-t-black-400 rounded-full animate-spin"></div>
                 </button>
                 <span class="item-quantity font-semibold text-black-500 min-w-[2rem] text-center"></span>
-                <button class="quantity-increase bg-white-200 hover:bg-white-300 w-8 h-8 rounded-full flex items-center justify-center transition-colors">
+                <button class="quantity-increase bg-white-200 hover:bg-white-300 w-8 h-8 rounded-full flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                     <x-solar-square-alt-arrow-right-outline class="w-4 h-4 text-black-400" />
+                    <div class="loading-spinner hidden w-4 h-4 border-2 border-black-200 border-t-black-400 rounded-full animate-spin"></div>
                 </button>
             </div>
             
             <!-- Botón eliminar -->
-            <button class="remove-item text-error-300 hover:text-error-200 p-2 transition-colors">
+            <button class="remove-item text-error-300 hover:text-error-200 p-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                 <x-solar-trash-bin-trash-outline class="w-5 h-5" />
+                <div class="loading-spinner hidden w-4 h-4 border-2 border-error-200 border-t-error-300 rounded-full animate-spin"></div>
             </button>
         </div>
     </div>
@@ -168,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (item.product.main_image_url) {
             imageElement.src = item.product.main_image_url;
         } else {
-            imageElement.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMCAyMEg0NFY0NEgyMFYyMFoiIHN0cm9rZT0iIzlDQTNBRiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPHBhdGggZD0iTTI4IDI4TDM2IDM2IiBzdHJva2U9IiM5Q0EzQUYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo=';
+            imageElement.src = '{{ asset("assets/images/placeholder-product.svg") }}';
         }
         itemElement.querySelector('.item-image').alt = item.product.name;
         itemElement.querySelector('.item-name').textContent = item.product.name;
@@ -200,6 +203,12 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
+        // Mostrar loading state
+        const itemElement = document.querySelector(`[data-item-key="${itemKey}"]`);
+        if (itemElement) {
+            showItemLoading(itemElement, 'quantity');
+        }
+
         try {
             const response = await fetch('{{ route("tenant.cart.update", $store->slug) }}', {
                 method: 'PUT',
@@ -216,20 +225,28 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
             if (data.success) {
                 loadCart();
-                // Actualizar carrito flotante
-                if (window.cart) {
-                    window.cart.syncWithServer();
-                }
+                // El carrito flotante se actualiza automáticamente vía cart.js
             } else {
                 showError(data.message || 'Error al actualizar cantidad');
             }
         } catch (error) {
             console.error('Error updating quantity:', error);
             showError('Error al actualizar cantidad');
+        } finally {
+            // Ocultar loading state
+            if (itemElement) {
+                hideItemLoading(itemElement, 'quantity');
+            }
         }
     }
 
     async function removeItem(itemKey) {
+        // Mostrar loading state
+        const itemElement = document.querySelector(`[data-item-key="${itemKey}"]`);
+        if (itemElement) {
+            showItemLoading(itemElement, 'remove');
+        }
+
         try {
             const response = await fetch('{{ route("tenant.cart.remove", $store->slug) }}', {
                 method: 'DELETE',
@@ -243,16 +260,18 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
             if (data.success) {
                 loadCart();
-                // Actualizar carrito flotante
-                if (window.cart) {
-                    window.cart.updateCartDisplay();
-                }
+                // El carrito flotante se actualiza automáticamente vía cart.js
             } else {
                 showError(data.message || 'Error al eliminar producto');
             }
         } catch (error) {
             console.error('Error removing item:', error);
             showError('Error de conexión');
+        } finally {
+            // Ocultar loading state
+            if (itemElement) {
+                hideItemLoading(itemElement, 'remove');
+            }
         }
     }
 
@@ -270,10 +289,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const data = await response.json();
                 if (data.success) {
                     loadCart();
-                    // Actualizar carrito flotante
-                    if (window.cart) {
-                        window.cart.updateCartDisplay();
-                    }
+                    // El carrito flotante se actualiza automáticamente vía cart.js
                 }
             } catch (error) {
                 console.error('Error clearing cart:', error);
@@ -291,18 +307,112 @@ document.addEventListener('DOMContentLoaded', function() {
         }).format(price);
     }
 
-    function showError(message) {
-        // Mostrar notificación de error
-        const notification = document.createElement('div');
-        notification.className = 'fixed top-4 right-4 bg-error-300 text-white-50 px-4 py-2 rounded-lg shadow-lg z-50';
-        notification.textContent = message;
-        document.body.appendChild(notification);
+    // Mostrar loading state en elemento específico
+    function showItemLoading(itemElement, type) {
+        if (type === 'quantity') {
+            const decreaseBtn = itemElement.querySelector('.quantity-decrease');
+            const increaseBtn = itemElement.querySelector('.quantity-increase');
+            
+            if (decreaseBtn && increaseBtn) {
+                // Deshabilitar botones
+                decreaseBtn.disabled = true;
+                increaseBtn.disabled = true;
+                
+                // Ocultar íconos y mostrar spinners
+                decreaseBtn.querySelector('svg').classList.add('hidden');
+                increaseBtn.querySelector('svg').classList.add('hidden');
+                decreaseBtn.querySelector('.loading-spinner').classList.remove('hidden');
+                increaseBtn.querySelector('.loading-spinner').classList.remove('hidden');
+            }
+        } else if (type === 'remove') {
+            const removeBtn = itemElement.querySelector('.remove-item');
+            
+            if (removeBtn) {
+                // Deshabilitar botón
+                removeBtn.disabled = true;
+                
+                // Ocultar ícono y mostrar spinner
+                removeBtn.querySelector('svg').classList.add('hidden');
+                removeBtn.querySelector('.loading-spinner').classList.remove('hidden');
+            }
+        }
+    }
 
+    // Ocultar loading state en elemento específico
+    function hideItemLoading(itemElement, type) {
+        if (type === 'quantity') {
+            const decreaseBtn = itemElement.querySelector('.quantity-decrease');
+            const increaseBtn = itemElement.querySelector('.quantity-increase');
+            
+            if (decreaseBtn && increaseBtn) {
+                // Habilitar botones
+                decreaseBtn.disabled = false;
+                increaseBtn.disabled = false;
+                
+                // Mostrar íconos y ocultar spinners
+                decreaseBtn.querySelector('svg').classList.remove('hidden');
+                increaseBtn.querySelector('svg').classList.remove('hidden');
+                decreaseBtn.querySelector('.loading-spinner').classList.add('hidden');
+                increaseBtn.querySelector('.loading-spinner').classList.add('hidden');
+            }
+        } else if (type === 'remove') {
+            const removeBtn = itemElement.querySelector('.remove-item');
+            
+            if (removeBtn) {
+                // Habilitar botón
+                removeBtn.disabled = false;
+                
+                // Mostrar ícono y ocultar spinner
+                removeBtn.querySelector('svg').classList.remove('hidden');
+                removeBtn.querySelector('.loading-spinner').classList.add('hidden');
+            }
+        }
+    }
+
+    function showError(message) {
+        // Evitar spam de notificaciones
+        const existingNotification = document.querySelector('.cart-page-error');
+        if (existingNotification) {
+            existingNotification.remove();
+        }
+
+        // Mostrar notificación de error mejorada
+        const notification = document.createElement('div');
+        notification.className = 'cart-page-error fixed top-4 right-4 bg-error-300 text-white-50 px-4 py-3 rounded-lg shadow-lg z-50 max-w-sm transform transition-all duration-300 translate-x-full';
+        notification.innerHTML = `
+            <div class="flex items-start gap-2">
+                <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.664-.833-2.464 0L4.268 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                </svg>
+                <div class="flex-1">
+                    <span class="text-sm font-medium">${message}</span>
+                </div>
+                <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-white-50 hover:text-white-200">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Animar entrada
+        setTimeout(() => {
+            notification.classList.remove('translate-x-full');
+        }, 100);
+
+        // Auto-hide después de 4 segundos
         setTimeout(() => {
             if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
             }
-        }, 3000);
+        }, 4000);
     }
 });
 </script>

@@ -2,7 +2,7 @@
 @section('title', 'Pedido #' . $order->order_number)
 
 @section('content')
-<div class="max-w-6xl mx-auto">
+<div class="max-w-6xl mx-auto" x-data="orderDetail" x-init="init()">
     <!-- Header -->
     <div class="mb-6">
         <div class="flex items-center gap-3 mb-4">
@@ -191,15 +191,18 @@
                     <div>
                         <label class="block text-xs text-black-400 mb-1">Método</label>
                         <div class="flex items-center text-sm">
-                            @if($order->payment_method === 'transferencia')
+                            @if($order->payment_method === 'transferencia' || $order->payment_method === 'bank_transfer')
                                 <x-solar-card-outline class="w-4 h-4 text-info-200 mr-2" />
                                 <span class="text-black-500">Transferencia Bancaria</span>
                             @elseif($order->payment_method === 'contra_entrega')
                                 <x-solar-wallet-money-outline class="w-4 h-4 text-warning-300 mr-2" />
                                 <span class="text-black-500">Pago Contra Entrega</span>
-                            @else
+                            @elseif($order->payment_method === 'efectivo' || $order->payment_method === 'cash')
                                 <x-solar-dollar-outline class="w-4 h-4 text-success-300 mr-2" />
                                 <span class="text-black-500">Efectivo</span>
+                            @else
+                                <x-solar-card-2-outline class="w-4 h-4 text-primary-300 mr-2" />
+                                <span class="text-black-500">{{ ucfirst(str_replace('_', ' ', $order->payment_method)) }}</span>
                             @endif
                         </div>
                     </div>
@@ -220,7 +223,7 @@
             </div>
 
             <!-- Cambiar Estado -->
-            <div class="bg-white-50 rounded-lg p-6" x-data="orderDetail" x-init="init()">
+            <div class="bg-white-50 rounded-lg p-6">
                 <h3 class="text-sm font-medium text-black-400 mb-4">Cambiar Estado</h3>
                 <div class="space-y-4">
                     <div>
@@ -240,7 +243,7 @@
                                   class="w-full px-3 py-2 border border-white-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200"
                                   placeholder="Observaciones sobre el cambio de estado..."></textarea>
                     </div>
-                    <button type="button" @click="updateStatus()" :disabled="!newStatus" 
+                    <button type="button" @click="showStatusModal = true" :disabled="!newStatus" 
                             class="w-full btn-primary text-sm">
                         <x-solar-refresh-outline class="w-4 h-4 mr-2" />
                         Actualizar Estado
@@ -291,12 +294,92 @@
                     </a>
                     
                     @if($order->status === 'pending')
-                        <button onclick="deleteOrder()" 
+                        <button @click="showDeleteModal = true" 
                                 class="w-full flex items-center justify-center px-4 py-2 bg-error-200 text-white-50 rounded-lg hover:bg-error-300 transition-colors text-sm">
                             <x-solar-trash-bin-trash-outline class="w-4 h-4 mr-2" />
                             Eliminar Pedido
                         </button>
                     @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Modal de confirmación de cambio de estado --}}
+    <div x-show="showStatusModal" 
+         x-transition.opacity
+         x-cloak
+         @click.away="showStatusModal = false"
+         @keydown.escape.window="showStatusModal = false"
+         class="fixed inset-0 z-50 overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div class="fixed inset-0 bg-black-400 opacity-75" @click="showStatusModal = false"></div>
+            <div class="relative bg-white-50 rounded-lg max-w-md w-full p-6" @click.stop>
+                <!-- Botón X para cerrar -->
+                <button @click="showStatusModal = false" 
+                        class="absolute top-4 right-4 text-black-300 hover:text-black-500">
+                    <x-solar-close-circle-outline class="w-5 h-5" />
+                </button>
+                
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-primary-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <x-solar-refresh-outline class="w-6 h-6 text-primary-300" />
+                    </div>
+                    <h3 class="text-lg font-semibold text-black-500 mb-2">Confirmar cambio de estado</h3>
+                    <p class="text-black-300 mb-2">
+                        ¿Cambiar el estado del pedido <strong>#{{ $order->order_number }}</strong> a:
+                    </p>
+                    <p class="text-sm text-primary-300 font-medium mb-6" x-text="getStatusLabel(newStatus)"></p>
+                    <div class="flex gap-3 justify-center">
+                        <button @click="showStatusModal = false" 
+                                class="btn-secondary">
+                            Cancelar
+                        </button>
+                        <button @click="confirmStatusUpdate()" 
+                                class="btn-primary">
+                            Confirmar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Modal de confirmación de eliminación --}}
+    <div x-show="showDeleteModal" 
+         x-transition.opacity
+         x-cloak
+         @click.away="showDeleteModal = false"
+         @keydown.escape.window="showDeleteModal = false"
+         class="fixed inset-0 z-50 overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div class="fixed inset-0 bg-black-400 opacity-75" @click="showDeleteModal = false"></div>
+            <div class="relative bg-white-50 rounded-lg max-w-md w-full p-6" @click.stop>
+                <!-- Botón X para cerrar -->
+                <button @click="showDeleteModal = false" 
+                        class="absolute top-4 right-4 text-black-300 hover:text-black-500">
+                    <x-solar-close-circle-outline class="w-5 h-5" />
+                </button>
+                
+                <div class="text-center">
+                    <div class="w-12 h-12 bg-error-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <x-solar-danger-triangle-outline class="w-6 h-6 text-error-200" />
+                    </div>
+                    <h3 class="text-lg font-semibold text-black-500 mb-2">Confirmar eliminación</h3>
+                    <p class="text-black-300 mb-6">
+                        ¿Estás seguro de que deseas eliminar el pedido <strong>#{{ $order->order_number }}</strong>? 
+                        Esta acción no se puede deshacer.
+                    </p>
+                    <div class="flex gap-3 justify-center">
+                        <button @click="showDeleteModal = false" 
+                                class="btn-secondary">
+                            Cancelar
+                        </button>
+                        <button @click="confirmDelete()" 
+                                class="btn-primary bg-error-200 hover:bg-error-100">
+                            Eliminar
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -309,15 +392,29 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('orderDetail', () => ({
         newStatus: '',
         statusNotes: '',
+        showStatusModal: false,
+        showDeleteModal: false,
 
         init() {
-            console.log('Order Detail initialized');
+            // Forzar cierre de modales al inicio
+            this.showDeleteModal = false;
+            this.showStatusModal = false;
         },
 
-        updateStatus() {
-            if (!this.newStatus) return;
+        getStatusLabel(status) {
+            const labels = {
+                'pending': 'Pendiente',
+                'confirmed': 'Confirmado', 
+                'preparing': 'Preparando',
+                'shipped': 'Enviado',
+                'delivered': 'Entregado',
+                'cancelled': 'Cancelado'
+            };
+            return labels[status] || status;
+        },
 
-            if (!confirm('¿Cambiar el estado de este pedido?')) return;
+        confirmStatusUpdate() {
+            if (!this.newStatus) return;
 
             fetch(`{{ route('tenant.admin.orders.update-status', [$store->slug, $order->id]) }}`, {
                 method: 'POST',
@@ -343,6 +440,28 @@ document.addEventListener('alpine:init', () => {
                 console.error('Error:', error);
                 alert('Error de conexión');
             });
+        },
+
+        confirmDelete() {
+            fetch(`{{ route('tenant.admin.orders.destroy', [$store->slug, $order->id]) }}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = `{{ route('tenant.admin.orders.index', $store->slug) }}`;
+                } else {
+                    alert(data.message || 'Error al eliminar pedido');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error de conexión');
+            });
         }
     }));
 });
@@ -350,31 +469,7 @@ document.addEventListener('alpine:init', () => {
 function printOrder() {
     window.print();
 }
-
-function deleteOrder() {
-    if (!confirm('¿Estás seguro de eliminar este pedido? Esta acción no se puede deshacer.')) return;
-
-    fetch(`{{ route('tenant.admin.orders.destroy', [$store->slug, $order->id]) }}`, {
-        method: 'DELETE',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            'Accept': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            window.location.href = `{{ route('tenant.admin.orders.index', $store->slug) }}`;
-        } else {
-            alert(data.message || 'Error al eliminar pedido');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error de conexión');
-    });
-}
 </script>
 @endpush
 @endsection
-</x-tenant-admin-layout> 
+</x-tenant-admin-layout>

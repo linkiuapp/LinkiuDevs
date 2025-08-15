@@ -641,7 +641,18 @@ document.addEventListener('alpine:init', () => {
          * Verifica editabilidad inicial del slug
          */
         checkInitialSlugEditability() {
-            this.canEditSlug = false; // Por defecto no editable en edición
+            // Verificar si el plan actual permite slug personalizado
+            const select = document.querySelector('select[name="plan_id"]');
+            if (!select) return;
+            
+            const currentOption = Array.from(select.options)
+                .find(option => option.value === this.originalPlanId);
+            
+            if (currentOption) {
+                const allowCustomSlug = currentOption.getAttribute('data-allow-custom') === 'true';
+                this.canEditSlug = allowCustomSlug;
+                console.log('🔧 EDIT STORE: Editabilidad inicial del slug:', allowCustomSlug);
+            }
         },
 
         /**
@@ -657,17 +668,29 @@ document.addEventListener('alpine:init', () => {
             if (!selectedOption) return;
             
             const allowCustomSlug = selectedOption.getAttribute('data-allow-custom') === 'true';
+            const wasUpgrading = this.isUpgrading;
             
-            // Permitir edición si upgrade desde Explorer a plan con slug personalizado
-            if (this.originalPlanSlug === 'explorer' && 
-                allowCustomSlug && 
-                this.selectedPlan !== this.originalPlanId) {
-                this.canEditSlug = true;
-                this.isUpgrading = true;
-            } else {
-                this.canEditSlug = false;
-                this.isUpgrading = false;
-                this.slug = this.originalSlug; // Restaurar slug original
+            console.log('🔧 EDIT STORE: Plan cambiado', {
+                plan_id: this.selectedPlan,
+                allow_custom_slug: allowCustomSlug,
+                original_plan: this.originalPlanId
+            });
+            
+            // Determinar si se puede editar slug
+            this.canEditSlug = allowCustomSlug;
+            
+            // Determinar si es upgrade (cambio hacia plan que permite personalización)
+            this.isUpgrading = (this.selectedPlan !== this.originalPlanId && allowCustomSlug);
+            
+            // Si se cambió de plan que no permite personalización a uno que sí permite,
+            // mantener el slug actual para que el usuario pueda editarlo
+            if (!wasUpgrading && this.isUpgrading) {
+                console.log('🔧 EDIT STORE: Upgrade detectado - slug editable');
+                // Mantener el slug actual, no restaurar
+            } else if (!allowCustomSlug) {
+                console.log('🔧 EDIT STORE: Plan no permite personalización - slug readonly');
+                // Si el plan no permite personalización, restaurar slug original
+                this.slug = this.originalSlug;
             }
         }
     }));

@@ -33,7 +33,7 @@
                             <x-solar-pen-outline class="w-4 h-4" />
                             Editar
                         </a>
-                        <button onclick="duplicateProduct({{ $product->id }})" 
+                        <button onclick="duplicateProductShow({{ $product->id }})" 
                                 class="btn-secondary flex items-center gap-2">
                             <x-solar-copy-outline class="w-4 h-4" />
                             Duplicar
@@ -142,7 +142,7 @@
                             Editar Producto
                         </a>
                         
-                        <button onclick="duplicateProduct({{ $product->id }})" 
+                        <button onclick="duplicateProductShow({{ $product->id }})" 
                                 class="w-full btn-secondary flex items-center justify-center gap-2">
                             <x-solar-copy-outline class="w-4 h-4" />
                             Duplicar
@@ -216,7 +216,7 @@
 
     @push('scripts')
     <script>
-        function duplicateProduct(productId) {
+        function duplicateProductShow(productId) {
             if (confirm('¿Quieres duplicar este producto?')) {
                 const form = document.createElement('form');
                 form.method = 'POST';

@@ -60,12 +60,12 @@ class MigrateImagesToCloud extends Command
             foreach ($files as $file) {
                 try {
                     // Verificar si el archivo ya existe en la nube
-                    if (!\Storage::disk('s3')->exists($file)) {
+                    if (!\Storage::disk('public')->exists($file)) {
                         // Leer el contenido del archivo local
                         $contents = \Storage::disk('public')->get($file);
                         
                         // Guardar el archivo en la nube
-                        \Storage::disk('s3')->put($file, $contents, 'public');
+                        \Storage::disk('public')->put($file, $contents, 'public');
                         $migratedFiles++;
                     }
                 } catch (\Exception $e) {

@@ -103,7 +103,13 @@ class StoreController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        \Log::info('🏪 STORE CREATE: Iniciando creación de tienda', [
+            'request_data' => $request->all(),
+            'user_id' => auth()->id()
+        ]);
+        
+        try {
+            $validated = $request->validate([
             // Información del propietario
             'owner_name' => 'required|string|max:255',
             'admin_email' => 'required|email|unique:users,email',
@@ -117,7 +123,7 @@ class StoreController extends Controller
             // Información de la tienda
             'name' => 'required|string|max:255',
             'plan_id' => 'required|exists:plans,id',
-            'slug' => 'required|string|max:255|unique:stores,slug',
+            'slug' => 'required|string|max:255|unique:stores,slug|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
             'email' => 'nullable|email|unique:stores,email',
             'document_type' => 'nullable|string|in:nit,cedula',
             'document_number' => 'nullable|string|max:20',
@@ -134,7 +140,22 @@ class StoreController extends Controller
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',
             'meta_keywords' => 'nullable|string|max:255',
+        ], [
+            'slug.regex' => 'La URL debe contener solo letras minúsculas, números y guiones. No se permiten espacios ni caracteres especiales.',
+            'slug.unique' => 'Esta URL ya está en uso por otra tienda.',
+            'slug.required' => 'La URL de la tienda es obligatoria.',
         ]);
+
+        // 🔍 VALIDACIÓN DE SLUG SEGÚN PLAN
+        $plan = Plan::findOrFail($validated['plan_id']);
+        
+        // Si el plan NO permite slug personalizado, generar uno automático
+        if (!$plan->allow_custom_slug) {
+            $validated['slug'] = $this->generateRandomSlug();
+        } else {
+            // Si permite personalización, sanitizar el slug por si acaso
+            $validated['slug'] = $this->sanitizeSlug($validated['slug']);
+        }
 
         // Verificar que el slug no sea reservado
         if (RouteServiceProvider::isReservedSlug($validated['slug'])) {
@@ -233,10 +254,87 @@ class StoreController extends Controller
             'admin_url' => url('/' . $store->slug . '/admin'),
         ];
 
+        \Log::info('🏪 STORE CREATE: Tienda creada exitosamente', [
+            'store_id' => $store->id,
+            'store_name' => $store->name,
+            'store_slug' => $store->slug
+        ]);
+
         return redirect()
             ->route('superlinkiu.stores.index')
             ->with('success', 'Tienda creada exitosamente.')
             ->with('admin_credentials', $adminCredentials);
+            
+        } catch (\Exception $e) {
+            \Log::error('🏪 STORE CREATE: Error crítico', [
+                'error_message' => $e->getMessage(),
+                'error_file' => $e->getFile(),
+                'error_line' => $e->getLine(),
+                'request_data' => $request->all(),
+                'stack_trace' => $e->getTraceAsString()
+            ]);
+            
+            return back()
+                ->withErrors(['general' => 'Error interno: ' . $e->getMessage()])
+                ->withInput();
+        }
+    }
+
+    /**
+     * Generar un slug aleatorio para planes que no permiten personalización
+     */
+    private function generateRandomSlug(): string
+    {
+        do {
+            $characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            $slug = 'tienda-';
+            
+            for ($i = 0; $i < 8; $i++) {
+                $slug .= $characters[rand(0, strlen($characters) - 1)];
+            }
+            
+            // Verificar que no exista en la BD
+            $exists = Store::where('slug', $slug)->exists();
+            
+        } while ($exists || RouteServiceProvider::isReservedSlug($slug));
+        
+        return $slug;
+    }
+
+    /**
+     * Sanitizar slug personalizado para asegurar formato correcto
+     */
+    private function sanitizeSlug(string $slug): string
+    {
+        // Convertir a minúsculas
+        $slug = strtolower($slug);
+        
+        // Eliminar acentos usando alternativa que no requiere iconv
+        $accents = [
+            'á' => 'a', 'à' => 'a', 'ä' => 'a', 'â' => 'a', 'ā' => 'a', 'ã' => 'a',
+            'é' => 'e', 'è' => 'e', 'ë' => 'e', 'ê' => 'e', 'ē' => 'e',
+            'í' => 'i', 'ì' => 'i', 'ï' => 'i', 'î' => 'i', 'ī' => 'i',
+            'ó' => 'o', 'ò' => 'o', 'ö' => 'o', 'ô' => 'o', 'ō' => 'o', 'õ' => 'o',
+            'ú' => 'u', 'ù' => 'u', 'ü' => 'u', 'û' => 'u', 'ū' => 'u',
+            'ñ' => 'n', 'ç' => 'c'
+        ];
+        $slug = strtr($slug, $accents);
+        
+        // Reemplazar espacios y caracteres no permitidos con guiones
+        $slug = preg_replace('/[^a-z0-9\-]/', '-', $slug);
+        
+        // Eliminar múltiples guiones consecutivos
+        $slug = preg_replace('/-+/', '-', $slug);
+        
+        // Eliminar guiones al inicio y final
+        $slug = trim($slug, '-');
+        
+        // Si queda vacío, generar uno básico
+        if (empty($slug)) {
+            $slug = 'tienda-' . rand(1000, 9999);
+        }
+        
+        return $slug;
     }
 
     public function show(Store $store)
@@ -275,17 +373,40 @@ class StoreController extends Controller
             'meta_keywords' => 'nullable|string|max:255',
         ];
 
-        // Verificar si puede cambiar el slug (upgrade de Explorer a plan superior)
+        // Verificar si puede cambiar el slug
         $oldPlan = $store->plan;
         $newPlan = Plan::find($request->plan_id);
         
-        if ($oldPlan && $newPlan && 
-            strtolower($oldPlan->name) === 'explorer' && 
-            $newPlan->allow_custom_slug && 
+        \Log::info('🔧 STORE UPDATE: Verificando slug editability', [
+            'store_id' => $store->id,
+            'old_plan_id' => $oldPlan?->id,
+            'old_plan_allow_custom' => $oldPlan?->allow_custom_slug,
+            'new_plan_id' => $newPlan?->id,
+            'new_plan_allow_custom' => $newPlan?->allow_custom_slug,
+            'slug_changed' => $request->slug !== $store->slug,
+            'request_slug' => $request->slug,
+            'current_slug' => $store->slug
+        ]);
+        
+        // Si el plan actual permite personalización O si es un upgrade a plan que permite personalización
+        if ($newPlan && ($newPlan->allow_custom_slug || 
+            ($oldPlan && !$oldPlan->allow_custom_slug && $newPlan->allow_custom_slug)) &&
             $request->has('slug') && 
             $request->slug !== $store->slug) {
             
-            $rules['slug'] = 'required|string|max:255|unique:stores,slug,' . $store->id;
+            $rules['slug'] = [
+                'required',
+                'string',
+                'max:255',
+                'unique:stores,slug,' . $store->id,
+                'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/'
+            ];
+            
+            \Log::info('🔧 STORE UPDATE: Slug validation enabled');
+        } else if ($request->has('slug') && $request->slug !== $store->slug) {
+            // Si intentan cambiar slug sin permiso, usar el slug original
+            $request->merge(['slug' => $store->slug]);
+            \Log::info('🔧 STORE UPDATE: Slug change blocked - plan does not allow custom slugs');
         }
 
         $validated = $request->validate($rules);
@@ -295,9 +416,22 @@ class StoreController extends Controller
             $validated['verified'] = $request->boolean('verified');
         }
 
-        // Verificar slug reservado si se está cambiando
-        if (isset($validated['slug']) && RouteServiceProvider::isReservedSlug($validated['slug'])) {
-            return back()->withErrors(['slug' => 'Este slug está reservado por el sistema.'])->withInput();
+        // Procesar slug si se está cambiando
+        if (isset($validated['slug'])) {
+            // Sanitizar slug personalizado
+            if ($newPlan && $newPlan->allow_custom_slug) {
+                $validated['slug'] = $this->sanitizeSlug($validated['slug']);
+            }
+            
+            // Verificar slug reservado
+            if (RouteServiceProvider::isReservedSlug($validated['slug'])) {
+                return back()->withErrors(['slug' => 'Este slug está reservado por el sistema.'])->withInput();
+            }
+            
+            \Log::info('🔧 STORE UPDATE: Slug will be updated', [
+                'old_slug' => $store->slug,
+                'new_slug' => $validated['slug']
+            ]);
         }
 
         $store->update($validated);
@@ -309,7 +443,20 @@ class StoreController extends Controller
 
     public function destroy(Store $store)
     {
+        \Log::info('🗑️ STORE DESTROY: Método llamado', [
+            'store_id' => $store->id,
+            'store_name' => $store->name,
+            'request_method' => request()->method(),
+            'request_url' => request()->fullUrl(),
+            'user_id' => auth()->id(),
+            'user_role' => auth()->user()?->role
+        ]);
+        
         $store->delete();
+        
+        \Log::info('🗑️ STORE DESTROY: Tienda eliminada exitosamente', [
+            'store_id' => $store->id
+        ]);
 
         if (request()->expectsJson()) {
             return response()->json([

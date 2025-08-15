@@ -31,6 +31,7 @@ Route::prefix('carrito')->name('cart.')->group(function () {
     Route::put('/actualizar', [OrderController::class, 'updateCartItem'])->name('update');
     Route::delete('/eliminar', [OrderController::class, 'removeFromCart'])->name('remove');
     Route::delete('/limpiar', [OrderController::class, 'clearCart'])->name('clear');
+    Route::post('/aplicar-cupon', [OrderController::class, 'applyCoupon'])->name('apply-coupon');
 });
 
 // Checkout Routes
@@ -38,11 +39,19 @@ Route::prefix('checkout')->name('checkout.')->group(function () {
     Route::get('/', [OrderController::class, 'create'])->name('create');
     Route::post('/', [OrderController::class, 'store'])->name('store');
     Route::post('/shipping-cost', [OrderController::class, 'getShippingCost'])->name('shipping-cost');
+    Route::get('/shipping-methods', [OrderController::class, 'getShippingMethods'])->name('shipping-methods');
+    Route::get('/payment-methods', [OrderController::class, 'getPaymentMethods'])->name('payment-methods');
+    Route::get('/exito', [OrderController::class, 'success'])->name('success');
+    Route::get('/error', [OrderController::class, 'error'])->name('error');
+    
+    // API Routes para estado de pedidos
+    Route::prefix('api')->group(function () {
+        Route::get('/order-status', [OrderController::class, 'getOrderStatusSimple'])->name('api.order.status.simple');
+    });
 });
 
 // Order Routes
 Route::prefix('pedido')->name('order.')->group(function () {
-    Route::get('/exito/{orderNumber}', [OrderController::class, 'success'])->name('success');
     Route::get('/seguimiento', [OrderController::class, 'tracking'])->name('tracking');
 });
 

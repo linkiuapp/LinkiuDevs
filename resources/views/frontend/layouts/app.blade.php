@@ -129,8 +129,10 @@
         }
     </script>
     
-    <!-- Carrito flotante -->
-    <x-cart-float :store="$store" />
+    <!-- Carrito flotante (no en checkout) -->
+    @unless(request()->routeIs('tenant.checkout.create'))
+        <x-cart-float :store="$store" />
+    @endunless
     
     @stack('scripts')
     

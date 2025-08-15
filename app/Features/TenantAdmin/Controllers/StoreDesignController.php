@@ -239,20 +239,27 @@ public function update(Request $request)
 
             // Generar nombre de archivo
             $filename = $type . '_' . time() . '.' . $extension;
-            $path = 'store-design/' . $storeId . '/' . $filename;
+            $relativePath = 'store-design/' . $storeId . '/' . $filename;
             
-            // Guardar en bucket S3
-            Storage::disk('s3')->put($path, $imageData, 'public');
+            // ✅ Crear directorio si no existe
+            $destinationPath = public_path('storage/store-design/' . $storeId);
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+            
+            // ✅ GUARDAR usando método estándar
+            $fullPath = public_path('storage/' . $relativePath);
+            file_put_contents($fullPath, $imageData);
 
-            // Retornar URLs según el tipo usando bucket S3
+            // ✅ Retornar URLs usando método estándar
             if ($type === 'logo') {
                 return [
-                    'logo_url' => Storage::disk('s3')->url($path),
+                    'logo_url' => asset('storage/' . $relativePath),
                     'logo_webp_url' => null
                 ];
             } else {
                 return [
-                    'favicon_url' => Storage::disk('s3')->url($path)
+                    'favicon_url' => asset('storage/' . $relativePath)
                 ];
             }
         } catch (\Exception $e) {
@@ -395,6 +402,13 @@ public function update(Request $request)
                 'header_description_color' => 'nullable|string|regex:/^#[A-Fa-f0-9]{6}$/',
                 'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'favicon' => 'nullable|image|mimes:jpeg,png,jpg,gif,ico|max:1024',
+                'store_name' => 'nullable|string|max:40|regex:/^[a-zA-Z0-9\s\-áéíóúñÁÉÍÓÚÑüÜ\.]*$/',
+                'store_description' => 'nullable|string|max:50|regex:/^[a-zA-Z0-9\s\-áéíóúñÁÉÍÓÚÑüÜ\.,¿?!:]*$/',
+            ], [
+                'store_name.regex' => 'El nombre solo puede contener letras, números, espacios, guiones, acentos y puntos.',
+                'store_name.max' => 'El nombre no puede superar los 40 caracteres.',
+                'store_description.regex' => 'La descripción contiene caracteres no permitidos.',
+                'store_description.max' => 'La descripción no puede superar los 50 caracteres.',
             ]);
 
             DB::beginTransaction();
@@ -447,12 +461,38 @@ public function update(Request $request)
 
                 // Actualizar diseño
                 $design->update($updateData);
+
+                // Actualizar datos de la tienda si se proporcionan
+                $storeUpdateData = [];
+                if ($request->filled('store_name')) {
+                    // Evitar re-guardar mismo nombre para no invalidar cache
+                    if ($store->name !== $validated['store_name']) {
+                        $storeUpdateData['name'] = $validated['store_name'];
+                    }
+                }
+                if ($request->has('store_description')) {
+                    // Permitimos vacío para limpiar descripción
+                    $storeUpdateData['description'] = $validated['store_description'] ?? null;
+                }
+
+                if (!empty($storeUpdateData)) {
+                    $store->update($storeUpdateData);
+                    Log::info('Store info updated', [
+                        'store_id' => $store->id,
+                        'updated_fields' => array_keys($storeUpdateData),
+                        'new_values' => $storeUpdateData
+                    ]);
+                }
                 
                 DB::commit();
 
                 return response()->json([
                     'message' => 'Diseño publicado correctamente',
-                    'design' => $design->fresh()
+                    'design' => $design->fresh(),
+                    'store' => [
+                        'name' => $store->fresh()->name,
+                        'description' => $store->fresh()->description
+                    ]
                 ]);
 
             } catch (\Exception $e) {

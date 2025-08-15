@@ -209,14 +209,14 @@ class CouponController extends Controller
     /**
      * Display the specified coupon.
      */
-    public function show(Request $request, Coupon $coupon)
+    public function show(Request $request, $store, $coupon)
     {
         $store = view()->shared('currentStore');
         
-        // Ensure coupon belongs to current store
-        if ($coupon->store_id !== $store->id) {
-            abort(404);
-        }
+        // Buscar el cupón manualmente para mayor seguridad
+        $coupon = Coupon::where('id', $coupon)
+            ->where('store_id', $store->id)
+            ->firstOrFail();
         
         // Load relationships
         $coupon->load(['categories', 'products', 'usageLogs.order']);
@@ -226,8 +226,8 @@ class CouponController extends Controller
             'total_uses' => $coupon->current_uses,
             'remaining_uses' => $coupon->max_uses ? max(0, $coupon->max_uses - $coupon->current_uses) : '∞',
             'usage_percentage' => $coupon->max_uses ? round(($coupon->current_uses / $coupon->max_uses) * 100, 1) : 0,
-            'total_discount_given' => $coupon->usageLogs()->sum('discount_amount'),
-            'average_discount' => $coupon->current_uses > 0 ? $coupon->usageLogs()->avg('discount_amount') : 0,
+            'total_discount_given' => $coupon->usageLogs()->sum('discount_applied'),
+            'average_discount' => $coupon->current_uses > 0 ? $coupon->usageLogs()->avg('discount_applied') : 0,
             'orders_count' => $coupon->usageLogs()->distinct('order_id')->count(),
         ];
         
@@ -244,14 +244,14 @@ class CouponController extends Controller
     /**
      * Show the form for editing the specified coupon.
      */
-    public function edit(Request $request, Coupon $coupon)
+    public function edit(Request $request, $store, $coupon)
     {
         $store = view()->shared('currentStore');
         
-        // Ensure coupon belongs to current store
-        if ($coupon->store_id !== $store->id) {
-            abort(404);
-        }
+        // Buscar el cupón manualmente para mayor seguridad
+        $coupon = Coupon::where('id', $coupon)
+            ->where('store_id', $store->id)
+            ->firstOrFail();
         
         // Load relationships
         $coupon->load(['categories', 'products']);
@@ -266,14 +266,14 @@ class CouponController extends Controller
     /**
      * Update the specified coupon in storage.
      */
-    public function update(Request $request, Coupon $coupon)
+    public function update(Request $request, $store, $coupon)
     {
         $store = view()->shared('currentStore');
         
-        // Ensure coupon belongs to current store
-        if ($coupon->store_id !== $store->id) {
-            abort(404);
-        }
+        // Buscar el cupón manualmente para mayor seguridad
+        $coupon = Coupon::where('id', $coupon)
+            ->where('store_id', $store->id)
+            ->firstOrFail();
         
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -406,14 +406,14 @@ class CouponController extends Controller
     /**
      * Duplicate the specified coupon.
      */
-    public function duplicate(Request $request, Coupon $coupon)
+    public function duplicate(Request $request, $store, $coupon)
     {
         $store = view()->shared('currentStore');
         
-        // Ensure coupon belongs to current store
-        if ($coupon->store_id !== $store->id) {
-            abort(404);
-        }
+        // Buscar el cupón manualmente para mayor seguridad
+        $coupon = Coupon::where('id', $coupon)
+            ->where('store_id', $store->id)
+            ->firstOrFail();
         
         // Check if store can create more coupons
         $maxCoupons = $store->plan->max_active_coupons ?? 5;

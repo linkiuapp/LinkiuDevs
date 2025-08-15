@@ -25,7 +25,7 @@
                 
                 // Finalmente, buscar el favicon más reciente en S3
                 if (config('filesystems.disks.s3.bucket')) {
-                    $files = Storage::disk('s3')->files('system');
+                    $files = Storage::disk('public')->files('system');
                     $faviconFiles = array_filter($files, function($file) {
                         return str_contains(basename($file), 'favicon_');
                     });
@@ -55,7 +55,7 @@
         if ($appFavicon) {
             try {
                 if (config('filesystems.disks.s3.bucket')) {
-                    $faviconSrc = \Storage::disk('s3')->url($appFavicon);
+                    $faviconSrc = \Storage::disk('public')->url($appFavicon);
                 } else {
                     $faviconSrc = asset('storage/' . $appFavicon);
                 }
@@ -80,7 +80,7 @@
     <!-- Additional Head Content -->
     @stack('styles')
 </head>
-<body class="bg-white-100 font-body">
+<body class="bg-secondary-50 font-body">
     <!-- Sidebar del Admin de Tienda -->
     @include('shared::admin.tenant-sidebar', ['store' => $store])
     

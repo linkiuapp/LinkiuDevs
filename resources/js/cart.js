@@ -1,27 +1,28 @@
-// Sistema de carrito con LocalStorage
+// Sistema de carrito unificado con Session (servidor)
 class Cart {
     constructor() {
-        this.items = this.loadCart();
+        this.items = []; // Solo para cache local temporal
         this.initializeEvents();
         this.syncWithServer();
     }
 
-    // Cargar carrito desde LocalStorage
+    // Ya no usamos LocalStorage, todo se maneja en servidor
+    // Mantenemos cache local solo para UI responsiva
     loadCart() {
-        const saved = localStorage.getItem('linkiu_cart');
-        return saved ? JSON.parse(saved) : [];
+        // Cache local solo temporal, la fuente de verdad es el servidor
+        return this.items;
     }
 
-    // Guardar carrito en LocalStorage
+    // Sincronizar con servidor en lugar de guardar localmente
     saveCart() {
-        localStorage.setItem('linkiu_cart', JSON.stringify(this.items));
+        // No guardamos en LocalStorage, confiamos en el servidor
         this.updateCartDisplay();
     }
 
     // Agregar producto al carrito
     async addProduct(product) {
         try {
-            // Enviar al servidor primero
+            // Enviar al servidor (única fuente de verdad)
             const response = await fetch(this.getCartAddUrl(), {
                 method: 'POST',
                 headers: {
@@ -30,75 +31,125 @@ class Cart {
                 },
                 body: JSON.stringify({
                     product_id: product.id,
-                    quantity: 1
+                    quantity: 1,
+                    variants: product.variants || null
                 })
             });
 
             const data = await response.json();
             
             if (data.success) {
-                // Actualizar localStorage con datos del servidor
-                const existingItem = this.items.find(item => item.id === product.id);
-                
-                if (existingItem) {
-                    existingItem.quantity += 1;
-                } else {
-                    this.items.push({
-                        id: product.id,
-                        name: product.name,
-                        price: product.price,
-                        image: product.image,
-                        quantity: 1
-                    });
-                }
-                
-                this.saveCart();
+                // Solo mostrar feedback y actualizar UI con datos del servidor
                 this.showAddedFeedback(product.name);
-                
-                // Actualizar display con datos del servidor
                 this.updateCartDisplayFromServer(data);
             } else {
                 this.showError(data.message || 'Error al agregar producto');
             }
         } catch (error) {
             console.error('Error adding to cart:', error);
-            this.showError('Error de conexión');
+            const isNetworkError = !navigator.onLine || error.name === 'NetworkError' || error.message.includes('fetch');
+            this.showError('Error al agregar producto', isNetworkError);
         }
     }
 
-    // Remover producto del carrito
-    removeProduct(productId) {
-        this.items = this.items.filter(item => item.id !== productId);
-        this.saveCart();
-    }
+    // Remover producto del carrito (ahora vía servidor)
+    async removeProduct(itemKey) {
+        try {
+            const response = await fetch(this.getCartRemoveUrl(), {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({ item_key: itemKey })
+            });
 
-    // Actualizar cantidad de producto
-    updateQuantity(productId, quantity) {
-        const item = this.items.find(item => item.id === productId);
-        if (item) {
-            if (quantity <= 0) {
-                this.removeProduct(productId);
+            const data = await response.json();
+            if (data.success) {
+                this.updateCartDisplayFromServer(data);
             } else {
-                item.quantity = quantity;
-                this.saveCart();
+                this.showError(data.message || 'Error al eliminar producto');
             }
+        } catch (error) {
+            console.error('Error removing from cart:', error);
+            const isNetworkError = !navigator.onLine || error.name === 'NetworkError' || error.message.includes('fetch');
+            this.showError('Error al eliminar producto', isNetworkError);
         }
     }
 
-    // Limpiar carrito
-    clearCart() {
-        this.items = [];
-        this.saveCart();
+    // Actualizar cantidad de producto (ahora vía servidor)
+    async updateQuantity(itemKey, quantity) {
+        if (quantity <= 0) {
+            this.removeProduct(itemKey);
+            return;
+        }
+
+        try {
+            const response = await fetch(this.getCartUpdateUrl(), {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({ 
+                    item_key: itemKey,
+                    quantity: quantity
+                })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                this.updateCartDisplayFromServer(data);
+            } else {
+                this.showError(data.message || 'Error al actualizar cantidad');
+            }
+        } catch (error) {
+            console.error('Error updating quantity:', error);
+            const isNetworkError = !navigator.onLine || error.name === 'NetworkError' || error.message.includes('fetch');
+            this.showError('Error al actualizar cantidad', isNetworkError);
+        }
     }
 
-    // Obtener total de productos
+    // Limpiar carrito (ahora vía servidor)
+    async clearCart() {
+        try {
+            const response = await fetch(this.getCartClearUrl(), {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                this.updateCartDisplayFromServer(data);
+            } else {
+                this.showError(data.message || 'Error al vaciar carrito');
+            }
+        } catch (error) {
+            console.error('Error clearing cart:', error);
+            const isNetworkError = !navigator.onLine || error.name === 'NetworkError' || error.message.includes('fetch');
+            this.showError('Error al vaciar carrito', isNetworkError);
+        }
+    }
+
+    // Obtener total de productos (ahora desde el servidor)
     getTotalItems() {
-        return this.items.reduce((total, item) => total + item.quantity, 0);
+        // Ya no usamos this.items, confiamos en los datos del servidor
+        // Este método se mantiene para compatibilidad pero debería usarse updateCartDisplayFromServer
+        const badge = document.querySelector('.cart-badge');
+        return badge ? parseInt(badge.textContent) || 0 : 0;
     }
 
-    // Obtener total del precio
+    // Obtener total del precio (ahora desde el servidor)
     getTotalPrice() {
-        return this.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+        // Ya no calculamos localmente, confiamos en los datos del servidor
+        const priceText = document.querySelector('.cart-total-price');
+        if (priceText) {
+            const price = priceText.textContent.replace(/[^\d]/g, '');
+            return parseInt(price) || 0;
+        }
+        return 0;
     }
 
     // Actualizar display del carrito flotante
@@ -149,11 +200,19 @@ class Cart {
             if (data.success) {
                 this.updateCartDisplayFromServer(data);
             } else {
-                this.updateCartDisplay(); // Fallback a localStorage
+                // Si no hay carrito en servidor, mostrar carrito vacío
+                this.updateCartDisplayFromServer({
+                    cart_count: 0,
+                    formatted_cart_total: '$0'
+                });
             }
         } catch (error) {
             console.error('Error syncing with server:', error);
-            this.updateCartDisplay(); // Fallback a localStorage
+            // En caso de error, mostrar carrito vacío en lugar de usar localStorage
+            this.updateCartDisplayFromServer({
+                cart_count: 0,
+                formatted_cart_total: '$0'
+            });
         }
     }
 
@@ -167,6 +226,24 @@ class Cart {
     getCartGetUrl() {
         const storeSlug = window.location.pathname.split('/')[1];
         return `/${storeSlug}/carrito/contenido`;
+    }
+
+    // Obtener URL para actualizar carrito
+    getCartUpdateUrl() {
+        const storeSlug = window.location.pathname.split('/')[1];
+        return `/${storeSlug}/carrito/actualizar`;
+    }
+
+    // Obtener URL para eliminar del carrito
+    getCartRemoveUrl() {
+        const storeSlug = window.location.pathname.split('/')[1];
+        return `/${storeSlug}/carrito/eliminar`;
+    }
+
+    // Obtener URL para limpiar carrito
+    getCartClearUrl() {
+        const storeSlug = window.location.pathname.split('/')[1];
+        return `/${storeSlug}/carrito/limpiar`;
     }
 
     // Actualizar display con datos del servidor
@@ -230,16 +307,46 @@ class Cart {
         }, 2000);
     }
 
-    // Mostrar error
-    showError(message) {
+    // Mostrar error con manejo robusto
+    showError(message, isNetworkError = false) {
+        // Evitar spam de notificaciones
+        const existingNotification = document.querySelector('.cart-error-notification');
+        if (existingNotification) {
+            existingNotification.remove();
+        }
+
+        // Determinar el tipo de error y mensaje apropiado
+        let finalMessage = message;
+        let iconPath = "M6 18L18 6M6 6l12 12"; // X icon (default)
+        
+        if (isNetworkError) {
+            finalMessage = "Sin conexión. Verifica tu internet e intenta nuevamente.";
+            iconPath = "M18.364 5.636l-12.728 12.728"; // Network icon
+        } else if (message.includes('404')) {
+            finalMessage = "Producto no encontrado. La página será actualizada.";
+            setTimeout(() => window.location.reload(), 2000);
+        } else if (message.includes('500')) {
+            finalMessage = "Error del servidor. Intenta nuevamente en unos momentos.";
+        } else if (message.includes('no disponible')) {
+            finalMessage = "Producto agotado o no disponible.";
+        }
+
         const notification = document.createElement('div');
-        notification.className = 'fixed top-4 right-4 bg-error-300 text-white-50 px-4 py-2 rounded-lg shadow-lg z-50 transform transition-all duration-300 translate-x-full';
+        notification.className = 'cart-error-notification fixed top-4 right-4 bg-error-300 text-white-50 px-4 py-2 rounded-lg shadow-lg z-50 transform transition-all duration-300 translate-x-full max-w-sm';
         notification.innerHTML = `
-            <div class="flex items-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            <div class="flex items-start gap-2">
+                <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${iconPath}"></path>
                 </svg>
-                <span class="text-sm font-medium">${message}</span>
+                <div class="flex-1">
+                    <span class="text-sm font-medium block">${finalMessage}</span>
+                    ${isNetworkError ? '<span class="text-xs opacity-75 block mt-1">Se reintentará automáticamente</span>' : ''}
+                </div>
+                <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-white-50 hover:text-white-200">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
             </div>
         `;
         
@@ -249,14 +356,18 @@ class Cart {
             notification.classList.remove('translate-x-full');
         }, 100);
         
+        // Auto-hide después de más tiempo si es un error de red
+        const hideTime = isNetworkError ? 5000 : 4000;
         setTimeout(() => {
-            notification.classList.add('translate-x-full');
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.parentNode.removeChild(notification);
-                }
-            }, 300);
-        }, 3000);
+            if (notification.parentNode) {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }
+        }, hideTime);
     }
 
     // Inicializar eventos
