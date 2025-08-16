@@ -450,15 +450,15 @@ class Order extends Model
     public function getStatusColorClassAttribute(): string
     {
         return match ($this->status) {
-            self::STATUS_PENDING => 'bg-warning-300 text-black-500',
-            self::STATUS_CONFIRMED => 'bg-info-400 text-white-50',
-            self::STATUS_PREPARING => 'bg-secondary-300 text-white-50',
-            self::STATUS_READY_FOR_PICKUP => 'bg-primary-300 text-white-50',
-            self::STATUS_SHIPPED => 'bg-primary-400 text-white-50',
-            self::STATUS_OUT_FOR_DELIVERY => 'bg-accent-300 text-white-50',
-            self::STATUS_DELIVERED => 'bg-success-400 text-white-50',
-            self::STATUS_CANCELLED => 'bg-error-400 text-white-50',
-            default => 'bg-black-50 text-black-500',
+            self::STATUS_PENDING => 'bg-warning-300 text-black-300',
+            self::STATUS_CONFIRMED => 'bg-info-300 text-accent-300',
+            self::STATUS_PREPARING => 'bg-secondary-300 text-accent-300',
+            self::STATUS_READY_FOR_PICKUP => 'bg-primary-300 text-accent-300',
+            self::STATUS_SHIPPED => 'bg-primary-300 text-accent-300',
+            self::STATUS_OUT_FOR_DELIVERY => 'bg-accent-300 text-accent-300',
+            self::STATUS_DELIVERED => 'bg-success-300 text-accent-300',
+            self::STATUS_CANCELLED => 'bg-error-300 text-accent-300',
+            default => 'bg-black-50 text-black-300',
         };
     }
 

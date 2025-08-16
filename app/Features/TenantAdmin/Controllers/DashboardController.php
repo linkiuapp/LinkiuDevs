@@ -40,7 +40,17 @@ class DashboardController extends Controller
             'store_verified' => $store->verified,
             'admin_name' => $user->name,
             'admin_email' => $user->email,
+            'total' => Order::byStore($store->id)->count(),
+            'pending' => Order::byStore($store->id)->byStatus('pending')->count(),
+            'confirmed' => Order::byStore($store->id)->byStatus('confirmed')->count(),
+            'preparing' => Order::byStore($store->id)->byStatus('preparing')->count(),
+            'shipped' => Order::byStore($store->id)->byStatus('shipped')->count(),
+            'delivered' => Order::byStore($store->id)->byStatus('delivered')->count(),
+            'cancelled' => Order::byStore($store->id)->byStatus('cancelled')->count(),
+            'total_revenue' => Order::byStore($store->id)->whereIn('status', ['delivered'])->sum('total'),
+            'avg_order_value' => Order::byStore($store->id)->whereIn('status', ['delivered'])->avg('total'),
         ];
+
 
         return view('tenant-admin::dashboard', compact('store', 'stats', 'recentOrders'));
     }

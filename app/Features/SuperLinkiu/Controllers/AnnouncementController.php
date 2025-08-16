@@ -280,10 +280,10 @@ class AnnouncementController extends Controller
      */
     private function handleBannerUpload($file): string
     {
-        // Validar dimensiones (1570x300px)
+        // Validar dimensiones (628x200px)
         $imageInfo = getimagesize($file->getPathname());
-        if ($imageInfo[0] !== 1570 || $imageInfo[1] !== 300) {
-            throw new \Exception('La imagen del banner debe ser exactamente 1570x300 píxeles.');
+        if ($imageInfo[0] !== 628 || $imageInfo[1] !== 200) {
+            throw new \Exception('La imagen del banner debe ser exactamente 628x200 píxeles.');
         }
 
         // Generar nombre único

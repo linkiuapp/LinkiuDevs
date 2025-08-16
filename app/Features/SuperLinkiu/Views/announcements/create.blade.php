@@ -128,7 +128,7 @@
                         <div x-show="formData.showAsBanner" x-transition class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-black-300 mb-2">
-                                    Imagen del Banner (320x100px)
+                                    Imagen del Banner (516x200px)
                                 </label>
                                 <input type="file" 
                                        name="banner_image" 
@@ -139,7 +139,7 @@
                                     <p class="text-error-300 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                                 <p class="text-xs text-black-200 mt-1">
-                                    Formatos: JPG, PNG, WebP. Tamaño exacto: 1570x300 píxeles. Máximo 2MB.
+                                    Formatos: JPG, PNG, WebP. Tamaño exacto: 628x200 píxeles. Máximo 2MB.
                                 </p>
                                 
                                 <div x-show="imagePreview" class="mt-3">

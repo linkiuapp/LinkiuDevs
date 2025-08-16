@@ -345,35 +345,28 @@ use Illuminate\Support\Facades\Storage;
         @endphp
 
         <div class="rounded-xl p-4 {{ $bannerClasses }}">
-            <div class="flex items-start gap-3">
+            <div class="flex-2 flex items-center justify-between gap-2">
                 <div class="flex-1">
                     <p class="text-small text-medium">Has consumido de tu plan</p>
                     <div class="w-full {{ $progressBgTrack }} rounded-full h-2 mt-2">
                         <div class="{{ $progressFill }} h-2 rounded-full transition-all duration-500" style="width: {{ number_format($usagePercent, 0) }}%"></div>
                     </div>
-
-                    <div class="flex-1 flex items-center justify-between">
                     <p class="mt-3 text-caption font-medium leading-none">
                         Tu plan activo es el <br>
                         <span class="text-body-large font-bold">{{ 'Plan ' . ucfirst($planName) }}</span>
                     </p>
-                    <div class="shrink-0">
-                    @if($planName === 'explorer')
-                        <img src="{{ asset('assets/images/img_plan_explorer.png') }}" alt="Plan Explorer" class="w-12 h-12">
-                    @elseif($planName === 'master')
-                        <img src="{{ asset('assets/images/img_plan_master.png') }}" alt="Plan Master" class="w-12 h-12">
-                    @else
-                        <img src="{{ asset('assets/images/img_plan_legend.png') }}" alt="Plan Legend" class="w-12 h-12">
-                    @endif
-                    </div>
                 </div>
+
+                <div class="flex-shrink-0">
+                    @if($planName === 'explorer')
+                        <img src="{{ asset('assets/images/img_plan_explorer.png') }}" alt="Plan Explorer" class="w-20 h-20">
+                    @elseif($planName === 'master')
+                        <img src="{{ asset('assets/images/img_plan_master.png') }}" alt="Plan Master" class="w-20 h-20">
+                    @else
+                        <img src="{{ asset('assets/images/img_plan_legend.png') }}" alt="Plan Legend" class="w-20 h-20">
+                    @endif
                 </div>
             </div>
-
-            <!-- <a href="{{ route('tenant.admin.billing.index', ['store' => $store->slug]) }}" class="mt-4 inline-flex items-center justify-center w-full btn-primary py-3 rounded-lg">
-                Mejorar Plan
-                <x-lucide-arrow-up-right class="w-4 h-4 ml-2" />
-            </a> -->
         </div>
     </div>
 </aside>
