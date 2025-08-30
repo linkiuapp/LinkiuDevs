@@ -5,15 +5,17 @@
     <!-- Header -->
     <div class="space-y-3">
         <!-- Breadcrumbs -->
-        <nav class="flex text-sm text-black-300">
-            <a href="{{ route('tenant.home', $store->slug) }}" class="hover:text-primary-300 transition-colors">Inicio</a>
+        <nav class="flex text-small font-regular text-info-300">
+            <a href="{{ route('tenant.home', $store->slug) }}" class="hover:text-info-200 transition-colors">Inicio</a>
             <span class="mx-2">/</span>
-            <span class="text-black-400 font-medium">Promociones</span>
+            <span class="text-secondary-300 font-medium">Promociones</span>
         </nav>
         
         <!-- Title -->
-        <h1 class="text-lg font-bold text-black-400">🎉 Promociones Activas</h1>
-        <p class="text-black-200">Aprovecha estas ofertas especiales</p>
+        <div class="space-y-2">
+            <h7 class="text-h7 font-bold text-black-300">🎉 Promociones Activas</h7>
+            <p class="text-body-small font-regular text-black-200">Aprovecha estas ofertas especiales</p>
+        </div>
     </div>
 
     @if($coupons->count() > 0)
@@ -178,17 +180,17 @@
         <!-- Estado vacío -->
         <div class="text-center py-12">
             <div class="w-20 h-20 bg-secondary-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                <x-solar-ticket-outline class="w-10 h-10 text-secondary-200" />
+                <x-lucide-ticket class="w-10 h-10 text-secondary-200" />
             </div>
-            <h3 class="text-lg font-semibold text-black-400 mb-2">No hay promociones activas</h3>
-            <p class="text-black-300 text-sm mb-6">
+            <h3 class="text-h7 font-bold text-black-300 mb-2">No hay promociones activas</h3>
+            <p class="text-body-small font-regular text-black-200 mb-6">
                 Por el momento no tenemos promociones disponibles, pero mantente atento porque pronto habrán nuevas ofertas.
             </p>
             
             <!-- Botón para continuar comprando -->
             <a href="{{ route('tenant.home', $store->slug) }}" 
                class="inline-flex items-center gap-2 bg-primary-300 hover:bg-primary-200 text-white-50 px-6 py-3 rounded-lg font-medium transition-colors">
-                <x-solar-shop-outline class="w-5 h-5" />
+                <x-lucide-shopping-cart class="w-5 h-5" />
                 Continuar comprando
             </a>
         </div>
