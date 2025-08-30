@@ -13,7 +13,7 @@ NC='\033[0m' # No Color
 
 # Configuración VPS
 VPS_HOST="162.240.163.188"
-VPS_USER="root"
+VPS_USER="wwlink"
 VPS_PORT="22022"
 VPS_PATH="/home/wwlink/linkiubio_app"
 
