@@ -14,6 +14,9 @@ Este archivo confirma que el sistema de deploy automático está funcionando cor
 ## 🔧 SSH Key actualizada:
 **Formato PEM configurado correctamente**
 
+## 🔑 Autenticación actualizada:
+**Cambiado a password authentication - Debería funcionar ahora**
+
 ## 🔄 Próximo deploy:
 Cada `git push` a la rama `main` desplegará automáticamente al VPS.
 
