@@ -1,33 +1,19 @@
-name: 🚀 Deploy LinkiuBio to VPS
+name: Deploy LinkiuBio to VPS
 
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
-    inputs:
-      force_deploy:
-        description: 'Force deploy even if no changes'
-        required: false
-        default: 'false'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     
     steps:
-    - name: 📥 Checkout code
+    - name: Checkout code
       uses: actions/checkout@v4
-      
-    - name: 🔧 Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.2'
-        extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, dom, filter, gd, json, zip, curl
         
-    - name: 📦 Install Composer dependencies
-      run: composer install --no-dev --optimize-autoloader --no-interaction
-        
-    - name: 📁 Sync files to server
+    - name: Sync files to server
       uses: appleboy/scp-action@v0.1.7
       with:
         host: ${{ secrets.VPS_HOST }}
@@ -36,10 +22,9 @@ jobs:
         port: ${{ secrets.VPS_PORT }}
         source: "."
         target: "/home/wwlink/linkiubio_app/"
-        rm: false
         overwrite: true
         
-    - name: 🚀 Deploy and optimize on server
+    - name: Deploy on server
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.VPS_HOST }}
@@ -48,29 +33,10 @@ jobs:
         port: ${{ secrets.VPS_PORT }}
         script: |
           cd /home/wwlink/linkiubio_app/
-          
-          echo "🔧 Installing/updating dependencies..."
           composer install --no-dev --optimize-autoloader --no-interaction
-          
-          echo "🧹 Clearing caches..."
           php artisan config:clear
           php artisan cache:clear
-          php artisan route:clear
-          php artisan view:clear
-          
-          echo "⚡ Optimizing for production..."
           php artisan config:cache
           php artisan route:cache
           php artisan view:cache
-          
-          echo "🗄️ Running migrations..."
-          php artisan migrate --force
-          
-          echo "🔄 Restarting services..."
-          php artisan queue:restart
-          
-          echo "🌐 Reloading web server..."
-          sudo systemctl reload nginx || echo "Nginx reload failed, but continuing..."
-          
-          echo "✅ Deploy completed successfully!"
-          echo "🌍 Site available at: https://linkiu.bio"
+          echo "Deploy completed successfully!"
