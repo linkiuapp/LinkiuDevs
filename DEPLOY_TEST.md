@@ -11,6 +11,9 @@ Este archivo confirma que el sistema de deploy automático está funcionando cor
 ## 📅 Fecha de configuración:
 **30 de agosto de 2025**
 
+## 🔧 SSH Key actualizada:
+**Formato PEM configurado correctamente**
+
 ## 🔄 Próximo deploy:
 Cada `git push` a la rama `main` desplegará automáticamente al VPS.
 
