@@ -124,6 +124,9 @@ class TicketController extends Controller
             $ticket->markAsInProgress($ticket->assigned_to);
         }
 
+        // Send ticket creation notification email
+        $this->sendTicketCreatedNotification($ticket);
+
         return redirect()
             ->route('superlinkiu.tickets.show', $ticket)
             ->with('success', 'Ticket creado exitosamente.');
@@ -219,6 +222,11 @@ class TicketController extends Controller
                     $ticket->update(['status' => 'open']);
                     break;
             }
+        }
+
+        // Send ticket response notification email if response is public
+        if ($isPublic) {
+            $this->sendTicketResponseNotification($ticket, $response);
         }
 
         return redirect()
@@ -345,5 +353,82 @@ class TicketController extends Controller
         ];
 
         return response()->json($stats);
+    }
+
+    /**
+     * Send ticket created notification email
+     */
+    private function sendTicketCreatedNotification(Ticket $ticket): void
+    {
+        try {
+            // Get store admin email
+            $storeAdminEmail = $ticket->store->admin_email ?? $ticket->store->email;
+            
+            if ($storeAdminEmail) {
+                \App\Services\EmailService::sendWithTemplate(
+                    'ticket_created',
+                    [$storeAdminEmail],
+                    [
+                        'ticket_id' => $ticket->ticket_number,
+                        'ticket_subject' => $ticket->title,
+                        'customer_name' => $ticket->store->name,
+                        'status' => $ticket->status_label
+                    ]
+                );
+            }
+
+            // Also notify support team
+            $supportEmail = \App\Services\EmailService::getContextEmail('support');
+            if ($supportEmail && $supportEmail !== $storeAdminEmail) {
+                \App\Services\EmailService::sendWithTemplate(
+                    'ticket_created',
+                    [$supportEmail],
+                    [
+                        'ticket_id' => $ticket->ticket_number,
+                        'ticket_subject' => $ticket->title,
+                        'customer_name' => $ticket->store->name,
+                        'status' => $ticket->status_label
+                    ]
+                );
+            }
+
+        } catch (\Exception $e) {
+            \Log::error('Error sending ticket created notification', [
+                'ticket_id' => $ticket->id,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * Send ticket response notification email
+     */
+    private function sendTicketResponseNotification(Ticket $ticket, TicketResponse $response): void
+    {
+        try {
+            // Get store admin email
+            $storeAdminEmail = $ticket->store->admin_email ?? $ticket->store->email;
+            
+            if ($storeAdminEmail) {
+                \App\Services\EmailService::sendWithTemplate(
+                    'ticket_response',
+                    [$storeAdminEmail],
+                    [
+                        'ticket_id' => $ticket->ticket_number,
+                        'ticket_subject' => $ticket->title,
+                        'customer_name' => $ticket->store->name,
+                        'response' => $response->message,
+                        'status' => $ticket->status_label
+                    ]
+                );
+            }
+
+        } catch (\Exception $e) {
+            \Log::error('Error sending ticket response notification', [
+                'ticket_id' => $ticket->id,
+                'response_id' => $response->id,
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 } 

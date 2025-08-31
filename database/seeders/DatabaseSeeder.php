@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
             SuperAdminSeeder::class,
             PlansSeeder::class,
             StoresSeeder::class,
+            EmailSettingSeeder::class,
+            EmailTemplateSeeder::class,
         ]);
     }
 }

@@ -27,6 +27,6 @@ class SuperLinkiuServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/Views', 'superlinkiu');
         
         // Registrar namespace para componentes de SuperLinkiu
-        Blade::componentNamespace('App\\Features\\SuperLinkiu\\Views\\Components', 'superlinkiu');
+        Blade::anonymousComponentNamespace('superlinkiu::components', 'superlinkiu');
     }
 } 

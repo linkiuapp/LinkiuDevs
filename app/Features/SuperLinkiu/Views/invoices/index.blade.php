@@ -169,8 +169,13 @@
                                 <div class="text-sm text-black-300">{{ $invoice->issue_date->format('d/m/Y') }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-black-500">{{ $invoice->store->name }}</div>
-                                <div class="text-sm text-black-300">{{ $invoice->store->email }}</div>
+                                @if($invoice->store)
+                                    <div class="text-sm text-black-500">{{ $invoice->store->name }}</div>
+                                    <div class="text-sm text-black-300">{{ $invoice->store->email }}</div>
+                                @else
+                                    <div class="text-sm text-gray-500">Sin tienda asignada</div>
+                                    <div class="text-sm text-gray-300">-</div>
+                                @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm text-black-500">{{ $invoice->plan->name }}</div>

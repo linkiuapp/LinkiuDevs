@@ -160,6 +160,9 @@ class InvoiceController extends Controller
             ]);
         }
 
+        // Send invoice created notification email
+        $this->sendInvoiceCreatedNotification($invoice);
+
         return redirect()
             ->route('superlinkiu.invoices.index')
             ->with('success', 'Factura creada exitosamente: ' . $invoice->invoice_number);
@@ -259,7 +262,9 @@ class InvoiceController extends Controller
                 'paid_date' => 'nullable|date',
             ]);
 
-            $paidDate = $validated['paid_date'] ? Carbon::parse($validated['paid_date']) : now();
+            $paidDate = isset($validated['paid_date']) && $validated['paid_date'] 
+                ? Carbon::parse($validated['paid_date']) 
+                : now();
             
             // Marcar factura como pagada
             $result = $invoice->markAsPaid($paidDate);
@@ -328,6 +333,9 @@ class InvoiceController extends Controller
 
             // Recargar la factura para obtener los datos actualizados
             $invoice->refresh();
+
+            // Send invoice paid notification email
+            $this->sendInvoicePaidNotification($invoice);
 
             return response()->json([
                 'success' => true,
@@ -436,6 +444,9 @@ class InvoiceController extends Controller
             ]);
         }
 
+        // Send invoice created notification email
+        $this->sendInvoiceCreatedNotification($invoice);
+
         return redirect()
             ->route('superlinkiu.invoices.show', $invoice)
             ->with('success', 'Factura generada exitosamente: ' . $invoice->invoice_number);
@@ -478,5 +489,97 @@ class InvoiceController extends Controller
         ];
 
         return response()->json($stats);
+    }
+
+    /**
+     * Send invoice created notification email
+     */
+    private function sendInvoiceCreatedNotification(Invoice $invoice): void
+    {
+        try {
+            // Get store admin email
+            $storeAdminEmail = $invoice->store->admin_email ?? $invoice->store->email;
+            
+            if ($storeAdminEmail) {
+                \App\Services\EmailService::sendWithTemplate(
+                    'invoice_created',
+                    [$storeAdminEmail],
+                    [
+                        'invoice_number' => $invoice->invoice_number,
+                        'amount' => number_format($invoice->amount, 2),
+                        'due_date' => $invoice->due_date->format('d/m/Y'),
+                        'store_name' => $invoice->store->name,
+                        'plan_name' => $invoice->plan->name ?? 'Plan Personalizado'
+                    ]
+                );
+            }
+
+            // Also notify billing team
+            $billingEmail = \App\Services\EmailService::getContextEmail('billing');
+            if ($billingEmail && $billingEmail !== $storeAdminEmail) {
+                \App\Services\EmailService::sendWithTemplate(
+                    'invoice_created',
+                    [$billingEmail],
+                    [
+                        'invoice_number' => $invoice->invoice_number,
+                        'amount' => number_format($invoice->amount, 2),
+                        'due_date' => $invoice->due_date->format('d/m/Y'),
+                        'store_name' => $invoice->store->name,
+                        'plan_name' => $invoice->plan->name ?? 'Plan Personalizado'
+                    ]
+                );
+            }
+
+        } catch (\Exception $e) {
+            \Log::error('Error sending invoice created notification', [
+                'invoice_id' => $invoice->id,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * Send invoice paid notification email
+     */
+    private function sendInvoicePaidNotification(Invoice $invoice): void
+    {
+        try {
+            // Get store admin email
+            $storeAdminEmail = $invoice->store->admin_email ?? $invoice->store->email;
+            
+            if ($storeAdminEmail) {
+                \App\Services\EmailService::sendWithTemplate(
+                    'invoice_paid',
+                    [$storeAdminEmail],
+                    [
+                        'invoice_number' => $invoice->invoice_number,
+                        'amount' => number_format($invoice->amount, 2),
+                        'store_name' => $invoice->store->name,
+                        'plan_name' => $invoice->plan->name ?? 'Plan Personalizado'
+                    ]
+                );
+            }
+
+            // Also notify billing team
+            $billingEmail = \App\Services\EmailService::getContextEmail('billing');
+            if ($billingEmail && $billingEmail !== $storeAdminEmail) {
+                \App\Services\EmailService::sendWithTemplate(
+                    'invoice_paid',
+                    [$billingEmail],
+                    [
+                        'invoice_number' => $invoice->invoice_number,
+                        'amount' => number_format($invoice->amount, 2),
+                        'store_name' => $invoice->store->name,
+                        'plan_name' => $invoice->plan->name ?? 'Plan Personalizado'
+                    ]
+                );
+            }
+
+        } catch (\Exception $e) {
+            \Log::error('Error sending invoice paid notification', [
+                'invoice_id' => $invoice->id,
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 } 

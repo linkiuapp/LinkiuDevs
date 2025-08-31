@@ -180,17 +180,21 @@ class SendSubscriptionNotifications extends Command
     private function sendRenewalReminderEmail(User $user, Subscription $subscription, int $days): void
     {
         $data = [
-            'user' => $user,
-            'store' => $subscription->store,
-            'subscription' => $subscription,
+            'user_name' => $user->name,
+            'store_name' => $subscription->store->name,
             'days' => $days,
             'amount' => $subscription->next_billing_amount,
-            'plan' => $subscription->plan,
+            'plan_name' => $subscription->plan->name,
             'billing_url' => route('tenant.admin.billing.index', $subscription->store->slug)
         ];
 
         try {
-            // Por ahora simular el envío de email - se puede integrar con Mail::send()
+            // Use EmailService to send renewal reminder
+            \App\Services\EmailService::sendWithTemplate(
+                'subscription_renewal_reminder',
+                [$user->email],
+                $data
+            );
             $this->logNotification('renewal_reminder', $user->email, $data);
         } catch (\Exception $e) {
             $this->error("Failed to send renewal reminder: " . $e->getMessage());
@@ -203,14 +207,19 @@ class SendSubscriptionNotifications extends Command
     private function sendExpirationNoticeEmail(User $user, Subscription $subscription): void
     {
         $data = [
-            'user' => $user,
-            'store' => $subscription->store,
-            'subscription' => $subscription,
-            'plan' => $subscription->plan,
+            'user_name' => $user->name,
+            'store_name' => $subscription->store->name,
+            'plan_name' => $subscription->plan->name,
             'billing_url' => route('tenant.admin.billing.index', $subscription->store->slug)
         ];
 
         try {
+            // Use EmailService to send expiration notice
+            \App\Services\EmailService::sendWithTemplate(
+                'subscription_expiration_notice',
+                [$user->email],
+                $data
+            );
             $this->logNotification('expiration_notice', $user->email, $data);
         } catch (\Exception $e) {
             $this->error("Failed to send expiration notice: " . $e->getMessage());
@@ -223,15 +232,20 @@ class SendSubscriptionNotifications extends Command
     private function sendGracePeriodEndingEmail(User $user, Subscription $subscription, int $daysLeft): void
     {
         $data = [
-            'user' => $user,
-            'store' => $subscription->store,
-            'subscription' => $subscription,
+            'user_name' => $user->name,
+            'store_name' => $subscription->store->name,
             'days_left' => $daysLeft,
-            'plan' => $subscription->plan,
+            'plan_name' => $subscription->plan->name,
             'billing_url' => route('tenant.admin.billing.index', $subscription->store->slug)
         ];
 
         try {
+            // Use EmailService to send grace period ending notice
+            \App\Services\EmailService::sendWithTemplate(
+                'subscription_grace_period_ending',
+                [$user->email],
+                $data
+            );
             $this->logNotification('grace_period_ending', $user->email, $data);
         } catch (\Exception $e) {
             $this->error("Failed to send grace period ending notice: " . $e->getMessage());
@@ -243,20 +257,68 @@ class SendSubscriptionNotifications extends Command
      */
     private function logNotification(string $type, string $email, array $data): void
     {
-        // Por ahora solo logear - se puede integrar con sistema de emails real
-        \Log::info("Subscription notification sent", [
-            'type' => $type,
-            'email' => $email,
-            'store_id' => $data['store']->id ?? null,
-            'store_name' => $data['store']->name ?? null,
-            'sent_at' => now()
-        ]);
+        // Send email using the new template system
+        try {
+            $templateKey = match($type) {
+                'renewal_reminder' => 'subscription_renewal_reminder',
+                'expiration_notice' => 'subscription_expiration_notice',
+                'grace_period_ending' => 'subscription_grace_period_ending',
+                default => null
+            };
 
-        // TODO: Implementar envío real de emails cuando se configure el sistema de correo
-        // Mail::send('emails.subscription.' . $type, $data, function($message) use ($email, $data) {
-        //     $message->to($email, $data['user']->name)
-        //             ->subject($this->getEmailSubject($type, $data));
-        // });
+            if ($templateKey) {
+                $templateData = $this->prepareTemplateData($type, $data);
+                
+                \App\Services\EmailService::sendWithTemplate(
+                    $templateKey,
+                    [$email],
+                    $templateData
+                );
+
+                \Log::info("Subscription notification sent via template", [
+                    'type' => $type,
+                    'template_key' => $templateKey,
+                    'email' => $email,
+                    'store_id' => $data['store']->id ?? null,
+                    'store_name' => $data['store']->name ?? null,
+                    'sent_at' => now()
+                ]);
+            } else {
+                \Log::warning("No template found for subscription notification type: {$type}");
+            }
+
+        } catch (\Exception $e) {
+            \Log::error("Error sending subscription notification", [
+                'type' => $type,
+                'email' => $email,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * Prepare template data for email sending
+     */
+    private function prepareTemplateData(string $type, array $data): array
+    {
+        $baseData = [
+            'user_name' => $data['user']->name ?? 'Usuario',
+            'store_name' => $data['store']->name ?? 'Tu tienda',
+            'plan_name' => $data['subscription']->plan->name ?? 'Plan actual',
+            'billing_url' => config('app.url') . '/billing' // Adjust as needed
+        ];
+
+        return match($type) {
+            'renewal_reminder' => array_merge($baseData, [
+                'days' => $data['days_until_expiry'] ?? 7,
+                'amount' => number_format($data['subscription']->next_billing_amount ?? 0, 2)
+            ]),
+            'expiration_notice' => $baseData,
+            'grace_period_ending' => array_merge($baseData, [
+                'days_left' => $data['grace_days_left'] ?? 3
+            ]),
+            default => $baseData
+        };
     }
 
     /**

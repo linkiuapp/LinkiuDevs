@@ -167,6 +167,22 @@ Route::prefix('superlinkiu')->name('superlinkiu.')->middleware('web')->group(fun
             Route::post('/test', [EmailConfigurationController::class, 'testConnection'])->name('test');
             Route::post('/restore-templates', [EmailConfigurationController::class, 'restoreDefaultTemplates'])->name('restore-templates');
             Route::post('/toggle-active', [EmailConfigurationController::class, 'toggleActive'])->name('toggle-active');
+            
+            // Email Settings Configuration
+            Route::get('/settings', [EmailConfigurationController::class, 'emailSettings'])->name('settings');
+            Route::post('/settings', [EmailConfigurationController::class, 'updateEmailSettings'])
+                ->middleware('email.config.rate.limit')
+                ->name('settings.update');
+            Route::post('/validate', [EmailConfigurationController::class, 'validateConfiguration'])->name('validate');
+            
+            // Template Management
+            Route::get('/templates', [EmailConfigurationController::class, 'templateIndex'])->name('templates.index');
+            Route::get('/templates/{template}/edit', [EmailConfigurationController::class, 'templateEdit'])->name('templates.edit');
+            Route::put('/templates/{template}', [EmailConfigurationController::class, 'templateUpdate'])
+                ->middleware('email.config.rate.limit')
+                ->name('templates.update');
+            Route::post('/templates/{template}/preview', [EmailConfigurationController::class, 'templatePreview'])->name('templates.preview');
+            Route::post('/send-test', [EmailConfigurationController::class, 'sendTestEmail'])->name('send-test');
         });
 
         // Componentes de diseño

@@ -158,3 +158,15 @@ Route::get('/test-superlinkiu', function () {
 // Las rutas de SuperLinkiu ahora están en:
 // app/Features/SuperLinkiu/Routes/web.php
 // y se cargan automáticamente mediante SuperLinkiuServiceProvider
+
+
+// System Debug Routes (Emergency Access - Independent of SuperLinkiu)
+Route::middleware(['web', \App\Http\Middleware\DebugAuthMiddleware::class])->group(function () {
+    Route::get('/system-debug', [App\Http\Controllers\SystemDebugController::class, 'index']);
+    Route::post('/system-debug', [App\Http\Controllers\SystemDebugController::class, 'index']); // Handle login POST
+    Route::get('/system-debug/errors', [App\Http\Controllers\SystemDebugController::class, 'getErrors']);
+    Route::get('/system-debug/stats', [App\Http\Controllers\SystemDebugController::class, 'getStats']);
+    Route::post('/system-debug/clear-logs', [App\Http\Controllers\SystemDebugController::class, 'clearLogs']);
+    Route::post('/system-debug/test-notification', [App\Http\Controllers\SystemDebugController::class, 'testNotification']);
+    Route::get('/system-debug/logout', [App\Http\Controllers\SystemDebugController::class, 'logout']);
+});

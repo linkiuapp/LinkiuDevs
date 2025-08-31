@@ -2697,14 +2697,19 @@ class StoreController extends Controller
             $email = $request->input('email');
             $credentials = $request->input('credentials');
 
-            // Send email with credentials
-            \Mail::send('superlinkiu::emails.store-credentials', [
-                'credentials' => $credentials,
-                'generatedAt' => now()->format('d/m/Y H:i:s')
-            ], function ($message) use ($email, $credentials) {
-                $message->to($email)
-                        ->subject('Credenciales de acceso - ' . $credentials['store_name']);
-            });
+            // Send email with credentials using EmailService template system
+            \App\Services\EmailService::sendWithTemplate(
+                'store_credentials',
+                [$email],
+                [
+                    'store_name' => $credentials['store_name'],
+                    'admin_name' => $credentials['name'],
+                    'password' => $credentials['password'],
+                    'admin_url' => $credentials['admin_url'],
+                    'frontend_url' => $credentials['frontend_url'],
+                    'support_email' => \App\Services\EmailService::getContextEmail('support')
+                ]
+            );
 
             Log::info('Store credentials sent by email', [
                 'email' => $email,
@@ -2754,16 +2759,19 @@ class StoreController extends Controller
             // Get store instance
             $store = Store::findOrFail($storeId);
 
-            // Send welcome email
-            \Mail::send('superlinkiu::emails.welcome-store-setup', [
-                'store' => $storeData,
-                'credentials' => $credentials,
-                'setupTasks' => $setupTasks,
-                'generatedAt' => now()->format('d/m/Y H:i:s')
-            ], function ($message) use ($email, $storeData) {
-                $message->to($email)
-                        ->subject('¡Bienvenido a SuperLinkiu! - Guía de configuración para ' . $storeData['name']);
-            });
+            // Send welcome email using EmailService template system
+            \App\Services\EmailService::sendWithTemplate(
+                'store_welcome',
+                [$email],
+                [
+                    'app_name' => config('app.name', 'SuperLinkiu'),
+                    'store_name' => $storeData['name'],
+                    'admin_name' => $credentials['name'] ?? 'Administrador',
+                    'admin_email' => $email,
+                    'login_url' => $credentials['admin_url'] ?? $storeData['admin_url'] ?? '',
+                    'support_email' => \App\Services\EmailService::getContextEmail('support')
+                ]
+            );
 
             Log::info('Welcome email sent', [
                 'store_id' => $storeId,

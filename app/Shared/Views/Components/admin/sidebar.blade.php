@@ -188,12 +188,7 @@ use Illuminate\Support\Facades\Storage;
                             @endif
                         </a>
                     </li>
-                    <li>
-                        <a href="{{ route('superlinkiu.email.index') }}" class="item-sidebar {{ request()->routeIs('superlinkiu.email.*') ? 'item-sidebar-active' : '' }}">
-                            <x-solar-settings-outline class="w-4 h-4 mr-2" />
-                            Configuración de Email
-                        </a>
-                    </li>
+
                 </ul>
             </li>
 
@@ -211,6 +206,35 @@ use Illuminate\Support\Facades\Storage;
                         </span>
                     @endif
                 </a>
+            </li>
+
+            <!-- Configuración de Email -->
+            <li x-data="{ emailOpen: {{ request()->routeIs('superlinkiu.email.*') ? 'true' : 'false' }} }">
+                <button @click="emailOpen = !emailOpen" class="item-sidebar w-full flex items-center justify-between {{ request()->routeIs('superlinkiu.email.*') ? 'item-sidebar-active' : '' }}">
+                    <div class="flex items-center">
+                        <x-solar-settings-outline class="w-4 h-4 mr-2" />
+                        Configuración de Email
+                    </div>
+                    <x-solar-alt-arrow-down-outline 
+                        class="w-4 h-4 transition-transform"
+                        x-bind:class="{ 'rotate-180': emailOpen }"
+                    />
+                </button>
+                
+                <ul x-show="emailOpen" class="pl-4 mt-1 space-y-1">
+                    <li>
+                        <a href="{{ route('superlinkiu.email.settings') }}" class="item-sidebar {{ request()->routeIs('superlinkiu.email.settings') ? 'item-sidebar-active' : '' }}">
+                            <x-solar-letter-outline class="w-4 h-4 mr-2" />
+                            Direcciones de Email
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('superlinkiu.email.templates.index') }}" class="item-sidebar {{ request()->routeIs('superlinkiu.email.templates.*') ? 'item-sidebar-active' : '' }}">
+                            <x-solar-document-text-outline class="w-4 h-4 mr-2" />
+                            Plantillas de Email
+                        </a>
+                    </li>
+                </ul>
             </li>
 
             <!-- Configuración de Tiendas -->

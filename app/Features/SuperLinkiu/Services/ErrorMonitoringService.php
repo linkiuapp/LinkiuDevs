@@ -270,18 +270,19 @@ class ErrorMonitoringService
         $subject = $this->getAlertSubject($alert);
         $message = $this->getAlertMessage($alert);
         
-        foreach ($adminEmails as $email) {
-            try {
-                Mail::raw($message, function ($mail) use ($email, $subject) {
-                    $mail->to($email)
-                         ->subject($subject);
-                });
-            } catch (\Exception $e) {
-                Log::error('Failed to send email alert', [
-                    'email' => $email,
-                    'error' => $e->getMessage()
-                ]);
-            }
+        // Use EmailService for consistent email sending
+        try {
+            \App\Services\EmailService::sendRaw(
+                $message,
+                $adminEmails,
+                $subject,
+                'support'
+            );
+        } catch (\Exception $e) {
+            Log::error('Failed to send email alert', [
+                'emails' => $adminEmails,
+                'error' => $e->getMessage()
+            ]);
         }
     }
 

@@ -67,5 +67,7 @@ class Kernel extends HttpKernel
         'super.admin' => \App\Shared\Middleware\SuperAdminMiddleware::class,
         'store.admin' => \App\Shared\Middleware\StoreAdminMiddleware::class,
         'tenant.identify' => \App\Shared\Middleware\TenantIdentificationMiddleware::class,
+        'email.config.rate.limit' => \App\Shared\Middleware\EmailConfigurationRateLimitMiddleware::class,
+        'debug.auth' => \App\Http\Middleware\DebugAuthMiddleware::class,
     ];
 } 
