@@ -23,7 +23,7 @@
         <button 
             type="button"
             @click="open"
-            class="w-10 h-10 rounded-lg ring-1 ring-white-200 transition-shadow hover:ring-2 hover:ring-primary-400"
+            class="w-10 h-10 rounded-lg ring-1 ring-accent-200 transition-shadow hover:ring-2 hover:ring-primary-400"
             :style="{ backgroundColor: color }"
             :class="{ 'ring-error-400': error }"
         ></button>
@@ -38,7 +38,7 @@
                 @input="validate"
                 @blur="validateFinal"
                 :class="{ 'border-error-400 focus:ring-error-400': error }"
-                class="w-full px-3 py-2 rounded-lg bg-white-100 border border-white-200 focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-colors"
+                class="w-full px-3 py-2 rounded-lg bg-accent-100 border border-accent-200 focus:ring-2 focus:ring-primary-400 focus:border-transparent transition-colors"
                 placeholder="#000000"
             >
             
@@ -60,7 +60,7 @@
             x-transition:leave="transition ease-in duration-100"
             x-transition:leave-start="opacity-100 scale-100"
             x-transition:leave-end="opacity-0 scale-95"
-            class="absolute z-50 mt-2 bg-white-50 rounded-lg shadow-lg p-4"
+            class="absolute z-50 mt-2 bg-accent-50 rounded-lg shadow-lg p-4"
             style="display: none;"
         >
             {{-- Preset Colors --}}
@@ -90,7 +90,7 @@
                     {{-- Neutral Colors --}}
                     <button 
                         @click="setColor('#DEECFB')"
-                        class="w-8 h-8 rounded bg-white-400 hover:ring-2 hover:ring-white-100"
+                        class="w-8 h-8 rounded bg-accent-400 hover:ring-2 hover:ring-accent-100"
                     ></button>
                     <button 
                         @click="setColor('#000273')"

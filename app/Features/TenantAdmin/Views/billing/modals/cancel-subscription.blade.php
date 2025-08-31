@@ -21,10 +21,10 @@
              x-transition:leave="transition ease-in duration-200"
              x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
              x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-             class="bg-white-50 rounded-lg shadow-xl max-w-md w-full">
+             class="bg-accent-50 rounded-lg shadow-xl max-w-md w-full">
             
             <!-- Header -->
-            <div class="border-b border-white-100 px-6 py-4">
+            <div class="border-b border-accent-100 px-6 py-4">
                 <div class="flex items-center justify-between">
                     <h3 class="text-lg font-semibold text-error-300">⚠️ Cancelar Suscripción</h3>
                     <button @click="showCancelModal = false; resetModalData()" 
@@ -61,7 +61,7 @@
                         <select id="cancellation_reason" 
                                 x-model="reason"
                                 required
-                                class="w-full px-3 py-2 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 text-sm text-black-500 mb-2">
+                                class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 text-sm text-black-500 mb-2">
                             <option value="">Selecciona una razón</option>
                             <option value="Muy caro">Muy caro</option>
                             <option value="No uso todas las funcionalidades">No uso todas las funcionalidades</option>
@@ -79,7 +79,7 @@
                             <textarea x-model="customReason"
                                       placeholder="Describe la razón..."
                                       rows="2"
-                                      class="w-full px-3 py-2 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 text-xs text-black-500"></textarea>
+                                      class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 text-xs text-black-500"></textarea>
                         </div>
                     </div>
                     
@@ -92,7 +92,7 @@
                                id="cancel_password"
                                x-model="password"
                                required
-                               class="w-full px-3 py-2 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 text-sm text-black-500"
+                               class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 text-sm text-black-500"
                                placeholder="Tu contraseña actual">
                     </div>
                     
@@ -110,7 +110,7 @@
             </div>
             
             <!-- Actions -->
-            <div class="border-t border-white-100 px-6 py-4">
+            <div class="border-t border-accent-100 px-6 py-4">
                 <div class="flex gap-3 justify-end">
                     <button @click="showCancelModal = false; resetModalData()" 
                             type="button"
@@ -120,10 +120,10 @@
                     <button @click="cancelSubscription()" 
                             :disabled="!reason || !password || isLoading"
                             :class="{ 'opacity-50 cursor-not-allowed': !reason || !password || isLoading }"
-                            class="px-4 py-2 bg-error-300 text-white-50 text-sm rounded-lg hover:bg-error-400 transition-colors">
+                            class="px-4 py-2 bg-error-300 text-accent-50 text-sm rounded-lg hover:bg-error-400 transition-colors">
                         <span x-show="!isLoading">Sí, cancelar suscripción</span>
                         <span x-show="isLoading" class="flex items-center">
-                            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white-50" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-accent-50" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>

@@ -20,7 +20,7 @@
     <!-- Stats Cards Row -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- Total Iconos -->
-        <div class="bg-white-50 rounded-xl p-6 shadow-sm border border-white-100">
+        <div class="bg-accent-50 rounded-xl p-6 shadow-sm border border-accent-100">
             <div class="flex items-center justify-between">
                 <div class="flex-1">
                     <p class="text-sm font-medium text-black-300 mb-1">Total de Iconos</p>
@@ -33,7 +33,7 @@
         </div>
 
         <!-- Iconos Activos -->
-        <div class="bg-white-50 rounded-xl p-6 shadow-sm border border-white-100">
+        <div class="bg-accent-50 rounded-xl p-6 shadow-sm border border-accent-100">
             <div class="flex items-center justify-between">
                 <div class="flex-1">
                     <p class="text-sm font-medium text-black-300 mb-1">Iconos Activos</p>
@@ -46,7 +46,7 @@
         </div>
 
         <!-- Iconos Inactivos -->
-        <div class="bg-white-50 rounded-xl p-6 shadow-sm border border-white-100">
+        <div class="bg-accent-50 rounded-xl p-6 shadow-sm border border-accent-100">
             <div class="flex items-center justify-between">
                 <div class="flex-1">
                     <p class="text-sm font-medium text-black-300 mb-1">Iconos Inactivos</p>
@@ -60,13 +60,13 @@
     </div>
 
     <!-- Main Content Card -->
-    <div class="bg-white-50 rounded-xl shadow-sm border border-white-100 overflow-hidden">
+    <div class="bg-accent-50 rounded-xl shadow-sm border border-accent-100 overflow-hidden">
         <!-- Card Header -->
-        <div class="px-6 py-4 border-b border-white-100 bg-gradient-to-r from-white-50 to-white-100">
+        <div class="px-6 py-4 border-b border-accent-100 bg-gradient-to-r from-accent-50 to-accent-100">
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-semibold text-black-500">Gestión de Iconos</h2>
                 <div class="flex items-center gap-3">
-                    <span class="text-sm text-black-300 bg-white-200 px-3 py-1 rounded-full">
+                    <span class="text-sm text-black-300 bg-accent-200 px-3 py-1 rounded-full">
                         {{ $icons->total() }} icono{{ $icons->total() !== 1 ? 's' : '' }} total
                     </span>
                 </div>
@@ -79,12 +79,12 @@
                 <!-- Icons Grid -->
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6" id="sortable-icons">
                     @foreach($icons as $icon)
-                        <div class="icon-card bg-white-100 rounded-xl p-4 border-2 border-white-200 hover:border-primary-200 hover:shadow-md transition-all duration-200 cursor-move group"
+                        <div class="icon-card bg-accent-100 rounded-xl p-4 border-2 border-accent-200 hover:border-primary-200 hover:shadow-md transition-all duration-200 cursor-move group"
                              data-icon-id="{{ $icon->id }}"
                              data-sort-order="{{ $icon->sort_order }}">
                             
                             <!-- Icon Preview -->
-                            <div class="aspect-square bg-white-50 rounded-lg p-3 mb-3 flex items-center justify-center overflow-hidden group-hover:bg-primary-50 transition-colors">
+                            <div class="aspect-square bg-accent-50 rounded-lg p-3 mb-3 flex items-center justify-center overflow-hidden group-hover:bg-primary-50 transition-colors">
                                 @if($icon->image_url)
                                     <img src="{{ $icon->image_url }}" 
                                          alt="{{ $icon->display_name }}" 
@@ -120,10 +120,10 @@
                                            {{ $icon->is_active ? 'checked' : '' }}
                                            data-icon-id="{{ $icon->id }}"
                                            data-url="{{ route('superlinkiu.category-icons.toggle-active', $icon->id) }}">
-                                    <div class="w-9 h-5 bg-white-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary-200 rounded-full peer 
-                                                peer-checked:after:translate-x-full peer-checked:after:border-white-50 
+                                    <div class="w-9 h-5 bg-accent-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary-200 rounded-full peer 
+                                                peer-checked:after:translate-x-full peer-checked:after:border-accent-50 
                                                 after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
-                                                after:bg-white-50 after:rounded-full after:h-4 after:w-4 after:transition-all 
+                                                after:bg-accent-50 after:rounded-full after:h-4 after:w-4 after:transition-all 
                                                 peer-checked:bg-success-300"></div>
                                 </label>
 
@@ -149,7 +149,7 @@
 
             <!-- Pagination -->
             @if($icons->hasPages())
-                <div class="px-6 py-4 border-t border-white-100 bg-white-100">
+                <div class="px-6 py-4 border-t border-accent-100 bg-accent-100">
                     {{ $icons->links() }}
                 </div>
             @endif
@@ -253,7 +253,7 @@
     function showNotification(message, type) {
         // Crear notificación temporal
         const notification = document.createElement('div');
-        notification.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg text-white-50 font-medium transition-all transform translate-x-full`;
+        notification.className = `fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg text-accent-50 font-medium transition-all transform translate-x-full`;
         notification.className += type === 'success' ? ' bg-success-400' : ' bg-error-400';
         notification.textContent = message;
         

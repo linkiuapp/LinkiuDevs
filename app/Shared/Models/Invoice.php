@@ -198,9 +198,9 @@ class Invoice extends Model
     {
         return match($this->status) {
             'pending' => 'bg-warning-300 text-black-500',
-            'paid' => 'bg-success-300 text-white-50',
-            'overdue' => 'bg-error-300 text-white-50',
-            'cancelled' => 'bg-black-300 text-white-50',
+            'paid' => 'bg-success-300 text-accent-50',
+            'overdue' => 'bg-error-300 text-accent-50',
+            'cancelled' => 'bg-black-300 text-accent-50',
             default => 'bg-warning-300 text-black-500'
         };
     }

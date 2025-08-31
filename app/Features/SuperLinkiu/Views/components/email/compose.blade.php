@@ -3,17 +3,17 @@
 @section('title', 'Redactar Email')
 
 @section('content')
-<div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-    <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+<div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+    <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
         <h2 class="text-3xl text-black-500 mb-0">Redactar Email</h2>
     </div>
     <div class="p-6">
         <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
             <!-- Sidebar -->
             <div class="col-span-12 xl:col-span-4 2xl:col-span-3">
-                <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+                <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                     <div class="p-6">
-                        <button type="button" class="bg-primary-400 hover:bg-primary-500 text-white-50 text-sm px-3 py-3 w-full rounded-lg flex items-center gap-2 mb-4 transition-colors">
+                        <button type="button" class="bg-primary-400 hover:bg-primary-500 text-accent-50 text-sm px-3 py-3 w-full rounded-lg flex items-center gap-2 mb-4 transition-colors">
                             <x-solar-add-square-outline class="w-5 h-5" />
                             Nuevo Email
                         </button>
@@ -94,9 +94,9 @@
 
             <!-- Main Content -->
             <div class="col-span-12 xl:col-span-8 2xl:col-span-9">
-                <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+                <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                     <!-- Header -->
-                    <div class="border-b border-white-100 bg-white-50 py-4 px-6 flex items-center justify-between">
+                    <div class="border-b border-accent-100 bg-accent-50 py-4 px-6 flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <button class="text-black-300 hover:text-black-500 transition-colors">
                                 <x-solar-arrow-left-outline class="w-5 h-5" />
@@ -120,7 +120,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                                 <label class="text-black-400 font-medium md:col-span-2">Para:</label>
                                 <div class="md:col-span-10">
-                                    <input type="email" class="w-full px-4 py-2 bg-white-50 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent" placeholder="destinatario@email.com">
+                                    <input type="email" class="w-full px-4 py-2 bg-accent-50 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent" placeholder="destinatario@email.com">
                                 </div>
                             </div>
 
@@ -128,7 +128,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                                 <label class="text-black-400 font-medium md:col-span-2">CC:</label>
                                 <div class="md:col-span-10">
-                                    <input type="email" class="w-full px-4 py-2 bg-white-50 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent" placeholder="copia@email.com">
+                                    <input type="email" class="w-full px-4 py-2 bg-accent-50 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent" placeholder="copia@email.com">
                                 </div>
                             </div>
 
@@ -136,7 +136,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                                 <label class="text-black-400 font-medium md:col-span-2">CCO:</label>
                                 <div class="md:col-span-10">
-                                    <input type="email" class="w-full px-4 py-2 bg-white-50 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent" placeholder="copia.oculta@email.com">
+                                    <input type="email" class="w-full px-4 py-2 bg-accent-50 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent" placeholder="copia.oculta@email.com">
                                 </div>
                             </div>
 
@@ -144,45 +144,45 @@
                             <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                                 <label class="text-black-400 font-medium md:col-span-2">Asunto:</label>
                                 <div class="md:col-span-10">
-                                    <input type="text" class="w-full px-4 py-2 bg-white-50 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent" placeholder="Asunto del email">
+                                    <input type="text" class="w-full px-4 py-2 bg-accent-50 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent" placeholder="Asunto del email">
                                 </div>
                             </div>
 
                             <!-- Toolbar -->
-                            <div class="border-t border-white-100 pt-4">
-                                <div class="flex flex-wrap items-center gap-2 mb-4 p-3 bg-white-100 rounded-lg">
-                                    <button type="button" class="p-2 text-black-300 hover:text-black-500 hover:bg-white-200 rounded transition-colors">
+                            <div class="border-t border-accent-100 pt-4">
+                                <div class="flex flex-wrap items-center gap-2 mb-4 p-3 bg-accent-100 rounded-lg">
+                                    <button type="button" class="p-2 text-black-300 hover:text-black-500 hover:bg-accent-200 rounded transition-colors">
                                         <x-solar-text-bold-outline class="w-5 h-5" />
                                     </button>
-                                    <button type="button" class="p-2 text-black-300 hover:text-black-500 hover:bg-white-200 rounded transition-colors">
+                                    <button type="button" class="p-2 text-black-300 hover:text-black-500 hover:bg-accent-200 rounded transition-colors">
                                         <x-solar-text-italic-outline class="w-5 h-5" />
                                     </button>
-                                    <button type="button" class="p-2 text-black-300 hover:text-black-500 hover:bg-white-200 rounded transition-colors">
+                                    <button type="button" class="p-2 text-black-300 hover:text-black-500 hover:bg-accent-200 rounded transition-colors">
                                         <x-solar-text-underline-outline class="w-5 h-5" />
                                     </button>
-                                    <div class="w-px h-6 bg-white-200"></div>
-                                    <button type="button" class="p-2 text-black-300 hover:text-black-500 hover:bg-white-200 rounded transition-colors">
+                                    <div class="w-px h-6 bg-accent-200"></div>
+                                    <button type="button" class="p-2 text-black-300 hover:text-black-500 hover:bg-accent-200 rounded transition-colors">
                                         <x-solar-list-outline class="w-5 h-5" />
                                     </button>
-                                    <button type="button" class="p-2 text-black-300 hover:text-black-500 hover:bg-white-200 rounded transition-colors">
+                                    <button type="button" class="p-2 text-black-300 hover:text-black-500 hover:bg-accent-200 rounded transition-colors">
                                         <x-solar-list-check-outline class="w-5 h-5" />
                                     </button>
-                                    <div class="w-px h-6 bg-white-200"></div>
-                                    <button type="button" class="p-2 text-black-300 hover:text-black-500 hover:bg-white-200 rounded transition-colors">
+                                    <div class="w-px h-6 bg-accent-200"></div>
+                                    <button type="button" class="p-2 text-black-300 hover:text-black-500 hover:bg-accent-200 rounded transition-colors">
                                         <x-solar-link-outline class="w-5 h-5" />
                                     </button>
-                                    <button type="button" class="p-2 text-black-300 hover:text-black-500 hover:bg-white-200 rounded transition-colors">
+                                    <button type="button" class="p-2 text-black-300 hover:text-black-500 hover:bg-accent-200 rounded transition-colors">
                                         <x-solar-gallery-outline class="w-5 h-5" />
                                     </button>
-                                    <button type="button" class="p-2 text-black-300 hover:text-black-500 hover:bg-white-200 rounded transition-colors">
+                                    <button type="button" class="p-2 text-black-300 hover:text-black-500 hover:bg-accent-200 rounded transition-colors">
                                         <x-solar-smile-circle-outline class="w-5 h-5" />
                                     </button>
                                 </div>
 
                                 <!-- Editor -->
-                                <div class="border border-white-200 rounded-lg">
+                                <div class="border border-accent-200 rounded-lg">
                                     <textarea 
-                                        class="w-full p-4 bg-white-50 border-0 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary-400" 
+                                        class="w-full p-4 bg-accent-50 border-0 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary-400" 
                                         rows="12" 
                                         placeholder="Escribe tu mensaje aquí..."
                                     ></textarea>
@@ -192,7 +192,7 @@
                             <!-- Attachments -->
                             <div class="space-y-4">
                                 <h4 class="text-black-400 font-medium">Archivos adjuntos</h4>
-                                <div class="border-2 border-dashed border-white-200 rounded-lg p-6 text-center">
+                                <div class="border-2 border-dashed border-accent-200 rounded-lg p-6 text-center">
                                     <div class="space-y-2">
                                         <x-solar-upload-outline class="w-8 h-8 text-black-300 mx-auto" />
                                         <p class="text-black-300">Arrastra archivos aquí o <button type="button" class="text-primary-400 hover:text-primary-500 underline">selecciona archivos</button></p>
@@ -203,7 +203,7 @@
 
                                 <!-- Lista de archivos (ejemplo) -->
                                 <div class="space-y-2">
-                                    <div class="flex items-center justify-between p-3 bg-white-100 rounded-lg">
+                                    <div class="flex items-center justify-between p-3 bg-accent-100 rounded-lg">
                                         <div class="flex items-center gap-3">
                                             <div class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
                                                 <x-solar-file-text-outline class="w-5 h-5 text-primary-400" />
@@ -221,13 +221,13 @@
                             </div>
 
                             <!-- Actions -->
-                            <div class="flex items-center justify-between pt-4 border-t border-white-100">
+                            <div class="flex items-center justify-between pt-4 border-t border-accent-100">
                                 <div class="flex items-center gap-3">
-                                    <button type="button" class="bg-primary-400 hover:bg-primary-500 text-white-50 px-6 py-2 rounded-lg flex items-center gap-2 transition-colors">
+                                    <button type="button" class="bg-primary-400 hover:bg-primary-500 text-accent-50 px-6 py-2 rounded-lg flex items-center gap-2 transition-colors">
                                         <x-solar-plain-2-outline class="w-5 h-5" />
                                         Enviar
                                     </button>
-                                    <button type="button" class="bg-white-100 hover:bg-white-200 text-black-400 px-6 py-2 rounded-lg flex items-center gap-2 transition-colors">
+                                    <button type="button" class="bg-accent-100 hover:bg-accent-200 text-black-400 px-6 py-2 rounded-lg flex items-center gap-2 transition-colors">
                                         <x-solar-archive-outline class="w-5 h-5" />
                                         Guardar borrador
                                     </button>
@@ -274,7 +274,7 @@
 }
 
 .file-tag {
-    background-color: rgb(var(--white-100));
+    background-color: rgb(var(--accent-100));
     padding: 0.25rem 0.5rem;
     border-radius: 0.375rem;
     font-size: 0.875rem;

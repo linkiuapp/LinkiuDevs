@@ -23,7 +23,7 @@
         <div class="flex items-center space-x-3">
             <!-- Icono de la categoría -->
             @if($category->icon && $category->icon->image_url)
-                <div class="w-12 h-12 bg-white-100 rounded-lg p-2 flex items-center justify-center">
+                <div class="w-12 h-12 bg-accent-100 rounded-lg p-2 flex items-center justify-center">
                     <img src="{{ $category->icon->image_url }}" 
                          alt="{{ $category->name }}" 
                          class="w-full h-full object-contain">
@@ -47,10 +47,10 @@
             <div class="grid grid-cols-2 gap-3">
                 @foreach($subcategories as $subcategory)
                     <a href="{{ route('tenant.category', [$store->slug, $subcategory->slug]) }}" 
-                       class="flex flex-col items-center p-3 bg-white-50 rounded-lg border border-white-200 hover:shadow-sm hover:border-primary-200 transition-all group">
+                       class="flex flex-col items-center p-3 bg-accent-50 rounded-lg border border-accent-200 hover:shadow-sm hover:border-primary-200 transition-all group">
                         
                         <!-- Icono de subcategoría -->
-                        <div class="w-10 h-10 mb-2 flex items-center justify-center rounded-lg bg-white-100 group-hover:bg-primary-50 transition-colors">
+                        <div class="w-10 h-10 mb-2 flex items-center justify-center rounded-lg bg-accent-100 group-hover:bg-primary-50 transition-colors">
                             @if($subcategory->icon && $subcategory->icon->image_url)
                                 <img src="{{ $subcategory->icon->image_url }}" 
                                      alt="{{ $subcategory->name }}" 
@@ -80,9 +80,9 @@
             
             <div class="space-y-3">
                 @foreach($products as $product)
-                    <div class="bg-white-50 rounded-lg p-3 flex items-center gap-3 border border-white-200 hover:shadow-sm transition-shadow relative">
+                    <div class="bg-accent-50 rounded-lg p-3 flex items-center gap-3 border border-accent-200 hover:shadow-sm transition-shadow relative">
                         <!-- Imagen del producto -->
-                        <div class="w-16 h-16 bg-white-100 rounded-lg flex-shrink-0 overflow-hidden">
+                        <div class="w-16 h-16 bg-accent-100 rounded-lg flex-shrink-0 overflow-hidden">
                             @if($product->mainImage)
                                 <img src="{{ $product->main_image_url }}" 
                                      alt="{{ $product->name }}" 
@@ -121,7 +121,7 @@
                         </div>
                         
                         <!-- Botón agregar -->
-                        <button class="add-to-cart-btn bg-secondary-300 hover:bg-secondary-200 text-white-50 w-8 h-8 rounded-full flex items-center justify-center transition-colors flex-shrink-0" 
+                        <button class="add-to-cart-btn bg-secondary-300 hover:bg-secondary-200 text-accent-50 w-8 h-8 rounded-full flex items-center justify-center transition-colors flex-shrink-0" 
                                 data-product-id="{{ $product->id }}"
                                 data-product-name="{{ $product->name }}"
                                 data-product-price="{{ $product->price }}"
@@ -136,7 +136,7 @@
         <!-- Estado: Sin productos -->
         @if($subcategories->count() == 0)
             <div class="text-center py-12 space-y-4">
-                <div class="w-16 h-16 bg-white-100 rounded-full flex items-center justify-center mx-auto">
+                <div class="w-16 h-16 bg-accent-100 rounded-full flex items-center justify-center mx-auto">
                     <x-solar-box-outline class="w-8 h-8 text-black-200" />
                 </div>
                 <div class="space-y-2">
@@ -148,12 +148,12 @@
                 </div>
                 <div class="flex flex-col sm:flex-row gap-3 justify-center">
                     <a href="{{ route('tenant.categories', $store->slug) }}" 
-                       class="inline-flex items-center px-4 py-2 bg-primary-300 text-white-50 rounded-lg hover:bg-primary-200 transition-colors text-sm">
+                       class="inline-flex items-center px-4 py-2 bg-primary-300 text-accent-50 rounded-lg hover:bg-primary-200 transition-colors text-sm">
                         <x-solar-gallery-outline class="w-4 h-4 mr-2" />
                         Ver categorías
                     </a>
                     <a href="{{ route('tenant.home', $store->slug) }}" 
-                       class="inline-flex items-center px-4 py-2 bg-white-200 text-black-400 rounded-lg hover:bg-white-300 transition-colors text-sm">
+                       class="inline-flex items-center px-4 py-2 bg-accent-200 text-black-400 rounded-lg hover:bg-accent-300 transition-colors text-sm">
                         <x-solar-home-2-outline class="w-4 h-4 mr-2" />
                         Ir al inicio
                     </a>

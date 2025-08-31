@@ -13,7 +13,7 @@
             <div class="card-body">
                 <div class="space-y-4">
                     <!-- Gráfico -->
-                    <div class="relative h-64 bg-white-100 rounded-lg p-4">
+                    <div class="relative h-64 bg-accent-100 rounded-lg p-4">
                         <svg class="w-full h-full" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
                             <defs>
                                 <pattern id="grid" width="40" height="20" patternUnits="userSpaceOnUse">
@@ -55,7 +55,7 @@
                         </div>
                     </div>
                     <!-- Estadísticas -->
-                    <div class="border-t border-white-100 pt-4">
+                    <div class="border-t border-accent-100 pt-4">
                         <div class="grid grid-cols-3 gap-4 text-center">
                             <div>
                                 <div class="text-2xl font-semibold text-primary-300">42.5K</div>
@@ -101,7 +101,7 @@
                     </div>
                     
                     <!-- Gráfico -->
-                    <div class="relative h-64 bg-white-100 rounded-lg p-4">
+                    <div class="relative h-64 bg-accent-100 rounded-lg p-4">
                         <svg class="w-full h-full" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
                             <!-- Grid lines -->
                             <rect width="100%" height="100%" fill="url(#grid)"/>
@@ -197,7 +197,7 @@
             <div class="card-body">
                 <div class="space-y-4">
                     <!-- Gráfico -->
-                    <div class="relative h-64 bg-white-100 rounded-lg p-4">
+                    <div class="relative h-64 bg-accent-100 rounded-lg p-4">
                         <svg class="w-full h-full" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
                             <!-- Grid lines -->
                             <rect width="100%" height="100%" fill="url(#grid)"/>
@@ -252,7 +252,7 @@
                     </div>
                     
                     <!-- Información adicional -->
-                    <div class="border-t border-white-100 pt-4">
+                    <div class="border-t border-accent-100 pt-4">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-2">
                                 <x-solar-graph-up-outline class="w-5 h-5 text-primary-300" />
@@ -284,7 +284,7 @@
                                 <x-solar-calendar-outline class="w-4 h-4 inline mr-1" />
                                 Último mes
                             </button>
-                            <button class="px-3 py-1 bg-white-100 text-black-300 rounded-lg text-sm hover:bg-white-200 transition-colors">
+                            <button class="px-3 py-1 bg-accent-100 text-black-300 rounded-lg text-sm hover:bg-accent-200 transition-colors">
                                 Último año
                             </button>
                         </div>
@@ -295,7 +295,7 @@
                     </div>
                     
                     <!-- Gráfico -->
-                    <div class="relative h-64 bg-white-100 rounded-lg p-4">
+                    <div class="relative h-64 bg-accent-100 rounded-lg p-4">
                         <svg class="w-full h-full" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid meet">
                             <!-- Grid lines -->
                             <rect width="100%" height="100%" fill="url(#grid)"/>

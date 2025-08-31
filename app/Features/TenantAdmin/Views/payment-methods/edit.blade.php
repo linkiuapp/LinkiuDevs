@@ -51,8 +51,8 @@
         @method('PUT')
         
         {{-- Card principal con toda la información --}}
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-            <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+            <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                 <h2 class="text-lg font-semibold text-black-400 mb-0">Información del Método de Pago</h2>
             </div>
             
@@ -69,7 +69,7 @@
                             <label class="block text-sm font-semibold text-black-300 mb-2">
                                 Tipo de Método
                             </label>
-                            <div class="w-full px-4 py-2 border border-white-200 rounded-lg bg-white-100 text-black-300">
+                            <div class="w-full px-4 py-2 border border-accent-200 rounded-lg bg-accent-100 text-black-300">
                                 @if($paymentMethod->isCash())
                                     Efectivo
                                 @elseif($paymentMethod->isBankTransfer())
@@ -92,7 +92,7 @@
                             <input type="text"
                                 name="name"
                                 value="{{ old('name', $paymentMethod->name) }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('name') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('name') border-error-200 @enderror"
                                 required>
                             @error('name')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
@@ -106,7 +106,7 @@
                             <textarea
                                 name="instructions"
                                 rows="3"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('instructions') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('instructions') border-error-200 @enderror"
                                 placeholder="Instrucciones para el cliente sobre cómo usar este método de pago...">{{ old('instructions', $paymentMethod->instructions) }}</textarea>
                             @error('instructions')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
@@ -124,7 +124,7 @@
                                         value="1"
                                         class="sr-only peer" 
                                         {{ old('is_active', $paymentMethod->is_active) ? 'checked' : '' }}>
-                                    <div class="w-11 h-6 bg-white-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white-50 after:border-white-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200"></div>
+                                    <div class="w-11 h-6 bg-accent-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-accent-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-accent-50 after:border-accent-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200"></div>
                                 </label>
                                 <span class="text-sm text-black-300">Método activo</span>
                             </div>
@@ -144,7 +144,7 @@
                                         value="1"
                                         class="sr-only peer" 
                                         {{ old('is_default', $isDefault) ? 'checked' : '' }}>
-                                    <div class="w-11 h-6 bg-white-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white-50 after:border-white-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200"></div>
+                                    <div class="w-11 h-6 bg-accent-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-accent-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-accent-50 after:border-accent-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200"></div>
                                 </label>
                                 <span class="text-sm text-black-300">Establecer como predeterminado</span>
                             </div>
@@ -174,7 +174,7 @@
                                         value="1"
                                         class="sr-only peer" 
                                         {{ old('available_for_pickup', $paymentMethod->available_for_pickup) ? 'checked' : '' }}>
-                                    <div class="w-11 h-6 bg-white-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white-50 after:border-white-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200"></div>
+                                    <div class="w-11 h-6 bg-accent-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-accent-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-accent-50 after:border-accent-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200"></div>
                                 </label>
                                 <span class="text-sm text-black-300">Disponible para recogida en tienda</span>
                             </div>
@@ -191,7 +191,7 @@
                                         value="1"
                                         class="sr-only peer" 
                                         {{ old('available_for_delivery', $paymentMethod->available_for_delivery) ? 'checked' : '' }}>
-                                    <div class="w-11 h-6 bg-white-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white-50 after:border-white-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200"></div>
+                                    <div class="w-11 h-6 bg-accent-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-accent-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-accent-50 after:border-accent-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200"></div>
                                 </label>
                                 <span class="text-sm text-black-300">Disponible para entrega a domicilio</span>
                             </div>
@@ -219,7 +219,7 @@
                                         value="1"
                                         class="sr-only peer" 
                                         {{ old('cash_change_available', $cashChangeAvailable) ? 'checked' : '' }}>
-                                    <div class="w-11 h-6 bg-white-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white-50 after:border-white-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200"></div>
+                                    <div class="w-11 h-6 bg-accent-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-accent-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-accent-50 after:border-accent-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200"></div>
                                 </label>
                                 <span class="text-sm text-black-300">Permitir que el cliente solicite cambio</span>
                             </div>
@@ -251,7 +251,7 @@
                                         value="1"
                                         class="sr-only peer" 
                                         {{ old('require_proof', $paymentMethod->require_proof ?? false) ? 'checked' : '' }}>
-                                    <div class="w-11 h-6 bg-white-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white-50 after:border-white-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200"></div>
+                                    <div class="w-11 h-6 bg-accent-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-accent-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-accent-50 after:border-accent-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200"></div>
                                 </label>
                                 <span class="text-sm text-black-300">Requerir comprobante de pago</span>
                             </div>
@@ -298,7 +298,7 @@
                             <input type="text"
                                 name="accepted_cards"
                                 value="{{ old('accepted_cards', $paymentMethod->accepted_cards ?? 'Visa, Mastercard') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
                                 placeholder="Ej: Visa, Mastercard, American Express">
                             <p class="text-xs text-black-200 mt-1">
                                 Especifica qué tarjetas aceptas (opcional).
@@ -310,7 +310,7 @@
             </div>
 
             {{-- Footer con botones --}}
-            <div class="border-t border-white-100 bg-white-50 px-6 py-4">
+            <div class="border-t border-accent-100 bg-accent-50 px-6 py-4">
                 <div class="flex justify-end gap-3">
                     <a href="{{ route('tenant.admin.payment-methods.index', ['store' => $store->slug, 'paymentMethod' => $paymentMethod->id]) }}"
                         class="btn-outline-secondary px-6 py-2 rounded-lg">

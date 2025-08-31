@@ -67,7 +67,7 @@
                                             <!-- Select de estado -->
                                             <div class="flex-shrink-0">
                                                 <select 
-                                                    class="text-caption px-2 py-2 border border-white-200 rounded focus:ring-1 focus:ring-primary-200 focus:border-primary-300 transition-colors"
+                                                    class="text-caption px-2 py-2 border border-accent-200 rounded focus:ring-1 focus:ring-primary-200 focus:border-primary-300 transition-colors"
                                                     @change="updateOrderStatus({{ $order->id }}, $event.target.value, $event.target)"
                                                     :disabled="updating"
                                                 >
@@ -94,21 +94,21 @@
             <!-- Widget botones de acciones -->
             <!-- Crear Producto -->
             <div class="col-start-7 bg-primary-300 rounded-lg p-0 shadow-sm flex items-center justify-center py-4 hover:bg-primary-400">
-                <a href="{{ route('tenant.admin.products.create', ['store' => $store->slug]) }}" class="flex flex-col items-center justify-center text-white-50 text-body-small font-medium transition-colors">
+                <a href="{{ route('tenant.admin.products.create', ['store' => $store->slug]) }}" class="flex flex-col items-center justify-center text-accent-50 text-body-small font-medium transition-colors">
                     <x-lucide-circle-plus class="w-8 h-8 mb-2" />
                     <span>Agregar Producto</span>
                 </a>
             </div>
             <!-- Crear Pedido -->
             <div class="col-start-8 bg-info-300 rounded-lg p-0 shadow-sm flex items-center justify-center py-4 hover:bg-info-400">
-                <a href="{{ route('tenant.admin.orders.create', ['store' => $store->slug]) }}" class="flex flex-col items-center justify-center text-white-50 text-body-small font-medium transition-colors">
+                <a href="{{ route('tenant.admin.orders.create', ['store' => $store->slug]) }}" class="flex flex-col items-center justify-center text-accent-50 text-body-small font-medium transition-colors">
                     <x-lucide-circle-plus class="w-8 h-8 mb-2" />
                     <span>Crear Pedido</span>
                 </a>
             </div>
             <!-- Crear Cupón -->
             <div class="col-start-9 bg-secondary-300 rounded-lg p-0 shadow-sm flex items-center justify-center py-4 hover:bg-secondary-200">
-                <a href="{{ route('tenant.admin.coupons.create', ['store' => $store->slug]) }}" class="flex flex-col items-center justify-center text-white-50 text-body-small font-medium transition-colors">
+                <a href="{{ route('tenant.admin.coupons.create', ['store' => $store->slug]) }}" class="flex flex-col items-center justify-center text-accent-50 text-body-small font-medium transition-colors">
                     <x-lucide-circle-plus class="w-8 h-8 mb-2" />
                     <span>Crear Cupón</span>
                 </a>
@@ -219,12 +219,12 @@
                         <div x-show="banners.length > 1" class="absolute inset-0 flex items-center justify-between pointer-events-none">
                             <!-- Botón anterior -->
                             <button @click="previousSlide()" 
-                                    class="ml-4 w-8 h-8 bg-black bg-opacity-40 hover:bg-opacity-60 rounded-full flex items-center justify-center text-white-50 transition-all duration-200 pointer-events-auto">
+                                    class="ml-4 w-8 h-8 bg-black bg-opacity-40 hover:bg-opacity-60 rounded-full flex items-center justify-center text-accent-50 transition-all duration-200 pointer-events-auto">
                                 <x-solar-arrow-left-outline class="w-4 h-4" />
                             </button>
                             <!-- Botón siguiente -->
                             <button @click="nextSlide()" 
-                                    class="mr-4 w-8 h-8 bg-black bg-opacity-40 hover:bg-opacity-60 rounded-full flex items-center justify-center text-white-50 transition-all duration-200 pointer-events-auto">
+                                    class="mr-4 w-8 h-8 bg-black bg-opacity-40 hover:bg-opacity-60 rounded-full flex items-center justify-center text-accent-50 transition-all duration-200 pointer-events-auto">
                                 <x-solar-arrow-right-outline class="w-4 h-4" />
                             </button>
                         </div>
@@ -233,7 +233,7 @@
                             <template x-for="(banner, index) in banners" :key="'dot-' + banner.id">
                                 <button @click="goToSlide(index)"
                                         class="w-2 h-2 rounded-full transition-all duration-200"
-                                        :class="currentSlide === index ? 'bg-white-50' : 'bg-white-50 bg-opacity-50'">
+                                        :class="currentSlide === index ? 'bg-accent-50' : 'bg-accent-50 bg-opacity-50'">
                                 </button>
                             </template>
                         </div>

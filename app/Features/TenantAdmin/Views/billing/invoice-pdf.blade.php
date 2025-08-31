@@ -22,7 +22,7 @@
         .invoice-container {
             max-width: 800px;
             margin: 0 auto;
-            background: white;
+            background: accent;
             padding: 0;
         }
         
@@ -82,15 +82,15 @@
             color: #3A4550;
         }
         
-        .text-white-200 {
+        .text-accent-200 {
             color: #D7E0E8;
         }
         
-        .bg-white-100 {
+        .bg-accent-100 {
             background-color: #F0F0F0;
         }
         
-        .border-white-200 {
+        .border-accent-200 {
             border-color: #D7E0E8;
         }
         
@@ -279,24 +279,24 @@
                     <!-- Tabla de items -->
                     <div class="mt-8">
                         <div>
-                            <table class="w-full border-collapse border border-white-200">
+                            <table class="w-full border-collapse border border-accent-200">
                                 <thead>
-                                    <tr class="bg-white-100">
-                                        <th class="border border-white-200 px-4 py-3 text-left text-base text-black-500">Concepto</th>
-                                        <th class="border border-white-200 px-4 py-3 text-left text-base text-black-500">Descripción</th>
-                                        <th class="border border-white-200 px-4 py-3 text-left text-base text-black-500">Período</th>
-                                        <th class="border border-white-200 px-4 py-3 text-right text-base text-black-500">Monto</th>
+                                    <tr class="bg-accent-100">
+                                        <th class="border border-accent-200 px-4 py-3 text-left text-base text-black-500">Concepto</th>
+                                        <th class="border border-accent-200 px-4 py-3 text-left text-base text-black-500">Descripción</th>
+                                        <th class="border border-accent-200 px-4 py-3 text-left text-base text-black-500">Período</th>
+                                        <th class="border border-accent-200 px-4 py-3 text-right text-base text-black-500">Monto</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td class="border border-white-200 px-4 py-3 text-base text-black-400">
+                                        <td class="border border-accent-200 px-4 py-3 text-base text-black-400">
                                             Suscripción {{ $invoice->plan ? $invoice->plan->name : 'Plan Básico' }}
                                         </td>
-                                        <td class="border border-white-200 px-4 py-3 text-base text-black-400">
+                                        <td class="border border-accent-200 px-4 py-3 text-base text-black-400">
                                             Plan {{ ucfirst($invoice->period) }} para tienda "{{ $store->name }}"
                                         </td>
-                                        <td class="border border-white-200 px-4 py-3 text-base text-black-400">
+                                        <td class="border border-accent-200 px-4 py-3 text-base text-black-400">
                                             @php
                                                 $startDate = $invoice->issue_date;
                                                 $endDate = match($invoice->period) {
@@ -308,7 +308,7 @@
                                             @endphp
                                             {{ $startDate->format('d/m/Y') }} - {{ $endDate->format('d/m/Y') }}
                                         </td>
-                                        <td class="border border-white-200 px-4 py-3 text-base text-black-400 text-right">
+                                        <td class="border border-accent-200 px-4 py-3 text-base text-black-400 text-right">
                                             ${{ number_format($invoice->amount, 0, ',', '.') }}
                                         </td>
                                     </tr>
@@ -340,8 +340,8 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="pr-16 py-1 border-b border-white-200 pb-4">IVA (19%):</td>
-                                            <td class="pl-6 py-1 border-b border-white-200 pb-4">
+                                            <td class="pr-16 py-1 border-b border-accent-200 pb-4">IVA (19%):</td>
+                                            <td class="pl-6 py-1 border-b border-accent-200 pb-4">
                                                 <span class="text-black-500 font-semibold">Incluido</span>
                                             </td>
                                         </tr>
@@ -384,7 +384,7 @@
 
                     <!-- Footer legal -->
                     <div class="mt-16">
-                        <div class="border-t border-white-200 pt-4">
+                        <div class="border-t border-accent-200 pt-4">
                             <p class="text-sm text-black-400 text-center">
                                 Esta es una factura generada automáticamente por {{ config('app.name', 'Linkiu.bio') }}<br>
                                 Para consultas sobre esta factura, por favor contacta nuestro equipo de soporte.

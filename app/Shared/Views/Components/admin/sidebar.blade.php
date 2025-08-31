@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Storage;
 @endphp
 
 <!-- Sidebar -->
-<aside class="fixed left-0 top-0 z-40 h-screen sidebar bg-white-50 shadow-lg dark:bg-gray-800 transition-transform duration-300 ease-in-out flex flex-col" 
+<aside class="fixed left-0 top-0 z-40 h-screen sidebar bg-accent-50 shadow-lg dark:bg-gray-800 transition-transform duration-300 ease-in-out flex flex-col" 
        x-data="{ sidebarOpen: true }"
        :class="{ '-translate-x-full': !sidebarOpen }">
     
@@ -162,7 +162,7 @@ use Illuminate\Support\Facades\Storage;
                                 $openTicketsCount = \App\Shared\Models\Ticket::whereIn('status', ['open', 'in_progress'])->count();
                             @endphp
                             @if($openTicketsCount > 0)
-                                <span class="ml-auto text-xs bg-error-200 text-white-50 px-2 py-1 rounded-full">
+                                <span class="ml-auto text-xs bg-error-200 text-accent-50 px-2 py-1 rounded-full">
                                     {{ $openTicketsCount }}
                                 </span>
                             @endif
@@ -206,7 +206,7 @@ use Illuminate\Support\Facades\Storage;
                         $totalAnnouncements = \App\Shared\Models\PlatformAnnouncement::where('is_active', true)->count();
                     @endphp
                     @if($totalAnnouncements > 0)
-                        <span class="ml-auto text-xs bg-primary-200 text-white-50 px-2 py-1 rounded-full">
+                        <span class="ml-auto text-xs bg-primary-200 text-accent-50 px-2 py-1 rounded-full">
                             {{ $totalAnnouncements }}
                         </span>
                     @endif
@@ -228,7 +228,7 @@ use Illuminate\Support\Facades\Storage;
                         $activeIcons = \App\Shared\Models\CategoryIcon::where('is_active', true)->count();
                     @endphp
                     @if($totalIcons > 0)
-                        <span class="ml-auto text-xs bg-info-300 text-white-50 px-2 py-1 rounded-full">
+                        <span class="ml-auto text-xs bg-info-300 text-accent-50 px-2 py-1 rounded-full">
                             {{ $activeIcons }}/{{ $totalIcons }}
                         </span>
                     @endif
@@ -245,7 +245,7 @@ use Illuminate\Support\Facades\Storage;
         <div class="flex items-center">
             <div class="flex-shrink-0">
                 <div class="w-8 h-8 bg-primary-300 rounded-full flex items-center justify-center">
-                    <span class="text-white-50 text-sm font-medium">
+                    <span class="text-accent-50 text-sm font-medium">
                         @if (auth()->user()->avatar_url)
                             <img src="{{ auth()->user()->avatar_url }}" alt="Avatar" class="w-8 h-8 rounded-full">
                         @else
@@ -256,7 +256,7 @@ use Illuminate\Support\Facades\Storage;
             </div>
             <div class="ml-3 flex-1 min-w-0">
                 <a href="{{ route('superlinkiu.profile.show') }}" class="hover:text-primary-200">
-                    <p class="text-sm font-medium text-gray-900 dark:text-white-50 truncate">
+                    <p class="text-sm font-medium text-gray-900 dark:text-accent-50 truncate">
                         {{ auth()->user()->name }}
                     </p>
                     <p class="text-xs text-gray-500 dark:text-gray-400 truncate">

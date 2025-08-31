@@ -16,13 +16,13 @@
                 <!-- Profile Content -->
                 <div class="pb-6 px-6 -mt-16 relative">
                     <!-- Avatar -->
-                    <div class="text-center border-b border-white-100 pb-4">
+                    <div class="text-center border-b border-accent-100 pb-4">
                         <div class="relative inline-block">
                             <img src="https://via.placeholder.com/120x120/6366f1/ffffff?text=JJ" 
                                  alt="Profile" 
-                                 class="w-32 h-32 rounded-full border-4 border-white-50 object-cover mx-auto bg-white-50">
-                            <div class="absolute bottom-2 right-2 w-8 h-8 bg-primary-400 rounded-full flex items-center justify-center border-2 border-white-50 cursor-pointer hover:bg-primary-500 transition-colors">
-                                <x-solar-camera-outline class="w-4 h-4 text-white-50" />
+                                 class="w-32 h-32 rounded-full border-4 border-accent-50 object-cover mx-auto bg-accent-50">
+                            <div class="absolute bottom-2 right-2 w-8 h-8 bg-primary-400 rounded-full flex items-center justify-center border-2 border-accent-50 cursor-pointer hover:bg-primary-500 transition-colors">
+                                <x-solar-camera-outline class="w-4 h-4 text-accent-50" />
                             </div>
                         </div>
                         <h3 class="text-2xl font-semibold text-black-500 mt-4 mb-1">Jacob Jones</h3>
@@ -73,24 +73,24 @@
                 <div class="card-header">
                     <h2 class="title-card">Profile Management</h2>
                 </div>
-                <div class="card-body bg-white-50">
+                <div class="card-body bg-accent-50">
                     <!-- Tabs -->
                     <div class="mb-6" x-data="{ activeTab: 'edit' }">
-                        <div class="flex border-b border-white-100">
+                        <div class="flex border-b border-accent-100">
                             <button @click="activeTab = 'edit'" 
-                                    :class="activeTab === 'edit' ? 'border-primary-300 text-primary-300' : 'border-transparent text-black-300 hover:text-black-400 hover:border-white-200'"
+                                    :class="activeTab === 'edit' ? 'border-primary-300 text-primary-300' : 'border-transparent text-black-300 hover:text-black-400 hover:border-accent-200'"
                                     class="py-3 px-4 border-b-2 text-base font-semibold transition-colors duration-200 flex items-center gap-2">
                                 <x-solar-pen-new-square-outline class="w-5 h-5" />
                                 Edit Profile
                             </button>
                             <button @click="activeTab = 'password'" 
-                                    :class="activeTab === 'password' ? 'border-primary-300 text-primary-300' : 'border-transparent text-black-300 hover:text-black-400 hover:border-white-200'"
+                                    :class="activeTab === 'password' ? 'border-primary-300 text-primary-300' : 'border-transparent text-black-300 hover:text-black-400 hover:border-accent-200'"
                                     class="py-3 px-4 border-b-2 text-base font-semibold transition-colors duration-200 flex items-center gap-2">
                                 <x-solar-lock-password-outline class="w-5 h-5" />
                                 Change Password
                             </button>
                             <button @click="activeTab = 'notifications'" 
-                                    :class="activeTab === 'notifications' ? 'border-primary-300 text-primary-300' : 'border-transparent text-black-300 hover:text-black-400 hover:border-white-200'"
+                                    :class="activeTab === 'notifications' ? 'border-primary-300 text-primary-300' : 'border-transparent text-black-300 hover:text-black-400 hover:border-accent-200'"
                                     class="py-3 px-4 border-b-2 text-base font-semibold transition-colors duration-200 flex items-center gap-2">
                                 <x-solar-bell-outline class="w-5 h-5" />
                                 Notifications
@@ -124,26 +124,26 @@
                                             Full Name <span class="text-error-200">*</span>
                                         </label>
                                         <input type="text" id="fullname" value="Jacob Jones" 
-                                               class="w-full px-4 py-3 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none">
+                                               class="w-full px-4 py-3 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none">
                                     </div>
                                     <div>
                                         <label for="email" class="block text-base text-black-500 font-semibold mb-2">
                                             Email <span class="text-error-200">*</span>
                                         </label>
                                         <input type="email" id="email" value="ifrandom@gmail.com" 
-                                               class="w-full px-4 py-3 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none">
+                                               class="w-full px-4 py-3 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none">
                                     </div>
                                     <div>
                                         <label for="phone" class="block text-base text-black-500 font-semibold mb-2">Phone</label>
                                         <input type="tel" id="phone" value="(1) 2536 2561 2365" 
-                                               class="w-full px-4 py-3 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none">
+                                               class="w-full px-4 py-3 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none">
                                     </div>
                                     <div>
                                         <label for="department" class="block text-base text-black-500 font-semibold mb-2">
                                             Department <span class="text-error-200">*</span>
                                         </label>
                                         <select id="department" 
-                                                class="w-full px-4 py-3 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none">
+                                                class="w-full px-4 py-3 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none">
                                             <option>Design</option>
                                             <option>Development</option>
                                             <option>Marketing</option>
@@ -155,7 +155,7 @@
                                             Designation <span class="text-error-200">*</span>
                                         </label>
                                         <select id="designation" 
-                                                class="w-full px-4 py-3 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none">
+                                                class="w-full px-4 py-3 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none">
                                             <option>UI UX Designer</option>
                                             <option>Frontend Developer</option>
                                             <option>Backend Developer</option>
@@ -167,7 +167,7 @@
                                             Language <span class="text-error-200">*</span>
                                         </label>
                                         <select id="language" 
-                                                class="w-full px-4 py-3 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none">
+                                                class="w-full px-4 py-3 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none">
                                             <option>English</option>
                                             <option>Spanish</option>
                                             <option>French</option>
@@ -178,14 +178,14 @@
                                 <div>
                                     <label for="bio" class="block text-base text-black-500 font-semibold mb-2">Bio</label>
                                     <textarea id="bio" rows="4" 
-                                              class="w-full px-4 py-3 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none resize-none"
+                                              class="w-full px-4 py-3 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none resize-none"
                                               placeholder="Write your bio...">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</textarea>
                                 </div>
                                 <div class="flex items-center justify-center gap-3 pt-4">
-                                    <button type="button" class="px-6 py-3 border border-error-200 text-error-200 text-base rounded-lg hover:bg-error-200 hover:text-white-50 transition-colors duration-200">
+                                    <button type="button" class="px-6 py-3 border border-error-200 text-error-200 text-base rounded-lg hover:bg-error-200 hover:text-accent-50 transition-colors duration-200">
                                         Cancel
                                     </button>
-                                    <button type="submit" class="px-6 py-3 bg-primary-200 text-white-50 text-base rounded-lg hover:bg-primary-500 transition-colors duration-200">
+                                    <button type="submit" class="px-6 py-3 bg-primary-200 text-accent-50 text-base rounded-lg hover:bg-primary-500 transition-colors duration-200">
                                         Save Changes
                                     </button>
                                 </div>
@@ -201,7 +201,7 @@
                                     </label>
                                     <div class="relative">
                                         <input type="password" id="new-password" 
-                                               class="w-full px-4 py-3 pr-12 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none"
+                                               class="w-full px-4 py-3 pr-12 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none"
                                                placeholder="Enter new password">
                                         <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-black-300 hover:text-black-400" onclick="togglePassword('new-password')">
                                             <x-solar-eye-outline class="w-5 h-5" />
@@ -214,7 +214,7 @@
                                     </label>
                                     <div class="relative">
                                         <input type="password" id="confirm-password" 
-                                               class="w-full px-4 py-3 pr-12 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none"
+                                               class="w-full px-4 py-3 pr-12 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none"
                                                placeholder="Confirm password">
                                         <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 text-black-300 hover:text-black-400" onclick="togglePassword('confirm-password')">
                                             <x-solar-eye-outline class="w-5 h-5" />
@@ -222,10 +222,10 @@
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-3 pt-4">
-                                    <button type="button" class="px-6 py-3 border border-error-200 text-error-200 text-base rounded-lg hover:bg-error-200 hover:text-white-50 transition-colors duration-200">
+                                    <button type="button" class="px-6 py-3 border border-error-200 text-error-200 text-base rounded-lg hover:bg-error-200 hover:text-accent-50 transition-colors duration-200">
                                         Cancel
                                     </button>
-                                    <button type="submit" class="px-6 py-3 bg-primary-200 text-white-50 text-base rounded-lg hover:bg-primary-500 transition-colors duration-200">
+                                    <button type="submit" class="px-6 py-3 bg-primary-200 text-accent-50 text-base rounded-lg hover:bg-primary-500 transition-colors duration-200">
                                         Update Password
                                     </button>
                                 </div>
@@ -235,44 +235,44 @@
                         <!-- Notifications Tab -->
                         <div x-show="activeTab === 'notifications'" class="mt-6">
                             <div class="space-y-4 max-w-md">
-                                <div class="flex items-center justify-between p-4 border border-white-200 rounded-lg">
+                                <div class="flex items-center justify-between p-4 border border-accent-200 rounded-lg">
                                     <div>
                                         <h5 class="text-base text-black-500 font-semibold">Company News</h5>
                                         <p class="text-base text-black-300">Get notified about company updates</p>
                                     </div>
                                     <label class="relative inline-flex items-center cursor-pointer">
                                         <input type="checkbox" class="sr-only peer">
-                                        <div class="w-11 h-6 bg-black-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white-50 after:border-white-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-300"></div>
+                                        <div class="w-11 h-6 bg-black-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-accent-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-accent-50 after:border-accent-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-300"></div>
                                     </label>
                                 </div>
-                                <div class="flex items-center justify-between p-4 border border-white-200 rounded-lg">
+                                <div class="flex items-center justify-between p-4 border border-accent-200 rounded-lg">
                                     <div>
                                         <h5 class="text-base text-black-500 font-semibold">Push Notifications</h5>
                                         <p class="text-base text-black-300">Receive push notifications</p>
                                     </div>
                                     <label class="relative inline-flex items-center cursor-pointer">
                                         <input type="checkbox" class="sr-only peer" checked>
-                                        <div class="w-11 h-6 bg-black-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white-50 after:border-white-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-300"></div>
+                                        <div class="w-11 h-6 bg-black-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-accent-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-accent-50 after:border-accent-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-300"></div>
                                     </label>
                                 </div>
-                                <div class="flex items-center justify-between p-4 border border-white-200 rounded-lg">
+                                <div class="flex items-center justify-between p-4 border border-accent-200 rounded-lg">
                                     <div>
                                         <h5 class="text-base text-black-500 font-semibold">Weekly Newsletters</h5>
                                         <p class="text-base text-black-300">Get weekly newsletter updates</p>
                                     </div>
                                     <label class="relative inline-flex items-center cursor-pointer">
                                         <input type="checkbox" class="sr-only peer" checked>
-                                        <div class="w-11 h-6 bg-black-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white-50 after:border-white-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-300"></div>
+                                        <div class="w-11 h-6 bg-black-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-accent-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-accent-50 after:border-accent-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-300"></div>
                                     </label>
                                 </div>
-                                <div class="flex items-center justify-between p-4 border border-white-200 rounded-lg">
+                                <div class="flex items-center justify-between p-4 border border-accent-200 rounded-lg">
                                     <div>
                                         <h5 class="text-base text-black-500 font-semibold">Order Notifications</h5>
                                         <p class="text-base text-black-300">Get notified about order updates</p>
                                     </div>
                                     <label class="relative inline-flex items-center cursor-pointer">
                                         <input type="checkbox" class="sr-only peer">
-                                        <div class="w-11 h-6 bg-black-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white-50 after:border-white-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-300"></div>
+                                        <div class="w-11 h-6 bg-black-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-accent-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-accent-50 after:border-accent-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-300"></div>
                                     </label>
                                 </div>
                             </div>

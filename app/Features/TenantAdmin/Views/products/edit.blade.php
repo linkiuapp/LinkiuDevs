@@ -4,8 +4,8 @@
     @section('content')
     <div class="space-y-4">
         <!-- Header con contador y botón crear -->
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-            <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+            <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
                         <a href="{{ route('tenant.admin.products.index', [$store->slug]) }}" 
@@ -18,7 +18,7 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-3">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $product->is_active ? 'bg-success-200 text-black-300' : 'bg-error-200 text-white-50' }}">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $product->is_active ? 'bg-success-200 text-black-300' : 'bg-error-200 text-accent-50' }}">
                             {{ $product->is_active ? 'Activo' : 'Inactivo' }}
                         </span>
                     </div>
@@ -31,8 +31,8 @@
             @method('PUT')
             
             <!-- Información Básica -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h3 class="text-lg font-semibold text-black-500">Información Básica</h3>
                 </div>
                 <div class="p-6 space-y-6">
@@ -46,7 +46,7 @@
                                    id="name" 
                                    name="name" 
                                    value="{{ old('name', $product->name) }}"
-                                   class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('name') border-error-300 @enderror"
+                                   class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('name') border-error-300 @enderror"
                                    placeholder="Ej: Camiseta Básica Blanca"
                                    required>
                             @error('name')
@@ -63,7 +63,7 @@
                                    id="sku" 
                                    name="sku" 
                                    value="{{ old('sku', $product->sku) }}"
-                                   class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('sku') border-error-300 @enderror"
+                                   class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('sku') border-error-300 @enderror"
                                    placeholder="Ej: CAM-BAS-001">
                             @error('sku')
                                 <p class="text-sm text-error-300 mt-1">{{ $message }}</p>
@@ -79,7 +79,7 @@
                         <textarea id="description" 
                                   name="description" 
                                   rows="4"
-                                  class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('description') border-error-300 @enderror"
+                                  class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('description') border-error-300 @enderror"
                                   placeholder="Describe las características principales del producto...">{{ old('description', $product->description) }}</textarea>
                         @error('description')
                             <p class="text-sm text-error-300 mt-1">{{ $message }}</p>
@@ -100,7 +100,7 @@
                                        value="{{ old('price', $product->price) }}"
                                        min="0" 
                                        step="0.01"
-                                       class="w-full pl-8 pr-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('price') border-error-300 @enderror"
+                                       class="w-full pl-8 pr-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('price') border-error-300 @enderror"
                                        placeholder="15000"
                                        required>
                             </div>
@@ -116,7 +116,7 @@
                             </label>
                             <select id="type" 
                                     name="type" 
-                                    class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('type') border-error-300 @enderror"
+                                    class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('type') border-error-300 @enderror"
                                     required>
                                 <option value="">Selecciona un tipo</option>
                                 <option value="simple" {{ old('type', $product->type) === 'simple' ? 'selected' : '' }}>Simple</option>
@@ -136,7 +136,7 @@
                                    value="1"
                                    {{ old('is_active', $product->is_active) ? 'checked' : '' }}
                                    class="sr-only peer">
-                            <div class="w-11 h-6 bg-white-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white-50 after:border-white-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-300"></div>
+                            <div class="w-11 h-6 bg-accent-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-accent-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-accent-50 after:border-accent-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-300"></div>
                         </label>
                         <span class="text-sm text-black-400">Producto activo</span>
                     </div>
@@ -145,17 +145,17 @@
 
             <!-- Imágenes Actuales -->
             @if($product->images && $product->images->count() > 0)
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h3 class="text-lg font-semibold text-black-500">Imágenes Actuales</h3>
                 </div>
                 <div class="p-6">
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                         @foreach($product->images as $image)
                         <div class="relative group">
-                            <img src="{{ $image->image_url }}" class="w-full h-24 object-cover rounded-lg border border-white-200">
+                            <img src="{{ $image->image_url }}" class="w-full h-24 object-cover rounded-lg border border-accent-200">
                             <div class="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <label class="flex items-center bg-error-400 text-white-50 rounded-full p-1 cursor-pointer">
+                                <label class="flex items-center bg-error-400 text-accent-50 rounded-full p-1 cursor-pointer">
                                     <input type="checkbox" 
                                            name="delete_images[]" 
                                            value="{{ $image->id }}" 
@@ -166,13 +166,13 @@
                             </div>
                             <div class="absolute bottom-1 left-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                 @if($image->is_main)
-                                <span class="bg-primary-400 text-white-50 rounded-full px-2 py-1 text-xs">
+                                <span class="bg-primary-400 text-accent-50 rounded-full px-2 py-1 text-xs">
                                     Principal
                                 </span>
                                 @else
                                 <button type="button" 
                                         onclick="setMainImage({{ $image->id }})"
-                                        class="bg-black-500 bg-opacity-75 text-white-50 rounded-full px-2 py-1 text-xs hover:bg-opacity-100">
+                                        class="bg-black-500 bg-opacity-75 text-accent-50 rounded-full px-2 py-1 text-xs hover:bg-opacity-100">
                                     Hacer principal
                                 </button>
                                 @endif
@@ -188,8 +188,8 @@
             @endif
 
             <!-- Nuevas Imágenes -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h3 class="text-lg font-semibold text-black-500">Agregar Nuevas Imágenes</h3>
                 </div>
                 <div class="p-6">
@@ -210,19 +210,19 @@
 
             <!-- Categorías -->
             @if($categories->count() > 0)
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h3 class="text-lg font-semibold text-black-500">Categorías</h3>
                 </div>
                 <div class="p-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         @foreach($categories as $category)
-                        <label class="flex items-center gap-3 p-3 border border-white-200 rounded-lg hover:bg-white-100 cursor-pointer">
+                        <label class="flex items-center gap-3 p-3 border border-accent-200 rounded-lg hover:bg-accent-100 cursor-pointer">
                             <input type="checkbox" 
                                    name="categories[]" 
                                    value="{{ $category->id }}"
                                    {{ $product->categories->contains($category->id) ? 'checked' : '' }}
-                                   class="rounded border-white-300 text-primary-300 focus:ring-primary-200">
+                                   class="rounded border-accent-300 text-primary-300 focus:ring-primary-200">
                             <div class="flex-1">
                                 <span class="text-sm font-medium text-black-400">{{ $category->name }}</span>
                                 @if($category->description)
@@ -238,20 +238,20 @@
 
             <!-- Variables (solo si hay) -->
             @if($variables->count() > 0)
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden" id="variables-section" style="display: {{ $product->type === 'variable' ? 'block' : 'none' }};">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden" id="variables-section" style="display: {{ $product->type === 'variable' ? 'block' : 'none' }};">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h3 class="text-lg font-semibold text-black-500">Variables del Producto</h3>
                     <p class="text-sm text-black-300">Solo para productos variables</p>
                 </div>
                 <div class="p-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         @foreach($variables as $variable)
-                        <label class="flex items-center gap-3 p-3 border border-white-200 rounded-lg hover:bg-white-100 cursor-pointer">
+                        <label class="flex items-center gap-3 p-3 border border-accent-200 rounded-lg hover:bg-accent-100 cursor-pointer">
                             <input type="checkbox" 
                                    name="variables[]" 
                                    value="{{ $variable->id }}"
                                    {{ $product->variables && $product->variables->contains($variable->id) ? 'checked' : '' }}
-                                   class="rounded border-white-300 text-primary-300 focus:ring-primary-200">
+                                   class="rounded border-accent-300 text-primary-300 focus:ring-primary-200">
                             <div class="flex-1">
                                 <span class="text-sm font-medium text-black-400">{{ $variable->name }}</span>
                                 <p class="text-xs text-black-300">{{ $variable->type_name }}</p>
@@ -264,7 +264,7 @@
             @endif
 
             <!-- Botones de acción -->
-            <div class="bg-white-50 rounded-lg p-6">
+            <div class="bg-accent-50 rounded-lg p-6">
                 <div class="flex justify-end gap-3">
                     <a href="{{ route('tenant.admin.products.show', [$store->slug, $product->id]) }}" 
                        class="btn-secondary flex items-center gap-2">
@@ -336,8 +336,8 @@
                 const previewDiv = document.createElement('div');
                 previewDiv.className = 'relative group';
                 previewDiv.innerHTML = `
-                    <img src="${e.target.result}" class="w-full h-24 object-cover rounded-lg border border-white-200">
-                    <button type="button" class="absolute top-1 right-1 bg-error-400 text-white-50 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity" onclick="removeImage(this, '${file.name}')">
+                    <img src="${e.target.result}" class="w-full h-24 object-cover rounded-lg border border-accent-200">
+                    <button type="button" class="absolute top-1 right-1 bg-error-400 text-accent-50 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity" onclick="removeImage(this, '${file.name}')">
                         <x-solar-close-circle-outline class="w-4 h-4" />
                     </button>
                     <p class="text-xs text-black-300 mt-1 truncate">${file.name}</p>

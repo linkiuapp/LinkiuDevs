@@ -85,7 +85,7 @@
                     </div>
                     <!-- Leyenda -->
                     <div class="flex-1 space-y-3">
-                        <div class="flex items-center justify-between border-b border-white-100 pb-2">
+                        <div class="flex items-center justify-between border-b border-accent-100 pb-2">
                             <span class="text-sm font-medium text-black-300">Categoría</span>
                             <span class="text-sm font-medium text-black-300">Valor</span>
                             <span class="text-sm font-medium text-black-300">%</span>
@@ -130,8 +130,8 @@
 
     <div class="col-span-1">
         <!-- Gráfico Pie Completo -->
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-            <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+            <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                 <h2 class="text-3xl text-black-500 mb-0">Gráfico Pie Completo</h2>
             </div>
             <div class="p-6">
@@ -210,7 +210,7 @@
                     </div>
                     
                     <!-- Estadísticas adicionales -->
-                    <div class="border-t border-white-100 pt-4 w-full">
+                    <div class="border-t border-accent-100 pt-4 w-full">
                         <div class="grid grid-cols-3 gap-4 text-center">
                             <div>
                                 <div class="text-lg font-semibold text-primary-400">15.2K</div>
@@ -233,8 +233,8 @@
 
     <div class="col-span-1">
         <!-- Gráfico Donut con Gradiente -->
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-            <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+            <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                 <h2 class="text-3xl text-black-500 mb-0">Donut con Gradiente</h2>
             </div>
             <div class="p-6">
@@ -324,7 +324,7 @@
                             <x-solar-refresh-outline class="w-4 h-4 inline mr-2" />
                             Actualizar
                         </button>
-                        <button class="px-4 py-2 bg-white-100 text-black-400 rounded-lg text-sm hover:bg-white-200 transition-colors">
+                        <button class="px-4 py-2 bg-accent-100 text-black-400 rounded-lg text-sm hover:bg-accent-200 transition-colors">
                             <x-solar-export-outline class="w-4 h-4 inline mr-2" />
                             Exportar
                         </button>
@@ -352,8 +352,8 @@
 
     <div class="col-span-1">
         <!-- Gráfico Semi-círculo -->
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-            <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+            <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                 <h2 class="text-3xl text-black-500 mb-0">Gráfico Semi-círculo</h2>
             </div>
             <div class="p-6">
@@ -416,10 +416,10 @@
                     
                     <!-- Acciones -->
                     <div class="flex items-center space-x-3 w-full justify-center">
-                        <button class="px-3 py-1.5 bg-primary-400 text-white-50 rounded-lg text-sm hover:bg-primary-500 transition-colors">
+                        <button class="px-3 py-1.5 bg-primary-400 text-accent-50 rounded-lg text-sm hover:bg-primary-500 transition-colors">
                             Ver detalles
                         </button>
-                        <button class="px-3 py-1.5 bg-white-100 text-black-400 rounded-lg text-sm hover:bg-white-200 transition-colors">
+                        <button class="px-3 py-1.5 bg-accent-100 text-black-400 rounded-lg text-sm hover:bg-accent-200 transition-colors">
                             Comparar
                         </button>
                     </div>

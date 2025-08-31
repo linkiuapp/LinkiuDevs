@@ -17,7 +17,7 @@
 </head>
 <body class="bg-gradient-to-br from-error-50 to-warning-50 min-h-screen flex items-center justify-center">
     <div class="max-w-2xl mx-auto px-4 py-8">
-        <div class="bg-white-50 rounded-2xl shadow-xl overflow-hidden text-center">
+        <div class="bg-accent-50 rounded-2xl shadow-xl overflow-hidden text-center">
             <div class="px-8 py-12">
                 <!-- Icono de estado -->
                 <div class="mb-8">
@@ -56,7 +56,7 @@
                 
                 <!-- Información de contacto si está disponible -->
                 @if($store->email)
-                <div class="bg-white-100 rounded-xl p-6 mb-8">
+                <div class="bg-accent-100 rounded-xl p-6 mb-8">
                     <h3 class="text-lg font-semibold text-black-400 mb-3">
                         Contacto
                     </h3>

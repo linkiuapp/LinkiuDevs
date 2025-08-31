@@ -8,7 +8,7 @@
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div>
             <h1 class="text-lg font-bold text-black-400">{{ $coupon->name }}</h1>
-            <p class="text-sm text-black-300">Código: <span class="font-mono bg-white-200 px-2 py-1 rounded">{{ $coupon->code }}</span></p>
+            <p class="text-sm text-black-300">Código: <span class="font-mono bg-accent-200 px-2 py-1 rounded">{{ $coupon->code }}</span></p>
         </div>
         
         <div class="flex items-center gap-3">
@@ -82,7 +82,7 @@
         {{-- Información principal --}}
         <div class="lg:col-span-2 space-y-6">
             {{-- Información básica --}}
-            <div class="bg-white-50 rounded-lg border border-white-200 p-6">
+            <div class="bg-accent-50 rounded-lg border border-accent-200 p-6">
                 <h3 class="text-lg font-semibold text-black-400 mb-4">Información del Cupón</h3>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -95,7 +95,7 @@
                             </div>
                             <div class="flex justify-between">
                                 <dt class="text-sm text-black-200">Código:</dt>
-                                <dd class="text-sm font-mono bg-white-200 px-2 py-1 rounded">{{ $coupon->code }}</dd>
+                                <dd class="text-sm font-mono bg-accent-200 px-2 py-1 rounded">{{ $coupon->code }}</dd>
                             </div>
                             @if($coupon->description)
                                 <div>
@@ -153,7 +153,7 @@
             </div>
 
             {{-- Restricciones --}}
-            <div class="bg-white-50 rounded-lg border border-white-200 p-6">
+            <div class="bg-accent-50 rounded-lg border border-accent-200 p-6">
                 <h3 class="text-lg font-semibold text-black-400 mb-4">Restricciones y Límites</h3>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -203,7 +203,7 @@
                                         <dt class="text-sm text-black-200">Disponibles:</dt>
                                         <dd class="text-sm font-medium text-black-400">{{ $remaining }}</dd>
                                     </div>
-                                    <div class="w-full bg-white-200 rounded-full h-2">
+                                    <div class="w-full bg-accent-200 rounded-full h-2">
                                         <div class="bg-primary-300 h-2 rounded-full" style="width: {{ $percentage }}%"></div>
                                     </div>
                                 </div>
@@ -215,7 +215,7 @@
 
             {{-- Restricciones temporales --}}
             @if($coupon->start_date || $coupon->end_date || $coupon->days_of_week || $coupon->start_time || $coupon->end_time)
-                <div class="bg-white-50 rounded-lg border border-white-200 p-6">
+                <div class="bg-accent-50 rounded-lg border border-accent-200 p-6">
                     <h3 class="text-lg font-semibold text-black-400 mb-4">Restricciones Temporales</h3>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -279,7 +279,7 @@
 
             {{-- Aplicabilidad --}}
             @if($coupon->type !== 'global')
-                <div class="bg-white-50 rounded-lg border border-white-200 p-6">
+                <div class="bg-accent-50 rounded-lg border border-accent-200 p-6">
                     <h3 class="text-lg font-semibold text-black-400 mb-4">
                         {{ $coupon->type === 'categories' ? 'Categorías Aplicables' : 'Productos Aplicables' }}
                     </h3>
@@ -287,7 +287,7 @@
                     @if($coupon->type === 'categories' && $coupon->categories->count() > 0)
                         <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                             @foreach($coupon->categories as $category)
-                                <div class="bg-white-100 border border-white-200 rounded-lg p-3">
+                                <div class="bg-accent-100 border border-accent-200 rounded-lg p-3">
                                     <span class="text-sm font-medium text-black-400">{{ $category->name }}</span>
                                 </div>
                             @endforeach
@@ -295,7 +295,7 @@
                     @elseif($coupon->type === 'products' && $coupon->products->count() > 0)
                         <div class="space-y-3 max-h-64 overflow-y-auto">
                             @foreach($coupon->products as $product)
-                                <div class="bg-white-100 border border-white-200 rounded-lg p-3">
+                                <div class="bg-accent-100 border border-accent-200 rounded-lg p-3">
                                     <div class="flex justify-between items-center">
                                         <span class="text-sm font-medium text-black-400">{{ $product->name }}</span>
                                         <span class="text-xs text-black-200">${{ number_format($product->price, 0, ',', '.') }}</span>
@@ -313,19 +313,19 @@
 
             {{-- Historial de uso reciente --}}
             @if($recentUsage->count() > 0)
-                <div class="bg-white-50 rounded-lg border border-white-200 p-6">
+                <div class="bg-accent-50 rounded-lg border border-accent-200 p-6">
                     <h3 class="text-lg font-semibold text-black-400 mb-4">Uso Reciente</h3>
                     
                     <div class="overflow-x-auto">
                         <table class="w-full">
-                            <thead class="border-b border-white-200">
+                            <thead class="border-b border-accent-200">
                                 <tr>
                                     <th class="text-left text-xs font-medium text-black-300 py-2">Fecha</th>
                                     <th class="text-left text-xs font-medium text-black-300 py-2">Orden</th>
                                     <th class="text-right text-xs font-medium text-black-300 py-2">Descuento</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-white-100">
+                            <tbody class="divide-y divide-accent-100">
                                 @foreach($recentUsage as $usage)
                                     <tr>
                                         <td class="py-2 text-sm text-black-400">
@@ -356,7 +356,7 @@
         {{-- Sidebar con estadísticas --}}
         <div class="space-y-6">
             {{-- Estadísticas generales --}}
-            <div class="bg-white-50 rounded-lg border border-white-200 p-6">
+            <div class="bg-accent-50 rounded-lg border border-accent-200 p-6">
                 <h3 class="text-lg font-semibold text-black-400 mb-4">Estadísticas</h3>
                 
                 <div class="space-y-4">
@@ -393,7 +393,7 @@
             </div>
 
             {{-- Acciones rápidas --}}
-            <div class="bg-white-50 rounded-lg border border-white-200 p-6">
+            <div class="bg-accent-50 rounded-lg border border-accent-200 p-6">
                 <h3 class="text-lg font-semibold text-black-400 mb-4">Acciones Rápidas</h3>
                 
                 <div class="space-y-3">
@@ -429,7 +429,7 @@
                             @csrf
                             @method('DELETE')
                             <button type="submit" 
-                                    class="w-full btn-primary bg-error-300 hover:bg-error-200 text-white-50 py-2 rounded-lg flex items-center justify-center gap-2">
+                                    class="w-full btn-primary bg-error-300 hover:bg-error-200 text-accent-50 py-2 rounded-lg flex items-center justify-center gap-2">
                                 <x-solar-trash-bin-trash-outline class="w-4 h-4" />
                                 Eliminar cupón
                             </button>
@@ -439,7 +439,7 @@
             </div>
 
             {{-- Información adicional --}}
-            <div class="bg-white-50 rounded-lg border border-white-200 p-6">
+            <div class="bg-accent-50 rounded-lg border border-accent-200 p-6">
                 <h3 class="text-lg font-semibold text-black-400 mb-4">Información</h3>
                 
                 <dl class="space-y-2 text-sm">

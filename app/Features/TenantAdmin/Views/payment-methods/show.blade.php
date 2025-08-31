@@ -78,8 +78,8 @@
         {{-- Columna principal --}}
         <div class="lg:col-span-2 space-y-6">
             {{-- Información básica --}}
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-lg font-semibold text-black-400 mb-0">Información Básica</h2>
                 </div>
                 <div class="p-6">
@@ -152,14 +152,14 @@
 
             {{-- Cuentas bancarias (solo para transferencia) --}}
             @if($paymentMethod->isBankTransfer() && $paymentMethod->bankAccounts->isNotEmpty())
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-lg font-semibold text-black-400 mb-0">Cuentas Bancarias</h2>
                 </div>
                 <div class="p-6">
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-white-100">
-                            <thead class="bg-white-100">
+                        <table class="min-w-full divide-y divide-accent-100">
+                            <thead class="bg-accent-100">
                                 <tr>
                                     <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-black-300 uppercase tracking-wider">
                                         Banco
@@ -178,7 +178,7 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white-50 divide-y divide-white-100">
+                            <tbody class="bg-accent-50 divide-y divide-accent-100">
                                 @foreach($paymentMethod->bankAccounts as $account)
                                     <tr>
                                         <td class="px-4 py-3 whitespace-nowrap">
@@ -213,8 +213,8 @@
         {{-- Columna lateral --}}
         <div class="space-y-6">
             {{-- Acciones rápidas --}}
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-lg font-semibold text-black-400 mb-0">Acciones Rápidas</h2>
                 </div>
                 <div class="p-6 space-y-3">

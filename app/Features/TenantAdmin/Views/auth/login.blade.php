@@ -17,7 +17,7 @@
 </head>
 <body class="bg-gradient-to-br from-primary-50 to-secondary-50 min-h-screen flex items-center justify-center">
     <div class="max-w-md mx-auto px-4 py-8">
-        <div class="bg-white-50 rounded-2xl shadow-xl overflow-hidden">
+        <div class="bg-accent-50 rounded-2xl shadow-xl overflow-hidden">
             <!-- Header -->
             <div class="bg-gradient-to-r from-primary-200 to-secondary-200 px-8 py-8 text-center">
                 @if($store->logo_url)
@@ -28,7 +28,7 @@
                     </div>
                 @else
                     <div class="mb-4">
-                        <div class="w-16 h-16 mx-auto bg-white-50 rounded-full flex items-center justify-center shadow-lg">
+                        <div class="w-16 h-16 mx-auto bg-accent-50 rounded-full flex items-center justify-center shadow-lg">
                             <span class="text-xl font-bold text-primary-300">
                                 {{ strtoupper(substr($store->name, 0, 2)) }}
                             </span>
@@ -36,10 +36,10 @@
                     </div>
                 @endif
                 
-                <h1 class="text-2xl font-bold text-white-50 mb-2">
+                <h1 class="text-2xl font-bold text-accent-50 mb-2">
                     {{ $store->name }}
                 </h1>
-                <p class="text-white-100 text-sm">
+                <p class="text-accent-100 text-sm">
                     Panel de Administración
                 </p>
             </div>
@@ -68,7 +68,7 @@
                                    id="email" 
                                    name="email" 
                                    value="{{ old('email') }}"
-                                   class="w-full pl-10 pr-4 py-3 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('email') border-error-200 @enderror"
+                                   class="w-full pl-10 pr-4 py-3 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('email') border-error-200 @enderror"
                                    placeholder="admin@tienda.com"
                                    required>
                             <x-solar-letter-outline class="w-5 h-5 text-black-200 absolute left-3 top-3.5" />
@@ -87,7 +87,7 @@
                             <input type="password" 
                                    id="password" 
                                    name="password" 
-                                   class="w-full pl-10 pr-4 py-3 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('password') border-error-200 @enderror"
+                                   class="w-full pl-10 pr-4 py-3 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('password') border-error-200 @enderror"
                                    placeholder="••••••••"
                                    required>
                             <x-solar-lock-password-outline class="w-5 h-5 text-black-200 absolute left-3 top-3.5" />
@@ -102,14 +102,14 @@
                         <label class="flex items-center">
                             <input type="checkbox" 
                                    name="remember" 
-                                   class="rounded border-white-300 text-primary-200 focus:border-primary-200 focus:ring-primary-200">
+                                   class="rounded border-accent-300 text-primary-200 focus:border-primary-200 focus:ring-primary-200">
                             <span class="ml-2 text-sm text-black-300">Recordarme</span>
                         </label>
                     </div>
                     
                     <!-- Submit button -->
                     <button type="submit" 
-                            class="w-full bg-primary-200 hover:bg-primary-300 text-white-50 font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                            class="w-full bg-primary-200 hover:bg-primary-300 text-accent-50 font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
                         <x-solar-login-3-outline class="w-5 h-5" />
                         Iniciar Sesión
                     </button>
@@ -117,7 +117,7 @@
                 
                 <!-- Links adicionales -->
                 <div class="mt-6 text-center">
-                    <div class="border-t border-white-100 pt-4">
+                    <div class="border-t border-accent-100 pt-4">
                         <a href="{{ route('tenant.home', $store->slug) }}" 
                            class="inline-flex items-center gap-2 text-sm text-primary-300 hover:text-primary-200 transition-colors">
                             <x-solar-arrow-left-outline class="w-4 h-4" />

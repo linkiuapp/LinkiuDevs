@@ -37,7 +37,7 @@
         </div>
 
         <!-- Información Básica -->
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden mb-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden mb-6">
             <div class="p-6 space-y-4">
                 <div class="mb-4">
                     <h3 class="text-lg font-medium text-black-500 mb-1">Información Básica</h3>
@@ -57,7 +57,7 @@
                                 Activo
                             </span>
                         @else
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-error-200 text-white-50">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-error-200 text-accent-50">
                                 <x-solar-close-circle-outline class="w-3 h-3 mr-1" />
                                 Inactivo
                             </span>
@@ -86,7 +86,7 @@
         </div>
 
         <!-- Imagen -->
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden mb-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden mb-6">
             <div class="p-6">
                 <div class="mb-4">
                     <h3 class="text-lg font-medium text-black-500 mb-1">Imagen</h3>
@@ -97,7 +97,7 @@
                     <div class="text-center">
                         <img src="{{ Storage::disk('public')->url($slider->image_path) }}" 
                              alt="{{ $slider->name }}" 
-                             class="max-w-full h-auto mx-auto rounded-lg shadow-sm border border-white-200">
+                             class="max-w-full h-auto mx-auto rounded-lg shadow-sm border border-accent-200">
                         <p class="text-xs text-black-300 mt-2">170x100px</p>
                     </div>
                 @else
@@ -110,7 +110,7 @@
         </div>
 
         <!-- Enlace -->
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden mb-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden mb-6">
             <div class="p-6 space-y-4">
                 <div class="mb-4">
                     <h3 class="text-lg font-medium text-black-500 mb-1">Enlace</h3>
@@ -147,7 +147,7 @@
         </div>
 
         <!-- Programación -->
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden mb-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden mb-6">
             <div class="p-6 space-y-4">
                 <div class="mb-4">
                     <h3 class="text-lg font-medium text-black-500 mb-1">Programación</h3>
@@ -238,7 +238,7 @@
         </div>
 
         <!-- Botones -->
-        <div class="bg-white-100 px-6 py-4 flex justify-between items-center">
+        <div class="bg-accent-100 px-6 py-4 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <a href="{{ route('tenant.admin.sliders.index', $store->slug) }}" 
                    class="btn-outline-secondary">

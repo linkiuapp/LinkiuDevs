@@ -27,8 +27,8 @@
     </div>
 
     <!-- Información del Ticket -->
-    <div class="bg-white-50 rounded-lg p-0 overflow-hidden mb-6">
-        <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+    <div class="bg-accent-50 rounded-lg p-0 overflow-hidden mb-6">
+        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
             <h2 class="text-lg font-semibold text-black-400 mb-0">Información del Ticket</h2>
         </div>
         
@@ -36,14 +36,14 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
                     <label class="block text-sm font-medium text-black-300 mb-1">Estado</label>
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $ticket->status_color == 'info' ? 'bg-info-300 text-white-50' : ($ticket->status_color == 'warning' ? 'bg-warning-300 text-black-500' : ($ticket->status_color == 'success' ? 'bg-success-300 text-white-50' : 'bg-secondary-300 text-white-50')) }}">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $ticket->status_color == 'info' ? 'bg-info-300 text-accent-50' : ($ticket->status_color == 'warning' ? 'bg-warning-300 text-black-500' : ($ticket->status_color == 'success' ? 'bg-success-300 text-accent-50' : 'bg-secondary-300 text-accent-50')) }}">
                         {{ $ticket->status_label }}
                     </span>
                 </div>
                 
                 <div>
                     <label class="block text-sm font-medium text-black-300 mb-1">Prioridad</label>
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $ticket->priority_color == 'success' ? 'bg-success-300 text-white-50' : ($ticket->priority_color == 'info' ? 'bg-info-300 text-white-50' : ($ticket->priority_color == 'warning' ? 'bg-warning-300 text-black-500' : 'bg-error-300 text-white-50')) }}">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $ticket->priority_color == 'success' ? 'bg-success-300 text-accent-50' : ($ticket->priority_color == 'info' ? 'bg-info-300 text-accent-50' : ($ticket->priority_color == 'warning' ? 'bg-warning-300 text-black-500' : 'bg-error-300 text-accent-50')) }}">
                         {{ $ticket->priority_label }}
                     </span>
                 </div>
@@ -54,13 +54,13 @@
                 </div>
             </div>
 
-            <div class="mt-4 pt-4 border-t border-white-100">
+            <div class="mt-4 pt-4 border-t border-accent-100">
                 <label class="block text-sm font-medium text-black-300 mb-2">Descripción Original</label>
                 <p class="text-black-400">{{ $ticket->description }}</p>
                 
                 <!-- Archivos adjuntos del ticket original -->
                 @if($ticket->attachments && count($ticket->attachments) > 0)
-                    <div class="mt-3 pt-3 border-t border-white-200">
+                    <div class="mt-3 pt-3 border-t border-accent-200">
                         <label class="block text-xs font-medium text-black-300 mb-2">Archivos adjuntos:</label>
                         <div class="space-y-1">
                             @foreach($ticket->attachments as $attachment)
@@ -86,7 +86,7 @@
             </div>
 
             @if($ticket->metadata)
-                <div class="mt-4 pt-4 border-t border-white-100">
+                <div class="mt-4 pt-4 border-t border-accent-100">
                     <label class="block text-sm font-medium text-black-300 mb-2">Información Técnica</label>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                         @if(isset($ticket->metadata['browser']))
@@ -118,8 +118,8 @@
     </div>
 
     <!-- Conversación -->
-    <div class="bg-white-50 rounded-lg p-0 overflow-hidden mb-6" x-data="{ showAllMessages: {{ $ticket->responses->count() <= 3 ? 'true' : 'false' }} }">
-        <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+    <div class="bg-accent-50 rounded-lg p-0 overflow-hidden mb-6" x-data="{ showAllMessages: {{ $ticket->responses->count() <= 3 ? 'true' : 'false' }} }">
+        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
             <div class="flex items-center justify-between">
                 <h2 class="text-lg font-semibold text-black-400 mb-0">Conversación ({{ $ticket->responses->count() }} respuestas)</h2>
                 @if($ticket->responses->count() > 3)
@@ -140,7 +140,7 @@
                      x-transition:enter="transition ease-out duration-300"
                      x-transition:enter-start="opacity-0"
                      x-transition:enter-end="opacity-100"
-                     class="text-center py-4 border border-white-200 rounded-lg bg-white-100">
+                     class="text-center py-4 border border-accent-200 rounded-lg bg-accent-100">
                     <div class="flex items-center justify-center gap-2 text-black-300">
                         <x-solar-history-outline class="w-5 h-5" />
                         <span class="font-medium">{{ $ticket->responses->count() - 3 }} mensajes anteriores ocultos</span>
@@ -164,11 +164,11 @@
                      class="flex gap-4 {{ $response->is_support_team ? 'justify-end' : 'justify-start' }}">
                     
                     <div class="w-full max-w-2xl {{ $response->is_support_team ? 'order-2' : 'order-1' }}">
-                        <div class="bg-{{ $response->is_support_team ? 'primary' : 'white' }}-100 rounded-lg p-4 border border-white-200">
+                        <div class="bg-{{ $response->is_support_team ? 'primary' : 'accent' }}-100 rounded-lg p-4 border border-accent-200">
                             <div class="flex items-center justify-between mb-3">
                                 <div class="flex items-center gap-2">
                                     <div class="w-6 h-6 bg-{{ $response->is_support_team ? 'primary' : 'secondary' }}-200 rounded-full flex items-center justify-center">
-                                        <span class="text-xs text-white-50">{{ substr($response->user->name ?? 'U', 0, 1) }}</span>
+                                        <span class="text-xs text-accent-50">{{ substr($response->user->name ?? 'U', 0, 1) }}</span>
                                     </div>
                                     <span class="text-sm font-medium text-black-400">
                                         @if($response->is_support_team)
@@ -191,7 +191,7 @@
 
                             <!-- Archivos adjuntos -->
                             @if($response->attachments && count($response->attachments) > 0)
-                                <div class="mt-3 pt-3 border-t border-white-200">
+                                <div class="mt-3 pt-3 border-t border-accent-200">
                                     <label class="block text-xs font-medium text-black-300 mb-2">Archivos adjuntos:</label>
                                     <div class="space-y-1">
                                         @foreach($response->attachments as $attachment)
@@ -226,8 +226,8 @@
 
     <!-- Formulario de Respuesta -->
     @if(in_array($ticket->status, ['open', 'in_progress']))
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden" id="response">
-            <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden" id="response">
+            <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                 <h2 class="text-lg font-semibold text-black-400 mb-0">Agregar Respuesta</h2>
             </div>
             
@@ -242,7 +242,7 @@
                         <textarea name="message" 
                                   rows="4"
                                   placeholder="Escribe tu respuesta..."
-                                  class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('message') border-error-300 @enderror"
+                                  class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('message') border-error-300 @enderror"
                                   required
                                   maxlength="2000">{{ old('message') }}</textarea>
                         @error('message')
@@ -258,14 +258,14 @@
                                name="attachments[]" 
                                multiple
                                accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.txt"
-                               class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200">
+                               class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200">
                         <p class="text-black-200 text-xs mt-1">Máximo 3 archivos, 5MB cada uno</p>
                         @error('attachments.*')
                             <p class="text-error-300 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-white-100">
+                    <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-accent-100">
                         <button type="submit" 
                                 class="btn-primary px-6 py-2 rounded-lg flex items-center gap-2">
                             <x-solar-plain-2-outline class="w-4 h-4" />
@@ -276,7 +276,7 @@
             </form>
         </div>
     @else
-        <div class="bg-white-50 rounded-lg p-6 text-center">
+        <div class="bg-accent-50 rounded-lg p-6 text-center">
             <div class="flex flex-col items-center gap-2">
                 <x-solar-lock-outline class="w-12 h-12 text-black-200" />
                 <p class="text-black-300">Este ticket está {{ $ticket->status_label }} y no acepta más respuestas</p>
@@ -296,7 +296,7 @@
          style="display: none;">
         
         <div x-on:click.away="showStatusModal = false" 
-             class="bg-white-50 rounded-lg p-6 max-w-md w-full mx-4">
+             class="bg-accent-50 rounded-lg p-6 max-w-md w-full mx-4">
             <h3 class="text-lg font-semibold text-black-400 mb-4">Cambiar Estado del Ticket</h3>
             
             <div class="space-y-3">
@@ -313,7 +313,7 @@
                 </button>
             </div>
             
-            <div class="flex justify-end gap-3 mt-4 pt-4 border-t border-white-100">
+            <div class="flex justify-end gap-3 mt-4 pt-4 border-t border-accent-100">
                 <button x-on:click="showStatusModal = false" 
                         class="btn-outline-secondary px-4 py-2 rounded-lg">
                     Cancelar

@@ -36,7 +36,7 @@
         @method('PUT')
 
         <!-- Información del Cliente -->
-        <div class="bg-white-50 rounded-lg p-6">
+        <div class="bg-accent-50 rounded-lg p-6">
             <h3 class="text-sm font-medium text-black-400 mb-4">Información del Cliente</h3>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div class="lg:col-span-2">
@@ -48,7 +48,7 @@
                            name="customer_name" 
                            value="{{ old('customer_name', $order->customer_name) }}" 
                            required
-                           class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500 placeholder-black-200"
+                           class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500 placeholder-black-200"
                            placeholder="Nombre completo del cliente">
                     @error('customer_name')
                         <p class="text-error-400 text-sm mt-1">{{ $message }}</p>
@@ -64,7 +64,7 @@
                            name="customer_phone" 
                            value="{{ old('customer_phone', $order->customer_phone) }}" 
                            required
-                           class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500 placeholder-black-200"
+                           class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500 placeholder-black-200"
                            placeholder="3001234567">
                     @error('customer_phone')
                         <p class="text-error-400 text-sm mt-1">{{ $message }}</p>
@@ -78,7 +78,7 @@
                     <select id="department" 
                             name="department" 
                             x-model="selectedDepartment"
-                            class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500"
+                            class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500"
                             required>
                         <option value="">Seleccionar departamento</option>
                         @foreach($departments as $department)
@@ -101,7 +101,7 @@
                            name="city" 
                            value="{{ old('city', $order->city) }}" 
                            required
-                           class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500 placeholder-black-200"
+                           class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500 placeholder-black-200"
                            placeholder="Ciudad">
                     @error('city')
                         <p class="text-error-400 text-sm mt-1">{{ $message }}</p>
@@ -116,7 +116,7 @@
                               name="customer_address" 
                               required 
                               rows="3"
-                              class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500 placeholder-black-200"
+                              class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500 placeholder-black-200"
                               placeholder="Dirección completa, barrio, referencias">{{ old('customer_address', $order->customer_address) }}</textarea>
                     @error('customer_address')
                         <p class="text-error-400 text-sm mt-1">{{ $message }}</p>
@@ -126,28 +126,28 @@
         </div>
 
         <!-- Tipo de Entrega y Pago -->
-        <div class="bg-white-50 rounded-lg p-6">
+        <div class="bg-accent-50 rounded-lg p-6">
             <h3 class="text-sm font-medium text-black-400 mb-4">Entrega y Pago</h3>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-sm font-medium text-black-400 mb-2">Tipo de Entrega *</label>
                     <div class="space-y-3">
-                        <label class="flex items-center p-3 border border-white-200 rounded-lg hover:bg-white-100 cursor-pointer">
+                        <label class="flex items-center p-3 border border-accent-200 rounded-lg hover:bg-accent-100 cursor-pointer">
                             <input type="radio" 
                                    name="delivery_type" 
                                    value="domicilio" 
                                    {{ old('delivery_type', $order->delivery_type) === 'domicilio' ? 'checked' : '' }}
                                    x-model="deliveryType"
-                                   class="w-4 h-4 text-primary-200 border-white-300 focus:ring-primary-200">
+                                   class="w-4 h-4 text-primary-200 border-accent-300 focus:ring-primary-200">
                             <span class="ml-3 text-sm text-black-500">Domicilio</span>
                         </label>
-                        <label class="flex items-center p-3 border border-white-200 rounded-lg hover:bg-white-100 cursor-pointer">
+                        <label class="flex items-center p-3 border border-accent-200 rounded-lg hover:bg-accent-100 cursor-pointer">
                             <input type="radio" 
                                    name="delivery_type" 
                                    value="pickup" 
                                    {{ old('delivery_type', $order->delivery_type) === 'pickup' ? 'checked' : '' }}
                                    x-model="deliveryType"
-                                   class="w-4 h-4 text-primary-200 border-white-300 focus:ring-primary-200">
+                                   class="w-4 h-4 text-primary-200 border-accent-300 focus:ring-primary-200">
                             <span class="ml-3 text-sm text-black-500">Pickup en Tienda (Gratis)</span>
                         </label>
                     </div>
@@ -159,31 +159,31 @@
                 <div>
                     <label class="block text-sm font-medium text-black-400 mb-2">Método de Pago *</label>
                     <div class="space-y-3">
-                        <label class="flex items-center p-3 border border-white-200 rounded-lg hover:bg-white-100 cursor-pointer">
+                        <label class="flex items-center p-3 border border-accent-200 rounded-lg hover:bg-accent-100 cursor-pointer">
                             <input type="radio" 
                                    name="payment_method" 
                                    value="transferencia" 
                                    {{ old('payment_method', $order->payment_method) === 'transferencia' ? 'checked' : '' }}
                                    x-model="paymentMethod"
-                                   class="w-4 h-4 text-primary-200 border-white-300 focus:ring-primary-200">
+                                   class="w-4 h-4 text-primary-200 border-accent-300 focus:ring-primary-200">
                             <span class="ml-3 text-sm text-black-500">Transferencia Bancaria</span>
                         </label>
-                        <label class="flex items-center p-3 border border-white-200 rounded-lg hover:bg-white-100 cursor-pointer">
+                        <label class="flex items-center p-3 border border-accent-200 rounded-lg hover:bg-accent-100 cursor-pointer">
                             <input type="radio" 
                                    name="payment_method" 
                                    value="contra_entrega" 
                                    {{ old('payment_method', $order->payment_method) === 'contra_entrega' ? 'checked' : '' }}
                                    x-model="paymentMethod"
-                                   class="w-4 h-4 text-primary-200 border-white-300 focus:ring-primary-200">
+                                   class="w-4 h-4 text-primary-200 border-accent-300 focus:ring-primary-200">
                             <span class="ml-3 text-sm text-black-500">Pago Contra Entrega</span>
                         </label>
-                        <label class="flex items-center p-3 border border-white-200 rounded-lg hover:bg-white-100 cursor-pointer" x-show="deliveryType === 'pickup'">
+                        <label class="flex items-center p-3 border border-accent-200 rounded-lg hover:bg-accent-100 cursor-pointer" x-show="deliveryType === 'pickup'">
                             <input type="radio" 
                                    name="payment_method" 
                                    value="efectivo" 
                                    {{ old('payment_method', $order->payment_method) === 'efectivo' ? 'checked' : '' }}
                                    x-model="paymentMethod"
-                                   class="w-4 h-4 text-primary-200 border-white-300 focus:ring-primary-200">
+                                   class="w-4 h-4 text-primary-200 border-accent-300 focus:ring-primary-200">
                             <span class="ml-3 text-sm text-black-500">Efectivo</span>
                         </label>
                     </div>
@@ -209,7 +209,7 @@
                                 </a>
                                 <label class="flex items-center">
                                     <input type="checkbox" name="remove_payment_proof" value="1" 
-                                           class="w-4 h-4 text-error-400 border-white-300 rounded focus:ring-error-200">
+                                           class="w-4 h-4 text-error-400 border-accent-300 rounded focus:ring-error-200">
                                     <span class="ml-2 text-xs text-error-400">Eliminar</span>
                                 </label>
                             </div>
@@ -224,7 +224,7 @@
                        id="payment_proof" 
                        name="payment_proof" 
                        accept="image/*,application/pdf" 
-                       class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors">
+                       class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors">
                 <div class="text-xs text-black-300 mt-1">JPG, PNG, PDF - Máximo 5MB</div>
                 @error('payment_proof')
                     <p class="text-error-400 text-sm mt-1">{{ $message }}</p>
@@ -233,7 +233,7 @@
         </div>
 
         <!-- Productos del Pedido (Solo lectura si no es editable) -->
-        <div class="bg-white-50 rounded-lg p-6">
+        <div class="bg-accent-50 rounded-lg p-6">
             <h3 class="text-sm font-medium text-black-400 mb-4">Productos del Pedido</h3>
             @if($order->canBeEdited())
                 <div class="bg-info-50 border border-info-200 rounded-lg p-4 mb-6">
@@ -251,13 +251,13 @@
 
             <div class="space-y-4">
                 @foreach($order->items as $item)
-                    <div class="flex items-center p-4 bg-white-100 rounded-lg">
+                    <div class="flex items-center p-4 bg-accent-100 rounded-lg">
                         @if($item->product && $item->product->mainImage)
                             <img src="{{ $item->product->mainImage->image_url }}" 
                                  alt="{{ $item->product_name }}" 
                                  class="w-12 h-12 rounded-lg object-cover mr-4">
                         @else
-                            <div class="w-12 h-12 bg-white-200 rounded-lg flex items-center justify-center mr-4">
+                            <div class="w-12 h-12 bg-accent-200 rounded-lg flex items-center justify-center mr-4">
                                 <x-solar-gallery-outline class="w-6 h-6 text-black-300" />
                             </div>
                         @endif
@@ -277,7 +277,7 @@
             </div>
 
             <!-- Resumen de Totales -->
-            <div class="mt-6 pt-6 border-t border-white-200">
+            <div class="mt-6 pt-6 border-t border-accent-200">
                 <div class="flex justify-end">
                     <div class="w-full max-w-sm space-y-3">
                         <div class="flex justify-between text-sm">
@@ -296,7 +296,7 @@
                                 <span class="text-success-300">-${{ number_format($order->coupon_discount, 0, ',', '.') }}</span>
                             </div>
                         @endif
-                        <div class="border-t border-white-200 pt-3">
+                        <div class="border-t border-accent-200 pt-3">
                             <div class="flex justify-between">
                                 <span class="text-lg font-semibold text-black-500">Total:</span>
                                 <span class="text-lg font-semibold text-primary-200">${{ number_format($order->total, 0, ',', '.') }}</span>
@@ -308,11 +308,11 @@
         </div>
 
         <!-- Notas Adicionales -->
-        <div class="bg-white-50 rounded-lg p-6">
+        <div class="bg-accent-50 rounded-lg p-6">
             <h3 class="text-sm font-medium text-black-400 mb-4">Notas Adicionales</h3>
             <textarea name="notes" 
                       rows="3"
-                      class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500 placeholder-black-200"
+                      class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500 placeholder-black-200"
                       placeholder="Instrucciones especiales, observaciones, etc.">{{ old('notes', $order->notes) }}</textarea>
             @error('notes')
                 <p class="text-error-400 text-sm mt-1">{{ $message }}</p>
@@ -321,7 +321,7 @@
 
         <!-- Acciones -->
         <div class="flex gap-3 justify-end">
-            <a href="{{ route('tenant.admin.orders.show', [$store->slug, $order->id]) }}" class="px-4 py-2 border border-white-300 text-black-400 rounded-lg hover:bg-white-100 transition-colors">
+            <a href="{{ route('tenant.admin.orders.show', [$store->slug, $order->id]) }}" class="px-4 py-2 border border-accent-300 text-black-400 rounded-lg hover:bg-accent-100 transition-colors">
                 Cancelar
             </a>
             <button type="submit" class="btn-primary">

@@ -60,7 +60,7 @@
                         <div class="text-center text-sm text-black-400 py-2 rounded-lg hover:bg-primary-50 hover:text-primary-300 cursor-pointer transition-colors">14</div>
                         
                         <!-- Día actual -->
-                        <div class="text-center text-sm text-white-50 py-2 rounded-lg bg-primary-200 cursor-pointer">15</div>
+                        <div class="text-center text-sm text-accent-50 py-2 rounded-lg bg-primary-200 cursor-pointer">15</div>
                         
                         <!-- Resto del mes -->
                         <div class="text-center text-sm text-black-400 py-2 rounded-lg hover:bg-primary-50 hover:text-primary-300 cursor-pointer transition-colors">16</div>
@@ -162,7 +162,7 @@
                         <div class="text-center text-sm text-black-400 py-2 rounded-lg hover:bg-primary-50 hover:text-primary-300 cursor-pointer transition-colors">14</div>
                         
                         <!-- Día actual -->
-                        <div class="text-center text-sm text-white-50 py-2 rounded-lg bg-primary-200 cursor-pointer">15</div>
+                        <div class="text-center text-sm text-accent-50 py-2 rounded-lg bg-primary-200 cursor-pointer">15</div>
                         
                         <div class="text-center text-sm text-black-400 py-2 rounded-lg hover:bg-primary-50 hover:text-primary-300 cursor-pointer transition-colors">16</div>
                         <div class="text-center text-sm text-black-400 py-2 rounded-lg hover:bg-primary-50 hover:text-primary-300 cursor-pointer transition-colors">17</div>
@@ -195,7 +195,7 @@
                     </div>
 
                     <!-- Leyenda -->
-                    <div class="mt-4 pt-4 border-t border-white-100">
+                    <div class="mt-4 pt-4 border-t border-accent-100">
                         <h4 class="text-sm font-medium text-black-500 mb-2">Leyenda:</h4>
                         <div class="flex flex-wrap gap-4 text-xs">
                             <div class="flex items-center gap-1">
@@ -229,21 +229,21 @@
                         <!-- Input de Fecha -->
                         <div>
                             <label class="block body-base text-black-500 font-medium mb-2">Fecha de Inicio</label>
-                            <input type="date" class="w-full px-4 py-3 bg-white-50 border border-white-200 rounded-lg body-base text-black-400 focus:outline-none focus:border-primary-300 focus:ring-1 focus:ring-primary-300 transition-colors" value="2024-11-15">
+                            <input type="date" class="w-full px-4 py-3 bg-accent-50 border border-accent-200 rounded-lg body-base text-black-400 focus:outline-none focus:border-primary-300 focus:ring-1 focus:ring-primary-300 transition-colors" value="2024-11-15">
                         </div>
 
                         <!-- Input de Fecha y Hora -->
                         <div>
                             <label class="block body-base text-black-500 font-medium mb-2">Fecha y Hora</label>
-                            <input type="datetime-local" class="w-full px-4 py-3 bg-white-50 border border-white-200 rounded-lg body-base text-black-400 focus:outline-none focus:border-primary-300 focus:ring-1 focus:ring-primary-300 transition-colors" value="2024-11-15T10:30">
+                            <input type="datetime-local" class="w-full px-4 py-3 bg-accent-50 border border-accent-200 rounded-lg body-base text-black-400 focus:outline-none focus:border-primary-300 focus:ring-1 focus:ring-primary-300 transition-colors" value="2024-11-15T10:30">
                         </div>
 
                         <!-- Rango de Fechas -->
                         <div>
                             <label class="block body-base text-black-500 font-medium mb-2">Rango de Fechas</label>
                             <div class="grid grid-cols-2 gap-3">
-                                <input type="date" class="w-full px-4 py-3 bg-white-50 border border-white-200 rounded-lg body-base text-black-400 focus:outline-none focus:border-primary-300 focus:ring-1 focus:ring-primary-300 transition-colors" value="2024-11-15">
-                                <input type="date" class="w-full px-4 py-3 bg-white-50 border border-white-200 rounded-lg body-base text-black-400 focus:outline-none focus:border-primary-300 focus:ring-1 focus:ring-primary-300 transition-colors" value="2024-11-30">
+                                <input type="date" class="w-full px-4 py-3 bg-accent-50 border border-accent-200 rounded-lg body-base text-black-400 focus:outline-none focus:border-primary-300 focus:ring-1 focus:ring-primary-300 transition-colors" value="2024-11-15">
+                                <input type="date" class="w-full px-4 py-3 bg-accent-50 border border-accent-200 rounded-lg body-base text-black-400 focus:outline-none focus:border-primary-300 focus:ring-1 focus:ring-primary-300 transition-colors" value="2024-11-30">
                             </div>
                         </div>
                     </div>
@@ -308,7 +308,7 @@
                         <div class="text-center text-xs text-black-400 py-1 rounded hover:bg-primary-50 hover:text-primary-300 cursor-pointer transition-colors">12</div>
                         <div class="text-center text-xs text-black-400 py-1 rounded hover:bg-primary-50 hover:text-primary-300 cursor-pointer transition-colors">13</div>
                         <div class="text-center text-xs text-black-400 py-1 rounded hover:bg-primary-50 hover:text-primary-300 cursor-pointer transition-colors">14</div>
-                        <div class="text-center text-xs text-white-50 py-1 rounded bg-primary-200 cursor-pointer">15</div>
+                        <div class="text-center text-xs text-accent-50 py-1 rounded bg-primary-200 cursor-pointer">15</div>
                         <div class="text-center text-xs text-black-400 py-1 rounded hover:bg-primary-50 hover:text-primary-300 cursor-pointer transition-colors">16</div>
                         
                         <!-- Semana 4 -->
@@ -340,7 +340,7 @@
                     </div>
 
                     <!-- Fecha Seleccionada -->
-                    <div class="mt-3 pt-3 border-t border-white-100">
+                    <div class="mt-3 pt-3 border-t border-accent-100">
                         <div class="text-center">
                             <div class="text-sm font-medium text-black-500">Fecha Seleccionada</div>
                             <div class="text-xs text-black-400">15 de Noviembre, 2024</div>

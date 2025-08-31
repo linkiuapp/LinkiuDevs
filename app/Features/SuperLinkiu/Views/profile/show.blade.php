@@ -64,8 +64,8 @@ use Illuminate\Support\Facades\Storage;
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <!-- Avatar Section -->
             <div class="lg:col-span-1">
-                <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                    <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+                <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                    <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                         <h2 class="text-lg font-semibold text-black-300 mb-0">Foto de Perfil</h2>
                     </div>
                     <div class="p-6 text-center">
@@ -74,10 +74,10 @@ use Illuminate\Support\Facades\Storage;
                             @if($user->avatar_url)
                                 <img src="{{ $user->avatar_url }}" 
                                      alt="Avatar de {{ $user->name }}" 
-                                     class="w-32 h-32 rounded-full mx-auto object-cover border-4 border-white-200">
+                                     class="w-32 h-32 rounded-full mx-auto object-cover border-4 border-accent-200">
                             @else
-                                <div class="w-32 h-32 bg-primary-200 rounded-full flex items-center justify-center mx-auto border-4 border-white-200">
-                                    <span class="text-white-50 text-4xl font-medium">
+                                <div class="w-32 h-32 bg-primary-200 rounded-full flex items-center justify-center mx-auto border-4 border-accent-200">
+                                    <span class="text-accent-50 text-4xl font-medium">
                                         {{ substr($user->name, 0, 1) }}
                                     </span>
                                 </div>
@@ -103,7 +103,7 @@ use Illuminate\Support\Facades\Storage;
                                               file:text-sm
                                               file:bg-primary-50 file:text-primary-200
                                               hover:file:bg-primary-100
-                                              border border-white-200 rounded-lg
+                                              border border-accent-200 rounded-lg
                                               focus:ring-2 focus:ring-primary-100 focus:border-primary-200">
                                 @error('avatar')
                                     <p class="mt-1 text-sm text-error-300">{{ $message }}</p>
@@ -112,7 +112,7 @@ use Illuminate\Support\Facades\Storage;
 
                             <div class="mb-4">
                                 <button type="submit" 
-                                        class="w-full bg-primary-200 text-white-50 py-2 px-4 rounded-lg text-sm font-medium
+                                        class="w-full bg-primary-200 text-accent-50 py-2 px-4 rounded-lg text-sm font-medium
                                                hover:bg-primary-300 focus:ring-2 focus:ring-primary-100 transition-colors">
                                     <x-solar-camera-outline class="w-4 h-4 inline mr-2" />
                                     Subir Avatar
@@ -126,7 +126,7 @@ use Illuminate\Support\Facades\Storage;
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" 
-                                        class="bg-error-200 text-white-50 py-2 px-4 rounded-lg text-sm font-medium
+                                        class="bg-error-200 text-accent-50 py-2 px-4 rounded-lg text-sm font-medium
                                                hover:bg-error-300 focus:ring-2 focus:ring-error-100 transition-colors"
                                         onclick="return confirm('¿Estás seguro de eliminar tu avatar?')">
                                     <x-solar-trash-bin-minimalistic-outline class="w-4 h-4 inline mr-2" />
@@ -145,8 +145,8 @@ use Illuminate\Support\Facades\Storage;
 
             <!-- Profile Information -->
             <div class="lg:col-span-2">
-                <div class="bg-white-50 rounded-lg p-0 overflow-hidden mb-8">
-                    <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+                <div class="bg-accent-50 rounded-lg p-0 overflow-hidden mb-8">
+                    <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                         <h2 class="text-lg font-semibold text-black-300 mb-0">Información Personal</h2>
                     </div>
                     <div class="p-6">
@@ -162,7 +162,7 @@ use Illuminate\Support\Facades\Storage;
                                            name="name" 
                                            id="name" 
                                            value="{{ old('name', $user->name) }}"
-                                           class="w-full px-4 py-3 border border-white-200 rounded-lg text-sm
+                                           class="w-full px-4 py-3 border border-accent-200 rounded-lg text-sm
                                                   focus:ring-2 focus:ring-primary-100 focus:border-primary-200
                                                   transition-colors">
                                     @error('name')
@@ -177,7 +177,7 @@ use Illuminate\Support\Facades\Storage;
                                            name="email" 
                                            id="email" 
                                            value="{{ old('email', $user->email) }}"
-                                           class="w-full px-4 py-3 border border-white-200 rounded-lg text-sm
+                                           class="w-full px-4 py-3 border border-accent-200 rounded-lg text-sm
                                                   focus:ring-2 focus:ring-primary-100 focus:border-primary-200
                                                   transition-colors">
                                     @error('email')
@@ -188,7 +188,7 @@ use Illuminate\Support\Facades\Storage;
 
                             <div class="mt-6 flex justify-end">
                                 <button type="submit" 
-                                        class="bg-primary-200 text-white-50 py-3 px-6 rounded-lg text-sm font-medium
+                                        class="bg-primary-200 text-accent-50 py-3 px-6 rounded-lg text-sm font-medium
                                                hover:bg-primary-300 focus:ring-2 focus:ring-primary-100 transition-colors">
                                     <x-solar-diskette-outline class="w-5 h-5 inline mr-2" />
                                     Guardar Cambios
@@ -199,8 +199,8 @@ use Illuminate\Support\Facades\Storage;
                 </div>
 
                 <!-- Change Password -->
-                <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                    <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+                <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                    <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                         <h2 class="text-lg font-semibold text-black-300 mb-0">Cambiar Contraseña</h2>
                     </div>
                     <div class="p-6">
@@ -215,7 +215,7 @@ use Illuminate\Support\Facades\Storage;
                                     <input type="password" 
                                            name="current_password" 
                                            id="current_password"
-                                           class="w-full px-4 py-3 border border-white-200 rounded-lg text-sm
+                                           class="w-full px-4 py-3 border border-accent-200 rounded-lg text-sm
                                                   focus:ring-2 focus:ring-primary-100 focus:border-primary-200
                                                   transition-colors">
                                     @error('current_password')
@@ -230,7 +230,7 @@ use Illuminate\Support\Facades\Storage;
                                         <input type="password" 
                                                name="password" 
                                                id="password"
-                                               class="w-full px-4 py-3 border border-white-200 rounded-lg text-sm
+                                               class="w-full px-4 py-3 border border-accent-200 rounded-lg text-sm
                                                       focus:ring-2 focus:ring-primary-100 focus:border-primary-200
                                                       transition-colors">
                                         @error('password')
@@ -244,7 +244,7 @@ use Illuminate\Support\Facades\Storage;
                                         <input type="password" 
                                                name="password_confirmation" 
                                                id="password_confirmation"
-                                               class="w-full px-4 py-3 border border-white-200 rounded-lg text-sm
+                                               class="w-full px-4 py-3 border border-accent-200 rounded-lg text-sm
                                                       focus:ring-2 focus:ring-primary-100 focus:border-primary-200
                                                       transition-colors">
                                     </div>
@@ -253,7 +253,7 @@ use Illuminate\Support\Facades\Storage;
 
                             <div class="mt-6 flex justify-end">
                                 <button type="submit" 
-                                        class="bg-secondary-200 text-white-50 py-3 px-6 rounded-lg text-sm font-medium
+                                        class="bg-secondary-200 text-accent-50 py-3 px-6 rounded-lg text-sm font-medium
                                                hover:bg-secondary-300 focus:ring-2 focus:ring-secondary-100 transition-colors">
                                     <x-solar-shield-check-outline class="w-5 h-5 inline mr-2" />
                                     Actualizar Contraseña
@@ -264,8 +264,8 @@ use Illuminate\Support\Facades\Storage;
                 </div>
 
                 <!-- App Settings -->
-                <div class="bg-white-50 rounded-lg p-0 overflow-hidden mt-8">
-                    <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+                <div class="bg-accent-50 rounded-lg p-0 overflow-hidden mt-8">
+                    <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                         <h2 class="text-lg font-semibold text-black-300 mb-0">Configuración de la Aplicación</h2>
                     </div>
                     <div class="p-6">
@@ -281,7 +281,7 @@ use Illuminate\Support\Facades\Storage;
                                            name="app_name" 
                                            id="app_name"
                                            value="{{ old('app_name', config('app.name')) }}"
-                                           class="w-full px-4 py-3 border border-white-200 rounded-lg text-sm
+                                           class="w-full px-4 py-3 border border-accent-200 rounded-lg text-sm
                                                   focus:ring-2 focus:ring-primary-100 focus:border-primary-200
                                                   transition-colors">
                                     @error('app_name')
@@ -316,7 +316,7 @@ use Illuminate\Support\Facades\Storage;
                                                 <p class="text-xs text-black-200 mb-2">Logo actual:</p>
                                                 <img src="{{ $logoSrc }}" 
                                                      alt="Logo actual" 
-                                                     class="h-12 object-contain border border-white-200 rounded-lg p-2">
+                                                     class="h-12 object-contain border border-accent-200 rounded-lg p-2">
                                             </div>
                                         @endif
                                         
@@ -330,7 +330,7 @@ use Illuminate\Support\Facades\Storage;
                                                       file:text-sm
                                                       file:bg-primary-50 file:text-primary-200
                                                       hover:file:bg-primary-100
-                                                      border border-white-200 rounded-lg
+                                                      border border-accent-200 rounded-lg
                                                       focus:ring-2 focus:ring-primary-100 focus:border-primary-200">
                                         <p class="text-xs text-black-200 mt-1">
                                             Formatos: JPG, PNG, GIF, SVG<br>
@@ -367,7 +367,7 @@ use Illuminate\Support\Facades\Storage;
                                                 <p class="text-xs text-black-200 mb-2">Favicon actual:</p>
                                                 <img src="{{ $faviconSrc }}" 
                                                      alt="Favicon actual" 
-                                                     class="w-8 h-8 object-contain border border-white-200 rounded">
+                                                     class="w-8 h-8 object-contain border border-accent-200 rounded">
                                             </div>
                                         @endif
                                         
@@ -381,7 +381,7 @@ use Illuminate\Support\Facades\Storage;
                                                       file:text-sm
                                                       file:bg-secondary-50 file:text-secondary-200
                                                       hover:file:bg-secondary-100
-                                                      border border-white-200 rounded-lg
+                                                      border border-accent-200 rounded-lg
                                                       focus:ring-2 focus:ring-secondary-100 focus:border-secondary-200">
                                         <p class="text-xs text-black-200 mt-1">
                                             Formatos: ICO, PNG<br>
@@ -396,7 +396,7 @@ use Illuminate\Support\Facades\Storage;
 
                             <div class="mt-6 flex justify-end">
                                 <button type="submit" 
-                                        class="bg-info-200 text-white-50 py-3 px-6 rounded-lg text-sm font-medium
+                                        class="bg-info-200 text-accent-50 py-3 px-6 rounded-lg text-sm font-medium
                                                hover:bg-info-300 focus:ring-2 focus:ring-info-100 transition-colors">
                                     <x-solar-settings-outline class="w-5 h-5 inline mr-2" />
                                     Actualizar Configuración

@@ -21,8 +21,8 @@
         <input type="hidden" name="_old_slug" value="{{ old('slug', '') }}">
         
         <!-- Card única con toda la información -->
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-            <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+            <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                 <h2 class="text-lg font-semibold text-black-400 mb-0">Información de la Tienda</h2>
             </div>
             
@@ -42,7 +42,7 @@
                             <input type="text"
                                 name="owner_name"
                                 value="{{ old('owner_name') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('owner_name') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('owner_name') border-error-200 @enderror"
                                 required>
                             @error('owner_name')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
@@ -56,7 +56,7 @@
                             <input type="email"
                                 name="admin_email"
                                 value="{{ old('admin_email') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('admin_email') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('admin_email') border-error-200 @enderror"
                                 required>
                             @error('admin_email')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
@@ -68,7 +68,7 @@
                                 Tipo de Documento <span class="text-error-300">*</span>
                             </label>
                             <select name="owner_document_type"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('owner_document_type') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('owner_document_type') border-error-200 @enderror"
                                 required>
                                 <option value="">Seleccionar tipo</option>
                                 <option value="cedula" {{ old('owner_document_type') == 'cedula' ? 'selected' : '' }}>Cédula</option>
@@ -87,7 +87,7 @@
                             <input type="text"
                                 name="owner_document_number"
                                 value="{{ old('owner_document_number') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('owner_document_number') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('owner_document_number') border-error-200 @enderror"
                                 required>
                             @error('owner_document_number')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
@@ -101,7 +101,7 @@
                             <input type="text"
                                 name="owner_country"
                                 value="{{ old('owner_country', 'Colombia') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('owner_country') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('owner_country') border-error-200 @enderror"
                                 required>
                             @error('owner_country')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
@@ -115,7 +115,7 @@
                             <input type="text"
                                 name="owner_department"
                                 value="{{ old('owner_department') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('owner_department') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('owner_department') border-error-200 @enderror"
                                 placeholder="Antioquia"
                                 required>
                             @error('owner_department')
@@ -130,7 +130,7 @@
                             <input type="text"
                                 name="owner_city"
                                 value="{{ old('owner_city') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('owner_city') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('owner_city') border-error-200 @enderror"
                                 placeholder="Medellín"
                                 required>
                             @error('owner_city')
@@ -144,7 +144,7 @@
                             </label>
                             <input type="password"
                                 name="admin_password"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('admin_password') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('admin_password') border-error-200 @enderror"
                                 required
                                 minlength="8">
                             @error('admin_password')
@@ -170,7 +170,7 @@
                             <input type="text"
                                 name="name"
                                 value="{{ old('name') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('name') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('name') border-error-200 @enderror"
                                 placeholder="Mi Tienda Online"
                                 required>
                         @error('name')
@@ -183,7 +183,7 @@
                                 Plan <span class="text-error-300">*</span>
                             </label>
                             <select name="plan_id"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('plan_id') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('plan_id') border-error-200 @enderror"
                                 required>
                                 <option value="">Seleccionar Plan</option>
                                 @foreach($plans as $plan)
@@ -210,7 +210,7 @@
                                     name="slug"
                                     id="slug-input"
                                     value="{{ old('slug') }}"
-                                    class="flex-1 px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('slug') border-error-200 @enderror"
+                                    class="flex-1 px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('slug') border-error-200 @enderror"
                                     placeholder="mi-tienda"
                                     required>
                             </div>
@@ -229,7 +229,7 @@
                             <input type="email"
                                 name="email"
                                 value="{{ old('email') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('email') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('email') border-error-200 @enderror"
                                 placeholder="Opcional - Email público de la tienda">
                         @error('email')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
@@ -243,7 +243,7 @@
                             <input type="text"
                                 name="phone"
                                 value="{{ old('phone') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('phone') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('phone') border-error-200 @enderror"
                                 placeholder="+57 300 123 4567">
                             @error('phone')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
@@ -255,7 +255,7 @@
                                 Estado Inicial
                             </label>
                             <select name="status"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
                                 <option value="active">Activa</option>
                                 <option value="inactive">Inactiva</option>
                             </select>
@@ -267,7 +267,7 @@
                                 Período de Facturación <span class="text-error-300">*</span>
                             </label>
                             <select name="billing_period"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('billing_period') border-error-200 @enderror">
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('billing_period') border-error-200 @enderror">
                                 <option value="">Seleccionar período</option>
                                 <option value="monthly" {{ old('billing_period') == 'monthly' ? 'selected' : '' }}>Mensual</option>
                                 <option value="quarterly" {{ old('billing_period') == 'quarterly' ? 'selected' : '' }}>Trimestral</option>
@@ -287,7 +287,7 @@
                                 Estado de Pago Inicial
                             </label>
                             <select name="initial_payment_status"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
                                 <option value="pending" {{ old('initial_payment_status') == 'pending' ? 'selected' : '' }}>Pendiente de Pago</option>
                                 <option value="paid" {{ old('initial_payment_status') == 'paid' ? 'selected' : '' }}>Pagado</option>
                             </select>
@@ -303,7 +303,7 @@
                             <textarea
                                 name="description"
                                 rows="3"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('description') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('description') border-error-200 @enderror"
                                 placeholder="Breve descripción de la tienda...">{{ old('description') }}</textarea>
                             @error('description')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
@@ -325,7 +325,7 @@
                                 Tipo de Documento de la Empresa
                             </label>
                             <select name="document_type"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('document_type') border-error-200 @enderror">
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('document_type') border-error-200 @enderror">
                                 <option value="">Seleccionar tipo</option>
                                 <option value="nit" {{ old('document_type') == 'nit' ? 'selected' : '' }}>NIT</option>
                                 <option value="cedula" {{ old('document_type') == 'cedula' ? 'selected' : '' }}>Cédula</option>
@@ -342,7 +342,7 @@
                             <input type="text"
                                 name="document_number"
                                 value="{{ old('document_number') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('document_number') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('document_number') border-error-200 @enderror"
                                 placeholder="123456789-0">
                         @error('document_number')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
@@ -356,7 +356,7 @@
                             <input type="text"
                                 name="country"
                                 value="{{ old('country', 'Colombia') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('country') border-error-200 @enderror">
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('country') border-error-200 @enderror">
                         @error('country')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
                         @enderror
@@ -369,7 +369,7 @@
                             <input type="text"
                                 name="department"
                                 value="{{ old('department') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('department') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('department') border-error-200 @enderror"
                                 placeholder="Antioquia">
                         @error('department')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
@@ -383,7 +383,7 @@
                             <input type="text"
                                 name="city"
                                 value="{{ old('city') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('city') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('city') border-error-200 @enderror"
                                 placeholder="Medellín">
                         @error('city')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
@@ -397,7 +397,7 @@
                             <input type="text"
                                 name="address"
                                 value="{{ old('address') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('address') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('address') border-error-200 @enderror"
                                 placeholder="Calle 123 #45-67">
                         @error('address')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
@@ -423,7 +423,7 @@
                             <input type="text"
                                 name="meta_title"
                                 value="{{ old('meta_title') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
                                 placeholder="Mi Tienda Online - Los mejores productos">
                         </div>
 
@@ -434,7 +434,7 @@
                         <textarea
                                 name="meta_description"
                                 rows="2"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
                                 placeholder="Descripción para motores de búsqueda...">{{ old('meta_description') }}</textarea>
                         </div>
 
@@ -445,7 +445,7 @@
                             <input type="text"
                                 name="meta_keywords"
                                 value="{{ old('meta_keywords') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
                                 placeholder="tienda, online, productos, calidad">
                         </div>
                     </div>
@@ -453,7 +453,7 @@
                 </div>
 
             <!-- Footer con botones -->
-            <div class="border-t border-white-100 bg-white-50 px-6 py-4">
+            <div class="border-t border-accent-100 bg-accent-50 px-6 py-4">
                 <div class="flex justify-end gap-3">
                     <a href="{{ route('superlinkiu.stores.index') }}"
                         class="btn-outline-secondary px-6 py-2 rounded-lg">
@@ -534,8 +534,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (planData.allow_custom_slug) {
             // Plan permite slug personalizado
             slugInput.removeAttribute('readonly');
-            slugInput.classList.remove('bg-white-100', 'cursor-not-allowed');
-            slugInput.classList.add('bg-white-50');
+            slugInput.classList.remove('bg-accent-100', 'cursor-not-allowed');
+            slugInput.classList.add('bg-accent-50');
             slugInput.placeholder = 'mi-tienda-personalizada';
             slugHelpText.innerHTML = '✅ Este plan permite URLs personalizadas. Elige la URL que prefieras.';
             slugHelpText.className = 'text-xs text-success-300 mt-1';
@@ -547,8 +547,8 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             // Plan NO permite slug personalizado - generar aleatorio
             slugInput.setAttribute('readonly', 'readonly');
-            slugInput.classList.add('bg-white-100', 'cursor-not-allowed');
-            slugInput.classList.remove('bg-white-50');
+            slugInput.classList.add('bg-accent-100', 'cursor-not-allowed');
+            slugInput.classList.remove('bg-accent-50');
             
             const randomSlug = generateRandomSlug();
             slugInput.value = randomSlug;

@@ -27,7 +27,7 @@
         <div class="xl:col-span-2 space-y-6">
             
             <!-- Información del Cliente -->
-            <div class="bg-white-50 rounded-lg p-6">
+            <div class="bg-accent-50 rounded-lg p-6">
                 <h3 class="text-sm font-medium text-black-400 mb-4">Información del Cliente</h3>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <div>
@@ -60,17 +60,17 @@
             </div>
 
             <!-- Productos del Pedido -->
-            <div class="bg-white-50 rounded-lg p-6">
+            <div class="bg-accent-50 rounded-lg p-6">
                 <h3 class="text-sm font-medium text-black-400 mb-4">Productos ({{ $order->items->count() }})</h3>
                 <div class="space-y-4">
                     @foreach($order->items as $item)
-                        <div class="flex items-center p-4 bg-white-100 rounded-lg">
+                        <div class="flex items-center p-4 bg-accent-100 rounded-lg">
                             @if($item->product && $item->product->mainImage)
                                 <img src="{{ $item->product->mainImage->image_url }}" 
                                      alt="{{ $item->product_name }}" 
                                      class="w-12 h-12 rounded-lg object-cover mr-4">
                             @else
-                                <div class="w-12 h-12 bg-white-200 rounded-lg flex items-center justify-center mr-4">
+                                <div class="w-12 h-12 bg-accent-200 rounded-lg flex items-center justify-center mr-4">
                                     <x-solar-gallery-outline class="w-6 h-6 text-black-300" />
                                 </div>
                             @endif
@@ -97,13 +97,13 @@
             </div>
 
             <!-- Historial de Estados -->
-            <div class="bg-white-50 rounded-lg p-6">
+            <div class="bg-accent-50 rounded-lg p-6">
                 <h3 class="text-sm font-medium text-black-400 mb-4">Historial de Estados</h3>
                 <div class="space-y-4">
                     @foreach($order->statusHistory as $history)
                         <div class="flex">
                             <div class="flex-shrink-0 w-8 h-8 {{ $history->status_color }} rounded-full flex items-center justify-center mr-3">
-                                <x-solar-check-circle-outline class="w-4 h-4 text-white-50" />
+                                <x-solar-check-circle-outline class="w-4 h-4 text-accent-50" />
                             </div>
                             <div class="flex-1 min-w-0">
                                 <div class="text-sm text-black-500">{{ $history->status_change }}</div>
@@ -124,7 +124,7 @@
         <div class="space-y-6">
             
             <!-- Resumen del Pedido -->
-            <div class="bg-white-50 rounded-lg p-6">
+            <div class="bg-accent-50 rounded-lg p-6">
                 <h3 class="text-sm font-medium text-black-400 mb-4">Resumen</h3>
                 <div class="space-y-3">
                     <div class="flex justify-between text-sm">
@@ -143,7 +143,7 @@
                             <span class="text-success-300">-${{ number_format($order->coupon_discount, 0, ',', '.') }}</span>
                         </div>
                     @endif
-                    <div class="border-t border-white-200 pt-3">
+                    <div class="border-t border-accent-200 pt-3">
                         <div class="flex justify-between">
                             <span class="text-lg font-semibold text-black-500">Total:</span>
                             <span class="text-lg font-semibold text-primary-200">${{ number_format($order->total, 0, ',', '.') }}</span>
@@ -153,7 +153,7 @@
             </div>
 
             <!-- Información de Entrega -->
-            <div class="bg-white-50 rounded-lg p-6">
+            <div class="bg-accent-50 rounded-lg p-6">
                 <h3 class="text-sm font-medium text-black-400 mb-4">Entrega</h3>
                 <div class="space-y-3">
                     <div>
@@ -185,7 +185,7 @@
             </div>
 
             <!-- Información de Pago -->
-            <div class="bg-white-50 rounded-lg p-6">
+            <div class="bg-accent-50 rounded-lg p-6">
                 <h3 class="text-sm font-medium text-black-400 mb-4">Pago</h3>
                 <div class="space-y-3">
                     <div>
@@ -223,12 +223,12 @@
             </div>
 
             <!-- Cambiar Estado -->
-            <div class="bg-white-50 rounded-lg p-6">
+            <div class="bg-accent-50 rounded-lg p-6">
                 <h3 class="text-sm font-medium text-black-400 mb-4">Cambiar Estado</h3>
                 <div class="space-y-4">
                     <div>
                         <label class="block text-xs text-black-400 mb-2">Nuevo Estado</label>
-                        <select x-model="newStatus" class="w-full px-3 py-2 border border-white-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
+                        <select x-model="newStatus" class="w-full px-3 py-2 border border-accent-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
                             <option value="">Seleccionar estado</option>
                             @foreach(['pending' => 'Pendiente', 'confirmed' => 'Confirmado', 'preparing' => 'Preparando', 'shipped' => 'Enviado', 'delivered' => 'Entregado', 'cancelled' => 'Cancelado'] as $status => $label)
                                 @if($status !== $order->status)
@@ -240,7 +240,7 @@
                     <div>
                         <label class="block text-xs text-black-400 mb-2">Notas (Opcional)</label>
                         <textarea x-model="statusNotes" rows="3" 
-                                  class="w-full px-3 py-2 border border-white-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200"
+                                  class="w-full px-3 py-2 border border-accent-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200"
                                   placeholder="Observaciones sobre el cambio de estado..."></textarea>
                     </div>
                     <button type="button" @click="showStatusModal = true" :disabled="!newStatus" 
@@ -253,14 +253,14 @@
 
             <!-- Notas del Pedido -->
             @if($order->notes)
-                <div class="bg-white-50 rounded-lg p-6">
+                <div class="bg-accent-50 rounded-lg p-6">
                     <h3 class="text-sm font-medium text-black-400 mb-4">Notas</h3>
                     <div class="text-sm text-black-500">{{ $order->notes }}</div>
                 </div>
             @endif
 
             <!-- Acciones Rápidas -->
-            <div class="bg-white-50 rounded-lg p-6">
+            <div class="bg-accent-50 rounded-lg p-6">
                 <h3 class="text-sm font-medium text-black-400 mb-4">Acciones</h3>
                 <div class="space-y-3">
                     @if($order->canBeEdited())
@@ -288,14 +288,14 @@
                     
                     <a href="https://wa.me/57{{ preg_replace('/\D/', '', $order->customer_phone) }}?text=Hola {{ $order->customer_name }}, te contactamos sobre tu pedido #{{ $order->order_number }}" 
                        target="_blank" 
-                       class="w-full flex items-center justify-center px-4 py-2 bg-success-200 text-white-50 rounded-lg hover:bg-success-300 transition-colors text-sm">
+                       class="w-full flex items-center justify-center px-4 py-2 bg-success-200 text-accent-50 rounded-lg hover:bg-success-300 transition-colors text-sm">
                         <x-solar-chat-round-dots-outline class="w-4 h-4 mr-2" />
                         Contactar por WhatsApp
                     </a>
                     
                     @if($order->status === 'pending')
                         <button @click="showDeleteModal = true" 
-                                class="w-full flex items-center justify-center px-4 py-2 bg-error-200 text-white-50 rounded-lg hover:bg-error-300 transition-colors text-sm">
+                                class="w-full flex items-center justify-center px-4 py-2 bg-error-200 text-accent-50 rounded-lg hover:bg-error-300 transition-colors text-sm">
                             <x-solar-trash-bin-trash-outline class="w-4 h-4 mr-2" />
                             Eliminar Pedido
                         </button>
@@ -314,7 +314,7 @@
          class="fixed inset-0 z-50 overflow-y-auto">
         <div class="flex items-center justify-center min-h-screen px-4">
             <div class="fixed inset-0 bg-black-400 opacity-75" @click="showStatusModal = false"></div>
-            <div class="relative bg-white-50 rounded-lg max-w-md w-full p-6" @click.stop>
+            <div class="relative bg-accent-50 rounded-lg max-w-md w-full p-6" @click.stop>
                 <!-- Botón X para cerrar -->
                 <button @click="showStatusModal = false" 
                         class="absolute top-4 right-4 text-black-300 hover:text-black-500">
@@ -354,7 +354,7 @@
          class="fixed inset-0 z-50 overflow-y-auto">
         <div class="flex items-center justify-center min-h-screen px-4">
             <div class="fixed inset-0 bg-black-400 opacity-75" @click="showDeleteModal = false"></div>
-            <div class="relative bg-white-50 rounded-lg max-w-md w-full p-6" @click.stop>
+            <div class="relative bg-accent-50 rounded-lg max-w-md w-full p-6" @click.stop>
                 <!-- Botón X para cerrar -->
                 <button @click="showDeleteModal = false" 
                         class="absolute top-4 right-4 text-black-300 hover:text-black-500">

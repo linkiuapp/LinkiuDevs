@@ -18,7 +18,7 @@
         <!-- Main Checkout Layout - Single Column -->
         <div class="max-w-2xl mx-auto">
             <!-- Checkout Form -->
-            <div class="bg-white-50 rounded-xl p-6 border border-white-200">
+            <div class="bg-accent-50 rounded-xl p-6 border border-accent-200">
                     <!-- Checkout Accordion Form -->
                     <form id="checkout-form" class="space-y-4">
                         @csrf
@@ -26,7 +26,7 @@
                         <!-- Step 1: Personal Data -->
                         <div id="step-1" class="checkout-step active">
                             <div class="flex items-center mb-3">
-                                <div class="w-5 h-5 bg-primary-300 text-white-50 rounded-full flex items-center justify-center text-xs font-medium mr-2">
+                                <div class="w-5 h-5 bg-primary-300 text-accent-50 rounded-full flex items-center justify-center text-xs font-medium mr-2">
                                     1
                                 </div>
                                 <h3 class="text-sm font-medium text-black-500">Datos Personales</h3>
@@ -42,7 +42,7 @@
                                             type="text" 
                                             id="customer_name" 
                                             name="customer_name" 
-                                            class="w-full px-3 py-2 border border-white-200 rounded-md focus:ring-1 focus:ring-primary-300 focus:border-transparent transition-colors text-sm"
+                                            class="w-full px-3 py-2 border border-accent-200 rounded-md focus:ring-1 focus:ring-primary-300 focus:border-transparent transition-colors text-sm"
                                             placeholder="Tu nombre completo"
                                             required
                                         >
@@ -58,7 +58,7 @@
                                             type="tel" 
                                             id="customer_phone" 
                                             name="customer_phone" 
-                                            class="w-full px-3 py-2 border border-white-200 rounded-md focus:ring-1 focus:ring-primary-300 focus:border-transparent transition-colors text-sm"
+                                            class="w-full px-3 py-2 border border-accent-200 rounded-md focus:ring-1 focus:ring-primary-300 focus:border-transparent transition-colors text-sm"
                                             placeholder="3001234567"
                                             required
                                         >
@@ -71,7 +71,7 @@
                                     <button 
                                         type="button" 
                                         id="continue-to-shipping" 
-                                        class="w-full bg-primary-300 hover:bg-primary-200 text-white-50 py-2 px-4 rounded-md font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                                        class="w-full bg-primary-300 hover:bg-primary-200 text-accent-50 py-2 px-4 rounded-md font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                                         disabled
                                     >
                                         Continuar al Envío
@@ -83,7 +83,7 @@
                         <!-- Step 2: Shipping Method -->
                         <div id="step-2" class="checkout-step">
                             <div class="flex items-center mb-3">
-                                <div class="w-5 h-5 bg-white-200 text-black-300 rounded-full flex items-center justify-center text-xs font-medium mr-2">
+                                <div class="w-5 h-5 bg-accent-200 text-black-300 rounded-full flex items-center justify-center text-xs font-medium mr-2">
                                     2
                                 </div>
                                 <h3 class="text-sm font-medium text-black-300">Método de Envío</h3>
@@ -92,7 +92,7 @@
                                 <!-- Shipping Method Options -->
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <!-- Domicilio Option -->
-                                    <label class="border border-white-200 rounded-lg p-3 hover:border-primary-300 transition-colors cursor-pointer">
+                                    <label class="border border-accent-200 rounded-lg p-3 hover:border-primary-300 transition-colors cursor-pointer">
                                         <input 
                                             type="radio" 
                                             name="delivery_type" 
@@ -110,7 +110,7 @@
                                     </label>
 
                                     <!-- Pickup Option -->
-                                    <label class="border border-white-200 rounded-lg p-3 hover:border-primary-300 transition-colors cursor-pointer">
+                                    <label class="border border-accent-200 rounded-lg p-3 hover:border-primary-300 transition-colors cursor-pointer">
                                         <input 
                                             type="radio" 
                                             name="delivery_type" 
@@ -132,7 +132,7 @@
                                 </div>
 
                                 <!-- Domicilio Fields (Hidden by default) -->
-                                <div id="domicilio-fields" class="hidden space-y-4 mt-6 p-4 bg-white-100 rounded-lg">
+                                <div id="domicilio-fields" class="hidden space-y-4 mt-6 p-4 bg-accent-100 rounded-lg">
                                     <h4 class="font-semibold text-black-500 mb-3">Información de Entrega</h4>
                                     
                                     <!-- Departamento -->
@@ -143,7 +143,7 @@
                                         <select 
                                             id="department" 
                                             name="department" 
-                                            class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-colors"
+                                            class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-colors"
                                         >
                                             <option value="">Selecciona tu departamento</option>
                                             @foreach(['Amazonas', 'Antioquia', 'Arauca', 'Atlántico', 'Bolívar', 'Boyacá', 'Caldas', 'Caquetá', 'Casanare', 'Cauca', 'Cesar', 'Chocó', 'Córdoba', 'Cundinamarca', 'Guainía', 'Guaviare', 'Huila', 'La Guajira', 'Magdalena', 'Meta', 'Nariño', 'Norte de Santander', 'Putumayo', 'Quindío', 'Risaralda', 'San Andrés y Providencia', 'Santander', 'Sucre', 'Tolima', 'Valle del Cauca', 'Vaupés', 'Vichada'] as $dept)
@@ -161,7 +161,7 @@
                                         <select 
                                             id="city" 
                                             name="city" 
-                                            class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-colors"
+                                            class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-colors"
                                             disabled
                                         >
                                             <option value="">Primero selecciona el departamento</option>
@@ -178,7 +178,7 @@
                                             id="address" 
                                             name="address" 
                                             rows="3"
-                                            class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-colors resize-none"
+                                            class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-colors resize-none"
                                             placeholder="Ej: Calle 123 #45-67, Barrio Centro, Referencias adicionales..."
                                         ></textarea>
                                         <div id="address_error" class="hidden mt-1 text-sm text-error-300"></div>
@@ -209,7 +209,7 @@
                                     <button 
                                         type="button" 
                                         id="continue-to-payment" 
-                                        class="w-full bg-primary-300 hover:bg-primary-200 text-white-50 py-2 px-4 rounded-md font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                                        class="w-full bg-primary-300 hover:bg-primary-200 text-accent-50 py-2 px-4 rounded-md font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                                         disabled
                                     >
                                         Continuar al Pago
@@ -221,7 +221,7 @@
                         <!-- Step 3: Payment Method -->
                         <div id="step-3" class="checkout-step">
                             <div class="flex items-center mb-3">
-                                <div class="w-5 h-5 bg-white-200 text-black-300 rounded-full flex items-center justify-center text-xs font-medium mr-2">
+                                <div class="w-5 h-5 bg-accent-200 text-black-300 rounded-full flex items-center justify-center text-xs font-medium mr-2">
                                     3
                                 </div>
                                 <h3 class="text-sm font-medium text-black-300">Método de Pago</h3>
@@ -230,7 +230,7 @@
                                 <!-- Payment Method Options -->
                                 <div class="space-y-4">
                                     <!-- Efectivo Option -->
-                                    <div class="border border-white-200 rounded-lg p-4 hover:border-primary-300 transition-colors">
+                                    <div class="border border-accent-200 rounded-lg p-4 hover:border-primary-300 transition-colors">
                                         <label class="flex items-start cursor-pointer">
                                             <input 
                                                 type="radio" 
@@ -250,7 +250,7 @@
                                     </div>
 
                                     <!-- Transferencia Option -->
-                                    <div class="border border-white-200 rounded-lg p-4 hover:border-primary-300 transition-colors">
+                                    <div class="border border-accent-200 rounded-lg p-4 hover:border-primary-300 transition-colors">
                                         <label class="flex items-start cursor-pointer">
                                             <input 
                                                 type="radio" 
@@ -271,7 +271,7 @@
                                 </div>
 
                                 <!-- Efectivo Fields (Hidden by default) -->
-                                <div id="efectivo-fields" class="hidden space-y-4 mt-6 p-4 bg-white-100 rounded-lg">
+                                <div id="efectivo-fields" class="hidden space-y-4 mt-6 p-4 bg-accent-100 rounded-lg">
                                     <h4 class="font-semibold text-black-500 mb-3">💵 Pago en Efectivo</h4>
                                     
                                     <div>
@@ -284,7 +284,7 @@
                                                 type="number" 
                                                 id="cash_amount" 
                                                 name="cash_amount" 
-                                                class="w-full pl-8 pr-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-colors"
+                                                class="w-full pl-8 pr-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-colors"
                                                 placeholder="0"
                                                 min="0"
                                             >
@@ -302,12 +302,12 @@
                                 </div>
 
                                 <!-- Transferencia Fields (Hidden by default) -->
-                                <div id="transferencia-fields" class="hidden space-y-4 mt-6 p-4 bg-white-100 rounded-lg">
+                                <div id="transferencia-fields" class="hidden space-y-4 mt-6 p-4 bg-accent-100 rounded-lg">
                                     <h4 class="font-semibold text-black-500 mb-3">🏦 Información Bancaria</h4>
                                     
                                     <!-- Bank Info -->
                                     <div class="space-y-3">
-                                        <div class="bg-white-50 border border-white-200 rounded-lg p-4">
+                                        <div class="bg-accent-50 border border-accent-200 rounded-lg p-4">
                                             <div class="flex justify-between items-center mb-2">
                                                 <span class="font-medium text-black-500">Banco:</span>
                                                 <span class="text-black-400">Bancolombia</span>
@@ -323,7 +323,7 @@
                                                     <button 
                                                         type="button" 
                                                         id="copy-account" 
-                                                        class="bg-primary-300 hover:bg-primary-200 text-white-50 px-3 py-1 rounded text-xs font-medium transition-colors"
+                                                        class="bg-primary-300 hover:bg-primary-200 text-accent-50 px-3 py-1 rounded text-xs font-medium transition-colors"
                                                     >
                                                         Copiar
                                                     </button>
@@ -341,7 +341,7 @@
                                         <label for="payment_proof" class="block text-sm font-medium text-black-500 mb-2">
                                             Comprobante de Pago (Opcional)
                                         </label>
-                                        <div class="border-2 border-dashed border-white-200 rounded-lg p-6 text-center hover:border-primary-300 transition-colors">
+                                        <div class="border-2 border-dashed border-accent-200 rounded-lg p-6 text-center hover:border-primary-300 transition-colors">
                                             <input 
                                                 type="file" 
                                                 id="payment_proof" 
@@ -369,7 +369,7 @@
                                         id="notes" 
                                         name="notes" 
                                         rows="3"
-                                        class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-colors resize-none"
+                                        class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-colors resize-none"
                                         placeholder="Instrucciones especiales, referencias adicionales, etc..."
                                     ></textarea>
                                 </div>
@@ -377,7 +377,7 @@
                         </div>
 
                         <!-- Cupones y Descuentos -->
-                        <div class="bg-white-100 rounded-lg p-4 border border-white-200">
+                        <div class="bg-accent-100 rounded-lg p-4 border border-accent-200">
                             <div class="flex items-center gap-2 mb-3">
                                 <span class="text-lg">🎟️</span>
                                 <h3 class="text-sm font-medium text-black-500">Cupones y Descuentos</h3>
@@ -389,7 +389,7 @@
                                         type="text" 
                                         id="coupon_code" 
                                         name="coupon_code" 
-                                        class="w-full px-3 py-2 border border-white-200 rounded-lg focus:ring-1 focus:ring-primary-300 focus:border-transparent transition-colors text-sm"
+                                        class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:ring-1 focus:ring-primary-300 focus:border-transparent transition-colors text-sm"
                                         placeholder="Código de cupón"
                                         maxlength="50"
                                     >
@@ -398,7 +398,7 @@
                                 <button 
                                     type="button" 
                                     id="apply-coupon-btn" 
-                                    class="px-4 py-2 bg-primary-300 hover:bg-primary-200 text-white-50 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    class="px-4 py-2 bg-primary-300 hover:bg-primary-200 text-accent-50 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     Aplicar
                                 </button>
@@ -420,8 +420,8 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <div class="pt-6 border-t border-white-200">
-                            <button type="submit" id="submit-order" class="w-full bg-success-300 hover:bg-success-200 text-white-50 py-4 px-6 rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-base" disabled>
+                        <div class="pt-6 border-t border-accent-200">
+                            <button type="submit" id="submit-order" class="w-full bg-success-300 hover:bg-success-200 text-accent-50 py-4 px-6 rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-base" disabled>
                                 <span id="submit-button-text">Finalizar Pedido - Total: $<span id="submit-button-total">0</span></span>
                             </button>
                         </div>
@@ -431,7 +431,7 @@
 
             <!-- Order Summary (Right Column - 1/3 width on desktop, top on mobile) -->
             <div class="lg:col-span-1 order-1 lg:order-2">
-                <div class="bg-white-50 rounded-xl p-4 sm:p-6 border border-white-200 lg:sticky lg:top-4">
+                <div class="bg-accent-50 rounded-xl p-4 sm:p-6 border border-accent-200 lg:sticky lg:top-4">
                     <!-- Order Summary Component -->
                     <div id="order-summary">
                         <h3 class="text-lg font-semibold text-black-500 mb-4">Resumen del Pedido</h3>
@@ -439,8 +439,8 @@
                         <!-- Products List -->
                         <div id="summary-products" class="space-y-3 mb-4">
                             @foreach($products as $item)
-                                <div class="flex items-center gap-3 p-3 bg-white-100 rounded-lg">
-                                    <div class="w-12 h-12 bg-white-200 rounded-lg overflow-hidden flex-shrink-0">
+                                <div class="flex items-center gap-3 p-3 bg-accent-100 rounded-lg">
+                                    <div class="w-12 h-12 bg-accent-200 rounded-lg overflow-hidden flex-shrink-0">
                                         @if($item['product']->main_image_url)
                                             <img src="{{ $item['product']->main_image_url }}" alt="{{ $item['product']->name }}" class="w-full h-full object-cover">
                                         @else
@@ -466,7 +466,7 @@
 
 
                         <!-- Totals Section -->
-                        <div class="border-t border-white-200 pt-4 space-y-2">
+                        <div class="border-t border-accent-200 pt-4 space-y-2">
                             <!-- Subtotal -->
                             <div class="flex justify-between items-center">
                                 <span class="text-black-400">Subtotal:</span>
@@ -488,7 +488,7 @@
                             </div>
 
                             <!-- Total -->
-                            <div class="border-t border-white-200 pt-2 mt-3">
+                            <div class="border-t border-accent-200 pt-2 mt-3">
                                 <div class="flex justify-between items-center">
                                     <span class="text-lg font-bold text-black-500">Total:</span>
                                     <span id="summary-total" class="text-lg font-bold text-primary-300">${{ number_format($subtotal, 0, ',', '.') }}</span>
@@ -523,7 +523,7 @@
     
     .checkout-step.completed .step-number {
         background-color: #10b981;
-        color: white;
+        color: accent;
     }
     
     .checkout-step.completed h3 {
@@ -686,7 +686,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 button.disabled = true;
                 button.innerHTML = `
                     <div class="inline-flex items-center gap-2">
-                        <div class="w-4 h-4 border-2 border-white-50 border-t-transparent rounded-full animate-spin"></div>
+                        <div class="w-4 h-4 border-2 border-accent-50 border-t-transparent rounded-full animate-spin"></div>
                         <span>Validando...</span>
                     </div>
                 `;
@@ -729,7 +729,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 button.disabled = true;
                 button.innerHTML = `
                     <div class="inline-flex items-center gap-2">
-                        <div class="w-4 h-4 border-2 border-white-50 border-t-transparent rounded-full animate-spin"></div>
+                        <div class="w-4 h-4 border-2 border-accent-50 border-t-transparent rounded-full animate-spin"></div>
                         <span>Validando envío...</span>
                     </div>
                 `;
@@ -898,14 +898,14 @@ document.addEventListener('DOMContentLoaded', function() {
             errorElement.textContent = message;
             errorElement.classList.remove('hidden');
             inputElement.classList.add('border-error-300', 'focus:ring-error-300');
-            inputElement.classList.remove('border-white-200', 'focus:ring-primary-300');
+            inputElement.classList.remove('border-accent-200', 'focus:ring-primary-300');
         },
         
         // Hide error message
         hideError(errorElement, inputElement) {
             errorElement.classList.add('hidden');
             inputElement.classList.remove('border-error-300', 'focus:ring-error-300');
-            inputElement.classList.add('border-white-200', 'focus:ring-primary-300');
+            inputElement.classList.add('border-accent-200', 'focus:ring-primary-300');
         },
         
         // Handle delivery type change
@@ -1061,7 +1061,7 @@ document.addEventListener('DOMContentLoaded', function() {
             submitButton.disabled = true;
             submitButton.innerHTML = `
                 <div class="inline-flex items-center gap-2">
-                    <div class="w-4 h-4 border-2 border-white-50 border-t-transparent rounded-full animate-spin"></div>
+                    <div class="w-4 h-4 border-2 border-accent-50 border-t-transparent rounded-full animate-spin"></div>
                     <span>Procesando pedido...</span>
                 </div>
             `;
@@ -1136,7 +1136,7 @@ document.addEventListener('DOMContentLoaded', function() {
         showSubmissionError(message) {
             // Create error notification
             const notification = document.createElement('div');
-            notification.className = 'fixed top-4 right-4 bg-error-300 text-white-50 px-6 py-4 rounded-lg shadow-lg z-50 max-w-sm';
+            notification.className = 'fixed top-4 right-4 bg-error-300 text-accent-50 px-6 py-4 rounded-lg shadow-lg z-50 max-w-sm';
             notification.innerHTML = `
                 <div class="flex items-start gap-3">
                     <span class="text-xl">⚠️</span>
@@ -1144,7 +1144,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <p class="font-semibold mb-1">Error en el pedido</p>
                         <p class="text-sm">${message}</p>
                     </div>
-                    <button onclick="this.parentElement.parentElement.remove()" class="text-white-50 hover:text-white-200 ml-2">✕</button>
+                    <button onclick="this.parentElement.parentElement.remove()" class="text-accent-50 hover:text-accent-200 ml-2">✕</button>
                 </div>
             `;
             
@@ -1519,7 +1519,7 @@ document.addEventListener('DOMContentLoaded', function() {
             applyBtn.disabled = true;
             applyBtn.innerHTML = `
                 <div class="inline-flex items-center gap-1">
-                    <div class="w-3 h-3 border border-white-50 border-t-transparent rounded-full animate-spin"></div>
+                    <div class="w-3 h-3 border border-accent-50 border-t-transparent rounded-full animate-spin"></div>
                     <span>Verificando...</span>
                 </div>
             `;
@@ -1670,15 +1670,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 if (i < this.currentStep) {
                     // Completed step
-                    numberElement.className = 'w-8 h-8 bg-success-300 text-white-50 rounded-full flex items-center justify-center text-sm font-semibold mr-3';
+                    numberElement.className = 'w-8 h-8 bg-success-300 text-accent-50 rounded-full flex items-center justify-center text-sm font-semibold mr-3';
                     titleElement.className = 'text-lg font-semibold text-black-500';
                 } else if (i === this.currentStep) {
                     // Active step
-                    numberElement.className = 'w-8 h-8 bg-primary-300 text-white-50 rounded-full flex items-center justify-center text-sm font-semibold mr-3';
+                    numberElement.className = 'w-8 h-8 bg-primary-300 text-accent-50 rounded-full flex items-center justify-center text-sm font-semibold mr-3';
                     titleElement.className = 'text-lg font-semibold text-black-500';
                 } else {
                     // Inactive step
-                    numberElement.className = 'w-8 h-8 bg-white-200 text-black-300 rounded-full flex items-center justify-center text-sm font-semibold mr-3';
+                    numberElement.className = 'w-8 h-8 bg-accent-200 text-black-300 rounded-full flex items-center justify-center text-sm font-semibold mr-3';
                     titleElement.className = 'text-lg font-semibold text-black-300';
                 }
             }
@@ -1736,10 +1736,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 const unitPrice = item.product_pricitem.variant_details?.precio_modificador || 0);
                 html += `
                     <div class="flex items-center gap-3 py-2">
-                        <div class="w-12 h-12 bg-white-100 rounded-lg overflow-hidden flex-shrink-0">
+                        <div class="w-12 h-12 bg-accent-100 rounded-lg overflow-hidden flex-shrink-0">
                             ${item.product.main_image_url ? 
                                 `<img src="${item.product.main_image_url}" alt="${item.product.name}" class="w-full h-full object-cover">` :
-                                `<div class="w-full h-full bg-white-200 flex items-center justify-center text-black-300 text-xs">Sin imagen</div>`
+                                `<div class="w-full h-full bg-accent-200 flex items-center justify-center text-black-300 text-xs">Sin imagen</div>`
                             }
                         </div>
                         <div class="flex-1 min-w-0">

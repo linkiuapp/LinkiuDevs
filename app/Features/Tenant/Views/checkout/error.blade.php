@@ -5,7 +5,7 @@
     <!-- Header de error -->
     <div class="text-center">
         <div class="w-16 h-16 bg-error-300 rounded-full flex items-center justify-center mx-auto mb-4">
-            <x-solar-close-circle-outline class="w-8 h-8 text-white-50" />
+            <x-solar-close-circle-outline class="w-8 h-8 text-accent-50" />
         </div>
         <h1 class="text-2xl font-bold text-black-500 mb-2">Error en el Pedido</h1>
         <p class="text-black-300">Ocurrió un problema al procesar tu pedido</p>
@@ -35,7 +35,7 @@
     @endif
 
     <!-- Sugerencias -->
-    <div class="bg-white-50 rounded-lg p-4 border border-white-200">
+    <div class="bg-accent-50 rounded-lg p-4 border border-accent-200">
         <h3 class="font-semibold text-black-500 mb-3">¿Qué puedes hacer?</h3>
         <div class="space-y-2 text-sm text-black-400">
             <p>• Verifica que todos los datos estén correctos</p>
@@ -48,15 +48,15 @@
     <!-- Acciones -->
     <div class="space-y-3">
         <a href="{{ route('tenant.checkout.create', $store->slug) }}" 
-           class="block w-full bg-primary-300 hover:bg-primary-200 text-white-50 py-3 rounded-lg font-semibold transition-colors text-center">
+           class="block w-full bg-primary-300 hover:bg-primary-200 text-accent-50 py-3 rounded-lg font-semibold transition-colors text-center">
             Intentar nuevamente
         </a>
         <a href="{{ route('tenant.cart.index', $store->slug) }}" 
-           class="block w-full bg-white-200 hover:bg-white-300 text-black-500 py-3 rounded-lg font-medium transition-colors text-center">
+           class="block w-full bg-accent-200 hover:bg-accent-300 text-black-500 py-3 rounded-lg font-medium transition-colors text-center">
             Volver al carrito
         </a>
         <a href="{{ route('tenant.home', $store->slug) }}" 
-           class="block w-full bg-white-100 hover:bg-white-200 text-black-400 py-3 rounded-lg font-medium transition-colors text-center">
+           class="block w-full bg-accent-100 hover:bg-accent-200 text-black-400 py-3 rounded-lg font-medium transition-colors text-center">
             Ir al inicio
         </a>
     </div>

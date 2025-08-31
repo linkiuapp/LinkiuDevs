@@ -21,8 +21,8 @@
     </div>
 
     {{-- Formulario --}}
-    <div class="bg-white-50 rounded-lg p-0 overflow-hidden mb-6">
-        <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+    <div class="bg-accent-50 rounded-lg p-0 overflow-hidden mb-6">
+        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
             <h2 class="text-lg font-semibold text-black-400 mb-0">Información de la Cuenta</h2>
         </div>
         <div class="p-6">
@@ -44,7 +44,7 @@
                                 Banco <span class="text-error-300">*</span>
                             </label>
                             <input type="text" name="bank_name" id="bank_name" 
-                                   class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('bank_name') border-error-200 @enderror"
+                                   class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('bank_name') border-error-200 @enderror"
                                    value="{{ old('bank_name', $bankAccount->bank_name) }}" required>
                             @error('bank_name')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
@@ -57,7 +57,7 @@
                                 Tipo de Cuenta <span class="text-error-300">*</span>
                             </label>
                             <select name="account_type" id="account_type" 
-                                    class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('account_type') border-error-200 @enderror">
+                                    class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('account_type') border-error-200 @enderror">
                                 <option value="">Seleccionar...</option>
                                 @foreach($accountTypes as $value => $label)
                                     <option value="{{ $value }}" {{ old('account_type', $bankAccount->account_type) == $value ? 'selected' : '' }}>{{ $label }}</option>
@@ -74,7 +74,7 @@
                                 Número de Cuenta <span class="text-error-300">*</span>
                             </label>
                             <input type="text" name="account_number" id="account_number" 
-                                   class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('account_number') border-error-200 @enderror"
+                                   class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('account_number') border-error-200 @enderror"
                                    value="{{ old('account_number', $bankAccount->account_number) }}" required
                                    pattern="[0-9]{10,20}" title="El número de cuenta debe contener solo dígitos y tener entre 10 y 20 caracteres"
                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')">
@@ -90,7 +90,7 @@
                                 Titular de la Cuenta <span class="text-error-300">*</span>
                             </label>
                             <input type="text" name="account_holder" id="account_holder" 
-                                   class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('account_holder') border-error-200 @enderror"
+                                   class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('account_holder') border-error-200 @enderror"
                                    value="{{ old('account_holder', $bankAccount->account_holder) }}" required>
                             @error('account_holder')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
@@ -103,7 +103,7 @@
                                 Número de Documento
                             </label>
                             <input type="text" name="document_number" id="document_number" 
-                                   class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('document_number') border-error-200 @enderror"
+                                   class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('document_number') border-error-200 @enderror"
                                    value="{{ old('document_number', $bankAccount->document_number) }}">
                             <p class="text-xs text-black-300 mt-1">Opcional</p>
                             @error('document_number')
@@ -116,7 +116,7 @@
                             {{-- Hidden field to ensure a value is always sent --}}
                             <input type="hidden" name="is_active" value="0">
                             <input type="checkbox" name="is_active" id="is_active" value="1"
-                                   class="mt-1 h-4 w-4 rounded border-white-200 text-primary-200 focus:ring-primary-50"
+                                   class="mt-1 h-4 w-4 rounded border-accent-200 text-primary-200 focus:ring-primary-50"
                                    {{ old('is_active', $bankAccount->is_active) ? 'checked' : '' }}>
                             <div>
                                 <label for="is_active" class="block text-sm font-semibold text-black-300">

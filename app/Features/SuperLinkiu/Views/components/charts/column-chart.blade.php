@@ -41,7 +41,7 @@
                     </div>
                     
                     <!-- Estadísticas -->
-                    <div class="border-t border-white-100 pt-4">
+                    <div class="border-t border-accent-100 pt-4">
                         <div class="grid grid-cols-3 gap-4 text-center">
                             <div>
                                 <div class="text-2xl font-semibold text-primary-300">$24K</div>
@@ -259,7 +259,7 @@
                     </div>
                     
                     <!-- Información adicional -->
-                    <div class="border-t border-white-100 pt-4">
+                    <div class="border-t border-accent-100 pt-4">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-2">
                                 <x-solar-chart-outline class="w-5 h-5 text-primary-300" />

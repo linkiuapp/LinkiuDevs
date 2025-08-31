@@ -61,8 +61,8 @@
     @endif
 
     <!-- Tabs -->
-    <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-        <div class="border-b border-white-100">
+    <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+        <div class="border-b border-accent-100">
             <nav class="flex">
                 <button @click="activeTab = 'smtp'" 
                         :class="activeTab === 'smtp' ? 'border-primary-300 text-primary-300' : 'border-transparent text-black-300 hover:text-black-400'"
@@ -98,7 +98,7 @@
                             <input type="text" 
                                    name="smtp_host" 
                                    value="{{ old('smtp_host', $config->smtp_host) }}"
-                                   class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
+                                   class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
                                    placeholder="smtp.gmail.com"
                                    required>
                             @error('smtp_host')
@@ -112,7 +112,7 @@
                             <input type="number" 
                                    name="smtp_port" 
                                    value="{{ old('smtp_port', $config->smtp_port ?: 587) }}"
-                                   class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
+                                   class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
                                    min="1" max="65535"
                                    required>
                             @error('smtp_port')
@@ -126,7 +126,7 @@
                             <input type="text" 
                                    name="smtp_username" 
                                    value="{{ old('smtp_username', $config->smtp_username) }}"
-                                   class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
+                                   class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
                                    placeholder="usuario@gmail.com"
                                    required>
                             @error('smtp_username')
@@ -141,7 +141,7 @@
                             </label>
                             <input type="password" 
                                    name="smtp_password" 
-                                   class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
+                                   class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
                                    placeholder="{{ $config->exists ? '••••••••' : 'Contraseña' }}"
                                    {{ !$config->exists ? 'required' : '' }}>
                             @error('smtp_password')
@@ -153,7 +153,7 @@
                         <div>
                             <label class="block text-sm font-medium text-black-300 mb-2">Encriptación</label>
                             <select name="smtp_encryption" 
-                                    class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                                    class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
                                 <option value="tls" {{ old('smtp_encryption', $config->smtp_encryption) === 'tls' ? 'selected' : '' }}>TLS (recomendado)</option>
                                 <option value="ssl" {{ old('smtp_encryption', $config->smtp_encryption) === 'ssl' ? 'selected' : '' }}>SSL</option>
                                 <option value="none" {{ old('smtp_encryption', $config->smtp_encryption) === 'none' ? 'selected' : '' }}>Ninguna</option>
@@ -169,7 +169,7 @@
                             <input type="email" 
                                    name="from_email" 
                                    value="{{ old('from_email', $config->from_email) }}"
-                                   class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
+                                   class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
                                    placeholder="noreply@linkiu.bio"
                                    required>
                             @error('from_email')
@@ -183,7 +183,7 @@
                             <input type="text" 
                                    name="from_name" 
                                    value="{{ old('from_name', $config->from_name ?: 'Linkiu.bio Support') }}"
-                                   class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
+                                   class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
                                    placeholder="Linkiu.bio Support"
                                    required>
                             @error('from_name')
@@ -208,48 +208,48 @@
                         <p class="text-sm text-black-300">Selecciona qué eventos deben generar notificaciones por email:</p>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <label class="flex items-center p-4 border border-white-200 rounded-lg hover:bg-white-100 cursor-pointer">
+                            <label class="flex items-center p-4 border border-accent-200 rounded-lg hover:bg-accent-100 cursor-pointer">
                                 <input type="checkbox" 
                                        name="send_on_ticket_created" 
                                        value="1"
                                        {{ old('send_on_ticket_created', $config->send_on_ticket_created) ? 'checked' : '' }}
-                                       class="mr-3 h-4 w-4 text-primary-300 focus:ring-primary-200 border-white-200 rounded">
+                                       class="mr-3 h-4 w-4 text-primary-300 focus:ring-primary-200 border-accent-200 rounded">
                                 <div>
                                     <div class="font-medium text-black-400">Nuevo ticket creado</div>
                                     <div class="text-sm text-black-300">Notificar cuando se crea un nuevo ticket</div>
                                 </div>
                             </label>
 
-                            <label class="flex items-center p-4 border border-white-200 rounded-lg hover:bg-white-100 cursor-pointer">
+                            <label class="flex items-center p-4 border border-accent-200 rounded-lg hover:bg-accent-100 cursor-pointer">
                                 <input type="checkbox" 
                                        name="send_on_ticket_response" 
                                        value="1"
                                        {{ old('send_on_ticket_response', $config->send_on_ticket_response) ? 'checked' : '' }}
-                                       class="mr-3 h-4 w-4 text-primary-300 focus:ring-primary-200 border-white-200 rounded">
+                                       class="mr-3 h-4 w-4 text-primary-300 focus:ring-primary-200 border-accent-200 rounded">
                                 <div>
                                     <div class="font-medium text-black-400">Nueva respuesta</div>
                                     <div class="text-sm text-black-300">Notificar cuando se agrega una respuesta</div>
                                 </div>
                             </label>
 
-                            <label class="flex items-center p-4 border border-white-200 rounded-lg hover:bg-white-100 cursor-pointer">
+                            <label class="flex items-center p-4 border border-accent-200 rounded-lg hover:bg-accent-100 cursor-pointer">
                                 <input type="checkbox" 
                                        name="send_on_status_change" 
                                        value="1"
                                        {{ old('send_on_status_change', $config->send_on_status_change) ? 'checked' : '' }}
-                                       class="mr-3 h-4 w-4 text-primary-300 focus:ring-primary-200 border-white-200 rounded">
+                                       class="mr-3 h-4 w-4 text-primary-300 focus:ring-primary-200 border-accent-200 rounded">
                                 <div>
                                     <div class="font-medium text-black-400">Cambio de estado</div>
                                     <div class="text-sm text-black-300">Notificar cuando cambia el estado del ticket</div>
                                 </div>
                             </label>
 
-                            <label class="flex items-center p-4 border border-white-200 rounded-lg hover:bg-white-100 cursor-pointer">
+                            <label class="flex items-center p-4 border border-accent-200 rounded-lg hover:bg-accent-100 cursor-pointer">
                                 <input type="checkbox" 
                                        name="send_on_ticket_assigned" 
                                        value="1"
                                        {{ old('send_on_ticket_assigned', $config->send_on_ticket_assigned) ? 'checked' : '' }}
-                                       class="mr-3 h-4 w-4 text-primary-300 focus:ring-primary-200 border-white-200 rounded">
+                                       class="mr-3 h-4 w-4 text-primary-300 focus:ring-primary-200 border-accent-200 rounded">
                                 <div>
                                     <div class="font-medium text-black-400">Ticket asignado</div>
                                     <div class="text-sm text-black-300">Notificar cuando se asigna un ticket a un admin</div>
@@ -287,7 +287,7 @@
                             <label class="block text-sm font-medium text-black-300 mb-2">Plantilla: Nuevo ticket creado</label>
                             <textarea name="ticket_created_template" 
                                       rows="3"
-                                      class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
+                                      class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
                                       placeholder="{{ $defaultTemplates['ticket_created'] }}">{{ old('ticket_created_template', $config->ticket_created_template ?: $defaultTemplates['ticket_created']) }}</textarea>
                         </div>
 
@@ -296,7 +296,7 @@
                             <label class="block text-sm font-medium text-black-300 mb-2">Plantilla: Nueva respuesta</label>
                             <textarea name="ticket_response_template" 
                                       rows="3"
-                                      class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
+                                      class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
                                       placeholder="{{ $defaultTemplates['ticket_response'] }}">{{ old('ticket_response_template', $config->ticket_response_template ?: $defaultTemplates['ticket_response']) }}</textarea>
                         </div>
 
@@ -305,7 +305,7 @@
                             <label class="block text-sm font-medium text-black-300 mb-2">Plantilla: Cambio de estado</label>
                             <textarea name="ticket_status_changed_template" 
                                       rows="3"
-                                      class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
+                                      class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
                                       placeholder="{{ $defaultTemplates['ticket_status_changed'] }}">{{ old('ticket_status_changed_template', $config->ticket_status_changed_template ?: $defaultTemplates['ticket_status_changed']) }}</textarea>
                         </div>
 
@@ -314,7 +314,7 @@
                             <label class="block text-sm font-medium text-black-300 mb-2">Plantilla: Ticket asignado</label>
                             <textarea name="ticket_assigned_template" 
                                       rows="3"
-                                      class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
+                                      class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
                                       placeholder="{{ $defaultTemplates['ticket_assigned'] }}">{{ old('ticket_assigned_template', $config->ticket_assigned_template ?: $defaultTemplates['ticket_assigned']) }}</textarea>
                         </div>
                     </div>
@@ -342,28 +342,28 @@
         <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div class="fixed inset-0 bg-black-400 bg-opacity-75 transition-opacity" @click="showTestModal = false"></div>
 
-            <div class="inline-block align-bottom bg-white-50 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="bg-white-50 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <div class="inline-block align-bottom bg-accent-50 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-accent-50 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <h3 class="text-lg font-medium text-black-400 mb-4">Probar Conexión SMTP</h3>
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-black-300 mb-2">Email de prueba (opcional)</label>
                         <input type="email" 
                                x-model="testEmail"
-                               class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
+                               class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
                                placeholder="{{ $config->from_email }}">
                         <p class="text-xs text-black-300 mt-1">Si no especificas un email, se usará el email remitente configurado.</p>
                     </div>
                 </div>
-                <div class="bg-white-100 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <div class="bg-accent-100 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                     <button @click="sendTestEmail()" 
                             :disabled="testing"
-                            class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-primary-300 text-base font-medium text-white-50 hover:bg-primary-400 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50">
+                            class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-primary-300 text-base font-medium text-accent-50 hover:bg-primary-400 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50">
                         <span x-show="!testing">Enviar Email de Prueba</span>
                         <span x-show="testing">Enviando...</span>
                     </button>
                     <button @click="showTestModal = false" 
                             type="button" 
-                            class="mt-3 w-full inline-flex justify-center rounded-lg border border-white-200 shadow-sm px-4 py-2 bg-white-50 text-base font-medium text-black-400 hover:bg-white-100 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                            class="mt-3 w-full inline-flex justify-center rounded-lg border border-accent-200 shadow-sm px-4 py-2 bg-accent-50 text-base font-medium text-black-400 hover:bg-accent-100 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                         Cancelar
                     </button>
                 </div>
@@ -476,7 +476,7 @@ function emailConfiguration() {
             // Crear notificación temporal
             const notification = document.createElement('div');
             notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transition-all duration-300 ${
-                type === 'success' ? 'bg-success-300 text-white-50' : 'bg-error-300 text-white-50'
+                type === 'success' ? 'bg-success-300 text-accent-50' : 'bg-error-300 text-accent-50'
             }`;
             notification.textContent = message;
             

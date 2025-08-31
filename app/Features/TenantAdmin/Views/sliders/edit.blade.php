@@ -28,7 +28,7 @@
             @method('PUT')
             
             <!-- Información Básica -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                 <div class="p-6 space-y-4">
                     <div class="mb-4">
                         <h3 class="text-lg font-medium text-black-500 mb-1">Información Básica</h3>
@@ -39,7 +39,7 @@
                         <div>
                             <label class="block text-sm font-medium text-black-400 mb-2">Nombre *</label>
                             <input type="text" name="name" value="{{ old('name', $slider->name) }}" required
-                                   class="w-full px-3 py-2 rounded-lg bg-white-100 border border-white-200 
+                                   class="w-full px-3 py-2 rounded-lg bg-accent-100 border border-accent-200 
                                           focus:ring-2 focus:ring-primary-200 focus:border-transparent"
                                    placeholder="Promoción Navidad 2024">
                             @error('name')
@@ -49,7 +49,7 @@
                         <div>
                             <label class="block text-sm font-medium text-black-400 mb-2">Transición</label>
                             <select name="transition_duration" 
-                                    class="w-full px-3 py-2 rounded-lg bg-white-100 border border-white-200 
+                                    class="w-full px-3 py-2 rounded-lg bg-accent-100 border border-accent-200 
                                            focus:ring-2 focus:ring-primary-200 focus:border-transparent">
                                 <option value="3" {{ old('transition_duration', $slider->transition_duration) == '3' ? 'selected' : '' }}>3 segundos</option>
                                 <option value="5" {{ old('transition_duration', $slider->transition_duration) == '5' ? 'selected' : '' }}>5 segundos</option>
@@ -61,7 +61,7 @@
                     <div>
                         <label class="block text-sm font-medium text-black-400 mb-2">Descripción</label>
                         <textarea name="description" rows="3" 
-                                  class="w-full px-3 py-2 rounded-lg bg-white-100 border border-white-200 
+                                  class="w-full px-3 py-2 rounded-lg bg-accent-100 border border-accent-200 
                                          focus:ring-2 focus:ring-primary-200 focus:border-transparent"
                                   placeholder="Descuentos especiales en toda la tienda">{{ old('description', $slider->description) }}</textarea>
                     </div>
@@ -69,7 +69,7 @@
                     <div>
                         <label class="flex items-center">
                             <input type="checkbox" name="is_active" value="1" {{ old('is_active', $slider->is_active) ? 'checked' : '' }}
-                                   class="rounded border-white-300 text-primary-300 focus:ring-primary-200">
+                                   class="rounded border-accent-300 text-primary-300 focus:ring-primary-200">
                             <span class="ml-2 text-sm text-black-400">Slider activo</span>
                         </label>
                     </div>
@@ -77,14 +77,14 @@
             </div>
 
             <!-- Imagen -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                 <div class="p-6">
                     <div class="mb-4">
                         <h3 class="text-lg font-medium text-black-500 mb-1">Imagen</h3>
                         <p class="text-sm text-black-300">Sube la imagen del slider (170x100px)</p>
                     </div>
                     
-                    <div class="border-2 border-dashed border-white-200 rounded-lg p-6 text-center" x-data="{ imagePreview: '{{ $slider->image_path ? Storage::disk('public')->url($slider->image_path) : null }}' }">
+                    <div class="border-2 border-dashed border-accent-200 rounded-lg p-6 text-center" x-data="{ imagePreview: '{{ $slider->image_path ? Storage::disk('public')->url($slider->image_path) : null }}' }">
                         <input type="file" name="image" accept="image/*"
                                class="hidden" id="image-upload"
                                @change="
@@ -119,7 +119,7 @@
             </div>
 
             <!-- Enlace -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                 <div class="p-6 space-y-4">
                     <div class="mb-4">
                         <h3 class="text-lg font-medium text-black-500 mb-1">Enlace</h3>
@@ -131,17 +131,17 @@
                         <div class="space-y-2">
                             <label class="flex items-center">
                                 <input type="radio" name="url_type" value="none" {{ old('url_type', $slider->url_type) == 'none' ? 'checked' : '' }}
-                                       class="border-white-300 text-primary-300 focus:ring-primary-200">
+                                       class="border-accent-300 text-primary-300 focus:ring-primary-200">
                                 <span class="ml-2 text-sm text-black-400">Sin enlace</span>
                             </label>
                             <label class="flex items-center">
                                 <input type="radio" name="url_type" value="internal" {{ old('url_type', $slider->url_type) == 'internal' ? 'checked' : '' }}
-                                       class="border-white-300 text-primary-300 focus:ring-primary-200">
+                                       class="border-accent-300 text-primary-300 focus:ring-primary-200">
                                 <span class="ml-2 text-sm text-black-400">Enlace interno</span>
                             </label>
                             <label class="flex items-center">
                                 <input type="radio" name="url_type" value="external" {{ old('url_type', $slider->url_type) == 'external' ? 'checked' : '' }}
-                                       class="border-white-300 text-primary-300 focus:ring-primary-200">
+                                       class="border-accent-300 text-primary-300 focus:ring-primary-200">
                                 <span class="ml-2 text-sm text-black-400">Enlace externo</span>
                             </label>
                         </div>
@@ -150,7 +150,7 @@
                     <div>
                         <label class="block text-sm font-medium text-black-400 mb-2">URL</label>
                         <input type="url" name="url" value="{{ old('url', $slider->url) }}"
-                               class="w-full px-3 py-2 rounded-lg bg-white-100 border border-white-200 
+                               class="w-full px-3 py-2 rounded-lg bg-accent-100 border border-accent-200 
                                       focus:ring-2 focus:ring-primary-200 focus:border-transparent"
                                placeholder="https://ejemplo.com o /categoria/ropa">
                         <p class="text-xs text-black-300 mt-1">
@@ -165,7 +165,7 @@
             </div>
 
             <!-- Programación -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                 <div class="p-6 space-y-4">
                     <div class="mb-4">
                         <h3 class="text-lg font-medium text-black-500 mb-1">Programación</h3>
@@ -176,7 +176,7 @@
                         <label class="flex items-center">
                             <input type="checkbox" name="is_scheduled" value="1" {{ old('is_scheduled', $slider->is_scheduled) ? 'checked' : '' }}
                                    x-model="isScheduled"
-                                   class="rounded border-white-300 text-primary-300 focus:ring-primary-200">
+                                   class="rounded border-accent-300 text-primary-300 focus:ring-primary-200">
                             <span class="ml-2 text-sm text-black-400">Programar slider</span>
                         </label>
                     </div>
@@ -186,7 +186,7 @@
                             <label class="flex items-center">
                                 <input type="checkbox" name="is_permanent" value="1" {{ old('is_permanent', $slider->is_permanent) ? 'checked' : '' }}
                                        x-model="isPermanent"
-                                       class="rounded border-white-300 text-primary-300 focus:ring-primary-200">
+                                       class="rounded border-accent-300 text-primary-300 focus:ring-primary-200">
                                 <span class="ml-2 text-sm text-black-400">Slider permanente (sin fecha fin)</span>
                             </label>
                         </div>
@@ -195,13 +195,13 @@
                             <div>
                                 <label class="block text-sm font-medium text-black-400 mb-2">Fecha inicio</label>
                                 <input type="date" name="start_date" value="{{ old('start_date', $slider->start_date) }}"
-                                       class="w-full px-3 py-2 rounded-lg bg-white-100 border border-white-200 
+                                       class="w-full px-3 py-2 rounded-lg bg-accent-100 border border-accent-200 
                                               focus:ring-2 focus:ring-primary-200 focus:border-transparent">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-black-400 mb-2">Fecha fin</label>
                                 <input type="date" name="end_date" value="{{ old('end_date', $slider->end_date) }}"
-                                       class="w-full px-3 py-2 rounded-lg bg-white-100 border border-white-200 
+                                       class="w-full px-3 py-2 rounded-lg bg-accent-100 border border-accent-200 
                                               focus:ring-2 focus:ring-primary-200 focus:border-transparent">
                             </div>
                         </div>
@@ -210,13 +210,13 @@
                             <div>
                                 <label class="block text-sm font-medium text-black-400 mb-2">Hora inicio</label>
                                 <input type="time" name="start_time" value="{{ old('start_time', $slider->start_time) }}"
-                                       class="w-full px-3 py-2 rounded-lg bg-white-100 border border-white-200 
+                                       class="w-full px-3 py-2 rounded-lg bg-accent-100 border border-accent-200 
                                               focus:ring-2 focus:ring-primary-200 focus:border-transparent">
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-black-400 mb-2">Hora fin</label>
                                 <input type="time" name="end_time" value="{{ old('end_time', $slider->end_time) }}"
-                                       class="w-full px-3 py-2 rounded-lg bg-white-100 border border-white-200 
+                                       class="w-full px-3 py-2 rounded-lg bg-accent-100 border border-accent-200 
                                               focus:ring-2 focus:ring-primary-200 focus:border-transparent">
                             </div>
                         </div>
@@ -225,7 +225,7 @@
                             <label class="block text-sm font-medium text-black-400 mb-2">Días de la semana</label>
                             <div class="grid grid-cols-4 md:grid-cols-7 gap-2">
                                 @foreach(['monday' => 'L', 'tuesday' => 'M', 'wednesday' => 'X', 'thursday' => 'J', 'friday' => 'V', 'saturday' => 'S', 'sunday' => 'D'] as $day => $label)
-                                    <label class="flex items-center justify-center p-2 border border-white-200 rounded-lg cursor-pointer hover:bg-white-100">
+                                    <label class="flex items-center justify-center p-2 border border-accent-200 rounded-lg cursor-pointer hover:bg-accent-100">
                                         <input type="checkbox" name="scheduled_days[{{ $day }}]" value="1" {{ old("scheduled_days.{$day}", $slider->scheduled_days[$day] ?? false) ? 'checked' : '' }}
                                                class="sr-only peer">
                                         <span class="text-sm font-medium text-black-400 peer-checked:text-primary-300">{{ $label }}</span>
@@ -238,7 +238,7 @@
             </div>
 
             <!-- Botones -->
-            <div class="bg-white-100 px-6 py-4 flex justify-between items-center">
+            <div class="bg-accent-100 px-6 py-4 flex justify-between items-center">
                 <div class="flex items-center gap-3">
                     <a href="{{ route('tenant.admin.sliders.index', $store->slug) }}" 
                        class="btn-outline-secondary">

@@ -28,8 +28,8 @@
         <!-- Contenido Principal -->
         <div class="lg:col-span-2 space-y-6">
             <!-- Información del Anuncio -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <div class="flex items-center justify-between">
                         <h2 class="text-lg font-semibold text-black-400 mb-0">Información del Anuncio</h2>
                         <div class="flex items-center gap-2">
@@ -78,12 +78,12 @@
                         </div>
 
                         @if($announcement->banner_image)
-                            <div class="border-t border-white-100 pt-4">
+                            <div class="border-t border-accent-100 pt-4">
                                 <h4 class="text-sm font-medium text-black-300 mb-3">Banner Asociado</h4>
                                 <div class="flex items-start gap-4">
                                     <img src="{{ $announcement->banner_image_url }}" 
                                          alt="Banner" 
-                                         class="border border-white-200 rounded"
+                                         class="border border-accent-200 rounded"
                                          style="width: 320px; height: 100px; object-fit: cover;">
                                     <div>
                                         <p class="text-sm text-black-400 mb-1">{{ $announcement->banner_image }}</p>
@@ -104,8 +104,8 @@
             </div>
 
             <!-- Estadísticas de Lectura -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-lg font-semibold text-black-400 mb-0">Estadísticas de Lectura</h2>
                 </div>
                 
@@ -130,10 +130,10 @@
                             <h4 class="text-sm font-medium text-black-300">Tiendas que han leído el anuncio:</h4>
                             <div class="max-h-64 overflow-y-auto space-y-2">
                                 @foreach($announcement->reads->sortByDesc('read_at') as $read)
-                                    <div class="flex items-center justify-between p-3 bg-white-100 rounded border">
+                                    <div class="flex items-center justify-between p-3 bg-accent-100 rounded border">
                                         <div class="flex items-center gap-3">
                                             <div class="w-8 h-8 bg-success-200 rounded-full flex items-center justify-center">
-                                                <span class="text-xs text-white-50">{{ substr($read->store->name, 0, 1) }}</span>
+                                                <span class="text-xs text-accent-50">{{ substr($read->store->name, 0, 1) }}</span>
                                             </div>
                                             <div>
                                                 <div class="font-medium text-black-400">{{ $read->store->name }}</div>
@@ -161,8 +161,8 @@
         <!-- Panel Lateral -->
         <div class="space-y-6">
             <!-- Información General -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-lg font-semibold text-black-400 mb-0">Información General</h2>
                 </div>
                 
@@ -201,7 +201,7 @@
                         </div>
                     @endif
 
-                    <hr class="border-white-200">
+                    <hr class="border-accent-200">
                     
                     <div class="flex justify-between items-center">
                         <span class="text-sm text-black-300">Creado:</span>
@@ -216,8 +216,8 @@
             </div>
 
             <!-- Configuración -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-lg font-semibold text-black-400 mb-0">Configuración</h2>
                 </div>
                 
@@ -308,7 +308,7 @@
             </div>
 
             <!-- Acciones Rápidas -->
-            <div class="bg-white-50 rounded-lg p-6">
+            <div class="bg-accent-50 rounded-lg p-6">
                 <h3 class="text-sm font-medium text-black-300 mb-4">Acciones Rápidas</h3>
                 <div class="space-y-3">
                     <a href="{{ route('superlinkiu.announcements.edit', $announcement) }}" 

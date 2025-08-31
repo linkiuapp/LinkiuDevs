@@ -23,7 +23,7 @@
 
     <!-- Estadísticas -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div class="bg-white-50 rounded-lg p-4">
+        <div class="bg-accent-50 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-black-300">Total</p>
@@ -35,7 +35,7 @@
             </div>
         </div>
 
-        <div class="bg-white-50 rounded-lg p-4">
+        <div class="bg-accent-50 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-black-300">Sin Leer</p>
@@ -47,7 +47,7 @@
             </div>
         </div>
 
-        <div class="bg-white-50 rounded-lg p-4">
+        <div class="bg-accent-50 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-black-300">Banners</p>
@@ -59,7 +59,7 @@
             </div>
         </div>
 
-        <div class="bg-white-50 rounded-lg p-4">
+        <div class="bg-accent-50 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-black-300">Críticos</p>
@@ -73,11 +73,11 @@
     </div>
 
     <!-- Filtros -->
-    <div class="bg-white-50 rounded-lg p-6 mb-6">
+    <div class="bg-accent-50 rounded-lg p-6 mb-6">
         <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
                 <label class="block text-sm font-medium text-black-300 mb-2">Tipo</label>
-                <select name="type" class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                <select name="type" class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
                     <option value="">Todos los tipos</option>
                     <option value="critical" {{ request('type') === 'critical' ? 'selected' : '' }}>🚨 Crítico</option>
                     <option value="important" {{ request('type') === 'important' ? 'selected' : '' }}>⭐ Importante</option>
@@ -87,7 +87,7 @@
 
             <div>
                 <label class="block text-sm font-medium text-black-300 mb-2">Estado de Lectura</label>
-                <select name="status" class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                <select name="status" class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
                     <option value="">Todos</option>
                     <option value="unread" {{ request('status') === 'unread' ? 'selected' : '' }}>Sin leer</option>
                     <option value="read" {{ request('status') === 'read' ? 'selected' : '' }}>Leídos</option>
@@ -100,7 +100,7 @@
                        name="search" 
                        value="{{ request('search') }}"
                        placeholder="Título o contenido..."
-                       class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                       class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
             </div>
 
             <div class="flex items-end gap-2">
@@ -123,7 +123,7 @@
                 $isRead = $announcement->isReadBy($store->id);
             @endphp
             
-            <div class="bg-white-50 rounded-lg border-l-4 border-{{ $announcement->type_color }}-200 p-0 overflow-hidden {{ !$isRead ? 'ring-2 ring-' . $announcement->type_color . '-100' : '' }}">
+            <div class="bg-accent-50 rounded-lg border-l-4 border-{{ $announcement->type_color }}-200 p-0 overflow-hidden {{ !$isRead ? 'ring-2 ring-' . $announcement->type_color . '-100' : '' }}">
                 <div class="p-6">
                     <div class="flex items-start justify-between gap-4">
                         <div class="flex-1">
@@ -137,7 +137,7 @@
                                     <div class="flex items-center gap-2 mb-1">
                                         <h3 class="text-lg font-semibold text-black-400">{{ $announcement->title }}</h3>
                                         @if(!$isRead)
-                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-warning-200 text-white-50">
+                                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-warning-200 text-accent-50">
                                                 Nuevo
                                             </span>
                                         @endif
@@ -176,7 +176,7 @@
                                     <div class="mb-4">
                                         <img src="{{ $announcement->banner_image_url }}" 
                                              alt="Banner" 
-                                             class="border border-white-200 rounded"
+                                             class="border border-accent-200 rounded"
                                              style="width: 160px; height: 50px; object-fit: cover;">
                                     </div>
                                 @endif
@@ -222,7 +222,7 @@
                 </div>
             </div>
         @empty
-            <div class="bg-white-50 rounded-lg p-12 text-center">
+            <div class="bg-accent-50 rounded-lg p-12 text-center">
                 <div class="flex flex-col items-center gap-4">
                     <div class="w-16 h-16 bg-black-100 rounded-full flex items-center justify-center">
                         <x-solar-chat-dots-outline class="w-8 h-8 text-black-200" />
@@ -264,7 +264,7 @@
          x-transition:leave-end="opacity-0 transform translate-y-2"
          class="fixed top-4 right-4 z-50 max-w-sm"
          style="display: none;">
-        <div class="bg-success-200 text-white-50 rounded-lg shadow-lg p-4 flex items-center gap-3">
+        <div class="bg-success-200 text-accent-50 rounded-lg shadow-lg p-4 flex items-center gap-3">
             <x-solar-check-circle-outline class="w-5 h-5 flex-shrink-0" />
             <span x-text="toastMessage" class="text-sm font-medium"></span>
         </div>

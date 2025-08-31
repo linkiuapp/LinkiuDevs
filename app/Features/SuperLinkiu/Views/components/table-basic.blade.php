@@ -15,7 +15,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full border-collapse">
                         <thead>
-                            <tr class="border-b border-white-100">
+                            <tr class="border-b border-accent-100">
                                 <th class="text-left py-3 px-4 text-base text-black-500 font-semibold">S.L</th>
                                 <th class="text-left py-3 px-4 text-base text-black-500 font-semibold">Invoice</th>
                                 <th class="text-left py-3 px-4 text-base text-black-500 font-semibold">Name</th>
@@ -24,7 +24,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="border-b border-white-100">
+                            <tr class="border-b border-accent-100">
                                 <td class="py-3 px-4 text-base text-black-400">01</td>
                                 <td class="py-3 px-4">
                                     <a href="javascript:void(0)" class="text-base text-primary-200 hover:text-primary-300">#526534</a>
@@ -33,7 +33,7 @@
                                 <td class="py-3 px-4 text-base text-black-400">25 Jan 2025</td>
                                 <td class="py-3 px-4 text-base text-black-400">$200.00</td>
                             </tr>
-                            <tr class="border-b border-white-100">
+                            <tr class="border-b border-accent-100">
                                 <td class="py-3 px-4 text-base text-black-400">02</td>
                                 <td class="py-3 px-4">
                                     <a href="javascript:void(0)" class="text-base text-primary-200 hover:text-primary-300">#696589</a>
@@ -42,7 +42,7 @@
                                 <td class="py-3 px-4 text-base text-black-400">25 Jan 2025</td>
                                 <td class="py-3 px-4 text-base text-black-400">$200.00</td>
                             </tr>
-                            <tr class="border-b border-white-100">
+                            <tr class="border-b border-accent-100">
                                 <td class="py-3 px-4 text-base text-black-400">03</td>
                                 <td class="py-3 px-4">
                                     <a href="javascript:void(0)" class="text-base text-primary-200 hover:text-primary-300">#256584</a>
@@ -51,7 +51,7 @@
                                 <td class="py-3 px-4 text-base text-black-400">10 Feb 2025</td>
                                 <td class="py-3 px-4 text-base text-black-400">$200.00</td>
                             </tr>
-                            <tr class="border-b border-white-100">
+                            <tr class="border-b border-accent-100">
                                 <td class="py-3 px-4 text-base text-black-400">04</td>
                                 <td class="py-3 px-4">
                                     <a href="javascript:void(0)" class="text-base text-primary-200 hover:text-primary-300">#526587</a>
@@ -82,68 +82,68 @@
             </div>
             <div class="p-6">
                 <div class="overflow-x-auto">
-                    <table class="w-full border-collapse border border-white-300 rounded-lg">
+                    <table class="w-full border-collapse border border-accent-300 rounded-lg">
                         <thead>
-                            <tr class="bg-white-100">
-                                <th class="text-left py-3 px-4 text-base text-black-500 font-semibold border-r border-white-200">Invoice</th>
-                                <th class="text-left py-3 px-4 text-base text-black-500 font-semibold border-r border-white-200">Name</th>
-                                <th class="text-left py-3 px-4 text-base text-black-500 font-semibold border-r border-white-200">Issued Date</th>
-                                <th class="text-left py-3 px-4 text-base text-black-500 font-semibold border-r border-white-200">Amount</th>
+                            <tr class="bg-accent-100">
+                                <th class="text-left py-3 px-4 text-base text-black-500 font-semibold border-r border-accent-200">Invoice</th>
+                                <th class="text-left py-3 px-4 text-base text-black-500 font-semibold border-r border-accent-200">Name</th>
+                                <th class="text-left py-3 px-4 text-base text-black-500 font-semibold border-r border-accent-200">Issued Date</th>
+                                <th class="text-left py-3 px-4 text-base text-black-500 font-semibold border-r border-accent-200">Amount</th>
                                 <th class="text-left py-3 px-4 text-base text-black-500 font-semibold">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="border-b border-white-200">
-                                <td class="py-3 px-4 border-r border-white-200">
+                            <tr class="border-b border-accent-200">
+                                <td class="py-3 px-4 border-r border-accent-200">
                                     <a href="javascript:void(0)" class="text-base text-primary-200 hover:text-primary-300">#526534</a>
                                 </td>
-                                <td class="py-3 px-4 text-base text-black-400 border-r border-white-200">Kathryn Murphy</td>
-                                <td class="py-3 px-4 text-base text-black-400 border-r border-white-200">25 Jan 2025</td>
-                                <td class="py-3 px-4 text-base text-black-400 border-r border-white-200">$200.00</td>
+                                <td class="py-3 px-4 text-base text-black-400 border-r border-accent-200">Kathryn Murphy</td>
+                                <td class="py-3 px-4 text-base text-black-400 border-r border-accent-200">25 Jan 2025</td>
+                                <td class="py-3 px-4 text-base text-black-400 border-r border-accent-200">$200.00</td>
                                 <td class="py-3 px-4">
                                     <a href="javascript:void(0)" class="text-base text-primary-200 hover:text-primary-300">Ver más ></a>
                                 </td>
                             </tr>
-                            <tr class="border-b border-white-200">
-                                <td class="py-3 px-4 border-r border-white-200">
+                            <tr class="border-b border-accent-200">
+                                <td class="py-3 px-4 border-r border-accent-200">
                                     <a href="javascript:void(0)" class="text-base text-primary-200 hover:text-primary-300">#696589</a>
                                 </td>
-                                <td class="py-3 px-4 text-base text-black-400 border-r border-white-200">Annette Black</td>
-                                <td class="py-3 px-4 text-base text-black-400 border-r border-white-200">25 Jan 2025</td>
-                                <td class="py-3 px-4 text-base text-black-400 border-r border-white-200">$200.00</td>
+                                <td class="py-3 px-4 text-base text-black-400 border-r border-accent-200">Annette Black</td>
+                                <td class="py-3 px-4 text-base text-black-400 border-r border-accent-200">25 Jan 2025</td>
+                                <td class="py-3 px-4 text-base text-black-400 border-r border-accent-200">$200.00</td>
                                 <td class="py-3 px-4">
                                     <a href="javascript:void(0)" class="text-base text-primary-200 hover:text-primary-300">Ver más ></a>
                                 </td>
                             </tr>
-                            <tr class="border-b border-white-200">
-                                <td class="py-3 px-4 border-r border-white-200">
+                            <tr class="border-b border-accent-200">
+                                <td class="py-3 px-4 border-r border-accent-200">
                                     <a href="javascript:void(0)" class="text-base text-primary-200 hover:text-primary-300">#256584</a>
                                 </td>
-                                <td class="py-3 px-4 text-base text-black-400 border-r border-white-200">Ronald Richards</td>
-                                <td class="py-3 px-4 text-base text-black-400 border-r border-white-200">10 Feb 2025</td>
-                                <td class="py-3 px-4 text-base text-black-400 border-r border-white-200">$200.00</td>
+                                <td class="py-3 px-4 text-base text-black-400 border-r border-accent-200">Ronald Richards</td>
+                                <td class="py-3 px-4 text-base text-black-400 border-r border-accent-200">10 Feb 2025</td>
+                                <td class="py-3 px-4 text-base text-black-400 border-r border-accent-200">$200.00</td>
                                 <td class="py-3 px-4">
                                     <a href="javascript:void(0)" class="text-base text-primary-200 hover:text-primary-300">Ver más ></a>
                                 </td>
                             </tr>
-                            <tr class="border-b border-white-200">
-                                <td class="py-3 px-4 border-r border-white-200">
+                            <tr class="border-b border-accent-200">
+                                <td class="py-3 px-4 border-r border-accent-200">
                                     <a href="javascript:void(0)" class="text-base text-primary-200 hover:text-primary-300">#526587</a>
                                 </td>
-                                <td class="py-3 px-4 text-base text-black-400 border-r border-white-200">Eleanor Pena</td>
-                                <td class="py-3 px-4 text-base text-black-400 border-r border-white-200">10 Feb 2025</td>
-                                <td class="py-3 px-4 text-base text-black-400 border-r border-white-200">$150.00</td>
+                                <td class="py-3 px-4 text-base text-black-400 border-r border-accent-200">Eleanor Pena</td>
+                                <td class="py-3 px-4 text-base text-black-400 border-r border-accent-200">10 Feb 2025</td>
+                                <td class="py-3 px-4 text-base text-black-400 border-r border-accent-200">$150.00</td>
                                 <td class="py-3 px-4">
                                     <a href="javascript:void(0)" class="text-base text-primary-200 hover:text-primary-300">Ver más ></a>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="py-3 px-4 border-r border-white-200">
+                                <td class="py-3 px-4 border-r border-accent-200">
                                     <a href="javascript:void(0)" class="text-base text-primary-200 hover:text-primary-300">#105986</a>
                                 </td>
-                                <td class="py-3 px-4 text-base text-black-400 border-r border-white-200">Leslie Alexander</td>
-                                <td class="py-3 px-4 text-base text-black-400 border-r border-white-200">15 Mar 2025</td>
-                                <td class="py-3 px-4 text-base text-black-400 border-r border-white-200">$150.00</td>
+                                <td class="py-3 px-4 text-base text-black-400 border-r border-accent-200">Leslie Alexander</td>
+                                <td class="py-3 px-4 text-base text-black-400 border-r border-accent-200">15 Mar 2025</td>
+                                <td class="py-3 px-4 text-base text-black-400 border-r border-accent-200">$150.00</td>
                                 <td class="py-3 px-4">
                                     <a href="javascript:void(0)" class="text-base text-primary-200 hover:text-primary-300">Ver más ></a>
                                 </td>
@@ -163,7 +163,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full border-collapse">
                         <thead>
-                            <tr class="border-b border-white-100">
+                            <tr class="border-b border-accent-100">
                                 <th class="text-left py-3 px-4 text-base text-black-500 font-semibold">Items</th>
                                 <th class="text-left py-3 px-4 text-base text-black-500 font-semibold">Price</th>
                                 <th class="text-left py-3 px-4 text-base text-black-500 font-semibold">Discount</th>
@@ -172,7 +172,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="odd:bg-white-100">
+                            <tr class="odd:bg-accent-100">
                                 <td class="py-3 px-4">
                                     <div class="flex items-center gap-3">
                                         <div class="w-12 h-12 bg-primary-50 rounded-lg flex items-center justify-center">
@@ -191,7 +191,7 @@
                                     <span class="bg-success-100 text-success-300 px-6 py-1.5 rounded-full text-sm font-semibold">70</span>
                                 </td>
                             </tr>
-                            <tr class="odd:bg-white-100">
+                            <tr class="odd:bg-accent-100">
                                 <td class="py-3 px-4">
                                     <div class="flex items-center gap-3">
                                         <div class="w-12 h-12 bg-secondary-50 rounded-lg flex items-center justify-center">
@@ -210,7 +210,7 @@
                                     <span class="bg-success-100 text-success-300 px-6 py-1.5 rounded-full text-sm font-semibold">70</span>
                                 </td>
                             </tr>
-                            <tr class="odd:bg-white-100">
+                            <tr class="odd:bg-accent-100">
                                 <td class="py-3 px-4">
                                     <div class="flex items-center gap-3">
                                         <div class="w-12 h-12 bg-info-50 rounded-lg flex items-center justify-center">
@@ -229,7 +229,7 @@
                                     <span class="bg-success-100 text-success-300 px-6 py-1.5 rounded-full text-sm font-semibold">70</span>
                                 </td>
                             </tr>
-                            <tr class="odd:bg-white-100">
+                            <tr class="odd:bg-accent-100">
                                 <td class="py-3 px-4">
                                     <div class="flex items-center gap-3">
                                         <div class="w-12 h-12 bg-warning-50 rounded-lg flex items-center justify-center">
@@ -248,7 +248,7 @@
                                     <span class="bg-success-100 text-success-300 px-6 py-1.5 rounded-full text-sm font-semibold">70</span>
                                 </td>
                             </tr>
-                            <tr class="odd:bg-white-100">
+                            <tr class="odd:bg-accent-100">
                                 <td class="py-3 px-4">
                                     <div class="flex items-center gap-3">
                                         <div class="w-12 h-12 bg-error-50 rounded-lg flex items-center justify-center">
@@ -282,7 +282,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full border-collapse">
                         <thead>
-                            <tr class="border-b border-white-100">
+                            <tr class="border-b border-accent-100">
                                 <th class="text-left py-3 px-4 text-base text-black-500 font-semibold">Registered On</th>
                                 <th class="text-left py-3 px-4 text-base text-black-500 font-semibold">Users</th>
                                 <th class="text-left py-3 px-4 text-base text-black-500 font-semibold">Email</th>
@@ -362,7 +362,7 @@
                 <div class="overflow-x-auto">
                     <table class="w-full border-collapse">
                         <thead>
-                            <tr class="border-b border-white-100">
+                            <tr class="border-b border-accent-100">
                                 <th class="text-left py-3 px-4 text-base text-black-500 font-semibold">Users</th>
                                 <th class="text-left py-3 px-4 text-base text-black-500 font-semibold">Invoice</th>
                                 <th class="text-left py-3 px-4 text-base text-black-500 font-semibold">Items</th>
@@ -372,7 +372,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="border-b border-white-100 hover:bg-white-100 transition-colors">
+                            <tr class="border-b border-accent-100 hover:bg-accent-100 transition-colors">
                                 <td class="py-4 px-4">
                                     <div class="flex items-center gap-3">
                                         <img src="https://via.placeholder.com/40x40/6366f1/ffffff?text=DR" alt="Dianne Russell" class="w-10 h-10 rounded-full object-cover">
@@ -384,10 +384,10 @@
                                 <td class="py-4 px-4 text-base text-black-400">2</td>
                                 <td class="py-4 px-4 text-base text-black-400">$5,000.00</td>
                                 <td class="py-4 px-4 text-center">
-                                    <span class="bg-success-200 text-white-50 px-6 py-1.5 rounded-full text-sm font-semibold">Paid</span>
+                                    <span class="bg-success-200 text-accent-50 px-6 py-1.5 rounded-full text-sm font-semibold">Paid</span>
                                 </td>
                             </tr>
-                            <tr class="border-b border-white-100 hover:bg-white-100 transition-colors">
+                            <tr class="border-b border-accent-100 hover:bg-accent-100 transition-colors">
                                 <td class="py-4 px-4">
                                     <div class="flex items-center gap-3">
                                         <img src="https://via.placeholder.com/40x40/10b981/ffffff?text=WW" alt="Wade Warren" class="w-10 h-10 rounded-full object-cover">
@@ -402,7 +402,7 @@
                                     <span class="bg-warning-200 text-black-500 px-6 py-1.5 rounded-full text-sm font-semibold">Pending</span>
                                 </td>
                             </tr>
-                            <tr class="border-b border-white-100 hover:bg-white-100 transition-colors">
+                            <tr class="border-b border-accent-100 hover:bg-accent-100 transition-colors">
                                 <td class="py-4 px-4">
                                     <div class="flex items-center gap-3">
                                         <img src="https://via.placeholder.com/40x40/3b82f6/ffffff?text=AF" alt="Albert Flores" class="w-10 h-10 rounded-full object-cover">
@@ -414,10 +414,10 @@
                                 <td class="py-4 px-4 text-base text-black-400">7</td>
                                 <td class="py-4 px-4 text-base text-black-400">$1,000.00</td>
                                 <td class="py-4 px-4 text-center">
-                                    <span class="bg-info-200 text-white-50 px-6 py-1.5 rounded-full text-sm font-semibold">Shipped</span>
+                                    <span class="bg-info-200 text-accent-50 px-6 py-1.5 rounded-full text-sm font-semibold">Shipped</span>
                                 </td>
                             </tr>
-                            <tr class="border-b border-white-100 hover:bg-white-100 transition-colors">
+                            <tr class="border-b border-accent-100 hover:bg-accent-100 transition-colors">
                                 <td class="py-4 px-4">
                                     <div class="flex items-center gap-3">
                                         <img src="https://via.placeholder.com/40x40/f59e0b/ffffff?text=BC" alt="Bessie Cooper" class="w-10 h-10 rounded-full object-cover">
@@ -429,10 +429,10 @@
                                 <td class="py-4 px-4 text-base text-black-400">1</td>
                                 <td class="py-4 px-4 text-base text-black-400">$3,000.00</td>
                                 <td class="py-4 px-4 text-center">
-                                    <span class="bg-error-200 text-white-50 px-6 py-1.5 rounded-full text-sm font-semibold">Canceled</span>
+                                    <span class="bg-error-200 text-accent-50 px-6 py-1.5 rounded-full text-sm font-semibold">Canceled</span>
                                 </td>
                             </tr>
-                            <tr class="hover:bg-white-100 transition-colors">
+                            <tr class="hover:bg-accent-100 transition-colors">
                                 <td class="py-4 px-4">
                                     <div class="flex items-center gap-3">
                                         <img src="https://via.placeholder.com/40x40/ef4444/ffffff?text=AM" alt="Arlene McCoy" class="w-10 h-10 rounded-full object-cover">
@@ -444,7 +444,7 @@
                                 <td class="py-4 px-4 text-base text-black-400">5</td>
                                 <td class="py-4 px-4 text-base text-black-400">$4,000.00</td>
                                 <td class="py-4 px-4 text-center">
-                                    <span class="bg-error-200 text-white-50 px-6 py-1.5 rounded-full text-sm font-semibold">Canceled</span>
+                                    <span class="bg-error-200 text-accent-50 px-6 py-1.5 rounded-full text-sm font-semibold">Canceled</span>
                                 </td>
                             </tr>
                         </tbody>

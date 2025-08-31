@@ -22,7 +22,7 @@
             <h3 class="text-lg font-semibold text-black-400 mb-2">Tu carrito está vacío</h3>
             <p class="text-black-300 mb-6">¡Agrega algunos productos deliciosos!</p>
             <a href="{{ route('tenant.home', $store->slug) }}" 
-               class="bg-primary-300 hover:bg-primary-200 text-white-50 px-6 py-3 rounded-lg font-medium transition-colors">
+               class="bg-primary-300 hover:bg-primary-200 text-accent-50 px-6 py-3 rounded-lg font-medium transition-colors">
                 Ver productos
             </a>
         </div>
@@ -33,13 +33,13 @@
         </div>
 
         <!-- Cart summary -->
-        <div id="cart-summary" class="bg-white-50 rounded-lg p-4 border border-white-200 hidden">
+        <div id="cart-summary" class="bg-accent-50 rounded-lg p-4 border border-accent-200 hidden">
             <div class="space-y-3">
                 <div class="flex justify-between items-center">
                     <span class="text-black-400">Subtotal:</span>
                     <span id="cart-subtotal" class="font-semibold text-black-500">$0</span>
                 </div>
-                <div class="border-t border-white-200 pt-3">
+                <div class="border-t border-accent-200 pt-3">
                     <div class="flex justify-between items-center">
                         <span class="text-lg font-bold text-black-500">Total:</span>
                         <span id="cart-total" class="text-lg font-bold text-primary-300">$0</span>
@@ -52,11 +52,11 @@
         <div id="cart-actions" class="space-y-3 hidden">
             <a href="{{ route('tenant.checkout.create', $store->slug) }}" 
                id="checkout-btn" 
-               class="block w-full bg-success-300 hover:bg-success-200 text-white-50 py-3 rounded-lg font-semibold transition-colors text-center">
+               class="block w-full bg-success-300 hover:bg-success-200 text-accent-50 py-3 rounded-lg font-semibold transition-colors text-center">
                 Proceder al Checkout
             </a>
             <button id="clear-cart-btn" 
-                    class="w-full bg-error-300 hover:bg-error-200 text-white-50 py-2 rounded-lg font-medium transition-colors">
+                    class="w-full bg-error-300 hover:bg-error-200 text-accent-50 py-2 rounded-lg font-medium transition-colors">
                 Vaciar Carrito
             </button>
         </div>
@@ -65,10 +65,10 @@
 
 <!-- Template para items del carrito -->
 <template id="cart-item-template">
-    <div class="cart-item bg-white-50 rounded-lg p-4 border border-white-200">
+    <div class="cart-item bg-accent-50 rounded-lg p-4 border border-accent-200">
         <div class="flex items-center gap-3">
             <!-- Imagen del producto -->
-            <div class="w-16 h-16 bg-white-100 rounded-lg overflow-hidden flex-shrink-0">
+            <div class="w-16 h-16 bg-accent-100 rounded-lg overflow-hidden flex-shrink-0">
                 <img class="item-image w-full h-full object-cover" src="" alt="">
             </div>
             
@@ -81,12 +81,12 @@
             
             <!-- Controles de cantidad -->
             <div class="flex items-center gap-2 flex-shrink-0">
-                <button class="quantity-decrease bg-white-200 hover:bg-white-300 w-8 h-8 rounded-full flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                <button class="quantity-decrease bg-accent-200 hover:bg-accent-300 w-8 h-8 rounded-full flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                     <x-solar-square-alt-arrow-left-outline class="w-4 h-4 text-black-400" />
                     <div class="loading-spinner hidden w-4 h-4 border-2 border-black-200 border-t-black-400 rounded-full animate-spin"></div>
                 </button>
                 <span class="item-quantity font-semibold text-black-500 min-w-[2rem] text-center"></span>
-                <button class="quantity-increase bg-white-200 hover:bg-white-300 w-8 h-8 rounded-full flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                <button class="quantity-increase bg-accent-200 hover:bg-accent-300 w-8 h-8 rounded-full flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                     <x-solar-square-alt-arrow-right-outline class="w-4 h-4 text-black-400" />
                     <div class="loading-spinner hidden w-4 h-4 border-2 border-black-200 border-t-black-400 rounded-full animate-spin"></div>
                 </button>
@@ -378,7 +378,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Mostrar notificación de error mejorada
         const notification = document.createElement('div');
-        notification.className = 'cart-page-error fixed top-4 right-4 bg-error-300 text-white-50 px-4 py-3 rounded-lg shadow-lg z-50 max-w-sm transform transition-all duration-300 translate-x-full';
+        notification.className = 'cart-page-error fixed top-4 right-4 bg-error-300 text-accent-50 px-4 py-3 rounded-lg shadow-lg z-50 max-w-sm transform transition-all duration-300 translate-x-full';
         notification.innerHTML = `
             <div class="flex items-start gap-2">
                 <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -387,7 +387,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="flex-1">
                     <span class="text-sm font-medium">${message}</span>
                 </div>
-                <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-white-50 hover:text-white-200">
+                <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-accent-50 hover:text-accent-200">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>

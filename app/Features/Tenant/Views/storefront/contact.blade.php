@@ -22,7 +22,7 @@
             <!-- Lista de sedes -->
             <div class="space-y-4">
                 @foreach($locations as $location)
-                    <div class="bg-white-50 rounded-xl border border-white-200 overflow-hidden" x-data="{ showSchedule: false }">
+                    <div class="bg-accent-50 rounded-xl border border-accent-200 overflow-hidden" x-data="{ showSchedule: false }">
                         <!-- Header de la sede -->
                         <div class="p-4 pb-3">
                             <div class="flex items-start justify-between mb-3">
@@ -30,7 +30,7 @@
                                     <div class="flex items-center gap-2 mb-1">
                                         <h3 class="text-lg font-semibold text-black-400">{{ $location->name }}</h3>
                                         @if($location->is_main)
-                                            <span class="bg-primary-300 text-white-50 text-xs px-2 py-1 rounded-full font-medium">Principal</span>
+                                            <span class="bg-primary-300 text-accent-50 text-xs px-2 py-1 rounded-full font-medium">Principal</span>
                                         @endif
                                     </div>
                                     
@@ -42,12 +42,12 @@
                                     <div class="flex items-center gap-2">
                                         @if($location->currentStatus['status'] === 'open')
                                             <span class="bg-success-200 text-black-400 text-xs px-3 py-1 rounded-full font-medium flex items-center gap-1">
-                                                <div class="w-1.5 h-1.5 bg-white-50 rounded-full"></div>
+                                                <div class="w-1.5 h-1.5 bg-accent-50 rounded-full"></div>
                                                 {{ $location->currentStatus['text'] }}
                                             </span>
                                         @elseif($location->currentStatus['status'] === 'closed')
-                                            <span class="bg-error-200 text-white-50 text-xs px-3 py-1 rounded-full font-medium flex items-center gap-1">
-                                                <div class="w-1.5 h-1.5 bg-white-50 rounded-full"></div>
+                                            <span class="bg-error-200 text-accent-50 text-xs px-3 py-1 rounded-full font-medium flex items-center gap-1">
+                                                <div class="w-1.5 h-1.5 bg-accent-50 rounded-full"></div>
                                                 {{ $location->currentStatus['text'] }}
                                             </span>
                                         @else
@@ -88,7 +88,7 @@
                             <div class="space-y-2">
                                 @if($location->phone)
                                     <a href="tel:{{ $location->phone }}" 
-                                       class="flex items-center gap-3 p-3 bg-white-100 rounded-lg hover:bg-primary-50 transition-colors">
+                                       class="flex items-center gap-3 p-3 bg-accent-100 rounded-lg hover:bg-primary-50 transition-colors">
                                         <div class="w-5 h-5 flex-shrink-0">
                                             <x-solar-phone-outline class="w-full h-full text-primary-300" />
                                         </div>
@@ -114,9 +114,9 @@
 
                         <!-- Horarios -->
                         @if($location->schedules->count() > 0)
-                            <div class="border-t border-white-200">
+                            <div class="border-t border-accent-200">
                                 <button @click="showSchedule = !showSchedule" 
-                                        class="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-white-100 transition-colors">
+                                        class="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-accent-100 transition-colors">
                                     <span class="text-sm text-black-400 font-medium">Ver horarios</span>
                                     <x-solar-alt-arrow-down-outline class="w-4 h-4 text-black-300 transition-transform" 
                                                                      x-bind:class="showSchedule ? 'rotate-180' : ''" />
@@ -155,13 +155,13 @@
 
                         <!-- Redes sociales -->
                         @if($location->socialLinks->count() > 0)
-                            <div class="border-t border-white-200 p-4">
+                            <div class="border-t border-accent-200 p-4">
                                 <p class="text-xs text-black-300 font-medium mb-2">Síguenos</p>
                                 <div class="flex gap-2">
                                     @foreach($location->socialLinks as $social)
                                         <a href="{{ $social->url }}" 
                                            target="_blank"
-                                           class="w-8 h-8 bg-white-200 rounded-lg flex items-center justify-center hover:bg-primary-100 transition-colors">
+                                           class="w-8 h-8 bg-accent-200 rounded-lg flex items-center justify-center hover:bg-primary-100 transition-colors">
                                             @if($social->platform === 'facebook')
                                                 <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
                                                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
@@ -210,14 +210,14 @@
                     <div class="space-y-2">
                         @if($store->phone)
                             <a href="tel:{{ $store->phone }}" 
-                               class="inline-flex items-center gap-2 bg-primary-300 text-white-50 px-4 py-2 rounded-lg text-caption font-medium hover:bg-primary-200 transition-colors">
+                               class="inline-flex items-center gap-2 bg-primary-300 text-accent-50 px-4 py-2 rounded-lg text-caption font-medium hover:bg-primary-200 transition-colors">
                                 <x-solar-phone-outline class="w-4 h-4" />
                                 {{ $store->phone }}
                             </a>
                         @endif
                         @if($store->email)
                             <a href="mailto:{{ $store->email }}" 
-                               class="inline-flex items-center gap-2 bg-white-200 text-black-300 px-4 py-2 rounded-lg text-caption font-medium hover:bg-white-300 transition-colors">
+                               class="inline-flex items-center gap-2 bg-accent-200 text-black-300 px-4 py-2 rounded-lg text-caption font-medium hover:bg-accent-300 transition-colors">
                                 <x-solar-letter-outline class="w-4 h-4" />
                                 {{ $store->email }}
                             </a>

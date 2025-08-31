@@ -164,7 +164,7 @@
     
     <!-- Loading Overlay -->
     <div id="loading-overlay" class="fixed inset-0 bg-black-500 bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white-50 rounded-lg p-6 flex items-center gap-3">
+        <div class="bg-accent-50 rounded-lg p-6 flex items-center gap-3">
             <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-300"></div>
             <span class="body-base text-black-400">Cargando...</span>
         </div>

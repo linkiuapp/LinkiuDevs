@@ -98,10 +98,18 @@ class StoreObserver
             }
 
             // 1. CREAR SUSCRIPCIÓN
+            $subscriptionStatus = $store->status === 'active' ? Subscription::STATUS_ACTIVE : Subscription::STATUS_SUSPENDED;
+            
+            Log::info("Creating subscription with status", [
+                'store_status' => $store->status,
+                'subscription_status' => $subscriptionStatus,
+                'store_id' => $store->id
+            ]);
+            
             $subscription = Subscription::create([
                 'store_id' => $store->id,
                 'plan_id' => $store->plan_id,
-                'status' => $store->status === 'active' ? Subscription::STATUS_ACTIVE : Subscription::STATUS_SUSPENDED,
+                'status' => $subscriptionStatus,
                 'billing_cycle' => $billingCycle,
                 'current_period_start' => $periodStart->toDateString(),
                 'current_period_end' => $periodEnd->toDateString(),

@@ -4,8 +4,8 @@
     @section('content')
     <div x-data="shippingManagement" class="space-y-6">
         {{-- Header con información del plan --}}
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-            <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+            <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                 <div class="flex items-center justify-between">
                     <div>
                         <h2 class="text-lg font-semibold text-black-500 mb-2">Configurar Métodos de Envío</h2>
@@ -27,8 +27,8 @@
         </div>
 
         {{-- Métodos de Envío Disponibles --}}
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-            <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+            <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                 <h3 class="text-lg font-semibold text-black-500">Métodos de Envío Disponibles</h3>
             </div>
             
@@ -36,7 +36,7 @@
                 {{-- Lista de métodos con drag & drop --}}
                 <div x-ref="sortableContainer" class="space-y-3">
                     @foreach($methods as $method)
-                    <div class="shipping-method-item bg-white-100 rounded-lg p-4 cursor-move" 
+                    <div class="shipping-method-item bg-accent-100 rounded-lg p-4 cursor-move" 
                          data-method-id="{{ $method->id }}">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-4">
@@ -78,7 +78,7 @@
                                         {{ $method->is_active ? 'checked' : '' }}
                                         data-method-id="{{ $method->id }}"
                                         @change="toggleMethod({{ $method->id }}, $event.target.checked)">
-                                    <div class="w-11 h-6 bg-white-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white-50 after:border-white-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200"></div>
+                                    <div class="w-11 h-6 bg-accent-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-accent-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-accent-50 after:border-accent-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200"></div>
                                 </label>
                                 
                                 {{-- Botón configurar --}}
@@ -115,8 +115,8 @@
 
         {{-- Zonas de Envío a Domicilio --}}
         @if($domicilioMethod)
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-            <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+            <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                 <div class="flex items-center justify-between">
                     <h3 class="text-lg font-semibold text-black-500">Zonas de Envío a Domicilio</h3>
                     @if($zonesCount < $maxZones)
@@ -138,7 +138,7 @@
                     <div class="overflow-x-auto">
                         <table class="w-full">
                             <thead>
-                                <tr class="border-b border-white-100">
+                                <tr class="border-b border-accent-100">
                                     <th class="text-left py-3 px-4 font-medium text-black-400">Zona</th>
                                     <th class="text-left py-3 px-4 font-medium text-black-400">Costo</th>
                                     <th class="text-left py-3 px-4 font-medium text-black-400">Tiempo</th>
@@ -148,7 +148,7 @@
                             </thead>
                             <tbody>
                                 @foreach($domicilioMethod->zones as $zone)
-                                <tr class="border-b border-white-100 hover:bg-white-50">
+                                <tr class="border-b border-accent-100 hover:bg-accent-50">
                                     <td class="py-3 px-4">
                                         <div>
                                             <p class="font-medium text-black-500">{{ $zone->name }}</p>
@@ -174,7 +174,7 @@
                                                 Activa
                                             </span>
                                         @else
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-white-200 text-black-300">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-accent-200 text-black-300">
                                                 Inactiva
                                             </span>
                                         @endif
@@ -231,9 +231,9 @@
                     <div class="absolute inset-0 bg-black-500 opacity-75"></div>
                 </div>
 
-                <div class="inline-block align-bottom bg-white-50 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="inline-block align-bottom bg-accent-50 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                     <form @submit.prevent="updatePickup()">
-                        <div class="bg-white-50 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div class="bg-accent-50 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                             <h3 class="text-lg font-semibold text-black-500 mb-4">Configurar Recoger en Tienda</h3>
                             
                             <div class="space-y-4">
@@ -243,7 +243,7 @@
                                         Tiempo de preparación
                                     </label>
                                     <select x-model="pickupData.preparation_time" 
-                                            class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200">
+                                            class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200">
                                         <option value="30min">30 minutos</option>
                                         <option value="1h">1 hora</option>
                                         <option value="2h">2 horas</option>
@@ -256,7 +256,7 @@
                                     <label class="flex items-center gap-3">
                                         <input type="checkbox" 
                                                x-model="pickupData.notification_enabled"
-                                               class="w-4 h-4 text-primary-300 border-white-300 rounded focus:ring-primary-200">
+                                               class="w-4 h-4 text-primary-300 border-accent-300 rounded focus:ring-primary-200">
                                         <span class="text-sm text-black-400">
                                             Notificar por WhatsApp cuando esté listo
                                         </span>
@@ -274,12 +274,12 @@
                                     <textarea x-model="pickupData.instructions" 
                                               rows="3"
                                               placeholder="Ej: Recoger en nuestra tienda principal en horario de atención"
-                                              class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200"></textarea>
+                                              class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200"></textarea>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="bg-white-100 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-3">
+                        <div class="bg-accent-100 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-3">
                             <button type="submit" class="btn-primary">
                                 Guardar Cambios
                             </button>
@@ -431,7 +431,7 @@
             showToast(message, type = 'info') {
                 // Implementación básica de toast (se puede mejorar)
                 const toast = document.createElement('div');
-                toast.className = `fixed top-4 right-4 z-50 px-4 py-2 rounded-lg text-white-50 ${
+                toast.className = `fixed top-4 right-4 z-50 px-4 py-2 rounded-lg text-accent-50 ${
                     type === 'success' ? 'bg-success-300' : 
                     type === 'error' ? 'bg-error-300' : 'bg-info-200'
                 }`;

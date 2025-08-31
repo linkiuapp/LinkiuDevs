@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     
-                    <div class="border-t border-white-100 pt-4">
+                    <div class="border-t border-accent-100 pt-4">
                         <h3 class="text-sm font-semibold text-black-300 mb-3">Estados Inactivos</h3>
                         <div class="flex items-center flex-wrap gap-7">
                             <div class="flex items-center gap-2">
@@ -90,13 +90,13 @@
                         </div>
                         <div class="bg-secondary-50 border border-secondary-100 px-4 py-3 rounded-lg hover:bg-secondary-100 transition-colors">
                             <span class="flex items-center gap-2">
-                                <input class="peer w-4 h-4 text-secondary-200 bg-white-100 border-white-300 focus:ring-secondary-100 focus:ring-2 rounded-full appearance-none checked:bg-secondary-200 checked:border-secondary-200" type="radio" name="radio_button" id="radio200">
+                                <input class="peer w-4 h-4 text-secondary-200 bg-accent-100 border-accent-300 focus:ring-secondary-100 focus:ring-2 rounded-full appearance-none checked:bg-secondary-200 checked:border-secondary-200" type="radio" name="radio_button" id="radio200">
                                 <label class="peer-checked:text-secondary-300 text-base font-semibold cursor-pointer" for="radio200">Secondary</label>
                             </span>
                         </div>
                         <div class="bg-success-50 border border-success-100 px-4 py-3 rounded-lg hover:bg-success-100 transition-colors">
                             <span class="flex items-center gap-2">
-                                <input class="peer w-4 h-4 text-success-200 bg-white-100 border-white-300 focus:ring-success-100 focus:ring-2 rounded-full appearance-none checked:bg-success-200 checked:border-success-200" type="radio" name="radio_button" id="radio300">
+                                <input class="peer w-4 h-4 text-success-200 bg-accent-100 border-accent-300 focus:ring-success-100 focus:ring-2 rounded-full appearance-none checked:bg-success-200 checked:border-success-200" type="radio" name="radio_button" id="radio300">
                                 <label class="peer-checked:text-success-300 text-base font-semibold cursor-pointer" for="radio300">Success</label>
                             </span>
                         </div>
@@ -105,19 +105,19 @@
                     <div class="flex items-center flex-wrap gap-4">
                         <div class="bg-warning-50 border border-warning-100 px-4 py-3 rounded-lg hover:bg-warning-100 transition-colors">
                             <span class="flex items-center gap-2">
-                                <input class="peer w-4 h-4 text-warning-200 bg-white-100 border-white-300 focus:ring-warning-100 focus:ring-2 rounded-full appearance-none checked:bg-warning-200 checked:border-warning-200" type="radio" name="radio_button" id="radio400">
+                                <input class="peer w-4 h-4 text-warning-200 bg-accent-100 border-accent-300 focus:ring-warning-100 focus:ring-2 rounded-full appearance-none checked:bg-warning-200 checked:border-warning-200" type="radio" name="radio_button" id="radio400">
                                 <label class="peer-checked:text-warning-300 text-base font-semibold cursor-pointer" for="radio400">Warning</label>
                             </span>
                         </div>
                         <div class="bg-error-50 border border-error-100 px-4 py-3 rounded-lg hover:bg-error-100 transition-colors">
                             <span class="flex items-center gap-2">
-                                <input class="peer w-4 h-4 text-error-200 bg-white-100 border-white-300 focus:ring-error-100 focus:ring-2 rounded-full appearance-none checked:bg-error-200 checked:border-error-200" type="radio" name="radio_button" id="radio500">
+                                <input class="peer w-4 h-4 text-error-200 bg-accent-100 border-accent-300 focus:ring-error-100 focus:ring-2 rounded-full appearance-none checked:bg-error-200 checked:border-error-200" type="radio" name="radio_button" id="radio500">
                                 <label class="peer-checked:text-error-300 text-base font-semibold cursor-pointer" for="radio500">Error</label>
                             </span>
                         </div>
                         <div class="bg-info-50 border border-info-100 px-4 py-3 rounded-lg hover:bg-info-100 transition-colors">
                             <span class="flex items-center gap-2">
-                                <input class="peer w-4 h-4 text-info-200 bg-white-100 border-white-300 focus:ring-info-100 focus:ring-2 rounded-full appearance-none checked:bg-info-200 checked:border-info-200" type="radio" name="radio_button" id="radio600">
+                                <input class="peer w-4 h-4 text-info-200 bg-accent-100 border-accent-300 focus:ring-info-100 focus:ring-2 rounded-full appearance-none checked:bg-info-200 checked:border-info-200" type="radio" name="radio_button" id="radio600">
                                 <label class="peer-checked:text-info-300 text-base font-semibold cursor-pointer" for="radio600">Info</label>
                             </span>
                         </div>
@@ -139,37 +139,37 @@
                         <h3 class="text-sm font-semibold text-black-300 mb-3">Selecciona una opción:</h3>
                         <div class="flex items-center flex-wrap gap-6">
                             <div class="flex items-center gap-2">
-                                <input class="peer w-4 h-4 text-primary-200 bg-white-100 border-white-300 focus:ring-primary-100 focus:ring-2 rounded-full appearance-none checked:bg-primary-200 checked:border-primary-200" type="radio" name="horizontal_group" id="horizontal1" checked>
+                                <input class="peer w-4 h-4 text-primary-200 bg-accent-100 border-accent-300 focus:ring-primary-100 focus:ring-2 rounded-full appearance-none checked:bg-primary-200 checked:border-primary-200" type="radio" name="horizontal_group" id="horizontal1" checked>
                                 <label class="peer-checked:text-primary-300 text-base font-medium cursor-pointer" for="horizontal1">Opción 1</label>
                             </div>
                             <div class="flex items-center gap-2">
-                                <input class="peer w-4 h-4 text-primary-200 bg-white-100 border-white-300 focus:ring-primary-100 focus:ring-2 rounded-full appearance-none checked:bg-primary-200 checked:border-primary-200" type="radio" name="horizontal_group" id="horizontal2">
+                                <input class="peer w-4 h-4 text-primary-200 bg-accent-100 border-accent-300 focus:ring-primary-100 focus:ring-2 rounded-full appearance-none checked:bg-primary-200 checked:border-primary-200" type="radio" name="horizontal_group" id="horizontal2">
                                 <label class="peer-checked:text-primary-300 text-base font-medium cursor-pointer" for="horizontal2">Opción 2</label>
                             </div>
                             <div class="flex items-center gap-2">
-                                <input class="peer w-4 h-4 text-primary-200 bg-white-100 border-white-300 focus:ring-primary-100 focus:ring-2 rounded-full appearance-none checked:bg-primary-200 checked:border-primary-200" type="radio" name="horizontal_group" id="horizontal3">
+                                <input class="peer w-4 h-4 text-primary-200 bg-accent-100 border-accent-300 focus:ring-primary-100 focus:ring-2 rounded-full appearance-none checked:bg-primary-200 checked:border-primary-200" type="radio" name="horizontal_group" id="horizontal3">
                                 <label class="peer-checked:text-primary-300 text-base font-medium cursor-pointer" for="horizontal3">Opción 3</label>
                             </div>
                             <div class="flex items-center gap-2">
-                                <input class="peer w-4 h-4 text-primary-200 bg-white-100 border-white-300 focus:ring-primary-100 focus:ring-2 rounded-full appearance-none checked:bg-primary-200 checked:border-primary-200" type="radio" name="horizontal_group" id="horizontal4">
+                                <input class="peer w-4 h-4 text-primary-200 bg-accent-100 border-accent-300 focus:ring-primary-100 focus:ring-2 rounded-full appearance-none checked:bg-primary-200 checked:border-primary-200" type="radio" name="horizontal_group" id="horizontal4">
                                 <label class="peer-checked:text-primary-300 text-base font-medium cursor-pointer" for="horizontal4">Opción 4</label>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="border-t border-white-100 pt-4">
+                    <div class="border-t border-accent-100 pt-4">
                         <h3 class="text-sm font-semibold text-black-300 mb-3">Tamaños de servicio:</h3>
                         <div class="flex items-center flex-wrap gap-6">
                             <div class="flex items-center gap-2">
-                                <input class="peer w-4 h-4 text-secondary-200 bg-white-100 border-white-300 focus:ring-secondary-100 focus:ring-2 rounded-full appearance-none checked:bg-secondary-200 checked:border-secondary-200" type="radio" name="size_group" id="size1">
+                                <input class="peer w-4 h-4 text-secondary-200 bg-accent-100 border-accent-300 focus:ring-secondary-100 focus:ring-2 rounded-full appearance-none checked:bg-secondary-200 checked:border-secondary-200" type="radio" name="size_group" id="size1">
                                 <label class="peer-checked:text-secondary-300 text-base font-medium cursor-pointer" for="size1">Pequeño</label>
                             </div>
                             <div class="flex items-center gap-2">
-                                <input class="peer w-4 h-4 text-secondary-200 bg-white-100 border-white-300 focus:ring-secondary-100 focus:ring-2 rounded-full appearance-none checked:bg-secondary-200 checked:border-secondary-200" type="radio" name="size_group" id="size2" checked>
+                                <input class="peer w-4 h-4 text-secondary-200 bg-accent-100 border-accent-300 focus:ring-secondary-100 focus:ring-2 rounded-full appearance-none checked:bg-secondary-200 checked:border-secondary-200" type="radio" name="size_group" id="size2" checked>
                                 <label class="peer-checked:text-secondary-300 text-base font-medium cursor-pointer" for="size2">Mediano</label>
                             </div>
                             <div class="flex items-center gap-2">
-                                <input class="peer w-4 h-4 text-secondary-200 bg-white-100 border-white-300 focus:ring-secondary-100 focus:ring-2 rounded-full appearance-none checked:bg-secondary-200 checked:border-secondary-200" type="radio" name="size_group" id="size3">
+                                <input class="peer w-4 h-4 text-secondary-200 bg-accent-100 border-accent-300 focus:ring-secondary-100 focus:ring-2 rounded-full appearance-none checked:bg-secondary-200 checked:border-secondary-200" type="radio" name="size_group" id="size3">
                                 <label class="peer-checked:text-secondary-300 text-base font-medium cursor-pointer" for="size3">Grande</label>
                             </div>
                         </div>
@@ -190,22 +190,22 @@
                     <div>
                         <h3 class="text-sm font-semibold text-black-300 mb-3">Selecciona tu plan:</h3>
                         <div class="flex items-start flex-col gap-4">
-                            <div class="flex items-center gap-3 p-3 rounded-lg border border-white-100 hover:border-primary-200 transition-colors w-full">
-                                <input class="peer w-4 h-4 text-primary-200 bg-white-100 border-white-300 focus:ring-primary-100 focus:ring-2 rounded-full appearance-none checked:bg-primary-200 checked:border-primary-200" type="radio" name="plan_group" id="plan1" checked>
+                            <div class="flex items-center gap-3 p-3 rounded-lg border border-accent-100 hover:border-primary-200 transition-colors w-full">
+                                <input class="peer w-4 h-4 text-primary-200 bg-accent-100 border-accent-300 focus:ring-primary-100 focus:ring-2 rounded-full appearance-none checked:bg-primary-200 checked:border-primary-200" type="radio" name="plan_group" id="plan1" checked>
                                 <label class="peer-checked:text-primary-300 cursor-pointer flex-1" for="plan1">
                                     <div class="text-base font-semibold">Plan Básico</div>
                                     <div class="text-sm text-black-300">$9.99/mes - Funciones básicas</div>
                                 </label>
                             </div>
-                            <div class="flex items-center gap-3 p-3 rounded-lg border border-white-100 hover:border-primary-200 transition-colors w-full">
-                                <input class="peer w-4 h-4 text-primary-200 bg-white-100 border-white-300 focus:ring-primary-100 focus:ring-2 rounded-full appearance-none checked:bg-primary-200 checked:border-primary-200" type="radio" name="plan_group" id="plan2">
+                            <div class="flex items-center gap-3 p-3 rounded-lg border border-accent-100 hover:border-primary-200 transition-colors w-full">
+                                <input class="peer w-4 h-4 text-primary-200 bg-accent-100 border-accent-300 focus:ring-primary-100 focus:ring-2 rounded-full appearance-none checked:bg-primary-200 checked:border-primary-200" type="radio" name="plan_group" id="plan2">
                                 <label class="peer-checked:text-primary-300 cursor-pointer flex-1" for="plan2">
                                     <div class="text-base font-semibold">Plan Pro</div>
                                     <div class="text-sm text-black-300">$19.99/mes - Funciones avanzadas</div>
                                 </label>
                             </div>
-                            <div class="flex items-center gap-3 p-3 rounded-lg border border-white-100 hover:border-primary-200 transition-colors w-full">
-                                <input class="peer w-4 h-4 text-primary-200 bg-white-100 border-white-300 focus:ring-primary-100 focus:ring-2 rounded-full appearance-none checked:bg-primary-200 checked:border-primary-200" type="radio" name="plan_group" id="plan3">
+                            <div class="flex items-center gap-3 p-3 rounded-lg border border-accent-100 hover:border-primary-200 transition-colors w-full">
+                                <input class="peer w-4 h-4 text-primary-200 bg-accent-100 border-accent-300 focus:ring-primary-100 focus:ring-2 rounded-full appearance-none checked:bg-primary-200 checked:border-primary-200" type="radio" name="plan_group" id="plan3">
                                 <label class="peer-checked:text-primary-300 cursor-pointer flex-1" for="plan3">
                                     <div class="text-base font-semibold">Plan Enterprise</div>
                                     <div class="text-sm text-black-300">$49.99/mes - Funciones completas</div>
@@ -214,25 +214,25 @@
                         </div>
                     </div>
                     
-                    <div class="border-t border-white-100 pt-4">
+                    <div class="border-t border-accent-100 pt-4">
                         <h3 class="text-sm font-semibold text-black-300 mb-3">Método de pago:</h3>
                         <div class="flex items-start flex-col gap-3">
                             <div class="flex items-center gap-3">
-                                <input class="peer w-4 h-4 text-success-200 bg-white-100 border-white-300 focus:ring-success-100 focus:ring-2 rounded-full appearance-none checked:bg-success-200 checked:border-success-200" type="radio" name="payment_group" id="payment1">
+                                <input class="peer w-4 h-4 text-success-200 bg-accent-100 border-accent-300 focus:ring-success-100 focus:ring-2 rounded-full appearance-none checked:bg-success-200 checked:border-success-200" type="radio" name="payment_group" id="payment1">
                                 <label class="peer-checked:text-success-300 text-base font-medium cursor-pointer" for="payment1">
                                     <x-solar-card-outline class="w-5 h-5 inline-block mr-2" />
                                     Tarjeta de Crédito
                                 </label>
                             </div>
                             <div class="flex items-center gap-3">
-                                <input class="peer w-4 h-4 text-success-200 bg-white-100 border-white-300 focus:ring-success-100 focus:ring-2 rounded-full appearance-none checked:bg-success-200 checked:border-success-200" type="radio" name="payment_group" id="payment2" checked>
+                                <input class="peer w-4 h-4 text-success-200 bg-accent-100 border-accent-300 focus:ring-success-100 focus:ring-2 rounded-full appearance-none checked:bg-success-200 checked:border-success-200" type="radio" name="payment_group" id="payment2" checked>
                                 <label class="peer-checked:text-success-300 text-base font-medium cursor-pointer" for="payment2">
                                     <x-solar-wallet-outline class="w-5 h-5 inline-block mr-2" />
                                     PayPal
                                 </label>
                             </div>
                             <div class="flex items-center gap-3">
-                                <input class="peer w-4 h-4 text-success-200 bg-white-100 border-white-300 focus:ring-success-100 focus:ring-2 rounded-full appearance-none checked:bg-success-200 checked:border-success-200" type="radio" name="payment_group" id="payment3">
+                                <input class="peer w-4 h-4 text-success-200 bg-accent-100 border-accent-300 focus:ring-success-100 focus:ring-2 rounded-full appearance-none checked:bg-success-200 checked:border-success-200" type="radio" name="payment_group" id="payment3">
                                 <label class="peer-checked:text-success-300 text-base font-medium cursor-pointer" for="payment3">
                                     <x-solar-card-transfer-outline class="w-5 h-5 inline-block mr-2" />
                                     Transferencia Bancaria

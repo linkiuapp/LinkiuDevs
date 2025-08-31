@@ -8,7 +8,7 @@
         <div class="card-header">
             <div class="flex items-center justify-between">
                 <h2 class="title-card">All Users</h2>
-                <button type="button" class="px-4 py-2 bg-primary-200 text-white-50 text-base rounded-lg hover:bg-primary-300 transition-colors duration-200 flex items-center gap-2">
+                <button type="button" class="px-4 py-2 bg-primary-200 text-accent-50 text-base rounded-lg hover:bg-primary-300 transition-colors duration-200 flex items-center gap-2">
                     <x-solar-user-plus-outline class="w-5 h-5" />
                     Add User
                 </button>
@@ -23,7 +23,7 @@
                     <div class="relative">
                         <x-solar-magnifer-outline class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black-300" />
                         <input type="text" id="search" 
-                               class="w-full pl-10 pr-4 py-2.5 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none"
+                               class="w-full pl-10 pr-4 py-2.5 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none"
                                placeholder="Search users...">
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                 <!-- Department Filter -->
                 <div class="min-w-0 sm:w-48">
                     <select id="department-filter" 
-                            class="w-full px-3 py-2.5 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none">
+                            class="w-full px-3 py-2.5 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none">
                         <option value="">All Departments</option>
                         <option value="design">Design</option>
                         <option value="development">Development</option>
@@ -45,7 +45,7 @@
                 <!-- Status Filter -->
                 <div class="min-w-0 sm:w-32">
                     <select id="status-filter" 
-                            class="w-full px-3 py-2.5 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none">
+                            class="w-full px-3 py-2.5 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none">
                         <option value="">All Status</option>
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
@@ -57,11 +57,11 @@
             <div class="overflow-x-auto">
                 <table class="w-full border-collapse">
                     <thead>
-                        <tr class="border-b border-white-100">
+                        <tr class="border-b border-accent-100">
                             <th class="text-left py-3 px-4 text-base text-black-500 font-semibold">
                                 <div class="flex items-center gap-2">
                                     <input type="checkbox" id="select-all" 
-                                           class="w-4 h-4 text-primary-200 border-white-200 focus:ring-primary-400 rounded">
+                                           class="w-4 h-4 text-primary-200 border-accent-200 focus:ring-primary-400 rounded">
                                     <span>User</span>
                                 </div>
                             </th>
@@ -100,7 +100,7 @@
                     </thead>
                     <tbody id="users-table-body">
                         <!-- User Row 1 -->
-                        <tr class="border-b border-white-100 hover:bg-white-100 transition-colors user-row" 
+                        <tr class="border-b border-accent-100 hover:bg-accent-100 transition-colors user-row" 
                             data-email="jacob.jones@example.com" 
                             data-department="design" 
                             data-designation="UI UX Designer" 
@@ -108,7 +108,7 @@
                             data-created="2024-01-15">
                             <td class="py-4 px-4">
                                 <div class="flex items-center gap-3">
-                                    <input type="checkbox" class="w-4 h-4 text-primary-400 border-white-200 focus:ring-primary-400 rounded row-checkbox">
+                                    <input type="checkbox" class="w-4 h-4 text-primary-400 border-accent-200 focus:ring-primary-400 rounded row-checkbox">
                                     <img src="https://via.placeholder.com/40x40/6366f1/ffffff?text=JJ" 
                                          alt="Jacob Jones" 
                                          class="w-10 h-10 rounded-full object-cover">
@@ -154,7 +154,7 @@
                         </tr>
 
                         <!-- User Row 2 -->
-                        <tr class="border-b border-white-100 hover:bg-white-100 transition-colors user-row" 
+                        <tr class="border-b border-accent-100 hover:bg-accent-100 transition-colors user-row" 
                             data-email="sarah.wilson@example.com" 
                             data-department="development" 
                             data-designation="Frontend Developer" 
@@ -162,7 +162,7 @@
                             data-created="2024-02-10">
                             <td class="py-4 px-4">
                                 <div class="flex items-center gap-3">
-                                    <input type="checkbox" class="w-4 h-4 text-primary-400 border-white-200 focus:ring-primary-400 rounded row-checkbox">
+                                    <input type="checkbox" class="w-4 h-4 text-primary-400 border-accent-200 focus:ring-primary-400 rounded row-checkbox">
                                     <img src="https://via.placeholder.com/40x40/ec4899/ffffff?text=SW" 
                                          alt="Sarah Wilson" 
                                          class="w-10 h-10 rounded-full object-cover">
@@ -208,7 +208,7 @@
                         </tr>
 
                         <!-- User Row 3 -->
-                        <tr class="border-b border-white-100 hover:bg-white-100 transition-colors user-row" 
+                        <tr class="border-b border-accent-100 hover:bg-accent-100 transition-colors user-row" 
                             data-email="mike.johnson@example.com" 
                             data-department="marketing" 
                             data-designation="Marketing Manager" 
@@ -216,7 +216,7 @@
                             data-created="2024-01-20">
                             <td class="py-4 px-4">
                                 <div class="flex items-center gap-3">
-                                    <input type="checkbox" class="w-4 h-4 text-primary-400 border-white-200 focus:ring-primary-400 rounded row-checkbox">
+                                    <input type="checkbox" class="w-4 h-4 text-primary-400 border-accent-200 focus:ring-primary-400 rounded row-checkbox">
                                     <img src="https://via.placeholder.com/40x40/f59e0b/ffffff?text=MJ" 
                                          alt="Mike Johnson" 
                                          class="w-10 h-10 rounded-full object-cover">
@@ -262,7 +262,7 @@
                         </tr>
 
                         <!-- User Row 4 -->
-                        <tr class="border-b border-white-100 hover:bg-white-100 transition-colors user-row" 
+                        <tr class="border-b border-accent-100 hover:bg-accent-100 transition-colors user-row" 
                             data-email="emma.davis@example.com" 
                             data-department="hr" 
                             data-designation="HR Specialist" 
@@ -270,7 +270,7 @@
                             data-created="2024-03-05">
                             <td class="py-4 px-4">
                                 <div class="flex items-center gap-3">
-                                    <input type="checkbox" class="w-4 h-4 text-primary-400 border-white-200 focus:ring-primary-400 rounded row-checkbox">
+                                    <input type="checkbox" class="w-4 h-4 text-primary-400 border-accent-200 focus:ring-primary-400 rounded row-checkbox">
                                     <img src="https://via.placeholder.com/40x40/10b981/ffffff?text=ED" 
                                          alt="Emma Davis" 
                                          class="w-10 h-10 rounded-full object-cover">
@@ -319,18 +319,18 @@
             </div>
 
             <!-- Pagination -->
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-6 border-t border-white-100">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-6 border-t border-accent-100">
                 <div class="text-base text-black-400">
                     Showing 1 to 4 of 4 entries
                 </div>
                 <div class="flex items-center gap-2">
-                    <button type="button" class="px-3 py-2 border border-white-200 rounded-lg text-base text-black-400 hover:bg-white-100 transition-colors disabled:opacity-50" disabled>
+                    <button type="button" class="px-3 py-2 border border-accent-200 rounded-lg text-base text-black-400 hover:bg-accent-100 transition-colors disabled:opacity-50" disabled>
                         Previous
                     </button>
-                    <button type="button" class="px-3 py-2 bg-primary-400 text-white-50 rounded-lg text-base">
+                    <button type="button" class="px-3 py-2 bg-primary-400 text-accent-50 rounded-lg text-base">
                         1
                     </button>
-                    <button type="button" class="px-3 py-2 border border-white-200 rounded-lg text-base text-black-400 hover:bg-white-100 transition-colors disabled:opacity-50" disabled>
+                    <button type="button" class="px-3 py-2 border border-accent-200 rounded-lg text-base text-black-400 hover:bg-accent-100 transition-colors disabled:opacity-50" disabled>
                         Next
                     </button>
                 </div>

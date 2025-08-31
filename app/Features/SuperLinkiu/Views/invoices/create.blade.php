@@ -10,15 +10,15 @@
             <h1 class="text-lg text-black-500 mb-0">Crear Nueva Factura</h1>
             <p class="text-black-300 mt-1">Genera una nueva factura para una tienda</p>
         </div>
-        <a href="{{ route('superlinkiu.invoices.index') }}" class="bg-white-100 hover:bg-white-200 text-black-400 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+        <a href="{{ route('superlinkiu.invoices.index') }}" class="bg-accent-100 hover:bg-accent-200 text-black-400 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
             <x-solar-arrow-left-outline class="w-5 h-5" />
             Volver a Facturas
         </a>
     </div>
 
     <!-- Formulario -->
-    <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-        <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+    <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
             <h2 class="text-lg text-black-500 mb-0">Información de la Factura</h2>
         </div>
         
@@ -34,7 +34,7 @@
                     <select name="store_id" 
                             x-model="selectedStore"
                             @change="updatePlanFromStore()"
-                            class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('store_id') border-error-200 @enderror">
+                            class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('store_id') border-error-200 @enderror">
                         <option value="">Seleccionar tienda</option>
                         @foreach($stores as $store)
                             <option value="{{ $store->id }}" 
@@ -57,7 +57,7 @@
                     <select name="plan_id" 
                             x-model="selectedPlan"
                             @change="updateAmountFromPlan()"
-                            class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('plan_id') border-error-200 @enderror">
+                            class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('plan_id') border-error-200 @enderror">
                         <option value="">Seleccionar plan</option>
                         @foreach($plans as $plan)
                             <option value="{{ $plan->id }}" 
@@ -82,7 +82,7 @@
                     <select name="period" 
                             x-model="selectedPeriod"
                             @change="updateAmountFromPlan()"
-                            class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('period') border-error-200 @enderror">
+                            class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('period') border-error-200 @enderror">
                         <option value="">Seleccionar período</option>
                         <option value="monthly" {{ old('period') == 'monthly' ? 'selected' : '' }}>Mensual</option>
                         <option value="quarterly" {{ old('period') == 'quarterly' ? 'selected' : '' }}>Trimestral</option>
@@ -103,7 +103,7 @@
                            value="{{ old('amount') }}"
                            min="0"
                            step="1000"
-                           class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('amount') border-error-200 @enderror"
+                           class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('amount') border-error-200 @enderror"
                            placeholder="60000">
                     @error('amount')
                         <p class="mt-1 text-sm text-error-300">{{ $message }}</p>
@@ -120,7 +120,7 @@
                     <input type="date" 
                            name="issue_date" 
                            value="{{ old('issue_date', now()->format('Y-m-d')) }}"
-                           class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('issue_date') border-error-200 @enderror">
+                           class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('issue_date') border-error-200 @enderror">
                     @error('issue_date')
                         <p class="mt-1 text-sm text-error-300">{{ $message }}</p>
                     @enderror
@@ -133,7 +133,7 @@
                     <input type="date" 
                            name="due_date" 
                            value="{{ old('due_date', now()->addDays(15)->format('Y-m-d')) }}"
-                           class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('due_date') border-error-200 @enderror">
+                           class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('due_date') border-error-200 @enderror">
                     @error('due_date')
                         <p class="mt-1 text-sm text-error-300">{{ $message }}</p>
                     @enderror
@@ -147,7 +147,7 @@
                 </label>
                 <textarea name="notes" 
                           rows="4"
-                          class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('notes') border-error-200 @enderror"
+                          class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('notes') border-error-200 @enderror"
                           placeholder="Notas adicionales sobre la factura">{{ old('notes') }}</textarea>
                 @error('notes')
                     <p class="mt-1 text-sm text-error-300">{{ $message }}</p>
@@ -155,7 +155,7 @@
             </div>
 
             <!-- Resumen -->
-            <div class="bg-white-100 rounded-lg p-4 mb-8" x-show="selectedStore && selectedPlan && selectedPeriod">
+            <div class="bg-accent-100 rounded-lg p-4 mb-8" x-show="selectedStore && selectedPlan && selectedPeriod">
                 <h3 class="text-sm font-semibold text-black-400 mb-3">Resumen de la Factura</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -180,11 +180,11 @@
             <!-- Botones -->
             <div class="flex justify-end gap-3">
                 <a href="{{ route('superlinkiu.invoices.index') }}" 
-                   class="bg-white-100 hover:bg-white-200 text-black-400 px-6 py-2 rounded-lg transition-colors">
+                   class="bg-accent-100 hover:bg-accent-200 text-black-400 px-6 py-2 rounded-lg transition-colors">
                     Cancelar
                 </a>
                 <button type="submit" 
-                        class="bg-primary-200 hover:bg-primary-300 text-white-50 px-6 py-2 rounded-lg transition-colors">
+                        class="bg-primary-200 hover:bg-primary-300 text-accent-50 px-6 py-2 rounded-lg transition-colors">
                     Crear Factura
                 </button>
             </div>

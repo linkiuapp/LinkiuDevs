@@ -10,7 +10,7 @@
                 {{-- Header --}}
                 <tr class="table-header">
                     <th class="px-6 py-3">
-                        <input type="checkbox" id="selectAll" class="rounded border-white-300">
+                        <input type="checkbox" id="selectAll" class="rounded border-accent-300">
                     </th>
                     <th class="px-6 py-3 text-left">Categoría</th>
                     <th class="px-6 py-3 text-left">Tipo</th>
@@ -21,11 +21,11 @@
                     <th class="px-6 py-3 text-left">Acciones</th>
                 </tr>
             </thead>
-            <tbody class="bg-white-50 divide-y divide-white-100 id="sortableCategories">
+            <tbody class="bg-accent-50 divide-y divide-accent-100 id="sortableCategories">
                 @forelse($categories as $category)
-                    <tr class="text-black-400 hover:bg-white-100">
+                    <tr class="text-black-400 hover:bg-accent-100">
                         <td class="px-6 py-4 text-center">
-                            <input type="checkbox" class="store-checkbox rounded border-white-300" value="{{ $store->id }}">
+                            <input type="checkbox" class="store-checkbox rounded border-accent-300" value="{{ $store->id }}">
                         </td>
 
                         {{-- ================================================================ --}}

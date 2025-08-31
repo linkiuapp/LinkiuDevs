@@ -15,11 +15,11 @@
     </div>
 
     <!-- Card principal -->
-    <div class="bg-white-50 rounded-lg p-0 overflow-hidden p-6">
-        <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+    <div class="bg-accent-50 rounded-lg p-0 overflow-hidden p-6">
+        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <div class="w-16 h-16 bg-white-100 rounded-lg p-3 flex items-center justify-center">
+                    <div class="w-16 h-16 bg-accent-100 rounded-lg p-3 flex items-center justify-center">
                         <x-dynamic-component :component="$variable->type_icon" class="w-full h-full text-primary-200" />
                     </div>
                     <div>
@@ -47,7 +47,7 @@
                 </div>
                 <div class="flex items-center gap-2">
                     <a href="{{ route('tenant.admin.variables.edit', [$store->slug, $variable]) }}" 
-                       class="px-3 py-2 bg-primary-200 text-white-50 rounded-lg hover:bg-primary-300 transition-colors text-sm flex items-center gap-2">
+                       class="px-3 py-2 bg-primary-200 text-accent-50 rounded-lg hover:bg-primary-300 transition-colors text-sm flex items-center gap-2">
                         <x-solar-pen-outline class="w-4 h-4" />
                         Editar
                     </a>
@@ -112,12 +112,12 @@
 
     <!-- Opciones Card -->
     @if($variable->type === 'radio' || $variable->type === 'checkbox')
-        <div class="bg-white-50 rounded-lg p-6 mt-6">
+        <div class="bg-accent-50 rounded-lg p-6 mt-6">
             <h3 class="text-lg font-semibold text-black-500 mb-4">Opciones de la Variable</h3>
             @if($variable->options->count() > 0)
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     @foreach($variable->options as $option)
-                        <div class="bg-white-100 rounded-lg p-4 border border-white-200">
+                        <div class="bg-accent-100 rounded-lg p-4 border border-accent-200">
                             <div class="flex items-center justify-between mb-2">
                                 <h4 class="font-medium text-black-500">{{ $option->name }}</h4>
                                 <span class="text-sm text-black-300">#{{ $loop->iteration }}</span>
@@ -135,11 +135,11 @@
                             @if($option->color_hex)
                                 <div class="text-sm text-black-400 mb-2 flex items-center">
                                     <span class="font-medium mr-2">Color:</span> 
-                                    <span class="inline-block w-4 h-4 rounded border border-white-200 mr-2" style="background-color: {{ $option->color_hex }}"></span>
+                                    <span class="inline-block w-4 h-4 rounded border border-accent-200 mr-2" style="background-color: {{ $option->color_hex }}"></span>
                                     <span class="font-mono text-xs">{{ $option->color_hex }}</span>
                                 </div>
                             @endif
-                            <div class="mt-2 pt-2 border-t border-white-200">
+                            <div class="mt-2 pt-2 border-t border-accent-200">
                                 <span class="text-xs text-black-300">
                                     Creado: {{ $option->created_at->format('d/m/Y') }}
                                 </span>
@@ -158,7 +158,7 @@
     @endif
 
     <!-- Estadísticas Card -->
-    <div class="bg-white-50 rounded-lg p-6 mt-6">
+    <div class="bg-accent-50 rounded-lg p-6 mt-6">
         <h3 class="text-lg font-semibold text-black-500 mb-4">Estadísticas</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div class="text-center">

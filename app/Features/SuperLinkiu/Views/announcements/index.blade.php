@@ -19,7 +19,7 @@
 
     <!-- Estadísticas -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div class="bg-white-50 rounded-lg p-4">
+        <div class="bg-accent-50 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-black-300">Total</p>
@@ -31,7 +31,7 @@
             </div>
         </div>
 
-        <div class="bg-white-50 rounded-lg p-4">
+        <div class="bg-accent-50 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-black-300">Activos</p>
@@ -43,7 +43,7 @@
             </div>
         </div>
 
-        <div class="bg-white-50 rounded-lg p-4">
+        <div class="bg-accent-50 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-black-300">Banners</p>
@@ -55,7 +55,7 @@
             </div>
         </div>
 
-        <div class="bg-white-50 rounded-lg p-4">
+        <div class="bg-accent-50 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-black-300">Críticos</p>
@@ -69,11 +69,11 @@
     </div>
 
     <!-- Filtros -->
-    <div class="bg-white-50 rounded-lg p-6 mb-6">
+    <div class="bg-accent-50 rounded-lg p-6 mb-6">
         <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
                 <label class="block text-sm font-medium text-black-300 mb-2">Tipo</label>
-                <select name="type" class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                <select name="type" class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
                     <option value="">Todos los tipos</option>
                     <option value="critical" {{ request('type') === 'critical' ? 'selected' : '' }}>🚨 Crítico</option>
                     <option value="important" {{ request('type') === 'important' ? 'selected' : '' }}>⭐ Importante</option>
@@ -83,7 +83,7 @@
 
             <div>
                 <label class="block text-sm font-medium text-black-300 mb-2">Estado</label>
-                <select name="status" class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                <select name="status" class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
                     <option value="">Todos los estados</option>
                     <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Activos</option>
                     <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactivos</option>
@@ -97,7 +97,7 @@
                        name="search" 
                        value="{{ request('search') }}"
                        placeholder="Título o contenido..."
-                       class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                       class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
             </div>
 
             <div class="flex items-end gap-2">
@@ -114,8 +114,8 @@
     </div>
 
     <!-- Tabla de Anuncios -->
-    <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-        <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+    <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
             <h2 class="text-lg font-semibold text-black-400 mb-0">
                 Anuncios ({{ $announcements->total() }})
             </h2>
@@ -123,7 +123,7 @@
 
         <div class="overflow-x-auto">
             <table class="w-full">
-                <thead class="bg-white-100">
+                <thead class="bg-accent-100">
                     <tr>
                         <th class="text-left py-3 px-4 font-medium text-black-300">Anuncio</th>
                         <th class="text-left py-3 px-4 font-medium text-black-300">Tipo</th>
@@ -133,9 +133,9 @@
                         <th class="text-right py-3 px-4 font-medium text-black-300">Acciones</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-white-100">
+                <tbody class="divide-y divide-accent-100">
                     @forelse($announcements as $announcement)
-                        <tr class="hover:bg-white-100 transition-colors duration-150">
+                        <tr class="hover:bg-accent-100 transition-colors duration-150">
                             <td class="py-3 px-4">
                                 <div>
                                     <h3 class="font-medium text-black-400">{{ $announcement->title }}</h3>
@@ -278,7 +278,7 @@
         </div>
 
         @if($announcements->hasPages())
-            <div class="border-t border-white-100 px-6 py-4">
+            <div class="border-t border-accent-100 px-6 py-4">
                 {{ $announcements->links() }}
             </div>
         @endif
@@ -294,7 +294,7 @@
          x-transition:leave-end="opacity-0"
          class="fixed inset-0 bg-black-500 bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50"
          style="display: none;">
-        <div class="bg-white-50 rounded-lg p-6 max-w-md w-full mx-4">
+        <div class="bg-accent-50 rounded-lg p-6 max-w-md w-full mx-4">
             <h3 class="text-lg font-medium text-black-400 mb-2">Confirmar Eliminación</h3>
             <p class="text-black-300 mb-4">
                 ¿Estás seguro de que deseas eliminar el anuncio 

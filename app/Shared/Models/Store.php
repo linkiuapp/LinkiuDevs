@@ -465,5 +465,11 @@ class Store extends Model
         return $result;
     }
 
-
+    /**
+     * Get the drafts associated with this store
+     */
+    public function drafts()
+    {
+        return $this->hasMany(\App\Models\StoreDraft::class);
+    }
 } 

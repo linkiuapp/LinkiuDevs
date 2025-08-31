@@ -8,7 +8,7 @@
         <div class="flex flex-wrap items-center justify-between gap-4">
             <h2 class="title-card">Vista Previa de Factura</h2>
             <div class="flex flex-wrap items-center gap-2">
-                <button type="button" class="bg-primary-200 text-white-50 px-4 py-2 rounded-lg inline-flex items-center gap-2 hover:bg-primary-300 transition-colors">
+                <button type="button" class="bg-primary-200 text-accent-50 px-4 py-2 rounded-lg inline-flex items-center gap-2 hover:bg-primary-300 transition-colors">
                     <x-solar-letter-outline class="w-5 h-5" />
                     <span class="text-base">Enviar Factura</span>
                 </button>
@@ -20,7 +20,7 @@
                     <x-solar-pen-outline class="w-5 h-5" />
                     <span class="text-base">Editar</span>
                 </button>
-                <button type="button" onclick="printInvoice()" class="bg-info-200 text-white-50 px-4 py-2 rounded-lg inline-flex items-center gap-2 hover:bg-info-300 transition-colors">
+                <button type="button" onclick="printInvoice()" class="bg-info-200 text-accent-50 px-4 py-2 rounded-lg inline-flex items-center gap-2 hover:bg-info-300 transition-colors">
                     <x-solar-printer-outline class="w-5 h-5" />
                     <span class="text-base">Imprimir</span>
                 </button>
@@ -93,49 +93,49 @@
                         <!-- Tabla de items -->
                         <div class="mt-8">
                             <div class="overflow-x-auto">
-                                <table class="w-full border-collapse border border-white-200">
+                                <table class="w-full border-collapse border border-accent-200">
                                     <thead>
-                                        <tr class="bg-white-100">
-                                            <th class="border border-white-200 px-4 py-3 text-left text-base text-black-500">No.</th>
-                                            <th class="border border-white-200 px-4 py-3 text-left text-base text-black-500">Artículos</th>
-                                            <th class="border border-white-200 px-4 py-3 text-left text-base text-black-500">Cantidad</th>
-                                            <th class="border border-white-200 px-4 py-3 text-left text-base text-black-500">Unidades</th>
-                                            <th class="border border-white-200 px-4 py-3 text-left text-base text-black-500">Precio Unit.</th>
-                                            <th class="border border-white-200 px-4 py-3 text-right text-base text-black-500">Precio</th>
+                                        <tr class="bg-accent-100">
+                                            <th class="border border-accent-200 px-4 py-3 text-left text-base text-black-500">No.</th>
+                                            <th class="border border-accent-200 px-4 py-3 text-left text-base text-black-500">Artículos</th>
+                                            <th class="border border-accent-200 px-4 py-3 text-left text-base text-black-500">Cantidad</th>
+                                            <th class="border border-accent-200 px-4 py-3 text-left text-base text-black-500">Unidades</th>
+                                            <th class="border border-accent-200 px-4 py-3 text-left text-base text-black-500">Precio Unit.</th>
+                                            <th class="border border-accent-200 px-4 py-3 text-right text-base text-black-500">Precio</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">01</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">Apple's Shoes</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">5</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">PC</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">$200</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400 text-right">$1000.00</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">01</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">Apple's Shoes</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">5</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">PC</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">$200</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400 text-right">$1000.00</td>
                                         </tr>
                                         <tr>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">02</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">Apple's Shoes</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">5</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">PC</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">$200</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400 text-right">$1000.00</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">02</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">Apple's Shoes</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">5</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">PC</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">$200</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400 text-right">$1000.00</td>
                                         </tr>
                                         <tr>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">03</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">Apple's Shoes</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">5</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">PC</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">$200</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400 text-right">$1000.00</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">03</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">Apple's Shoes</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">5</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">PC</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">$200</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400 text-right">$1000.00</td>
                                         </tr>
                                         <tr>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">04</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">Apple's Shoes</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">5</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">PC</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">$200</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400 text-right">$1000.00</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">04</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">Apple's Shoes</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">5</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">PC</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">$200</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400 text-right">$1000.00</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -165,8 +165,8 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td class="pr-16 py-1 border-b border-white-200 pb-4">Impuesto:</td>
-                                                <td class="pl-6 py-1 border-b border-white-200 pb-4">
+                                                <td class="pr-16 py-1 border-b border-accent-200 pb-4">Impuesto:</td>
+                                                <td class="pl-6 py-1 border-b border-accent-200 pb-4">
                                                     <span class="text-black-500 font-semibold">$0.00</span>
                                                 </td>
                                             </tr>
@@ -191,8 +191,8 @@
 
                         <!-- Firmas -->
                         <div class="flex flex-wrap justify-between items-end mt-16">
-                            <div class="text-base border-t border-white-200 inline-block px-3 pt-2">Firma del Cliente</div>
-                            <div class="text-base border-t border-white-200 inline-block px-3 pt-2">Firma del Autorizado</div>
+                            <div class="text-base border-t border-accent-200 inline-block px-3 pt-2">Firma del Cliente</div>
+                            <div class="text-base border-t border-accent-200 inline-block px-3 pt-2">Firma del Autorizado</div>
                         </div>
                     </div>
                 </div>

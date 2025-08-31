@@ -10,7 +10,7 @@
     <div class="card-body p-6 flex flex-col gap-6">
         <!-- AI Widgets Start -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-6">
-            <div class="border border-white-100 rounded-lg h-full bg-gradient-to-r from-primary-100 to-white-100">
+            <div class="border border-accent-100 rounded-lg h-full bg-gradient-to-r from-primary-100 to-accent-100">
                 <div class="p-5">
                     <div class="flex flex-wrap items-center justify-between gap-3">
                         <div>
@@ -18,7 +18,7 @@
                             <h6 class="text-xl font-black mb-0 text-black-500">20,000</h6>
                         </div>
                         <div class="w-[48px] h-[48px] bg-info-300 rounded-full flex justify-center items-center">
-                            <x-solar-users-group-two-rounded-outline class="text-white-50 text-xl p-3" />
+                            <x-solar-users-group-two-rounded-outline class="text-accent-50 text-xl p-3" />
                         </div>
                     </div>
                     <p class="font-medium text-sm text-black-300 mt-3 mb-0 flex items-center gap-2">
@@ -31,7 +31,7 @@
                 </div>
             </div><!-- card end -->
             
-            <div class="border border-white-100 rounded-lg h-full bg-gradient-to-r from-secondary-100 to-white-100">
+            <div class="border border-accent-100 rounded-lg h-full bg-gradient-to-r from-secondary-100 to-accent-100">
                 <div class="p-5">
                     <div class="flex flex-wrap items-center justify-between gap-3">
                         <div>
@@ -39,7 +39,7 @@
                             <h6 class="text-xl font-black mb-0 text-black-500">15,000</h6>
                         </div>
                         <div class="w-[48px] h-[48px] bg-secondary-300 rounded-full flex justify-center items-center">
-                            <x-solar-medal-star-outline class="text-white-50 text-xl p-3" />
+                            <x-solar-medal-star-outline class="text-accent-50 text-xl p-3" />
                         </div>
                     </div>
                     <p class="font-medium text-sm text-black-300 mt-3 mb-0 flex items-center gap-2">
@@ -52,7 +52,7 @@
                 </div>
             </div><!-- card end -->
             
-            <div class="border border-white-100 rounded-lg h-full bg-gradient-to-r from-info-100 to-white-100">
+            <div class="border border-accent-100 rounded-lg h-full bg-gradient-to-r from-info-100 to-accent-100">
                 <div class="p-5">
                     <div class="flex flex-wrap items-center justify-between gap-3">
                         <div>
@@ -60,7 +60,7 @@
                             <h6 class="text-xl font-black mb-0 text-black-500">5,000</h6>
                         </div>
                         <div class="w-[48px] h-[48px] bg-info-300 rounded-full flex justify-center items-center">
-                            <x-solar-user-outline class="text-white-50 text-xl p-3" />
+                            <x-solar-user-outline class="text-accent-50 text-xl p-3" />
                         </div>
                     </div>
                     <p class="font-medium text-sm text-black-300 mt-3 mb-0 flex items-center gap-2">
@@ -73,7 +73,7 @@
                 </div>
             </div><!-- card end -->
             
-            <div class="border border-white-100 rounded-lg h-full bg-gradient-to-r from-success-100 to-white-100">
+            <div class="border border-accent-100 rounded-lg h-full bg-gradient-to-r from-success-100 to-accent-100">
                 <div class="p-5">
                     <div class="flex flex-wrap items-center justify-between gap-3">
                         <div>
@@ -81,7 +81,7 @@
                             <h6 class="text-xl font-black mb-0 text-black-500">$42,000</h6>
                         </div>
                         <div class="w-[48px] h-[48px] bg-success-300 rounded-full flex justify-center items-center">
-                            <x-solar-wallet-outline class="text-white-50 text-xl p-3" />
+                            <x-solar-wallet-outline class="text-accent-50 text-xl p-3" />
                         </div>
                     </div>
                     <p class="font-medium text-sm text-black-300 mt-3 mb-0 flex items-center gap-2">
@@ -94,7 +94,7 @@
                 </div>
             </div><!-- card end -->
             
-            <div class="border border-white-100 rounded-lg h-full bg-gradient-to-r from-error-100 to-white-100">
+            <div class="border border-accent-100 rounded-lg h-full bg-gradient-to-r from-error-100 to-accent-100">
                 <div class="p-5">
                     <div class="flex flex-wrap items-center justify-between gap-3">
                         <div>
@@ -102,7 +102,7 @@
                             <h6 class="text-xl font-black mb-0 text-black-500">$30,000</h6>
                         </div>
                         <div class="w-[48px] h-[48px] bg-error-300 rounded-full flex justify-center items-center">
-                            <x-solar-bill-list-outline class="text-white-50 text-xl p-3" />
+                            <x-solar-bill-list-outline class="text-accent-50 text-xl p-3" />
                         </div>
                     </div>
                     <p class="font-medium text-sm text-black-300 mt-3 mb-0 flex items-center gap-2">
@@ -119,11 +119,11 @@
         
         <!-- CRM Widgets Start -->
         <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-6">
-            <div class="border border-white-100 rounded-lg h-full bg-gradient-to-l from-primary-100 to-white-100">
+            <div class="border border-accent-100 rounded-lg h-full bg-gradient-to-l from-primary-100 to-accent-100">
                 <div class="p-5">
                     <div class="flex flex-wrap items-center justify-between gap-1 mb-2">
                         <div class="flex items-center gap-2">
-                            <span class="mb-0 w-[48px] h-[48px] bg-primary-300 shrink-0 text-white-50 flex justify-center items-center rounded-full text-2xl">
+                            <span class="mb-0 w-[48px] h-[48px] bg-primary-300 shrink-0 text-accent-50 flex justify-center items-center rounded-full text-2xl">
                                 <x-solar-user-plus-outline class="w-5 h-5" />
                             </span>
                             <div>
@@ -149,11 +149,11 @@
                 </div>
             </div>
 
-            <div class="border border-white-100 rounded-lg h-full bg-gradient-to-l from-success-100 to-white-100">
+            <div class="border border-accent-100 rounded-lg h-full bg-gradient-to-l from-success-100 to-accent-100">
                 <div class="p-5">
                     <div class="flex flex-wrap items-center justify-between gap-1 mb-2">
                         <div class="flex items-center gap-2">
-                            <span class="mb-0 w-[48px] h-[48px] bg-success-300 shrink-0 text-white-50 flex justify-center items-center rounded-full text-2xl">
+                            <span class="mb-0 w-[48px] h-[48px] bg-success-300 shrink-0 text-accent-50 flex justify-center items-center rounded-full text-2xl">
                                 <x-solar-users-group-two-rounded-outline class="w-5 h-5" />
                             </span>
                             <div>
@@ -179,7 +179,7 @@
                 </div>
             </div>
 
-            <div class="border border-white-100 rounded-lg h-full bg-gradient-to-l from-warning-100 to-white-100">
+            <div class="border border-accent-100 rounded-lg h-full bg-gradient-to-l from-warning-100 to-accent-100">
                 <div class="p-5">
                     <div class="flex flex-wrap items-center justify-between gap-1 mb-2">
                         <div class="flex items-center gap-2">
@@ -209,11 +209,11 @@
                 </div>
             </div>
 
-            <div class="border border-white-100 rounded-lg h-full bg-gradient-to-l from-secondary-100 to-white-100">
+            <div class="border border-accent-100 rounded-lg h-full bg-gradient-to-l from-secondary-100 to-accent-100">
                 <div class="p-5">
                     <div class="flex flex-wrap items-center justify-between gap-1 mb-2">
                         <div class="flex items-center gap-2">
-                            <span class="mb-0 w-[48px] h-[48px] bg-secondary-300 text-white-50 shrink-0 flex justify-center items-center rounded-full text-2xl">
+                            <span class="mb-0 w-[48px] h-[48px] bg-secondary-300 text-accent-50 shrink-0 flex justify-center items-center rounded-full text-2xl">
                                 <x-solar-chart-outline class="w-5 h-5" />
                             </span>
                             <div>
@@ -243,7 +243,7 @@
         
         <!-- Ecommerce Widgets Start -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="p-6 h-full flex flex-col border border-white-300 last:border-0 rounded-lg">
+            <div class="p-6 h-full flex flex-col border border-accent-300 last:border-0 rounded-lg">
                 <div class="flex flex-wrap items-center justify-between gap-1 mb-0.5">
                     <div>
                         <span class="w-[48px] h-[48px] text-primary-400 bg-primary-50 border border-primary-100 shrink-0 flex justify-center items-center rounded-lg text-2xl mb-4">
@@ -256,7 +256,7 @@
                 <p class="text-sm mb-0 mt-3">Increase by <span class="badge-success">+200</span> this week</p>
             </div>
             
-            <div class="p-6 h-full flex flex-col border border-white-300 last:border-0 rounded-lg">
+            <div class="p-6 h-full flex flex-col border border-accent-300 last:border-0 rounded-lg">
                 <div class="flex flex-wrap items-center justify-between gap-1 mb-0.5">
                     <div>
                         <span class="w-[48px] h-[48px] text-warning-400 bg-warning-50 border border-warning-100 shrink-0 flex justify-center items-center rounded-lg text-2xl mb-4">
@@ -269,7 +269,7 @@
                 <p class="text-sm mb-0 mt-3">Decrease by <span class="badge-error">-5k</span> this week</p>
             </div>
             
-            <div class="p-6 h-full flex flex-col border border-white-300 last:border-0 rounded-lg">
+            <div class="p-6 h-full flex flex-col border border-accent-300 last:border-0 rounded-lg">
                 <div class="flex flex-wrap items-center justify-between gap-1 mb-0.5">
                     <div>
                         <span class="w-[48px] h-[48px] text-secondary-300 bg-secondary-50 border border-secondary-100 shrink-0 flex justify-center items-center rounded-lg text-2xl mb-4">
@@ -282,7 +282,7 @@
                 <p class="text-sm mb-0 mt-3">Increase by <span class="badge-success">+1k</span> this week</p>
             </div>
             
-            <div class="p-6 h-full flex flex-col border border-white-300 last:border-0 rounded-lg">
+            <div class="p-6 h-full flex flex-col border border-accent-300 last:border-0 rounded-lg">
                 <div class="flex flex-wrap items-center justify-between gap-1 mb-0.5">
                     <div>
                         <span class="w-[48px] h-[48px] text-info-400 bg-info-50 border border-info-100 shrink-0 flex justify-center items-center rounded-lg text-2xl mb-4">

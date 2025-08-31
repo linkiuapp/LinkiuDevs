@@ -16,7 +16,7 @@
     <!-- Widgets de estadísticas principales -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         <!-- Total Tiendas -->
-        <div class="border border-white-100 rounded-lg h-full bg-gradient-to-r from-primary-100 to-white-100">
+        <div class="border border-accent-100 rounded-lg h-full bg-gradient-to-r from-primary-100 to-accent-100">
             <div class="p-5">
                 <div class="flex flex-wrap items-center justify-between gap-3">
                     <div>
@@ -24,7 +24,7 @@
                         <h6 class="text-xl font-black mb-0 text-black-400">{{ number_format($stats['total_stores']) }}</h6>
                     </div>
                     <div class="w-[48px] h-[48px] bg-primary-200 rounded-full flex justify-center items-center">
-                        <x-solar-shop-2-outline class="text-white-50 w-6 h-6" />
+                        <x-solar-shop-2-outline class="text-accent-50 w-6 h-6" />
                     </div>
                 </div>
                 <p class="font-medium text-sm text-black-300 mt-3 mb-0">
@@ -34,7 +34,7 @@
         </div>
 
         <!-- Tiendas Activas -->
-        <div class="border border-white-100 rounded-lg h-full bg-gradient-to-r from-success-100 to-white-100">
+        <div class="border border-accent-100 rounded-lg h-full bg-gradient-to-r from-success-100 to-accent-100">
             <div class="p-5">
                 <div class="flex flex-wrap items-center justify-between gap-3">
                     <div>
@@ -42,7 +42,7 @@
                         <h6 class="text-xl font-black mb-0 text-black-400">{{ number_format($stats['active_stores']) }}</h6>
                     </div>
                     <div class="w-[48px] h-[48px] bg-success-200 rounded-full flex justify-center items-center">
-                        <x-solar-check-circle-outline class="text-white-50 w-6 h-6" />
+                        <x-solar-check-circle-outline class="text-accent-50 w-6 h-6" />
                     </div>
                 </div>
                 <p class="font-medium text-sm text-black-300 mt-3 mb-0 flex items-center gap-2">
@@ -53,7 +53,7 @@
         </div>
 
         <!-- Tiendas Verificadas -->
-        <div class="border border-white-100 rounded-lg h-full bg-gradient-to-r from-info-100 to-white-100">
+        <div class="border border-accent-100 rounded-lg h-full bg-gradient-to-r from-info-100 to-accent-100">
             <div class="p-5">
                 <div class="flex flex-wrap items-center justify-between gap-3">
                     <div>
@@ -61,7 +61,7 @@
                         <h6 class="text-xl font-black mb-0 text-black-400">{{ number_format($stats['verified_stores']) }}</h6>
                     </div>
                     <div class="w-[48px] h-[48px] bg-info-200 rounded-full flex justify-center items-center">
-                        <x-solar-shield-check-outline class="text-white-50 w-6 h-6" />
+                        <x-solar-shield-check-outline class="text-accent-50 w-6 h-6" />
                     </div>
                 </div>
                 <p class="font-medium text-sm text-black-300 mt-3 mb-0">
@@ -71,7 +71,7 @@
         </div>
 
         <!-- Ingresos del Mes -->
-        <div class="border border-white-100 rounded-lg h-full bg-gradient-to-r from-secondary-100 to-white-100">
+        <div class="border border-accent-100 rounded-lg h-full bg-gradient-to-r from-secondary-100 to-accent-100">
             <div class="p-5">
                 <div class="flex flex-wrap items-center justify-between gap-3">
                     <div>
@@ -79,7 +79,7 @@
                         <h6 class="text-xl font-black mb-0 text-black-400">${{ number_format($monthlyRevenue, 0, ',', '.') }}</h6>
                     </div>
                     <div class="w-[48px] h-[48px] bg-secondary-200 rounded-full flex justify-center items-center">
-                        <x-solar-wallet-outline class="text-white-50 w-6 h-6" />
+                        <x-solar-wallet-outline class="text-accent-50 w-6 h-6" />
                     </div>
                 </div>
                 <p class="font-medium text-sm text-black-300 mt-3 mb-0 flex items-center gap-2">
@@ -172,7 +172,7 @@
         <div class="overflow-x-auto">
             <table class="w-full">
                 <thead>
-                    <tr class="text-xs font-semibold tracking-wide text-left text-black-300 uppercase border-b border-white-100 bg-white-50">
+                    <tr class="text-xs font-semibold tracking-wide text-left text-black-300 uppercase border-b border-accent-100 bg-accent-50">
                         <th class="px-6 py-3">Tienda</th>
                         <th class="px-6 py-3">Plan</th>
                         <th class="px-6 py-3">Estado</th>
@@ -180,7 +180,7 @@
                         <th class="px-6 py-3">Acciones</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white-50 divide-y divide-white-100">
+                <tbody class="bg-accent-50 divide-y divide-accent-100">
                     @forelse($latestStores as $store)
                         <tr class="text-black-400">
                             <td class="px-6 py-4">

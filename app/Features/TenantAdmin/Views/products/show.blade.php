@@ -4,8 +4,8 @@
     @section('content')
     <div class="space-y-4">
         <!-- Header -->
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-            <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+            <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
                         <a href="{{ route('tenant.admin.products.index', $store->slug) }}" 
@@ -18,7 +18,7 @@
                                 @if($product->sku)
                                 <span class="text-sm text-black-400 font-mono">{{ $product->sku }}</span>
                                 @endif
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $product->is_active ? 'bg-success-200 text-black-300' : 'bg-error-200 text-white-50' }}">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $product->is_active ? 'bg-success-200 text-black-300' : 'bg-error-200 text-accent-50' }}">
                                     {{ $product->is_active ? 'Activo' : 'Inactivo' }}
                                 </span>
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $product->type === 'simple' ? 'bg-info-200 text-black-300' : 'bg-warning-200 text-black-500' }}">
@@ -47,8 +47,8 @@
             <!-- Columna principal -->
             <div class="lg:col-span-2 space-y-4">
                 <!-- Información básica -->
-                <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                    <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+                <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                    <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                         <h3 class="text-lg font-semibold text-black-500">Información del Producto</h3>
                     </div>
                     <div class="p-6 space-y-4">
@@ -87,8 +87,8 @@
 
                 <!-- Imágenes -->
                 @if($product->images && $product->images->count() > 0)
-                <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                    <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+                <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                    <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                         <h3 class="text-lg font-semibold text-black-500">Imágenes</h3>
                     </div>
                     <div class="p-6">
@@ -97,10 +97,10 @@
                             <div class="relative group">
                                 <img src="{{ $image->image_url }}" 
                                      alt="{{ $product->name }}"
-                                     class="w-full h-32 object-cover rounded-lg border border-white-200 cursor-pointer hover:opacity-90 transition-opacity"
+                                     class="w-full h-32 object-cover rounded-lg border border-accent-200 cursor-pointer hover:opacity-90 transition-opacity"
                                      onclick="openImageModal('{{ $image->image_url }}')">
                                 <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all rounded-lg flex items-center justify-center">
-                                    <x-solar-eye-outline class="w-6 h-6 text-white-50 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    <x-solar-eye-outline class="w-6 h-6 text-accent-50 opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </div>
                             </div>
                             @endforeach
@@ -111,8 +111,8 @@
 
                 <!-- Categorías -->
                 @if($product->categories && $product->categories->count() > 0)
-                <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                    <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+                <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                    <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                         <h3 class="text-lg font-semibold text-black-500">Categorías</h3>
                     </div>
                     <div class="p-6">
@@ -131,8 +131,8 @@
             <!-- Sidebar -->
             <div class="space-y-4">
                 <!-- Acciones rápidas -->
-                <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                    <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+                <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                    <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                         <h3 class="text-lg font-semibold text-black-500">Acciones</h3>
                     </div>
                     <div class="p-6 space-y-3">
@@ -174,8 +174,8 @@
                 </div>
 
                 <!-- Información adicional -->
-                <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                    <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+                <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                    <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                         <h3 class="text-lg font-semibold text-black-500">Información</h3>
                     </div>
                     <div class="p-6 space-y-3">
@@ -201,8 +201,8 @@
 
     <!-- Modal para ver imágenes -->
     <div id="imageModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white-50 rounded-lg max-w-4xl max-h-[90vh] overflow-hidden">
-            <div class="flex justify-between items-center p-4 border-b border-white-100">
+        <div class="bg-accent-50 rounded-lg max-w-4xl max-h-[90vh] overflow-hidden">
+            <div class="flex justify-between items-center p-4 border-b border-accent-100">
                 <h3 class="text-lg font-semibold text-black-500">Vista de Imagen</h3>
                 <button onclick="closeImageModal()" class="text-black-400 hover:text-black-500">
                     <x-solar-close-circle-outline class="w-6 h-6" />

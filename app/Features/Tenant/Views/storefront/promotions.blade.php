@@ -22,11 +22,11 @@
         <!-- Lista de promociones -->
         <div class="space-y-4">
             @foreach($coupons as $coupon)
-                <div class="bg-white-50 rounded-lg border border-white-200 overflow-hidden shadow-sm" 
+                <div class="bg-accent-50 rounded-lg border border-accent-200 overflow-hidden shadow-sm" 
                      x-data="{ copied: false }">
                     
                     <!-- Header del cupón con descuento destacado -->
-                    <div class="bg-gradient-to-r from-primary-300 to-secondary-300 p-4 text-white-50">
+                    <div class="bg-gradient-to-r from-primary-300 to-secondary-300 p-4 text-accent-50">
                         <div class="flex items-center justify-between">
                             <div class="flex-1">
                                 <!-- Descuento principal -->
@@ -56,14 +56,14 @@
                         <!-- Código del cupón -->
                         <div class="text-center">
                             <div class="text-sm text-black-300 mb-2">Código de descuento</div>
-                            <div class="bg-white-100 border-2 border-dashed border-primary-200 rounded-lg p-3 flex items-center justify-between">
+                            <div class="bg-accent-100 border-2 border-dashed border-primary-200 rounded-lg p-3 flex items-center justify-between">
                                 <span class="font-mono text-lg font-bold text-primary-300">{{ $coupon->code }}</span>
                                 <button @click="
                                     navigator.clipboard.writeText('{{ $coupon->code }}');
                                     copied = true;
                                     setTimeout(() => copied = false, 2000);
                                 " 
-                                class="bg-primary-300 hover:bg-primary-200 text-white-50 px-3 py-1 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                                class="bg-primary-300 hover:bg-primary-200 text-accent-50 px-3 py-1 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
                                     <template x-if="!copied">
                                         <div class="flex items-center gap-2">
                                             <x-solar-copy-outline class="w-4 h-4" />
@@ -154,7 +154,7 @@
         </div>
 
         <!-- Información adicional -->
-        <div class="bg-white-100 rounded-lg p-4 border border-white-200">
+        <div class="bg-accent-100 rounded-lg p-4 border border-accent-200">
             <h3 class="font-semibold text-black-400 mb-2">📋 Cómo usar tus cupones</h3>
             <div class="space-y-2 text-sm text-black-300">
                 <div class="flex items-start gap-2">
@@ -189,7 +189,7 @@
             
             <!-- Botón para continuar comprando -->
             <a href="{{ route('tenant.home', $store->slug) }}" 
-               class="inline-flex items-center gap-2 bg-primary-300 hover:bg-primary-200 text-white-50 px-6 py-3 rounded-lg font-medium transition-colors">
+               class="inline-flex items-center gap-2 bg-primary-300 hover:bg-primary-200 text-accent-50 px-6 py-3 rounded-lg font-medium transition-colors">
                 <x-lucide-shopping-cart class="w-5 h-5" />
                 Continuar comprando
             </a>

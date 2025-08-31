@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="test-token">
+    <title>Enhanced Validation Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/build/assets/app.css">
+    <style>
+        /* Include validation and wizard CSS */
+        @import url('/resources/css/validation.css');
+        @import url('/resources/css/wizard.css');
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen py-8">
+    <div class="max-w-4xl mx-auto px-4">
+        <div class="bg-accent rounded-lg shadow-lg p-8">
+            <h1 class="text-3xl font-bold text-gray-900 mb-8 text-center">
+                Enhanced Validation & Animation Test
+            </h1>
+
+            <!-- Wizard Navigation -->
+            <div class="wizard-container" x-data="wizardNavigation({
+                steps: [
+                    { id: 'basic', title: 'Información Básica', description: 'Datos principales' },
+                    { id: 'validation', title: 'Validación', description: 'Campos con validación' },
+                    { id: 'confirmation', title: 'Confirmación', description: 'Revisar datos' }
+                ]
+            })">
+                <!-- Progress Bar -->
+                <div class="wizard-progress mb-8">
+                    <div class="wizard-progress-bar" :style="`width: ${getProgressPercentage()}%`"></div>
+                </div>
+
+                <!-- Step Navigation -->
+                <div class="wizard-nav">
+                    <template x-for="(step, index) in steps" :key="step.id">
+                        <div class="wizard-nav-step" :data-step-nav="index">
+                            <div class="wizard-step-indicator" 
+                                 :class="getStepStatus(index)"
+                                 @click="navigateToStep(index)">
+                                <span x-text="index + 1"></span>
+                            </div>
+                            <div class="wizard-step-label" 
+                                 :class="getStepStatus(index)"
+                                 x-text="step.title"></div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Step Content -->
+                <div class="wizard-step-content">
+                    <!-- Step 1: Basic Information -->
+                    <div class="wizard-step" :class="{ 'hidden': currentStep !== 0 }" data-step="0">
+                        <h2 class="text-xl font-semibold mb-6">Información Básica</h2>
+                        <div class="space-y-6">
+                            <div class="form-group">
+                                <label class="field-label-with-help">
+                                    <span class="label-text">Nombre completo</span>
+                                    <div class="help-tooltip">
+                                        <button type="button" class="tooltip-trigger">?</button>
+                                        <div class="tooltip-content">
+                                            <div class="tooltip-title">Nombre completo</div>
+                                            <div class="tooltip-description">Ingresa tu nombre y apellidos completos</div>
+                                        </div>
+                                    </div>
+                                </label>
+                                <div class="relative">
+                                    <input type="text" name="name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200" placeholder="Ej: Juan Pérez">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="field-label-with-help">
+                                    <span class="label-text">Email</span>
+                                    <div class="help-tooltip">
+                                        <button type="button" class="tooltip-trigger">?</button>
+                                        <div class="tooltip-content">
+                                            <div class="tooltip-title">Dirección de email</div>
+                                            <div class="tooltip-description">Será usado para acceder al sistema</div>
+                                        </div>
+                                    </div>
+                                </label>
+                                <div class="relative">
+                                    <input type="email" name="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200" placeholder="ejemplo@correo.com">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Validation -->
+                    <div class="wizard-step" :class="{ 'hidden': currentStep !== 1 }" data-step="1">
+                        <h2 class="text-xl font-semibold mb-6">Campos con Validación</h2>
+                        <div class="space-y-6">
+                            <div class="form-group">
+                                <label class="field-label-with-help">
+                                    <span class="label-text">URL de la tienda</span>
+                                    <div class="help-tooltip">
+                                        <button type="button" class="tooltip-trigger">?</button>
+                                        <div class="tooltip-content">
+                                            <div class="tooltip-title">URL personalizada</div>
+                                            <div class="tooltip-description">Solo letras, números y guiones. Debe ser única.</div>
+                                        </div>
+                                    </div>
+                                </label>
+                                <div class="relative">
+                                    <input type="text" name="slug" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200" placeholder="mi-tienda-online">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="field-label-with-help">
+                                    <span class="label-text">Email de administrador</span>
+                                    <div class="help-tooltip">
+                                        <button type="button" class="tooltip-trigger">?</button>
+                                        <div class="tooltip-content">
+                                            <div class="tooltip-title">Email único</div>
+                                            <div class="tooltip-description">Debe ser único en el sistema</div>
+                                        </div>
+                                    </div>
+                                </label>
+                                <div class="relative">
+                                    <input type="email" name="admin_email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200" placeholder="admin@mitienda.com">
+                                </div>
+                            </div>
+
+                            <!-- Test buttons for different states -->
+                            <div class="bg-gray-50 p-4 rounded-lg">
+                                <h3 class="font-medium mb-3">Probar estados de validación:</h3>
+                                <div class="flex flex-wrap gap-2">
+                                    <button type="button" class="test-btn px-3 py-1 text-sm bg-red-100 text-red-700 rounded hover:bg-red-200" onclick="testValidationError()">
+                                        Error de validación
+                                    </button>
+                                    <button type="button" class="test-btn px-3 py-1 text-sm bg-green-100 text-green-700 rounded hover:bg-green-200" onclick="testValidationSuccess()">
+                                        Validación exitosa
+                                    </button>
+                                    <button type="button" class="test-btn px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded hover:bg-blue-200" onclick="testLoadingState()">
+                                        Estado de carga
+                                    </button>
+                                    <button type="button" class="test-btn px-3 py-1 text-sm bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200" onclick="testToastNotifications()">
+                                        Notificaciones
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Confirmation -->
+                    <div class="wizard-step" :class="{ 'hidden': currentStep !== 2 }" data-step="2">
+                        <h2 class="text-xl font-semibold mb-6">Confirmación</h2>
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-6">
+                            <div class="flex items-center mb-4">
+                                <svg class="w-8 h-8 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <h3 class="text-lg font-semibold text-green-800">¡Formulario completado!</h3>
+                            </div>
+                            <p class="text-green-700">Todos los campos han sido validados correctamente.</p>
+                            
+                            <button type="button" class="mt-4 wizard-btn wizard-btn-primary" onclick="testFormSuccess()">
+                                Enviar formulario
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="wizard-controls">
+                    <button type="button" 
+                            class="wizard-btn wizard-btn-secondary"
+                            :disabled="!canGoPrevious()"
+                            @click="previousStep()">
+                        ← Anterior
+                    </button>
+                    
+                    <div class="flex space-x-3">
+                        <button type="button" 
+                                class="wizard-btn wizard-btn-primary"
+                                :disabled="!canGoNext()"
+                                @click="nextStep()"
+                                x-show="!isLastStep()">
+                            Siguiente →
+                        </button>
+                        
+                        <button type="button" 
+                                class="wizard-btn wizard-btn-primary"
+                                @click="completeWizard()"
+                                x-show="isLastStep()">
+                            Finalizar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="/resources/js/components/loading-manager.js"></script>
+    <script src="/resources/js/components/animation-manager.js"></script>
+    <script src="/resources/js/components/validation-engine.js"></script>
+    <script src="/resources/js/components/validation-helpers.js"></script>
+    <script src="/resources/js/components/wizard-navigation.js"></script>
+
+    <script>
+        // Test functions
+        function testValidationError() {
+            const slugField = document.querySelector('[name="slug"]');
+            if (window.validationEngine) {
+                window.validationEngine.displayError('slug', 'Esta URL ya está en uso', ['mi-tienda-online-2', 'mi-tienda-nueva', 'tienda-juan-2024']);
+            }
+        }
+
+        function testValidationSuccess() {
+            const emailField = document.querySelector('[name="admin_email"]');
+            if (window.validationEngine) {
+                window.validationEngine.displaySuccess('admin_email');
+            }
+        }
+
+        function testLoadingState() {
+            if (window.loadingManager) {
+                window.loadingManager.showGlobalLoading('Procesando datos...', true);
+                
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 20;
+                    window.loadingManager.updateGlobalProgress(progress, `Procesando... ${progress}%`);
+                    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            window.loadingManager.hideGlobalLoading();
+                        }, 1000);
+                    }
+                }, 500);
+            }
+        }
+
+        function testToastNotifications() {
+            if (window.loadingManager) {
+                window.loadingManager.showToast('Información guardada correctamente', 'success');
+                
+                setTimeout(() => {
+                    window.loadingManager.showToast('Advertencia: Revisa los datos', 'warning');
+                }, 1000);
+                
+                setTimeout(() => {
+                    window.loadingManager.showToast('Error en la conexión', 'error');
+                }, 2000);
+                
+                setTimeout(() => {
+                    window.loadingManager.showToast('Proceso completado', 'info');
+                }, 3000);
+            }
+        }
+
+        function testFormSuccess() {
+            const form = document.querySelector('.wizard-step-content');
+            if (window.animationManager) {
+                window.animationManager.animateFormSuccess(form);
+            }
+        }
+
+        // Initialize validation when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            // Setup validation for test fields
+            if (window.validationHelpers) {
+                window.validationHelpers.setupStoreCreationValidation();
+            }
+            
+            // Add scroll animations to form fields
+            document.querySelectorAll('.form-group').forEach(group => {
+                group.classList.add('animate-on-scroll');
+                if (window.animationManager) {
+                    window.animationManager.observeElement(group);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

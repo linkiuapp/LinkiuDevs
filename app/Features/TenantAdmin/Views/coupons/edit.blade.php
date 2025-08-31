@@ -48,7 +48,7 @@
             {{-- Columna principal (formulario) --}}
             <div class="lg:col-span-2">
                 {{-- Información básica --}}
-                <div class="bg-white-50 rounded-lg border border-white-200 p-6 mb-6">
+                <div class="bg-accent-50 rounded-lg border border-accent-200 p-6 mb-6">
                     <h3 class="text-lg font-semibold text-black-400 mb-4">Información Básica</h3>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -98,7 +98,7 @@
                 </div>
 
                 {{-- Configuración de descuento --}}
-                <div class="bg-white-50 rounded-lg border border-white-200 p-6 mb-6">
+                <div class="bg-accent-50 rounded-lg border border-accent-200 p-6 mb-6">
                     <h3 class="text-lg font-semibold text-black-400 mb-4">Configuración de Descuento</h3>
                     
                     @if($coupon->current_uses > 0)
@@ -220,7 +220,7 @@
                 </div>
 
                 {{-- Aplicabilidad --}}
-                <div class="bg-white-50 rounded-lg border border-white-200 p-6 mb-6" x-show="formData.type !== 'global'">
+                <div class="bg-accent-50 rounded-lg border border-accent-200 p-6 mb-6" x-show="formData.type !== 'global'">
                     <h3 class="text-lg font-semibold text-black-400 mb-4">
                         <span x-text="formData.type === 'categories' ? 'Categorías Aplicables' : 'Productos Aplicables'"></span>
                     </h3>
@@ -230,9 +230,9 @@
                         <p class="text-sm text-black-300 mb-3">Selecciona las categorías donde se puede aplicar este cupón:</p>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                             @foreach($categories as $category)
-                                <label class="flex items-center p-3 border border-white-200 rounded-lg hover:bg-white-100 cursor-pointer">
+                                <label class="flex items-center p-3 border border-accent-200 rounded-lg hover:bg-accent-100 cursor-pointer">
                                     <input type="checkbox" name="categories[]" value="{{ $category->id }}" 
-                                           class="rounded border-white-300 text-primary-300 focus:ring-primary-200"
+                                           class="rounded border-accent-300 text-primary-300 focus:ring-primary-200"
                                            {{ 
                                                (is_array(old('categories')) && in_array($category->id, old('categories'))) ||
                                                (!old('categories') && $coupon->categories->contains($category->id))
@@ -250,11 +250,11 @@
                     <!-- Productos -->
                     <div x-show="formData.type === 'products'">
                         <p class="text-sm text-black-300 mb-3">Selecciona los productos donde se puede aplicar este cupón:</p>
-                        <div class="max-h-64 overflow-y-auto border border-white-200 rounded-lg">
+                        <div class="max-h-64 overflow-y-auto border border-accent-200 rounded-lg">
                             @foreach($products as $product)
-                                <label class="flex items-center p-3 border-b border-white-100 last:border-b-0 hover:bg-white-50 cursor-pointer">
+                                <label class="flex items-center p-3 border-b border-accent-100 last:border-b-0 hover:bg-accent-50 cursor-pointer">
                                     <input type="checkbox" name="products[]" value="{{ $product->id }}" 
-                                           class="rounded border-white-300 text-primary-300 focus:ring-primary-200"
+                                           class="rounded border-accent-300 text-primary-300 focus:ring-primary-200"
                                            {{ 
                                                (is_array(old('products')) && in_array($product->id, old('products'))) ||
                                                (!old('products') && $coupon->products->contains($product->id))
@@ -274,7 +274,7 @@
                 </div>
 
                 {{-- Configuración avanzada --}}
-                <div class="bg-white-50 rounded-lg border border-white-200 p-6 mb-6">
+                <div class="bg-accent-50 rounded-lg border border-accent-200 p-6 mb-6">
                     <h3 class="text-lg font-semibold text-black-400 mb-4">Configuración Avanzada</h3>
                     
                     {{-- Límites de uso --}}
@@ -343,7 +343,7 @@
                     </div>
 
                     {{-- Restricciones horarias --}}
-                    <div class="border-t border-white-200 pt-6" x-data="{ showTimeRestrictions: {{ ($coupon->days_of_week || $coupon->start_time || $coupon->end_time) ? 'true' : 'false' }} }">
+                    <div class="border-t border-accent-200 pt-6" x-data="{ showTimeRestrictions: {{ ($coupon->days_of_week || $coupon->start_time || $coupon->end_time) ? 'true' : 'false' }} }">
                         <div class="flex items-center justify-between mb-4">
                             <h4 class="text-base font-semibold text-black-400">Restricciones Horarias</h4>
                             <button type="button" @click="showTimeRestrictions = !showTimeRestrictions"
@@ -365,9 +365,9 @@
                                         $selectedDays = old('days_of_week', $coupon->days_of_week ?? []);
                                     @endphp
                                     @foreach($days as $index => $day)
-                                        <label class="flex items-center p-2 border border-white-200 rounded cursor-pointer hover:bg-white-100">
+                                        <label class="flex items-center p-2 border border-accent-200 rounded cursor-pointer hover:bg-accent-100">
                                             <input type="checkbox" name="days_of_week[]" value="{{ $index }}" 
-                                                   class="rounded border-white-300 text-primary-300 focus:ring-primary-200"
+                                                   class="rounded border-accent-300 text-primary-300 focus:ring-primary-200"
                                                    {{ is_array($selectedDays) && in_array($index, $selectedDays) ? 'checked' : '' }}>
                                             <span class="ml-2 text-sm text-black-400">{{ $day }}</span>
                                         </label>
@@ -410,7 +410,7 @@
             <div class="lg:col-span-1">
                 {{-- Estadísticas actuales --}}
                 @if($coupon->current_uses > 0)
-                    <div class="bg-white-50 rounded-lg border border-white-200 p-6 mb-6">
+                    <div class="bg-accent-50 rounded-lg border border-accent-200 p-6 mb-6">
                         <h3 class="text-lg font-semibold text-black-400 mb-4">Estadísticas</h3>
                         
                         <div class="space-y-3">
@@ -437,7 +437,7 @@
                 @endif
 
                 {{-- Configuración general --}}
-                <div class="bg-white-50 rounded-lg border border-white-200 p-6 mb-6">
+                <div class="bg-accent-50 rounded-lg border border-accent-200 p-6 mb-6">
                     <h3 class="text-lg font-semibold text-black-400 mb-4">Configuración</h3>
                     
                     <div class="space-y-4">
@@ -445,7 +445,7 @@
                         <div>
                             <label class="flex items-center cursor-pointer">
                                 <input type="checkbox" name="is_active" value="1" 
-                                       class="rounded border-white-300 text-primary-300 focus:ring-primary-200"
+                                       class="rounded border-accent-300 text-primary-300 focus:ring-primary-200"
                                        {{ old('is_active', $coupon->is_active) ? 'checked' : '' }}>
                                 <div class="ml-3">
                                     <span class="text-sm font-medium text-black-400">Activar cupón</span>
@@ -458,7 +458,7 @@
                         <div>
                             <label class="flex items-center cursor-pointer">
                                 <input type="checkbox" name="is_public" value="1" 
-                                       class="rounded border-white-300 text-primary-300 focus:ring-primary-200"
+                                       class="rounded border-accent-300 text-primary-300 focus:ring-primary-200"
                                        {{ old('is_public', $coupon->is_public) ? 'checked' : '' }}>
                                 <div class="ml-3">
                                     <span class="text-sm font-medium text-black-400">Cupón público</span>
@@ -471,7 +471,7 @@
                         <div>
                             <label class="flex items-center cursor-pointer">
                                 <input type="checkbox" name="is_automatic" value="1" 
-                                       class="rounded border-white-300 text-primary-300 focus:ring-primary-200"
+                                       class="rounded border-accent-300 text-primary-300 focus:ring-primary-200"
                                        {{ old('is_automatic', $coupon->is_automatic) ? 'checked' : '' }}>
                                 <div class="ml-3">
                                     <span class="text-sm font-medium text-black-400">Aplicación automática</span>
@@ -495,7 +495,7 @@
                     </a>
                     
                     <a href="{{ route('tenant.admin.coupons.index', ['store' => $store->slug]) }}" 
-                       class="btn-secondary bg-white-200 text-black-400 w-full py-3 rounded-lg text-center">
+                       class="btn-secondary bg-accent-200 text-black-400 w-full py-3 rounded-lg text-center">
                         Cancelar
                     </a>
                 </div>

@@ -15,7 +15,7 @@
 
     <!-- Estadísticas -->
     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
-        <div class="bg-white-50 rounded-lg p-4">
+        <div class="bg-accent-50 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-black-300">Total</p>
@@ -27,7 +27,7 @@
             </div>
         </div>
 
-        <div class="bg-white-50 rounded-lg p-4">
+        <div class="bg-accent-50 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-black-300">Abiertos</p>
@@ -39,7 +39,7 @@
             </div>
         </div>
 
-        <div class="bg-white-50 rounded-lg p-4">
+        <div class="bg-accent-50 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-black-300">En Progreso</p>
@@ -51,7 +51,7 @@
             </div>
         </div>
 
-        <div class="bg-white-50 rounded-lg p-4">
+        <div class="bg-accent-50 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-black-300">Resueltos</p>
@@ -63,7 +63,7 @@
             </div>
         </div>
 
-        <div class="bg-white-50 rounded-lg p-4">
+        <div class="bg-accent-50 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-black-300">Urgentes</p>
@@ -75,7 +75,7 @@
             </div>
         </div>
 
-        <div class="bg-white-50 rounded-lg p-4">
+        <div class="bg-accent-50 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-black-300">Vencidos</p>
@@ -89,18 +89,18 @@
     </div>
 
     <!-- Filtros -->
-    <div class="bg-white-50 rounded-lg p-6 mb-6">
+    <div class="bg-accent-50 rounded-lg p-6 mb-6">
         <form method="GET" action="{{ route('superlinkiu.tickets.index') }}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
                 <label class="block text-sm font-medium text-black-300 mb-2">Buscar</label>
                 <input type="text" name="search" value="{{ request('search') }}" 
                        placeholder="Número, título o tienda..."
-                       class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                       class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
             </div>
 
             <div>
                 <label class="block text-sm font-medium text-black-300 mb-2">Estado</label>
-                <select name="status" class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                <select name="status" class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
                     <option value="">Todos los estados</option>
                     <option value="open" {{ request('status') == 'open' ? 'selected' : '' }}>Abierto</option>
                     <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>En Progreso</option>
@@ -111,7 +111,7 @@
 
             <div>
                 <label class="block text-sm font-medium text-black-300 mb-2">Prioridad</label>
-                <select name="priority" class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                <select name="priority" class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
                     <option value="">Todas las prioridades</option>
                     <option value="low" {{ request('priority') == 'low' ? 'selected' : '' }}>Baja</option>
                     <option value="medium" {{ request('priority') == 'medium' ? 'selected' : '' }}>Media</option>
@@ -122,7 +122,7 @@
 
             <div>
                 <label class="block text-sm font-medium text-black-300 mb-2">Categoría</label>
-                <select name="category" class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                <select name="category" class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
                     <option value="">Todas las categorías</option>
                     <option value="technical" {{ request('category') == 'technical' ? 'selected' : '' }}>Técnico</option>
                     <option value="billing" {{ request('category') == 'billing' ? 'selected' : '' }}>Facturación</option>
@@ -133,7 +133,7 @@
 
             <div>
                 <label class="block text-sm font-medium text-black-300 mb-2">Tienda</label>
-                <select name="store_id" class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                <select name="store_id" class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
                     <option value="">Todas las tiendas</option>
                     @foreach($stores as $store)
                         <option value="{{ $store->id }}" {{ request('store_id') == $store->id ? 'selected' : '' }}>
@@ -145,7 +145,7 @@
 
             <div>
                 <label class="block text-sm font-medium text-black-300 mb-2">Asignado a</label>
-                <select name="assigned_to" class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                <select name="assigned_to" class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
                     <option value="">Todos</option>
                     <option value="unassigned" {{ request('assigned_to') == 'unassigned' ? 'selected' : '' }}>Sin asignar</option>
                     @foreach($admins as $admin)
@@ -169,8 +169,8 @@
     </div>
 
     <!-- Tabla de tickets -->
-    <div class="bg-white-50 rounded-lg overflow-hidden">
-        <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+    <div class="bg-accent-50 rounded-lg overflow-hidden">
+        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
             <h2 class="text-lg font-semibold text-black-400 mb-0">
                 Lista de Tickets ({{ $tickets->total() }})
             </h2>
@@ -178,7 +178,7 @@
 
         <div class="overflow-x-auto">
             <table class="w-full">
-                <thead class="bg-white-100">
+                <thead class="bg-accent-100">
                     <tr>
                         <th class="text-left py-3 px-4 font-medium text-black-300">Número</th>
                         <th class="text-left py-3 px-4 font-medium text-black-300">Título</th>
@@ -191,9 +191,9 @@
                         <th class="text-left py-3 px-4 font-medium text-black-300">Acciones</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-white-100">
+                <tbody class="divide-y divide-accent-100">
                     @forelse($tickets as $ticket)
-                        <tr class="hover:bg-white-100 transition-colors duration-150">
+                        <tr class="hover:bg-accent-100 transition-colors duration-150">
                             <td class="py-3 px-4">
                                 <div class="flex items-center gap-2">
                                     <a href="{{ route('superlinkiu.tickets.show', $ticket) }}" 
@@ -202,13 +202,13 @@
                                         {{ $ticket->ticket_number }}
                                     </a>
                                     @if($ticket->has_new_store_responses)
-                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-200 text-white-50" title="Respuestas nuevas de la tienda">
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-primary-200 text-accent-50" title="Respuestas nuevas de la tienda">
                                             <x-solar-chat-round-dots-outline class="w-3 h-3 mr-1" />
                                             {{ $ticket->new_store_responses_count }} nueva{{ $ticket->new_store_responses_count > 1 ? 's' : '' }}
                                         </span>
                                     @endif
                                     @if($ticket->is_overdue)
-                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-error-200 text-white-50">
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-error-200 text-accent-50">
                                             <x-solar-clock-circle-outline class="w-3 h-3 mr-1" />
                                             Vencido
                                         </span>
@@ -228,12 +228,12 @@
                                 <span class="text-sm text-black-400">{{ $ticket->category_label }}</span>
                             </td>
                             <td class="py-3 px-4">
-                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-{{ $ticket->priority_color }}-200 text-white-50">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-{{ $ticket->priority_color }}-200 text-accent-50">
                                     {{ $ticket->priority_label }}
                                 </span>
                             </td>
                             <td class="py-3 px-4">
-                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-{{ $ticket->status_color }}-200 text-white-50">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-{{ $ticket->status_color }}-200 text-accent-50">
                                     {{ $ticket->status_label }}
                                 </span>
                             </td>
@@ -241,7 +241,7 @@
                                 @if($ticket->assignedTo)
                                     <div class="flex items-center gap-2">
                                         <div class="w-6 h-6 bg-primary-200 rounded-full flex items-center justify-center">
-                                            <span class="text-xs text-white-50">{{ substr($ticket->assignedTo->name, 0, 1) }}</span>
+                                            <span class="text-xs text-accent-50">{{ substr($ticket->assignedTo->name, 0, 1) }}</span>
                                         </div>
                                         <span class="text-sm text-black-400">{{ $ticket->assignedTo->name }}</span>
                                     </div>
@@ -299,7 +299,7 @@
 
         <!-- Paginación -->
         @if($tickets->hasPages())
-            <div class="border-t border-white-100 px-6 py-4">
+            <div class="border-t border-accent-100 px-6 py-4">
                 {{ $tickets->links() }}
             </div>
         @endif

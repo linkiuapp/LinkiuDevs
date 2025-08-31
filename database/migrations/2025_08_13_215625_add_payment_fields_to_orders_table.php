@@ -26,7 +26,10 @@ return new class extends Migration
         });
         
         // Actualizar enum de payment_method para incluir nuevos valores
-        DB::statement("ALTER TABLE orders MODIFY COLUMN payment_method ENUM('transferencia', 'contra_entrega', 'efectivo', 'cash', 'bank_transfer', 'card_terminal') DEFAULT 'cash'");
+        // Solo ejecutar en MySQL, SQLite no soporta MODIFY COLUMN con ENUM
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE orders MODIFY COLUMN payment_method ENUM('transferencia', 'contra_entrega', 'efectivo', 'cash', 'bank_transfer', 'card_terminal') DEFAULT 'cash'");
+        }
     }
 
     /**
@@ -44,6 +47,9 @@ return new class extends Migration
         });
         
         // Revertir enum de payment_method
-        DB::statement("ALTER TABLE orders MODIFY COLUMN payment_method ENUM('transferencia', 'contra_entrega', 'efectivo') DEFAULT 'efectivo'");
+        // Solo ejecutar en MySQL, SQLite no soporta MODIFY COLUMN con ENUM
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE orders MODIFY COLUMN payment_method ENUM('transferencia', 'contra_entrega', 'efectivo') DEFAULT 'efectivo'");
+        }
     }
 };

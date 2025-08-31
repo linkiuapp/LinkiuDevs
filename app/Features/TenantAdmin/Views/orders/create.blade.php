@@ -18,7 +18,7 @@
         @csrf
 
         <!-- Información del Cliente -->
-        <div class="bg-white-50 rounded-lg p-6">
+        <div class="bg-accent-50 rounded-lg p-6">
             <h3 class="text-sm font-medium text-black-400 mb-4">Información del Cliente</h3>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div class="lg:col-span-2">
@@ -30,7 +30,7 @@
                            name="customer_name" 
                            value="{{ old('customer_name') }}" 
                            required
-                           class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500 placeholder-black-200"
+                           class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500 placeholder-black-200"
                            placeholder="Nombre completo del cliente">
                     @error('customer_name')
                         <p class="text-error-400 text-sm mt-1">{{ $message }}</p>
@@ -46,7 +46,7 @@
                            name="customer_phone" 
                            value="{{ old('customer_phone') }}" 
                            required
-                           class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500 placeholder-black-200"
+                           class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500 placeholder-black-200"
                            placeholder="3001234567">
                     @error('customer_phone')
                         <p class="text-error-400 text-sm mt-1">{{ $message }}</p>
@@ -60,7 +60,7 @@
                     <select id="department" 
                             name="department" 
                             x-model="selectedDepartment"
-                            class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500"
+                            class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500"
                             required>
                         <option value="">Seleccionar departamento</option>
                         @foreach($departments as $department)
@@ -83,7 +83,7 @@
                            name="city" 
                            value="{{ old('city') }}" 
                            required
-                           class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500 placeholder-black-200"
+                           class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500 placeholder-black-200"
                            placeholder="Ciudad">
                     @error('city')
                         <p class="text-error-400 text-sm mt-1">{{ $message }}</p>
@@ -98,7 +98,7 @@
                               name="customer_address" 
                               required 
                               rows="3"
-                              class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500 placeholder-black-200"
+                              class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500 placeholder-black-200"
                               placeholder="Dirección completa, barrio, referencias">{{ old('customer_address') }}</textarea>
                     @error('customer_address')
                         <p class="text-error-400 text-sm mt-1">{{ $message }}</p>
@@ -108,30 +108,30 @@
         </div>
 
         <!-- Tipo de Entrega y Pago -->
-        <div class="bg-white-50 rounded-lg p-6">
+        <div class="bg-accent-50 rounded-lg p-6">
             <h3 class="text-sm font-medium text-black-400 mb-4">Entrega y Pago</h3>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-sm font-medium text-black-400 mb-2">Tipo de Entrega *</label>
                     <div class="space-y-3">
-                        <label class="flex items-center p-3 border border-white-200 rounded-lg hover:bg-white-100 cursor-pointer">
+                        <label class="flex items-center p-3 border border-accent-200 rounded-lg hover:bg-accent-100 cursor-pointer">
                             <input type="radio" 
                                    name="delivery_type" 
                                    value="domicilio" 
                                    {{ old('delivery_type') === 'domicilio' ? 'checked' : '' }}
                                    x-model="deliveryType" 
                                    @change="updateShippingOptions()"
-                                   class="w-4 h-4 text-primary-200 border-white-300 focus:ring-primary-200">
+                                   class="w-4 h-4 text-primary-200 border-accent-300 focus:ring-primary-200">
                             <span class="ml-3 text-sm text-black-500">Domicilio</span>
                         </label>
-                        <label class="flex items-center p-3 border border-white-200 rounded-lg hover:bg-white-100 cursor-pointer">
+                        <label class="flex items-center p-3 border border-accent-200 rounded-lg hover:bg-accent-100 cursor-pointer">
                             <input type="radio" 
                                    name="delivery_type" 
                                    value="pickup" 
                                    {{ old('delivery_type') === 'pickup' ? 'checked' : '' }}
                                    x-model="deliveryType" 
                                    @change="updateShippingOptions()"
-                                   class="w-4 h-4 text-primary-200 border-white-300 focus:ring-primary-200">
+                                   class="w-4 h-4 text-primary-200 border-accent-300 focus:ring-primary-200">
                             <span class="ml-3 text-sm text-black-500">Pickup en Tienda (Gratis)</span>
                         </label>
                     </div>
@@ -143,31 +143,31 @@
                 <div>
                     <label class="block text-sm font-medium text-black-400 mb-2">Método de Pago *</label>
                     <div class="space-y-3">
-                        <label class="flex items-center p-3 border border-white-200 rounded-lg hover:bg-white-100 cursor-pointer">
+                        <label class="flex items-center p-3 border border-accent-200 rounded-lg hover:bg-accent-100 cursor-pointer">
                             <input type="radio" 
                                    name="payment_method" 
                                    value="transferencia" 
                                    {{ old('payment_method') === 'transferencia' ? 'checked' : '' }}
                                    x-model="paymentMethod"
-                                   class="w-4 h-4 text-primary-200 border-white-300 focus:ring-primary-200">
+                                   class="w-4 h-4 text-primary-200 border-accent-300 focus:ring-primary-200">
                             <span class="ml-3 text-sm text-black-500">Transferencia Bancaria</span>
                         </label>
-                        <label class="flex items-center p-3 border border-white-200 rounded-lg hover:bg-white-100 cursor-pointer">
+                        <label class="flex items-center p-3 border border-accent-200 rounded-lg hover:bg-accent-100 cursor-pointer">
                             <input type="radio" 
                                    name="payment_method" 
                                    value="contra_entrega" 
                                    {{ old('payment_method') === 'contra_entrega' ? 'checked' : '' }}
                                    x-model="paymentMethod"
-                                   class="w-4 h-4 text-primary-200 border-white-300 focus:ring-primary-200">
+                                   class="w-4 h-4 text-primary-200 border-accent-300 focus:ring-primary-200">
                             <span class="ml-3 text-sm text-black-500">Pago Contra Entrega</span>
                         </label>
-                        <label class="flex items-center p-3 border border-white-200 rounded-lg hover:bg-white-100 cursor-pointer" x-show="deliveryType === 'pickup'">
+                        <label class="flex items-center p-3 border border-accent-200 rounded-lg hover:bg-accent-100 cursor-pointer" x-show="deliveryType === 'pickup'">
                             <input type="radio" 
                                    name="payment_method" 
                                    value="efectivo" 
                                    {{ old('payment_method') === 'efectivo' ? 'checked' : '' }}
                                    x-model="paymentMethod"
-                                   class="w-4 h-4 text-primary-200 border-white-300 focus:ring-primary-200">
+                                   class="w-4 h-4 text-primary-200 border-accent-300 focus:ring-primary-200">
                             <span class="ml-3 text-sm text-black-500">Efectivo</span>
                         </label>
                     </div>
@@ -201,7 +201,7 @@
                             name="shipping_zone_id" 
                             x-model="selectedShippingZone" 
                             @change="calculateShipping()"
-                            class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500">
+                            class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500">
                         <option value="">Seleccionar zona</option>
                         <template x-for="method in shippingMethods" :key="method.id">
                             <optgroup :label="method.name">
@@ -236,7 +236,7 @@
                        id="payment_proof" 
                        name="payment_proof" 
                        accept="image/*,application/pdf" 
-                       class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors">
+                       class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors">
                 <div class="text-xs text-black-300 mt-1">JPG, PNG, PDF - Máximo 5MB</div>
                 @error('payment_proof')
                     <p class="text-error-400 text-sm mt-1">{{ $message }}</p>
@@ -245,7 +245,7 @@
         </div>
 
         <!-- Productos -->
-        <div class="bg-white-50 rounded-lg p-6">
+        <div class="bg-accent-50 rounded-lg p-6">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-sm font-medium text-black-400">Productos del Pedido</h3>
                 <button type="button" @click="addProduct()" class="btn-primary text-sm flex items-center gap-2">
@@ -257,7 +257,7 @@
             <!-- Lista de productos -->
             <div class="space-y-4" x-show="orderItems.length > 0">
                 <template x-for="(item, index) in orderItems" :key="index">
-                    <div class="border border-white-200 rounded-lg p-4 bg-white-100">
+                    <div class="border border-accent-200 rounded-lg p-4 bg-accent-100">
                         <div class="grid grid-cols-1 lg:grid-cols-6 gap-4 items-end">
                             <!-- Producto -->
                             <div class="lg:col-span-2">
@@ -266,7 +266,7 @@
                                         x-model="item.product_id" 
                                         @change="updateProductInfo(index)" 
                                         required
-                                        class="w-full px-3 py-2 border border-white-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
+                                        class="w-full px-3 py-2 border border-accent-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
                                     <option value="">Seleccionar producto</option>
                                     <template x-for="product in products" :key="product.id">
                                         <option :value="product.id" x-text="`${product.name} - $${product.price.toLocaleString()}`"></option>
@@ -283,13 +283,13 @@
                                        @input="calculateItemTotal(index)" 
                                        min="1" 
                                        required
-                                       class="w-full px-3 py-2 border border-white-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
+                                       class="w-full px-3 py-2 border border-accent-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
                             </div>
 
                             <!-- Precio Unitario -->
                             <div>
                                 <label class="block text-xs font-medium text-black-400 mb-2">Precio Unit.</label>
-                                <div class="px-3 py-2 bg-white-200 rounded-lg text-sm text-black-400" 
+                                <div class="px-3 py-2 bg-accent-200 rounded-lg text-sm text-black-400" 
                                      x-text="`$${item.unitPrice.toLocaleString()}`"></div>
                             </div>
 
@@ -324,7 +324,7 @@
         </div>
 
         <!-- Resumen del Pedido -->
-        <div class="bg-white-50 rounded-lg p-6" x-show="orderItems.length > 0">
+        <div class="bg-accent-50 rounded-lg p-6" x-show="orderItems.length > 0">
             <h3 class="text-sm font-medium text-black-400 mb-4">Resumen del Pedido</h3>
             <div class="space-y-3">
                 <div class="flex justify-between text-sm">
@@ -335,7 +335,7 @@
                     <span class="text-black-400">Envío:</span>
                     <span class="text-black-500" x-text="`$${shippingCost.toLocaleString()}`"></span>
                 </div>
-                <div class="flex justify-between border-t border-white-200 pt-3">
+                <div class="flex justify-between border-t border-accent-200 pt-3">
                     <span class="text-lg font-semibold text-black-500">Total:</span>
                     <span class="text-lg font-semibold text-primary-200" x-text="`$${total.toLocaleString()}`"></span>
                 </div>
@@ -343,11 +343,11 @@
         </div>
 
         <!-- Notas Adicionales -->
-        <div class="bg-white-50 rounded-lg p-6">
+        <div class="bg-accent-50 rounded-lg p-6">
             <h3 class="text-sm font-medium text-black-400 mb-4">Notas Adicionales</h3>
             <textarea name="notes" 
                       rows="3"
-                      class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500 placeholder-black-200"
+                      class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500 placeholder-black-200"
                       placeholder="Instrucciones especiales, observaciones, etc.">{{ old('notes') }}</textarea>
             @error('notes')
                 <p class="text-error-400 text-sm mt-1">{{ $message }}</p>
@@ -356,7 +356,7 @@
 
         <!-- Acciones -->
         <div class="flex gap-3 justify-end">
-            <a href="{{ route('tenant.admin.orders.index', $store->slug) }}" class="px-4 py-2 border border-white-300 text-black-400 rounded-lg hover:bg-white-100 transition-colors">
+            <a href="{{ route('tenant.admin.orders.index', $store->slug) }}" class="px-4 py-2 border border-accent-300 text-black-400 rounded-lg hover:bg-accent-100 transition-colors">
                 Cancelar
             </a>
             <button type="submit" class="btn-primary" :disabled="orderItems.length === 0">

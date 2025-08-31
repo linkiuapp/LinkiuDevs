@@ -15,11 +15,11 @@
         </div>
 
         <!-- Card principal -->
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden p-6">
-            <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden p-6">
+            <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
-                        <div class="w-16 h-16 bg-white-100 rounded-lg p-3 flex items-center justify-center">
+                        <div class="w-16 h-16 bg-accent-100 rounded-lg p-3 flex items-center justify-center">
                             <img src="{{ $category->icon->image_url }}" 
                                  alt="{{ $category->icon->display_name }}" 
                                  class="w-full h-full object-contain">
@@ -129,7 +129,7 @@
                 <div>
                     <h3 class="text-lg font-semibold text-black-500 mb-4">Estadísticas</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="bg-white-100 rounded-lg p-4">
+                        <div class="bg-accent-100 rounded-lg p-4">
                             <div class="flex items-center justify-between">
                                 <div>
                                     <p class="text-sm font-medium text-black-400">Productos</p>
@@ -140,7 +140,7 @@
                         </div>
                         
                         @if(!$category->parent)
-                            <div class="bg-white-100 rounded-lg p-4">
+                            <div class="bg-accent-100 rounded-lg p-4">
                                 <div class="flex items-center justify-between">
                                     <div>
                                         <p class="text-sm font-medium text-black-400">Subcategorías</p>
@@ -151,7 +151,7 @@
                             </div>
                         @endif
                         
-                        <div class="bg-white-100 rounded-lg p-4">
+                        <div class="bg-accent-100 rounded-lg p-4">
                             <div class="flex items-center justify-between">
                                 <div>
                                     <p class="text-sm font-medium text-black-400">Creada</p>
@@ -169,9 +169,9 @@
                         <h3 class="text-lg font-semibold text-black-500 mb-4">Subcategorías</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             @foreach($category->children as $child)
-                                <div class="bg-white-100 rounded-lg p-4">
+                                <div class="bg-accent-100 rounded-lg p-4">
                                     <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 bg-white-50 rounded-lg p-2 flex items-center justify-center">
+                                        <div class="w-10 h-10 bg-accent-50 rounded-lg p-2 flex items-center justify-center">
                                             <img src="{{ $child->icon->image_url }}" 
                                                  alt="{{ $child->icon->display_name }}" 
                                                  class="w-full h-full object-contain">
@@ -199,7 +199,7 @@
                 @endif
 
                 <!-- Metadatos -->
-                <div class="border-t border-white-100 pt-6">
+                <div class="border-t border-accent-100 pt-6">
                     <h3 class="text-lg font-semibold text-black-500 mb-4">Metadatos</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>

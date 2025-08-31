@@ -16,9 +16,9 @@
     <!-- Planes Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @forelse($plans as $plan)
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden {{ $plan->is_featured ? 'ring-2 ring-primary-200' : '' }}">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden {{ $plan->is_featured ? 'ring-2 ring-primary-200' : '' }}">
                 <!-- Header del plan -->
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6 relative">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6 relative">
                     @if($plan->is_featured)
                         <span class="absolute top-2 right-2 badge-soft-primary text-xs">
                             Más Popular
@@ -62,7 +62,7 @@
 
                     <!-- Precios por período -->
                     @if($plan->prices)
-                        <div class="border-t border-white-100 pt-4 mb-4">
+                        <div class="border-t border-accent-100 pt-4 mb-4">
                             <p class="text-xs font-medium text-black-300 mb-2">Precios por período:</p>
                             <div class="space-y-1">
                                 @foreach(['monthly' => 'Mensual', 'quarterly' => 'Trimestral', 'semester' => 'Semestral'] as $period => $label)
@@ -110,7 +110,7 @@
                 </div>
 
                 <!-- Acciones -->
-                <div class="border-t border-white-100 bg-white-50 px-6 py-3">
+                <div class="border-t border-accent-100 bg-accent-50 px-6 py-3">
                     <div class="flex gap-2">
                         <a href="{{ route('superlinkiu.plans.show', $plan) }}"
                             class="flex-1 bg-primary-50 hover:bg-primary-100 text-primary-300 py-2 rounded-lg text-center transition-colors text-sm">
@@ -149,13 +149,13 @@
             {{-- Previous Page Link --}}
             @if ($plans->onFirstPage())
                 <li class="page-item">
-                    <span class="page-link bg-white-100 border border-white-200 text-black-200 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] cursor-not-allowed">
+                    <span class="page-link bg-accent-100 border border-accent-200 text-black-200 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] cursor-not-allowed">
                         <x-solar-arrow-left-outline class="w-4 h-4" />
                     </span>
                 </li>
             @else
                 <li class="page-item">
-                    <a class="page-link bg-white-50 border border-white-200 text-black-400 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] hover:bg-primary-50 hover:border-primary-200 hover:text-primary-400 transition-colors" 
+                    <a class="page-link bg-accent-50 border border-accent-200 text-black-400 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] hover:bg-primary-50 hover:border-primary-200 hover:text-primary-400 transition-colors" 
                        href="{{ $plans->previousPageUrl() }}">
                         <x-solar-arrow-left-outline class="w-4 h-4" />
                     </a>
@@ -166,13 +166,13 @@
             @foreach ($plans->getUrlRange(1, $plans->lastPage()) as $page => $url)
                 @if ($page == $plans->currentPage())
                     <li class="page-item">
-                        <span class="page-link bg-primary-200 text-white-50 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] w-[40px]">
+                        <span class="page-link bg-primary-200 text-accent-50 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] w-[40px]">
                             {{ $page }}
                         </span>
                     </li>
                 @else
                     <li class="page-item">
-                        <a class="page-link bg-white-50 border border-white-200 text-black-400 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] w-[40px] hover:bg-primary-50 hover:border-primary-200 hover:text-primary-400 transition-colors" 
+                        <a class="page-link bg-accent-50 border border-accent-200 text-black-400 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] w-[40px] hover:bg-primary-50 hover:border-primary-200 hover:text-primary-400 transition-colors" 
                            href="{{ $url }}">
                             {{ $page }}
                         </a>
@@ -183,14 +183,14 @@
             {{-- Next Page Link --}}
             @if ($plans->hasMorePages())
                 <li class="page-item">
-                    <a class="page-link bg-white-50 border border-white-200 text-black-400 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] hover:bg-primary-50 hover:border-primary-200 hover:text-primary-400 transition-colors" 
+                    <a class="page-link bg-accent-50 border border-accent-200 text-black-400 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] hover:bg-primary-50 hover:border-primary-200 hover:text-primary-400 transition-colors" 
                        href="{{ $plans->nextPageUrl() }}">
                         <x-solar-arrow-right-outline class="w-4 h-4" />
                     </a>
                 </li>
             @else
                 <li class="page-item">
-                    <span class="page-link bg-white-100 border border-white-200 text-black-200 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] cursor-not-allowed">
+                    <span class="page-link bg-accent-100 border border-accent-200 text-black-200 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] cursor-not-allowed">
                         <x-solar-arrow-right-outline class="w-4 h-4" />
                     </span>
                 </li>

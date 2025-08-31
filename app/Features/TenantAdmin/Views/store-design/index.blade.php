@@ -4,7 +4,7 @@
     @section('content')
     <div class="flex flex-col h-full">
         {{-- Header de la página --}}
-        <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
             <div class="flex items-center justify-between">
                 <h1 class="text-lg font-semibold text-black-500 mb-0">Diseño de Tienda</h1>
                 <div class="flex items-center gap-3">
@@ -23,13 +23,13 @@
         {{-- Contenido principal --}}
         <div class="flex-1 flex overflow-hidden">
             {{-- Panel izquierdo: Logo y Favicon --}}
-            <div class="w-[350px] border-r border-white-100 bg-white-50 overflow-y-auto">
+            <div class="w-[350px] border-r border-accent-100 bg-accent-50 overflow-y-auto">
                 <div class="p-4 space-y-6">
                     {{-- Logo de la Tienda --}}
                     <div>
                         <h2 class="text-base font-semibold text-black-500 mb-3">Logo de la Tienda</h2>
                         <div x-data="imageUploader('logo')" class="space-y-3">
-                            <div class="flex items-center justify-center w-full h-32 bg-white-100 rounded-lg overflow-hidden">
+                            <div class="flex items-center justify-center w-full h-32 bg-accent-100 rounded-lg overflow-hidden">
                                 <template x-if="!preview && !currentLogo">
                                     <div class="text-center p-4">
                                         <x-solar-gallery-add-outline class="w-6 h-6 mx-auto text-black-300" />
@@ -58,7 +58,7 @@
                     <div>
                         <h2 class="text-base font-semibold text-black-500 mb-3">Favicon</h2>
                         <div x-data="imageUploader('favicon')" class="space-y-3">
-                            <div class="flex items-center justify-center w-full h-32 bg-white-100 rounded-lg overflow-hidden">
+                            <div class="flex items-center justify-center w-full h-32 bg-accent-100 rounded-lg overflow-hidden">
                                 <template x-if="!preview && !currentFavicon">
                                     <div class="text-center p-4">
                                         <x-solar-gallery-add-outline class="w-6 h-6 mx-auto text-black-300" />
@@ -86,7 +86,7 @@
             </div>
 
             {{-- Panel central: Colores del Header --}}
-            <div class="flex-1 bg-white-50 border-r border-white-100 overflow-y-auto">
+            <div class="flex-1 bg-accent-50 border-r border-accent-100 overflow-y-auto">
                 <div class="p-4">
                     <div x-data="headerDesign">
                         <h2 class="text-base font-semibold text-black-500 mb-3">Colores del Header</h2>
@@ -120,7 +120,7 @@
                         </div>
 
                         {{-- Nueva Sección: Información de la Tienda --}}
-                        <div class="mt-8 pt-6 border-t border-white-200">
+                        <div class="mt-8 pt-6 border-t border-accent-200">
                             <h2 class="text-base font-semibold text-black-500 mb-3">Información de la Tienda</h2>
                             <div class="space-y-4">
                                 {{-- Nombre de la Tienda --}}
@@ -134,7 +134,7 @@
                                             x-model="storeName"
                                             @input="updatePreview"
                                             maxlength="40"
-                                            class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none text-sm"
+                                            class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none text-sm"
                                             placeholder="Nombre de tu tienda"
                                         >
                                         <div class="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-black-300">
@@ -155,7 +155,7 @@
                                             x-model="storeDescription"
                                             @input="updatePreview"
                                             maxlength="50"
-                                            class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none text-sm"
+                                            class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none text-sm"
                                             placeholder="Breve descripción de tu tienda"
                                         >
                                         <div class="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-black-300">
@@ -171,7 +171,7 @@
             </div>
 
             {{-- Panel derecho: Vista Previa --}}
-            <div class="w-[450px] bg-white-100 overflow-y-auto p-4">
+            <div class="w-[450px] bg-accent-100 overflow-y-auto p-4">
                 <h2 class="text-base font-semibold text-black-500 mb-3">Vista Previa</h2>
                 <div class="rounded-xl overflow-hidden shadow-lg">
                     <x-tenant-admin::header-preview :store="$store" :design="$design" />
@@ -180,12 +180,12 @@
         </div>
 
         {{-- Historial (Abajo) --}}
-        <div class="bg-white-50 border-t border-white-100 p-4">
+        <div class="bg-accent-50 border-t border-accent-100 p-4">
             <div class="max-w-4xl mx-auto">
                 <h2 class="text-base font-semibold text-black-500 mb-3">Historial de Cambios</h2>
                 <div class="space-y-3">
                     @forelse($history as $version)
-                        <div class="p-3 rounded-lg bg-white-100">
+                        <div class="p-3 rounded-lg bg-accent-100">
                             <div class="flex flex-col gap-2">
                                 <div class="flex items-center justify-between">
                                     <p class="text-sm text-black-400">
@@ -207,7 +207,7 @@
                             </div>
                         </div>
                     @empty
-                        <div class="p-3 rounded-lg bg-white-100">
+                        <div class="p-3 rounded-lg bg-accent-100">
                             <p class="text-sm text-black-300 text-center">
                                 No hay cambios registrados
                             </p>

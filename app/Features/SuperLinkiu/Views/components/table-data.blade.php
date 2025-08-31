@@ -17,7 +17,7 @@
                     <div class="relative">
                         <x-solar-magnifer-outline class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black-300" />
                         <input type="text" id="search-table" 
-                               class="w-full pl-10 pr-4 py-2.5 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
+                               class="w-full pl-10 pr-4 py-2.5 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
                                placeholder="Buscar facturas...">
                     </div>
                 </div>
@@ -25,7 +25,7 @@
                 <!-- Status Filter -->
                 <div class="min-w-0 sm:w-40">
                     <select id="status-filter" 
-                            class="w-full px-3 py-2.5 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                            class="w-full px-3 py-2.5 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
                         <option value="">All Status</option>
                         <option value="paid">Paid</option>
                         <option value="pending">Pending</option>
@@ -36,7 +36,7 @@
                 <!-- Date Filter -->
                 <div class="min-w-0 sm:w-40">
                     <select id="date-filter" 
-                            class="w-full px-3 py-2.5 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                            class="w-full px-3 py-2.5 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
                         <option value="">All Dates</option>
                         <option value="today">Today</option>
                         <option value="week">This Week</option>
@@ -53,7 +53,7 @@
                         Export
                     </button>
                     <button type="button" id="add-btn" 
-                            class="px-4 py-2.5 bg-primary-200 text-white-50 text-base rounded-lg hover:bg-primary-300 transition-colors duration-200 flex items-center gap-2">
+                            class="px-4 py-2.5 bg-primary-200 text-accent-50 text-base rounded-lg hover:bg-primary-300 transition-colors duration-200 flex items-center gap-2">
                         <x-solar-add-circle-outline class="w-5 h-5" />
                         Add New
                     </button>
@@ -81,11 +81,11 @@
             <div class="overflow-x-auto">
                 <table class="w-full border-collapse" id="data-table">
                     <thead>
-                        <tr class="border-b border-white-100">
+                        <tr class="border-b border-accent-100">
                             <th class="text-left py-3 px-4 text-base text-black-400 font-medium">
                                 <div class="flex items-center gap-2">
                                     <input type="checkbox" id="select-all" 
-                                           class="w-4 h-4 text-primary-200 border-white-200 focus:ring-primary-200 rounded">
+                                           class="w-4 h-4 text-primary-200 border-accent-200 focus:ring-primary-200 rounded">
                                     <span>S.L</span>
                                 </div>
                             </th>
@@ -124,7 +124,7 @@
                     </thead>
                     <tbody id="table-body">
                         <!-- Row 1 -->
-                        <tr class="border-b border-white-100 hover:bg-white-100 transition-colors table-row" 
+                        <tr class="border-b border-accent-100 hover:bg-accent-100 transition-colors table-row" 
                             data-invoice="#526534" 
                             data-name="Kathryn Murphy" 
                             data-date="2025-01-25" 
@@ -132,7 +132,7 @@
                             data-status="paid">
                             <td class="py-4 px-4">
                                 <div class="flex items-center gap-3">
-                                    <input type="checkbox" class="w-4 h-4 text-primary-200 border-white-200 focus:ring-primary-200 rounded row-checkbox">
+                                    <input type="checkbox" class="w-4 h-4 text-primary-200 border-accent-200 focus:ring-primary-200 rounded row-checkbox">
                                     <span class="text-base text-black-400">01</span>
                                 </div>
                             </td>
@@ -148,7 +148,7 @@
                             <td class="py-4 px-4 text-base text-black-400">25 Jan 2025</td>
                             <td class="py-4 px-4 text-base text-black-400">$200.00</td>
                             <td class="py-4 px-4">
-                                <span class="bg-success-200 text-white-50 px-6 py-1.5 rounded-full text-sm font-semibold">Paid</span>
+                                <span class="bg-success-200 text-accent-50 px-6 py-1.5 rounded-full text-sm font-semibold">Paid</span>
                             </td>
                             <td class="py-4 px-4">
                                 <div class="flex items-center justify-center gap-2">
@@ -166,7 +166,7 @@
                         </tr>
 
                         <!-- Row 2 -->
-                        <tr class="border-b border-white-100 hover:bg-white-100 transition-colors table-row" 
+                        <tr class="border-b border-accent-100 hover:bg-accent-100 transition-colors table-row" 
                             data-invoice="#696589" 
                             data-name="Annette Black" 
                             data-date="2025-01-25" 
@@ -174,7 +174,7 @@
                             data-status="paid">
                             <td class="py-4 px-4">
                                 <div class="flex items-center gap-3">
-                                    <input type="checkbox" class="w-4 h-4 text-primary-200 border-white-200 focus:ring-primary-200 rounded row-checkbox">
+                                    <input type="checkbox" class="w-4 h-4 text-primary-200 border-accent-200 focus:ring-primary-200 rounded row-checkbox">
                                     <span class="text-base text-black-400">02</span>
                                 </div>
                             </td>
@@ -190,7 +190,7 @@
                             <td class="py-4 px-4 text-base text-black-400">25 Jan 2025</td>
                             <td class="py-4 px-4 text-base text-black-400">$200.00</td>
                             <td class="py-4 px-4">
-                                <span class="bg-success-200 text-white-50 px-6 py-1.5 rounded-full text-sm font-semibold">Paid</span>
+                                <span class="bg-success-200 text-accent-50 px-6 py-1.5 rounded-full text-sm font-semibold">Paid</span>
                             </td>
                             <td class="py-4 px-4">
                                 <div class="flex items-center justify-center gap-2">
@@ -208,7 +208,7 @@
                         </tr>
 
                         <!-- Row 3 -->
-                        <tr class="border-b border-white-100 hover:bg-white-100 transition-colors table-row" 
+                        <tr class="border-b border-accent-100 hover:bg-accent-100 transition-colors table-row" 
                             data-invoice="#256584" 
                             data-name="Ronald Richards" 
                             data-date="2025-02-10" 
@@ -216,7 +216,7 @@
                             data-status="paid">
                             <td class="py-4 px-4">
                                 <div class="flex items-center gap-3">
-                                    <input type="checkbox" class="w-4 h-4 text-primary-200 border-white-200 focus:ring-primary-200 rounded row-checkbox">
+                                    <input type="checkbox" class="w-4 h-4 text-primary-200 border-accent-200 focus:ring-primary-200 rounded row-checkbox">
                                     <span class="text-base text-black-400">03</span>
                                 </div>
                             </td>
@@ -232,7 +232,7 @@
                             <td class="py-4 px-4 text-base text-black-400">10 Feb 2025</td>
                             <td class="py-4 px-4 text-base text-black-400">$200.00</td>
                             <td class="py-4 px-4">
-                                <span class="bg-success-200 text-white-50 px-6 py-1.5 rounded-full text-sm font-semibold">Paid</span>
+                                <span class="bg-success-200 text-accent-50 px-6 py-1.5 rounded-full text-sm font-semibold">Paid</span>
                             </td>
                             <td class="py-4 px-4">
                                 <div class="flex items-center justify-center gap-2">
@@ -250,7 +250,7 @@
                         </tr>
 
                         <!-- Row 4 -->
-                        <tr class="border-b border-white-100 hover:bg-white-100 transition-colors table-row" 
+                        <tr class="border-b border-accent-100 hover:bg-accent-100 transition-colors table-row" 
                             data-invoice="#526587" 
                             data-name="Eleanor Pena" 
                             data-date="2025-02-10" 
@@ -258,7 +258,7 @@
                             data-status="paid">
                             <td class="py-4 px-4">
                                 <div class="flex items-center gap-3">
-                                    <input type="checkbox" class="w-4 h-4 text-primary-200 border-white-200 focus:ring-primary-200 rounded row-checkbox">
+                                    <input type="checkbox" class="w-4 h-4 text-primary-200 border-accent-200 focus:ring-primary-200 rounded row-checkbox">
                                     <span class="text-base text-black-400">04</span>
                                 </div>
                             </td>
@@ -274,7 +274,7 @@
                             <td class="py-4 px-4 text-base text-black-400">10 Feb 2025</td>
                             <td class="py-4 px-4 text-base text-black-400">$150.00</td>
                             <td class="py-4 px-4">
-                                <span class="bg-success-200 text-white-50 px-6 py-1.5 rounded-full text-sm font-semibold">Paid</span>
+                                <span class="bg-success-200 text-accent-50 px-6 py-1.5 rounded-full text-sm font-semibold">Paid</span>
                             </td>
                             <td class="py-4 px-4">
                                 <div class="flex items-center justify-center gap-2">
@@ -292,7 +292,7 @@
                         </tr>
 
                         <!-- Row 5 -->
-                        <tr class="border-b border-white-100 hover:bg-white-100 transition-colors table-row" 
+                        <tr class="border-b border-accent-100 hover:bg-accent-100 transition-colors table-row" 
                             data-invoice="#105986" 
                             data-name="Leslie Alexander" 
                             data-date="2025-03-15" 
@@ -300,7 +300,7 @@
                             data-status="pending">
                             <td class="py-4 px-4">
                                 <div class="flex items-center gap-3">
-                                    <input type="checkbox" class="w-4 h-4 text-primary-200 border-white-200 focus:ring-primary-200 rounded row-checkbox">
+                                    <input type="checkbox" class="w-4 h-4 text-primary-200 border-accent-200 focus:ring-primary-200 rounded row-checkbox">
                                     <span class="text-base text-black-400">05</span>
                                 </div>
                             </td>
@@ -334,7 +334,7 @@
                         </tr>
 
                         <!-- Row 6 -->
-                        <tr class="border-b border-white-100 hover:bg-white-100 transition-colors table-row" 
+                        <tr class="border-b border-accent-100 hover:bg-accent-100 transition-colors table-row" 
                             data-invoice="#526589" 
                             data-name="Albert Flores" 
                             data-date="2025-03-15" 
@@ -342,7 +342,7 @@
                             data-status="overdue">
                             <td class="py-4 px-4">
                                 <div class="flex items-center gap-3">
-                                    <input type="checkbox" class="w-4 h-4 text-primary-200 border-white-200 focus:ring-primary-200 rounded row-checkbox">
+                                    <input type="checkbox" class="w-4 h-4 text-primary-200 border-accent-200 focus:ring-primary-200 rounded row-checkbox">
                                     <span class="text-base text-black-400">06</span>
                                 </div>
                             </td>
@@ -358,7 +358,7 @@
                             <td class="py-4 px-4 text-base text-black-400">15 Mar 2025</td>
                             <td class="py-4 px-4 text-base text-black-400">$150.00</td>
                             <td class="py-4 px-4">
-                                <span class="bg-error-200 text-white-50 px-6 py-1.5 rounded-full text-sm font-semibold">Overdue</span>
+                                <span class="bg-error-200 text-accent-50 px-6 py-1.5 rounded-full text-sm font-semibold">Overdue</span>
                             </td>
                             <td class="py-4 px-4">
                                 <div class="flex items-center justify-center gap-2">
@@ -379,10 +379,10 @@
             </div>
 
             <!-- Pagination -->
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-6 border-t border-white-100">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-6 border-t border-accent-100">
                 <div class="flex items-center gap-2">
                     <span class="text-base text-black-400">Show</span>
-                    <select id="per-page" class="px-3 py-2 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                    <select id="per-page" class="px-3 py-2 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
                         <option value="5">5</option>
                         <option value="10" selected>10</option>
                         <option value="25">25</option>
@@ -396,13 +396,13 @@
                 </div>
                 
                 <div class="flex items-center gap-2">
-                    <button type="button" id="prev-btn" class="px-3 py-2 border border-white-200 rounded-lg text-base text-black-400 hover:bg-white-100 transition-colors disabled:opacity-50" disabled>
+                    <button type="button" id="prev-btn" class="px-3 py-2 border border-accent-200 rounded-lg text-base text-black-400 hover:bg-accent-100 transition-colors disabled:opacity-50" disabled>
                         <x-solar-alt-arrow-left-outline class="w-4 h-4" />
                     </button>
-                    <button type="button" class="px-3 py-2 bg-primary-200 text-white-50 rounded-lg text-base">
+                    <button type="button" class="px-3 py-2 bg-primary-200 text-accent-50 rounded-lg text-base">
                         1
                     </button>
-                    <button type="button" id="next-btn" class="px-3 py-2 border border-white-200 rounded-lg body-base text-black-400 hover:bg-white-100 transition-colors disabled:opacity-50" disabled>
+                    <button type="button" id="next-btn" class="px-3 py-2 border border-accent-200 rounded-lg body-base text-black-400 hover:bg-accent-100 transition-colors disabled:opacity-50" disabled>
                         <x-solar-alt-arrow-right-outline class="w-4 h-4" />
                     </button>
                 </div>

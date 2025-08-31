@@ -23,8 +23,8 @@
         @csrf
         
         <!-- Card principal -->
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-            <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+            <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                 <h2 class="text-lg font-semibold text-black-400 mb-0">Información del Ticket</h2>
             </div>
             
@@ -37,7 +37,7 @@
                                 Categoría *
                             </label>
                             <select name="category" 
-                                    class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('category') border-error-300 @enderror"
+                                    class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('category') border-error-300 @enderror"
                                     required>
                                 <option value="">Selecciona una categoría</option>
                                 @foreach($categories as $slug => $name)
@@ -56,7 +56,7 @@
                                 Prioridad *
                             </label>
                             <select name="priority" 
-                                    class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('priority') border-error-300 @enderror"
+                                    class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('priority') border-error-300 @enderror"
                                     required>
                                 <option value="">Selecciona la prioridad</option>
                                 <option value="low" {{ old('priority') == 'low' ? 'selected' : '' }}>Baja</option>
@@ -77,7 +77,7 @@
                                    name="title" 
                                    value="{{ old('title') }}"
                                    placeholder="Describe brevemente tu problema"
-                                   class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('title') border-error-300 @enderror"
+                                   class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('title') border-error-300 @enderror"
                                    required
                                    maxlength="255">
                             @error('title')
@@ -88,7 +88,7 @@
 
                     <!-- Columna derecha -->
                     <div class="space-y-4">
-                        <div class="bg-white-100 rounded-lg p-4">
+                        <div class="bg-accent-100 rounded-lg p-4">
                             <h3 class="font-semibold text-black-400 mb-3">Información Automática</h3>
                             <div class="space-y-2 text-sm">
                                 <div class="flex justify-between">
@@ -114,7 +114,7 @@
                             <label class="block text-sm font-medium text-black-300 mb-2">
                                 Archivos Adjuntos
                             </label>
-                            <div class="border-2 border-dashed border-white-200 rounded-lg p-4 text-center"
+                            <div class="border-2 border-dashed border-accent-200 rounded-lg p-4 text-center"
                                  x-on:dragover.prevent
                                  x-on:drop.prevent="handleFileDrop($event)">
                                 <input type="file" 
@@ -138,7 +138,7 @@
                             <!-- Lista de archivos seleccionados -->
                             <div x-show="selectedFiles.length > 0" class="mt-3">
                                 <template x-for="(file, index) in selectedFiles" :key="index">
-                                    <div class="flex items-center justify-between p-2 bg-white-100 rounded-lg mb-2">
+                                    <div class="flex items-center justify-between p-2 bg-accent-100 rounded-lg mb-2">
                                         <div class="flex items-center gap-2">
                                             <x-solar-document-outline class="w-4 h-4 text-black-300" />
                                             <span class="text-sm text-black-400" x-text="file.name"></span>
@@ -168,7 +168,7 @@
                     <textarea name="description" 
                               rows="6"
                               placeholder="Describe detalladamente tu problema o consulta..."
-                              class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('description') border-error-300 @enderror"
+                              class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('description') border-error-300 @enderror"
                               required
                               maxlength="5000">{{ old('description') }}</textarea>
                     <div class="flex justify-between mt-1">
@@ -182,7 +182,7 @@
                 </div>
 
                 <!-- Botones -->
-                <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-white-100">
+                <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-accent-100">
                     <a href="{{ route('tenant.admin.tickets.index', ['store' => $store->slug]) }}" 
                        class="btn-outline-secondary px-6 py-2 rounded-lg">
                         Cancelar

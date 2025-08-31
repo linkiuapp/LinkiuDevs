@@ -27,7 +27,7 @@
     >
         {{-- Preview Container --}}
         <div 
-            class="w-full h-full bg-white-100 rounded-lg overflow-hidden"
+            class="w-full h-full bg-accent-100 rounded-lg overflow-hidden"
             :class="{ 
                 'ring-2 ring-primary-400 bg-primary-50/10': dragOver,
                 'ring-2 ring-error-400 bg-error-50/10': error

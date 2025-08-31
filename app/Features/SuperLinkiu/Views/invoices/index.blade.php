@@ -7,7 +7,7 @@
     <!-- Header -->
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-lg font-bold text-black-400">Gestión de Facturas</h1>
-        <a href="{{ route('superlinkiu.invoices.create') }}" class="bg-primary-200 hover:bg-primary-300 text-white-50 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+        <a href="{{ route('superlinkiu.invoices.create') }}" class="bg-primary-200 hover:bg-primary-300 text-accent-50 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
             <x-solar-add-circle-outline class="w-5 h-5" />
             Nueva Factura
         </a>
@@ -15,7 +15,7 @@
 
     <!-- Estadísticas -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-        <div class="bg-white-50 rounded-lg p-4">
+        <div class="bg-accent-50 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-black-300">Total Facturas</p>
@@ -24,7 +24,7 @@
                 <x-solar-document-text-outline class="w-8 h-8 text-primary-300" />
             </div>
         </div>
-        <div class="bg-white-50 rounded-lg p-4">
+        <div class="bg-accent-50 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-black-300">Pendientes</p>
@@ -33,7 +33,7 @@
                 <x-solar-clock-circle-outline class="w-8 h-8 text-warning-300" />
             </div>
         </div>
-        <div class="bg-white-50 rounded-lg p-4">
+        <div class="bg-accent-50 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-black-300">Pagadas</p>
@@ -42,7 +42,7 @@
                 <x-solar-check-circle-outline class="w-8 h-8 text-success-300" />
             </div>
         </div>
-        <div class="bg-white-50 rounded-lg p-4">
+        <div class="bg-accent-50 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-black-300">Vencidas</p>
@@ -51,7 +51,7 @@
                 <x-solar-danger-triangle-outline class="w-8 h-8 text-error-300" />
             </div>
         </div>
-        <div class="bg-white-50 rounded-lg p-4">
+        <div class="bg-accent-50 rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-black-300">Ingresos Totales</p>
@@ -63,7 +63,7 @@
     </div>
 
     <!-- Filtros -->
-    <div class="bg-white-50 rounded-lg p-6 mb-6">
+    <div class="bg-accent-50 rounded-lg p-6 mb-6">
         <form method="GET" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
             <div>
                 <label class="block text-sm font-medium text-black-400 mb-2">Buscar</label>
@@ -71,11 +71,11 @@
                        name="search" 
                        value="{{ request('search') }}"
                        placeholder="Número de factura o tienda"
-                       class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200">
+                       class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200">
             </div>
             <div>
                 <label class="block text-sm font-medium text-black-400 mb-2">Tienda</label>
-                <select name="store_id" class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200">
+                <select name="store_id" class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200">
                     <option value="">Todas las tiendas</option>
                     @foreach($stores as $store)
                         <option value="{{ $store->id }}" {{ request('store_id') == $store->id ? 'selected' : '' }}>
@@ -86,7 +86,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-black-400 mb-2">Plan</label>
-                <select name="plan_id" class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200">
+                <select name="plan_id" class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200">
                     <option value="">Todos los planes</option>
                     @foreach($plans as $plan)
                         <option value="{{ $plan->id }}" {{ request('plan_id') == $plan->id ? 'selected' : '' }}>
@@ -97,7 +97,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-black-400 mb-2">Estado</label>
-                <select name="status" class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200">
+                <select name="status" class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200">
                     <option value="">Todos los estados</option>
                     <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pendiente</option>
                     <option value="paid" {{ request('status') == 'paid' ? 'selected' : '' }}>Pagada</option>
@@ -107,7 +107,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-black-400 mb-2">Período</label>
-                <select name="period" class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200">
+                <select name="period" class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200">
                     <option value="">Todos los períodos</option>
                     <option value="monthly" {{ request('period') == 'monthly' ? 'selected' : '' }}>Mensual</option>
                     <option value="quarterly" {{ request('period') == 'quarterly' ? 'selected' : '' }}>Trimestral</option>
@@ -115,10 +115,10 @@
                 </select>
             </div>
             <div class="flex items-end gap-2">
-                <button type="submit" class="bg-primary-200 hover:bg-primary-300 text-white-50 px-4 py-2 rounded-lg transition-colors">
+                <button type="submit" class="bg-primary-200 hover:bg-primary-300 text-accent-50 px-4 py-2 rounded-lg transition-colors">
                     <x-solar-magnifer-outline class="w-4 h-4" />
                 </button>
-                <a href="{{ route('superlinkiu.invoices.index') }}" class="bg-white-200 hover:bg-white-300 text-black-400 px-4 py-2 rounded-lg transition-colors">
+                <a href="{{ route('superlinkiu.invoices.index') }}" class="bg-accent-200 hover:bg-accent-300 text-black-400 px-4 py-2 rounded-lg transition-colors">
                     <x-solar-refresh-outline class="w-4 h-4" />
                 </a>
             </div>
@@ -126,14 +126,14 @@
     </div>
 
     <!-- Tabla de Facturas -->
-    <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-        <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+    <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
             <h2 class="text-lg text-black-500 mb-0">Lista de Facturas</h2>
         </div>
         
         <div class="overflow-x-auto">
             <table class="w-full">
-                <thead class="bg-white-100">
+                <thead class="bg-accent-100">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-black-400 uppercase tracking-wider">
                             Número
@@ -161,9 +161,9 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody class="bg-white-50 divide-y divide-white-100">
+                <tbody class="bg-accent-50 divide-y divide-accent-100">
                     @forelse($invoices as $invoice)
-                        <tr class="hover:bg-white-100 transition-colors">
+                        <tr class="hover:bg-accent-100 transition-colors">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm font-medium text-black-500">{{ $invoice->invoice_number }}</div>
                                 <div class="text-sm text-black-300">{{ $invoice->issue_date->format('d/m/Y') }}</div>
@@ -182,7 +182,7 @@
                                 <div class="text-sm text-black-500">{{ $invoice->getPeriodLabel() }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="bg-{{ $invoice->getStatusColor() }}-200 text-white-50 px-2 py-1 rounded text-xs">
+                                <span class="bg-{{ $invoice->getStatusColor() }}-200 text-accent-50 px-2 py-1 rounded text-xs">
                                     {{ $invoice->getStatusLabel() }}
                                 </span>
                             </td>
@@ -252,13 +252,13 @@
             {{-- Previous Page Link --}}
             @if ($invoices->onFirstPage())
                 <li class="page-item">
-                    <span class="page-link bg-white-100 border border-white-200 text-black-200 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] cursor-not-allowed">
+                    <span class="page-link bg-accent-100 border border-accent-200 text-black-200 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] cursor-not-allowed">
                         <x-solar-arrow-left-outline class="w-4 h-4" />
                     </span>
                 </li>
             @else
                 <li class="page-item">
-                    <a class="page-link bg-white-50 border border-white-200 text-black-400 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] hover:bg-primary-50 hover:border-primary-200 hover:text-primary-400 transition-colors" 
+                    <a class="page-link bg-accent-50 border border-accent-200 text-black-400 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] hover:bg-primary-50 hover:border-primary-200 hover:text-primary-400 transition-colors" 
                        href="{{ $invoices->previousPageUrl() }}">
                         <x-solar-arrow-left-outline class="w-4 h-4" />
                     </a>
@@ -269,13 +269,13 @@
             @foreach ($invoices->getUrlRange(1, $invoices->lastPage()) as $page => $url)
                 @if ($page == $invoices->currentPage())
                     <li class="page-item">
-                        <span class="page-link bg-primary-200 text-white-50 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] w-[40px]">
+                        <span class="page-link bg-primary-200 text-accent-50 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] w-[40px]">
                             {{ $page }}
                         </span>
                     </li>
                 @else
                     <li class="page-item">
-                        <a class="page-link bg-white-50 border border-white-200 text-black-400 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] w-[40px] hover:bg-primary-50 hover:border-primary-200 hover:text-primary-400 transition-colors" 
+                        <a class="page-link bg-accent-50 border border-accent-200 text-black-400 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] w-[40px] hover:bg-primary-50 hover:border-primary-200 hover:text-primary-400 transition-colors" 
                            href="{{ $url }}">
                             {{ $page }}
                         </a>
@@ -286,14 +286,14 @@
             {{-- Next Page Link --}}
             @if ($invoices->hasMorePages())
                 <li class="page-item">
-                    <a class="page-link bg-white-50 border border-white-200 text-black-400 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] hover:bg-primary-50 hover:border-primary-200 hover:text-primary-400 transition-colors" 
+                    <a class="page-link bg-accent-50 border border-accent-200 text-black-400 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] hover:bg-primary-50 hover:border-primary-200 hover:text-primary-400 transition-colors" 
                        href="{{ $invoices->nextPageUrl() }}">
                         <x-solar-arrow-right-outline class="w-4 h-4" />
                     </a>
                 </li>
             @else
                 <li class="page-item">
-                    <span class="page-link bg-white-100 border border-white-200 text-black-200 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] cursor-not-allowed">
+                    <span class="page-link bg-accent-100 border border-accent-200 text-black-200 font-medium rounded-lg px-3 py-2 flex items-center justify-center h-[40px] cursor-not-allowed">
                         <x-solar-arrow-right-outline class="w-4 h-4" />
                     </span>
                 </li>

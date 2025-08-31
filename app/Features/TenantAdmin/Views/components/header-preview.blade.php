@@ -22,7 +22,7 @@
                 <img :src="$store.design.logo" class="w-24 h-24 rounded-full object-cover" alt="Logo">
             </template>
             <template x-if="!$store.design.logo">
-                <div class="w-24 h-24 rounded-full bg-white-100 flex items-center justify-center">
+                <div class="w-24 h-24 rounded-full bg-accent-100 flex items-center justify-center">
                     <span class="text-black-300 text-xl font-bold">{{ substr($store->name, 0, 2) }}</span>
                 </div>
             </template>

@@ -29,8 +29,8 @@
         <!-- Contenido Principal -->
         <div class="lg:col-span-3 space-y-6">
             <!-- Contenido del Anuncio -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden border-l-4 border-{{ $announcement->type_color }}-200">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden border-l-4 border-{{ $announcement->type_color }}-200">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <div class="flex items-center justify-between">
                         <h2 class="text-lg font-semibold text-black-400 mb-0">Contenido del Anuncio</h2>
                         <div class="flex items-center gap-2">
@@ -55,8 +55,8 @@
 
             <!-- Banner si existe -->
             @if($announcement->banner_image)
-                <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                    <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+                <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                    <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                         <h2 class="text-lg font-semibold text-black-400 mb-0 flex items-center gap-2">
                             <x-solar-gallery-outline class="w-5 h-5" />
                             Banner Asociado
@@ -67,7 +67,7 @@
                         <div class="flex items-start gap-6">
                             <img src="{{ $announcement->banner_image_url }}" 
                                  alt="Banner" 
-                                 class="border border-white-200 rounded shadow-sm"
+                                 class="border border-accent-200 rounded shadow-sm"
                                  style="width: 320px; height: 100px; object-fit: cover;">
                             <div class="flex-1">
                                 <h4 class="font-medium text-black-400 mb-2">{{ $announcement->title }}</h4>
@@ -121,8 +121,8 @@
         <!-- Panel Lateral -->
         <div class="space-y-6">
             <!-- Estado del Anuncio -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-lg font-semibold text-black-400 mb-0">Estado</h2>
                 </div>
                 
@@ -137,7 +137,7 @@
                         </div>
                     </div>
 
-                    <hr class="border-white-200">
+                    <hr class="border-accent-200">
 
                     <div class="space-y-3">
                         <div class="flex justify-between items-center">
@@ -168,8 +168,8 @@
             </div>
 
             <!-- Características -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-lg font-semibold text-black-400 mb-0">Características</h2>
                 </div>
                 
@@ -214,7 +214,7 @@
             </div>
 
             <!-- Navegación -->
-            <div class="bg-white-50 rounded-lg p-6">
+            <div class="bg-accent-50 rounded-lg p-6">
                 <h3 class="text-sm font-medium text-black-300 mb-4">Navegación</h3>
                 <div class="space-y-3">
                     <a href="{{ route('tenant.admin.announcements.index', $store->slug) }}" 

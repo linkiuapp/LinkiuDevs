@@ -20,8 +20,8 @@
             @method('PUT')
 
             {{-- Información de la Zona --}}
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden mb-6">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden mb-6">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-lg font-semibold text-black-500">Información de la Zona</h2>
                 </div>
                 
@@ -35,7 +35,7 @@
                                name="name" 
                                value="{{ old('name', $zone->name) }}"
                                placeholder="Ej: Ciudad Principal"
-                               class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('name') border-error-300 @enderror"
+                               class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('name') border-error-300 @enderror"
                                required>
                         @error('name')
                             <p class="text-sm text-error-300 mt-1">{{ $message }}</p>
@@ -50,7 +50,7 @@
                         <textarea name="description" 
                                   rows="2"
                                   placeholder="Ej: Bogotá y alrededores"
-                                  class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('description') border-error-300 @enderror">{{ old('description', $zone->description) }}</textarea>
+                                  class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('description') border-error-300 @enderror">{{ old('description', $zone->description) }}</textarea>
                         @error('description')
                             <p class="text-sm text-error-300 mt-1">{{ $message }}</p>
                         @enderror
@@ -69,7 +69,7 @@
                                        value="{{ old('cost', $zone->cost) }}"
                                        min="0"
                                        step="1000"
-                                       class="w-full pl-8 pr-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('cost') border-error-300 @enderror"
+                                       class="w-full pl-8 pr-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('cost') border-error-300 @enderror"
                                        required>
                             </div>
                             @error('cost')
@@ -90,7 +90,7 @@
                                        min="0"
                                        step="1000"
                                        placeholder="Opcional"
-                                       class="w-full pl-8 pr-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('free_shipping_from') border-error-300 @enderror">
+                                       class="w-full pl-8 pr-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('free_shipping_from') border-error-300 @enderror">
                             </div>
                             <p class="text-xs text-black-300 mt-1">Deja vacío si no aplica envío gratis</p>
                             @error('free_shipping_from')
@@ -105,7 +105,7 @@
                             Tiempo estimado de entrega <span class="text-error-300">*</span>
                         </label>
                                                  <select name="estimated_time" 
-                                 class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('estimated_time') border-error-300 @enderror"
+                                 class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('estimated_time') border-error-300 @enderror"
                                  required>
                              <option value="">Selecciona un tiempo</option>
                              @foreach(\App\Features\TenantAdmin\Models\ShippingZone::ESTIMATED_TIMES as $key => $label)
@@ -126,7 +126,7 @@
                                    name="is_active" 
                                    value="1"
                                    {{ old('is_active', $zone->is_active) ? 'checked' : '' }}
-                                   class="w-4 h-4 text-primary-300 border-white-300 rounded focus:ring-primary-200">
+                                   class="w-4 h-4 text-primary-300 border-accent-300 rounded focus:ring-primary-200">
                             <span class="text-sm text-black-400">
                                 Zona activa
                             </span>
@@ -139,8 +139,8 @@
             </div>
 
             {{-- Horarios de Entrega --}}
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden mb-6">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden mb-6">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-lg font-semibold text-black-500">Horarios de Entrega</h2>
                 </div>
                 
@@ -169,7 +169,7 @@
                                            name="delivery_days[]" 
                                            value="{{ $key }}"
                                            {{ in_array($key, $selectedDays) ? 'checked' : '' }}
-                                           class="w-4 h-4 text-primary-300 border-white-300 rounded focus:ring-primary-200">
+                                           class="w-4 h-4 text-primary-300 border-accent-300 rounded focus:ring-primary-200">
                                     <span class="text-sm text-black-400">{{ $day }}</span>
                                 </label>
                             @endforeach
@@ -188,7 +188,7 @@
                             <input type="time" 
                                    name="start_time" 
                                    value="{{ old('start_time', $zone->start_time ? $zone->start_time->format('H:i') : '09:00') }}"
-                                   class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('start_time') border-error-300 @enderror">
+                                   class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('start_time') border-error-300 @enderror">
                             @error('start_time')
                                 <p class="text-sm text-error-300 mt-1">{{ $message }}</p>
                             @enderror
@@ -202,7 +202,7 @@
                             <input type="time" 
                                    name="end_time" 
                                    value="{{ old('end_time', $zone->end_time ? $zone->end_time->format('H:i') : '18:00') }}"
-                                   class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('end_time') border-error-300 @enderror">
+                                   class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 @error('end_time') border-error-300 @enderror">
                             @error('end_time')
                                 <p class="text-sm text-error-300 mt-1">{{ $message }}</p>
                             @enderror
@@ -217,7 +217,7 @@
                         <textarea name="instructions" 
                                   rows="2"
                                   placeholder="Ej: Entrega en horario laboral, llamar antes de entregar"
-                                  class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200">{{ old('instructions', $zone->instructions) }}</textarea>
+                                  class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200">{{ old('instructions', $zone->instructions) }}</textarea>
                     </div>
                 </div>
             </div>

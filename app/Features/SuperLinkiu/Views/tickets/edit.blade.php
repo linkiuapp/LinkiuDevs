@@ -27,8 +27,8 @@
         @method('PUT')
         
         <!-- Card única con toda la información -->
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-            <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+            <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                 <h2 class="text-lg font-semibold text-black-400 mb-0">Información del Ticket</h2>
             </div>
             
@@ -40,7 +40,7 @@
                             <label class="block text-sm font-medium text-black-300 mb-2">
                                 Tienda
                             </label>
-                            <div class="w-full px-4 py-2 bg-white-100 border border-white-200 rounded-lg text-black-400">
+                            <div class="w-full px-4 py-2 bg-accent-100 border border-accent-200 rounded-lg text-black-400">
                                 {{ $ticket->store->name }}
                             </div>
                             <p class="text-xs text-black-200 mt-1">
@@ -53,7 +53,7 @@
                                 Título <span class="text-error-300">*</span>
                             </label>
                             <input type="text" name="title" value="{{ old('title', $ticket->title) }}"
-                                   class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('title') border-error-200 @enderror"
+                                   class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('title') border-error-200 @enderror"
                                    placeholder="Título descriptivo del problema"
                                    required>
                             @error('title')
@@ -66,7 +66,7 @@
                                 Categoría <span class="text-error-300">*</span>
                             </label>
                             <select name="category" 
-                                    class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('category') border-error-200 @enderror"
+                                    class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('category') border-error-200 @enderror"
                                     required>
                                 <option value="">Seleccionar categoría</option>
                                 <option value="technical" {{ old('category', $ticket->category) == 'technical' ? 'selected' : '' }}>Técnico</option>
@@ -87,7 +87,7 @@
                                 Prioridad <span class="text-error-300">*</span>
                             </label>
                             <select name="priority" 
-                                    class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('priority') border-error-200 @enderror"
+                                    class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('priority') border-error-200 @enderror"
                                     required>
                                 <option value="">Seleccionar prioridad</option>
                                 <option value="low" {{ old('priority', $ticket->priority) == 'low' ? 'selected' : '' }}>Baja</option>
@@ -105,7 +105,7 @@
                                 Asignar a
                             </label>
                             <select name="assigned_to" 
-                                    class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('assigned_to') border-error-200 @enderror">
+                                    class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('assigned_to') border-error-200 @enderror">
                                 <option value="">Sin asignar</option>
                                 @foreach($admins as $admin)
                                     <option value="{{ $admin->id }}" {{ old('assigned_to', $ticket->assigned_to) == $admin->id ? 'selected' : '' }}>
@@ -124,10 +124,10 @@
                                 <div>
                                     <h4 class="text-sm font-medium text-info-300 mb-1">Estado Actual</h4>
                                     <div class="flex items-center gap-2">
-                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-{{ $ticket->status_color }}-200 text-white-50">
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-{{ $ticket->status_color }}-200 text-accent-50">
                                             {{ $ticket->status_label }}
                                         </span>
-                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-{{ $ticket->priority_color }}-200 text-white-50">
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-{{ $ticket->priority_color }}-200 text-accent-50">
                                             {{ $ticket->priority_label }}
                                         </span>
                                     </div>
@@ -147,7 +147,7 @@
                         Descripción <span class="text-error-300">*</span>
                     </label>
                     <textarea name="description" rows="6"
-                              class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('description') border-error-200 @enderror"
+                              class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('description') border-error-200 @enderror"
                               placeholder="Describe detalladamente el problema o solicitud..."
                               required>{{ old('description', $ticket->description) }}</textarea>
                     @error('description')
@@ -187,7 +187,7 @@
             </div>
 
             <!-- Footer con botones -->
-            <div class="border-t border-white-100 bg-white-50 px-6 py-4">
+            <div class="border-t border-accent-100 bg-accent-50 px-6 py-4">
                 <div class="flex justify-between items-center">
                     <div class="text-sm text-black-300">
                         Última actualización: {{ $ticket->updated_at->format('d/m/Y H:i') }}

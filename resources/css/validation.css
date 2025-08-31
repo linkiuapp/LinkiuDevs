@@ -1,0 +1,775 @@
+/* Enhanced Validation Engine Styles */
+
+/* Loading state for fields being validated */
+.validation-loading {
+    @apply pr-10 relative;
+}
+
+/* Enhanced validation error styles with better visual hierarchy */
+.validation-error {
+    @apply mt-2 p-3 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg shadow-sm;
+    animation: slideInDown 0.3s ease-out, pulse 0.5s ease-in-out;
+}
+
+.validation-error.severe {
+    @apply bg-red-100 border-red-300 text-red-800;
+}
+
+.validation-error .error-icon {
+    @apply inline-flex items-center mr-2;
+}
+
+.validation-error .error-message {
+    @apply font-medium;
+}
+
+.validation-error .error-details {
+    @apply mt-1 text-xs text-red-600 opacity-80;
+}
+
+.validation-error .suggestions-container {
+    @apply mt-3 pt-2 border-t border-red-200;
+}
+
+.validation-error .suggestions-label {
+    @apply text-xs font-medium text-red-700 mb-2 flex items-center;
+}
+
+.validation-error .suggestions-label::before {
+    content: "💡";
+    @apply mr-1;
+}
+
+.validation-error .suggestion-button {
+    @apply inline-flex items-center mr-2 mb-2 px-3 py-1.5 text-xs font-medium bg-blue-100 text-blue-800 rounded-md hover:bg-blue-200 focus:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-all duration-200 cursor-pointer;
+}
+
+.validation-error .suggestion-button:hover {
+    @apply transform scale-105 shadow-sm;
+}
+
+.validation-error .suggestion-button:active {
+    @apply transform scale-95;
+}
+
+/* Enhanced field validation states with better visual feedback */
+.field-valid {
+    @apply border-green-500 focus:border-green-500 focus:ring-green-500 bg-green-50;
+    animation: validPulse 0.6s ease-out;
+}
+
+.field-invalid {
+    @apply border-red-500 focus:border-red-500 focus:ring-red-500 bg-red-50;
+    animation: invalidShake 0.5s ease-out;
+}
+
+.field-validating {
+    @apply border-yellow-400 focus:border-yellow-400 focus:ring-yellow-400 bg-yellow-50;
+    animation: validatingPulse 1.5s ease-in-out infinite;
+}
+
+.field-warning {
+    @apply border-orange-400 focus:border-orange-400 focus:ring-orange-400 bg-orange-50;
+}
+
+/* Validation spinner */
+.validation-spinner {
+    @apply absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none;
+}
+
+.validation-spinner svg {
+    @apply animate-spin h-4 w-4 text-gray-400;
+}
+
+/* Success checkmark */
+.validation-success {
+    @apply absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none;
+}
+
+.validation-success svg {
+    @apply h-4 w-4 text-green-500;
+}
+
+/* Error icon */
+.validation-error-icon {
+    @apply absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none;
+}
+
+.validation-error-icon svg {
+    @apply h-4 w-4 text-red-500;
+}
+
+/* Suggestion buttons hover effects */
+.suggestion-button:hover {
+    @apply bg-blue-200 transform scale-105;
+}
+
+.suggestion-button:active {
+    @apply bg-blue-300 transform scale-95;
+}
+
+/* Enhanced validation animations */
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+@keyframes validPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+    }
+}
+
+@keyframes invalidShake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-2px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(2px);
+    }
+}
+
+@keyframes validatingPulse {
+    0%, 100% {
+        border-color: rgb(251, 191, 36);
+        background-color: rgb(254, 252, 232);
+    }
+    50% {
+        border-color: rgb(245, 158, 11);
+        background-color: rgb(255, 251, 235);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+}
+
+/* Field focus states with validation */
+.field-valid:focus {
+    @apply ring-2 ring-green-500 ring-opacity-50;
+}
+
+.field-invalid:focus {
+    @apply ring-2 ring-red-500 ring-opacity-50;
+}
+
+.field-validating:focus {
+    @apply ring-2 ring-yellow-300 ring-opacity-50;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .validation-error {
+        @apply text-xs;
+    }
+    
+    .suggestion-button {
+        @apply text-xs px-1 py-0.5;
+    }
+    
+    .validation-spinner svg,
+    .validation-success svg,
+    .validation-error-icon svg {
+        @apply h-3 w-3;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .validation-error {
+        @apply text-red-400;
+    }
+    
+    .suggestions-label {
+        @apply text-gray-400;
+    }
+    
+    .suggestion-button {
+        @apply bg-blue-900 text-blue-200;
+    }
+    
+    .suggestion-button:hover {
+        @apply bg-blue-800;
+    }
+    
+    .validation-spinner svg {
+        @apply text-gray-500;
+    }
+}
+
+/* Accessibility improvements */
+.validation-error[role="alert"] {
+    @apply sr-only;
+}
+
+.field-invalid[aria-invalid="true"] {
+    @apply border-red-500;
+}
+
+.field-valid[aria-invalid="false"] {
+    @apply border-green-500;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .field-valid {
+        @apply border-green-700;
+    }
+    
+    .field-invalid {
+        @apply border-red-700;
+    }
+    
+    .validation-error {
+        @apply text-red-800 font-semibold;
+    }
+}
+
+/* Error Summary Panel */
+.error-summary-panel {
+    @apply fixed top-4 right-4 max-w-md bg-accent border border-red-200 rounded-lg shadow-lg z-50 p-4;
+    animation: slideInRight 0.3s ease-out;
+}
+
+.error-summary-panel.hidden {
+    animation: slideOutRight 0.3s ease-in forwards;
+}
+
+.error-summary-panel .panel-header {
+    @apply flex items-center justify-between mb-3 pb-2 border-b border-red-100;
+}
+
+.error-summary-panel .panel-title {
+    @apply text-sm font-semibold text-red-800 flex items-center;
+}
+
+.error-summary-panel .panel-title::before {
+    content: "⚠️";
+    @apply mr-2;
+}
+
+.error-summary-panel .close-button {
+    @apply text-red-400 hover:text-red-600 focus:outline-none focus:text-red-600 transition-colors;
+}
+
+.error-summary-panel .error-list {
+    @apply space-y-2;
+}
+
+.error-summary-panel .error-item {
+    @apply flex items-start space-x-2 p-2 bg-red-50 rounded text-xs;
+}
+
+.error-summary-panel .error-item .field-name {
+    @apply font-medium text-red-700 min-w-0 flex-shrink-0;
+}
+
+.error-summary-panel .error-item .error-text {
+    @apply text-red-600 flex-1;
+}
+
+.error-summary-panel .error-item .goto-field {
+    @apply text-blue-600 hover:text-blue-800 cursor-pointer underline flex-shrink-0;
+}
+
+/* Contextual Help Tooltips */
+.help-tooltip {
+    @apply relative inline-block;
+}
+
+.help-tooltip .tooltip-trigger {
+    @apply inline-flex items-center justify-center w-4 h-4 text-xs text-gray-400 hover:text-gray-600 cursor-help rounded-full border border-gray-300 hover:border-gray-400 transition-colors;
+}
+
+.help-tooltip .tooltip-content {
+    @apply absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 text-xs text-accent bg-gray-900 rounded-lg shadow-lg opacity-0 pointer-events-none transition-opacity duration-200 z-10;
+    min-width: 200px;
+    max-width: 300px;
+}
+
+.help-tooltip .tooltip-content::after {
+    content: "";
+    @apply absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-900;
+}
+
+.help-tooltip:hover .tooltip-content,
+.help-tooltip .tooltip-trigger:focus + .tooltip-content {
+    @apply opacity-100 pointer-events-auto;
+}
+
+.help-tooltip .tooltip-content .tooltip-title {
+    @apply font-semibold mb-1;
+}
+
+.help-tooltip .tooltip-content .tooltip-description {
+    @apply text-gray-200;
+}
+
+/* Field Labels with Help */
+.field-label-with-help {
+    @apply flex items-center space-x-2;
+}
+
+.field-label-with-help .label-text {
+    @apply block text-sm font-medium text-gray-700;
+}
+
+/* Enhanced Loading States */
+.validation-spinner {
+    @apply absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none z-10;
+}
+
+.validation-spinner.with-backdrop {
+    @apply right-0 top-0 w-full h-full bg-accent bg-opacity-75 flex items-center justify-center;
+}
+
+.validation-spinner svg {
+    @apply animate-spin h-4 w-4 text-blue-500;
+}
+
+.validation-spinner.large svg {
+    @apply h-6 w-6;
+}
+
+/* Success and Error Icons */
+.validation-success {
+    @apply absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none z-10;
+}
+
+.validation-success svg {
+    @apply h-4 w-4 text-green-500;
+    animation: successPop 0.4s ease-out;
+}
+
+.validation-error-icon {
+    @apply absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none z-10;
+}
+
+.validation-error-icon svg {
+    @apply h-4 w-4 text-red-500;
+    animation: errorPop 0.4s ease-out;
+}
+
+@keyframes successPop {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes errorPop {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+/* Loading States and Progress Feedback */
+
+/* Global Loading Overlay */
+.loading-overlay {
+    @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.loading-overlay .loading-content {
+    @apply bg-accent rounded-lg p-6 shadow-xl max-w-sm mx-4;
+}
+
+.loading-overlay .loading-spinner {
+    @apply flex items-center justify-center mb-4;
+}
+
+.loading-overlay .loading-spinner svg {
+    @apply animate-spin h-8 w-8 text-blue-500;
+}
+
+.loading-overlay .loading-text {
+    @apply text-center text-gray-700 font-medium;
+}
+
+.loading-overlay .loading-progress {
+    @apply mt-4;
+}
+
+/* Progress Bar */
+.progress-bar {
+    @apply w-full bg-gray-200 rounded-full h-2 overflow-hidden;
+}
+
+.progress-bar .progress-fill {
+    @apply h-full bg-blue-500 transition-all duration-300 ease-out;
+    animation: progressPulse 2s ease-in-out infinite;
+}
+
+.progress-bar.success .progress-fill {
+    @apply bg-green-500;
+    animation: none;
+}
+
+.progress-bar.error .progress-fill {
+    @apply bg-red-500;
+    animation: none;
+}
+
+@keyframes progressPulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* Skeleton Loaders */
+.skeleton {
+    @apply bg-gray-200 rounded animate-pulse;
+}
+
+.skeleton-text {
+    @apply skeleton h-4 mb-2;
+}
+
+.skeleton-text.large {
+    @apply h-6;
+}
+
+.skeleton-text.small {
+    @apply h-3;
+}
+
+.skeleton-card {
+    @apply skeleton p-4 mb-4;
+}
+
+.skeleton-template {
+    @apply skeleton h-32 rounded-lg mb-4;
+}
+
+.skeleton-form-field {
+    @apply skeleton h-10 rounded mb-4;
+}
+
+.skeleton-button {
+    @apply skeleton h-10 w-24 rounded;
+}
+
+/* Template Loading Skeleton */
+.template-loading-skeleton {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4;
+}
+
+.template-loading-skeleton .template-skeleton {
+    @apply skeleton h-40 rounded-lg;
+}
+
+/* Form Loading States */
+.form-loading {
+    @apply relative;
+}
+
+.form-loading::before {
+    content: "";
+    @apply absolute inset-0 bg-accent bg-opacity-75 z-10 rounded;
+}
+
+.form-loading .form-loading-spinner {
+    @apply absolute inset-0 flex items-center justify-center z-20;
+}
+
+.form-loading .form-loading-spinner svg {
+    @apply animate-spin h-6 w-6 text-blue-500;
+}
+
+/* Button Loading States */
+.btn-loading {
+    @apply relative pointer-events-none;
+}
+
+.btn-loading .btn-text {
+    @apply opacity-0;
+}
+
+.btn-loading .btn-spinner {
+    @apply absolute inset-0 flex items-center justify-center;
+}
+
+.btn-loading .btn-spinner svg {
+    @apply animate-spin h-4 w-4 text-current;
+}
+
+/* Toast Notifications */
+.toast-container {
+    @apply fixed top-4 right-4 z-50 space-y-2;
+}
+
+.toast {
+    @apply max-w-sm bg-accent border border-gray-200 rounded-lg shadow-lg p-4;
+    animation: slideInRight 0.3s ease-out;
+}
+
+.toast.success {
+    @apply border-green-200 bg-green-50;
+}
+
+.toast.error {
+    @apply border-red-200 bg-red-50;
+}
+
+.toast.warning {
+    @apply border-yellow-200 bg-yellow-50;
+}
+
+.toast.info {
+    @apply border-blue-200 bg-blue-50;
+}
+
+.toast.hiding {
+    animation: slideOutRight 0.3s ease-in forwards;
+}
+
+.toast .toast-header {
+    @apply flex items-center justify-between mb-2;
+}
+
+.toast .toast-title {
+    @apply font-semibold text-sm flex items-center;
+}
+
+.toast.success .toast-title {
+    @apply text-green-800;
+}
+
+.toast.error .toast-title {
+    @apply text-red-800;
+}
+
+.toast.warning .toast-title {
+    @apply text-yellow-800;
+}
+
+.toast.info .toast-title {
+    @apply text-blue-800;
+}
+
+.toast .toast-icon {
+    @apply mr-2;
+}
+
+.toast .toast-close {
+    @apply text-gray-400 hover:text-gray-600 cursor-pointer;
+}
+
+.toast .toast-message {
+    @apply text-sm text-gray-700;
+}
+
+.toast.success .toast-message {
+    @apply text-green-700;
+}
+
+.toast.error .toast-message {
+    @apply text-red-700;
+}
+
+.toast.warning .toast-message {
+    @apply text-yellow-700;
+}
+
+.toast.info .toast-message {
+    @apply text-blue-700;
+}
+
+/* Step Progress Indicators */
+.step-progress {
+    @apply flex items-center justify-between mb-6;
+}
+
+.step-progress .step-item {
+    @apply flex items-center;
+}
+
+.step-progress .step-item:not(:last-child)::after {
+    content: "";
+    @apply flex-1 h-0.5 bg-gray-200 mx-4;
+}
+
+.step-progress .step-item.completed::after {
+    @apply bg-green-500;
+}
+
+.step-progress .step-item.active::after {
+    @apply bg-blue-500;
+}
+
+.step-progress .step-circle {
+    @apply w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center text-sm font-medium bg-accent;
+}
+
+.step-progress .step-item.completed .step-circle {
+    @apply border-green-500 bg-green-500 text-accent;
+}
+
+.step-progress .step-item.active .step-circle {
+    @apply border-blue-500 bg-blue-500 text-accent;
+}
+
+.step-progress .step-label {
+    @apply ml-2 text-sm font-medium text-gray-600;
+}
+
+.step-progress .step-item.completed .step-label {
+    @apply text-green-600;
+}
+
+.step-progress .step-item.active .step-label {
+    @apply text-blue-600;
+}
+
+/* Inline Loading States */
+.inline-loading {
+    @apply inline-flex items-center;
+}
+
+.inline-loading .loading-dot {
+    @apply w-1 h-1 bg-gray-400 rounded-full mx-0.5;
+    animation: loadingDots 1.4s ease-in-out infinite both;
+}
+
+.inline-loading .loading-dot:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.inline-loading .loading-dot:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes loadingDots {
+    0%, 80%, 100% {
+        transform: scale(0);
+    }
+    40% {
+        transform: scale(1);
+    }
+}
+
+/* Fade animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .validation-error,
+    .field-valid,
+    .field-invalid,
+    .field-validating,
+    .error-summary-panel,
+    .loading-overlay,
+    .toast,
+    .progress-fill {
+        animation: none;
+    }
+    
+    .suggestion-button:hover {
+        @apply transform-none;
+    }
+    
+    .validation-spinner svg,
+    .loading-spinner svg,
+    .btn-spinner svg {
+        @apply animate-none;
+    }
+    
+    .validation-success svg,
+    .validation-error-icon svg {
+        animation: none;
+    }
+    
+    .skeleton {
+        @apply animate-none;
+    }
+}

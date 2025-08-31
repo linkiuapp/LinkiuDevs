@@ -3,17 +3,17 @@
 @section('title', 'Email Inbox')
 
 @section('content')
-<div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-    <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+<div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+    <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
         <h2 class="text-3xl text-black-500 mb-0">Email Inbox</h2>
     </div>
     <div class="p-6">
         <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
             <!-- Sidebar -->
             <div class="col-span-12 xl:col-span-4 2xl:col-span-3">
-                <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+                <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                     <div class="p-6">
-                        <button type="button" class="bg-primary-400 hover:bg-primary-500 text-white-50 text-sm px-3 py-3 w-full rounded-lg flex items-center gap-2 mb-4 transition-colors">
+                        <button type="button" class="bg-primary-400 hover:bg-primary-500 text-accent-50 text-sm px-3 py-3 w-full rounded-lg flex items-center gap-2 mb-4 transition-colors">
                             <x-solar-add-square-outline class="w-5 h-5" />
                             Redactar
                         </button>
@@ -123,13 +123,13 @@
 
             <!-- Main Content -->
             <div class="col-span-12 xl:col-span-8 2xl:col-span-9">
-                <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+                <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                     <!-- Header -->
-                    <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+                    <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                         <div class="flex flex-wrap items-center justify-between gap-4">
                             <div class="flex items-center gap-3">
                                 <div class="flex items-center">
-                                    <input type="checkbox" class="rounded border bg-white-50 text-primary-400 focus:ring-primary-400" id="selectAll">
+                                    <input type="checkbox" class="rounded border bg-accent-50 text-primary-400 focus:ring-primary-400" id="selectAll">
                                     <div class="ml-2">
                                         <button type="button" class="text-black-300 hover:text-black-500 transition-colors">
                                             <x-solar-alt-arrow-down-outline class="w-4 h-4" />
@@ -149,10 +149,10 @@
                             <div class="flex items-center gap-3">
                                 <span class="text-black-300">1-12 de 1,253</span>
                                 <div class="flex items-center gap-1">
-                                    <button class="p-2 text-black-300 hover:text-black-500 border border-white-200 rounded transition-colors">
+                                    <button class="p-2 text-black-300 hover:text-black-500 border border-accent-200 rounded transition-colors">
                                         <x-solar-arrow-left-outline class="w-4 h-4" />
                                     </button>
-                                    <button class="p-2 text-black-300 hover:text-black-500 border border-white-200 rounded transition-colors">
+                                    <button class="p-2 text-black-300 hover:text-black-500 border border-accent-200 rounded transition-colors">
                                         <x-solar-arrow-right-outline class="w-4 h-4" />
                                     </button>
                                 </div>
@@ -164,9 +164,9 @@
                     <div class="overflow-x-auto">
                         <ul class="min-w-max">
                             @for ($i = 0; $i < 12; $i++)
-                            <li class="px-6 py-4 flex gap-4 items-center border-b border-white-100 cursor-pointer hover:bg-white-100 transition-colors">
+                            <li class="px-6 py-4 flex gap-4 items-center border-b border-accent-100 cursor-pointer hover:bg-accent-100 transition-colors">
                                 <div class="flex items-center">
-                                    <input type="checkbox" class="rounded border bg-white-50 text-primary-400 focus:ring-primary-400">
+                                    <input type="checkbox" class="rounded border bg-accent-50 text-primary-400 focus:ring-primary-400">
                                 </div>
                                 <button type="button" class="text-warning-300 hover:text-warning-400 transition-colors">
                                     <x-solar-star-outline class="w-5 h-5" />

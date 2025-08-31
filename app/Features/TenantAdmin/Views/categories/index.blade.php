@@ -4,8 +4,8 @@
     @section('content')
     <div x-data="categoryManagement" class="space-y-4">
         <!-- Header con contador y botón crear -->
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-            <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+            <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                 <div class="flex items-center justify-between">
                     <div>
                         <h2 class="text-lg font-semibold text-black-500 mb-2">Categorías</h2>
@@ -31,19 +31,19 @@
             </div>
 
             <!-- Barra de herramientas -->
-            <div class="px-6 py-3 border-b border-white-100 bg-white-50">
+            <div class="px-6 py-3 border-b border-accent-100 bg-accent-50">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center gap-4">
                         <!-- Filtros rápidos -->
                         <select x-model="filterStatus" @change="applyFilters()" 
-                                class="px-3 py-1.5 border border-white-200 rounded-lg text-sm focus:outline-none">
+                                class="px-3 py-1.5 border border-accent-200 rounded-lg text-sm focus:outline-none">
                             <option value="">Todas</option>
                             <option value="active">Activas</option>
                             <option value="inactive">Inactivas</option>
                         </select>
                         
                         <select x-model="filterType" @change="applyFilters()" 
-                                class="px-3 py-1.5 border border-white-200 rounded-lg text-sm focus:outline-none">
+                                class="px-3 py-1.5 border border-accent-200 rounded-lg text-sm focus:outline-none">
                             <option value="">Todas las categorías</option>
                             <option value="main">Solo principales</option>
                             <option value="sub">Solo subcategorías</option>
@@ -66,7 +66,7 @@
 
             <!-- Paginación -->
             @if($categories->hasPages())
-                <div class="px-6 py-4 border-t border-white-100">
+                <div class="px-6 py-4 border-t border-accent-100">
                     {{ $categories->links() }}
                 </div>
             @endif
@@ -104,9 +104,9 @@
                      x-transition:leave="transition ease-in duration-200"
                      x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
                      x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                     class="inline-block align-bottom bg-white-50 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                     class="inline-block align-bottom bg-accent-50 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                     
-                    <div class="bg-white-50 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="bg-accent-50 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="sm:flex sm:items-start">
                             <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-error-50 sm:mx-0 sm:h-10 sm:w-10">
                                 <x-solar-trash-bin-trash-bold class="h-6 w-6 text-error-300" />
@@ -125,15 +125,15 @@
                         </div>
                     </div>
                     
-                    <div class="bg-white-100 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <div class="bg-accent-100 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                         <button type="button" 
                                 @click="confirmDelete()"
-                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-error-200 text-base font-medium text-white-50 hover:bg-error-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-error-200 sm:ml-3 sm:w-auto sm:text-sm">
+                                class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-error-200 text-base font-medium text-accent-50 hover:bg-error-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-error-200 sm:ml-3 sm:w-auto sm:text-sm">
                             Eliminar
                         </button>
                         <button type="button" 
                                 @click="closeDeleteModal()"
-                                class="mt-3 w-full inline-flex justify-center rounded-md border border-white-300 shadow-sm px-4 py-2 bg-white-50 text-base font-medium text-black-400 hover:bg-white-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-200 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                class="mt-3 w-full inline-flex justify-center rounded-md border border-accent-300 shadow-sm px-4 py-2 bg-accent-50 text-base font-medium text-black-400 hover:bg-accent-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-200 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                             Cancelar
                         </button>
                     </div>

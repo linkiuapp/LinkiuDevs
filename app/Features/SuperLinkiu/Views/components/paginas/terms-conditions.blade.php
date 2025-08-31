@@ -13,70 +13,70 @@
     <div class="card-body">
         <div class="flex flex-wrap items-center gap-2">
             <!-- Formato de texto -->
-            <div class="flex items-center bg-white-50 rounded-lg p-1 gap-2">
-                <button type="button" class="p-2 bg-white-300 rounded hover:bg-white-200 transition-colors" title="Negrita">
+            <div class="flex items-center bg-accent-50 rounded-lg p-1 gap-2">
+                <button type="button" class="p-2 bg-accent-300 rounded hover:bg-accent-200 transition-colors" title="Negrita">
                     <x-solar-text-bold-outline class="w-4 h-4 text-black-400" />
                 </button>
-                <button type="button" class="p-2 bg-white-300 rounded hover:bg-white-200 transition-colors" title="Cursiva">
+                <button type="button" class="p-2 bg-accent-300 rounded hover:bg-accent-200 transition-colors" title="Cursiva">
                     <x-solar-text-italic-outline class="w-4 h-4 text-black-400" />
                 </button>
-                <button type="button" class="p-2 bg-white-300 rounded hover:bg-white-200 transition-colors" title="Subrayado">
+                <button type="button" class="p-2 bg-accent-300 rounded hover:bg-accent-200 transition-colors" title="Subrayado">
                     <x-solar-text-underline-outline class="w-4 h-4 text-black-400" />
                 </button>
             </div>
 
             <!-- Encabezados -->
-            <div class="flex items-center bg-white-50 rounded-lg p-1 gap-2">
-                <button type="button" class="p-2 bg-white-300 rounded hover:bg-white-200 transition-colors" title="Encabezado 1">
+            <div class="flex items-center bg-accent-50 rounded-lg p-1 gap-2">
+                <button type="button" class="p-2 bg-accent-300 rounded hover:bg-accent-200 transition-colors" title="Encabezado 1">
                     <span class="text-sm font-bold text-black-400">H1</span>
                 </button>
-                <button type="button" class="p-2 bg-white-300 rounded hover:bg-white-200 transition-colors" title="Encabezado 2">
+                <button type="button" class="p-2 bg-accent-300 rounded hover:bg-accent-200 transition-colors" title="Encabezado 2">
                     <span class="text-sm font-bold text-black-400">H2</span>
                 </button>
-                <button type="button" class="p-2 bg-white-300 rounded hover:bg-white-200 transition-colors" title="Encabezado 3">
+                <button type="button" class="p-2 bg-accent-300 rounded hover:bg-accent-200 transition-colors" title="Encabezado 3">
                     <span class="text-sm font-bold text-black-400">H3</span>
                 </button>
             </div>
 
             <!-- Listas -->
-            <div class="flex items-center bg-white-50 rounded-lg p-1 gap-2">
-                <button type="button" class="p-2 bg-white-300 rounded hover:bg-white-200 transition-colors" title="Lista numerada">
+            <div class="flex items-center bg-accent-50 rounded-lg p-1 gap-2">
+                <button type="button" class="p-2 bg-accent-300 rounded hover:bg-accent-200 transition-colors" title="Lista numerada">
                     <x-solar-list-check-outline class="w-4 h-4 text-black-400" />
                 </button>
-                <button type="button" class="p-2 bg-white-300 rounded hover:bg-white-200 transition-colors" title="Lista con viñetas">
+                <button type="button" class="p-2 bg-accent-300 rounded hover:bg-accent-200 transition-colors" title="Lista con viñetas">
                     <x-solar-list-outline class="w-4 h-4 text-black-400" />
                 </button>
             </div>
 
             <!-- Alineación -->
-            <div class="flex items-center bg-white-50 rounded-lg p-1">
-                <button type="button" class="p-2 bg-white-300 rounded hover:bg-white-200 transition-colors" title="Alinear izquierda">
+            <div class="flex items-center bg-accent-50 rounded-lg p-1">
+                <button type="button" class="p-2 bg-accent-300 rounded hover:bg-accent-200 transition-colors" title="Alinear izquierda">
                     <x-solar-align-left-outline class="w-4 h-4 text-black-400" />
                 </button>
-                <button type="button" class="p-2 bg-white-300 rounded hover:bg-white-200 transition-colors" title="Alinear centro">
+                <button type="button" class="p-2 bg-accent-300 rounded hover:bg-accent-200 transition-colors" title="Alinear centro">
                     <x-solar-align-horizontal-center-outline class="w-4 h-4 text-black-400" />
                 </button>
-                <button type="button" class="p-2 bg-white-300 rounded hover:bg-white-200 transition-colors" title="Alinear derecha">
+                <button type="button" class="p-2 bg-accent-300 rounded hover:bg-accent-200 transition-colors" title="Alinear derecha">
                     <x-solar-align-right-outline class="w-4 h-4 text-black-400" />
                 </button>
             </div>
 
             <!-- Insertar -->
-            <div class="flex items-center bg-white-50 rounded-lg p-1">
-                <button type="button" class="p-2 bg-white-300 rounded hover:bg-white-200 transition-colors" title="Insertar enlace">
+            <div class="flex items-center bg-accent-50 rounded-lg p-1">
+                <button type="button" class="p-2 bg-accent-300 rounded hover:bg-accent-200 transition-colors" title="Insertar enlace">
                     <x-solar-link-outline class="w-4 h-4 text-black-400" />
                 </button>
-                <button type="button" class="p-2 bg-white-300 rounded hover:bg-white-200 transition-colors" title="Insertar imagen">
+                <button type="button" class="p-2 bg-accent-300 rounded hover:bg-accent-200 transition-colors" title="Insertar imagen">
                     <x-solar-gallery-outline class="w-4 h-4 text-black-400" />
                 </button>
             </div>
 
             <!-- Acciones -->
-            <div class="flex items-center bg-white-50 rounded-lg p-1">
-                <button type="button" class="p-2 bg-white-300 rounded hover:bg-white-200 transition-colors" title="Deshacer">
+            <div class="flex items-center bg-accent-50 rounded-lg p-1">
+                <button type="button" class="p-2 bg-accent-300 rounded hover:bg-accent-200 transition-colors" title="Deshacer">
                     <x-solar-undo-left-outline class="w-4 h-4 text-black-400" />
                 </button>
-                <button type="button" class="p-2 bg-white-300 rounded hover:bg-white-200 transition-colors" title="Rehacer">
+                <button type="button" class="p-2 bg-accent-300 rounded hover:bg-accent-200 transition-colors" title="Rehacer">
                     <x-solar-undo-right-outline class="w-4 h-4 text-black-400" />
                 </button>
             </div>
@@ -91,7 +91,7 @@
 
     <!-- Editor Content -->
     <div class="p-6">
-        <div class="min-h-[600px] bg-white-50 rounded-lg p-6 border border-white-100 focus-within:border-black-400 transition-colors">
+        <div class="min-h-[600px] bg-accent-50 rounded-lg p-6 border border-accent-100 focus-within:border-black-400 transition-colors">
             <!-- Contenido editable -->
             <div class="prose prose-lg max-w-none">
                 <h1 class="text-lg font-bold text-black-400 mb-6">Términos y Condiciones de Uso</h1>
@@ -164,7 +164,7 @@
     </div>
 
     <!-- Footer con botones -->
-    <div class="border-t border-white-100 bg-white-50 p-6">
+    <div class="border-t border-accent-100 bg-accent-50 p-6">
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
             <!-- Botón Cancelar -->
             <button type="button" 
@@ -175,14 +175,14 @@
 
             <!-- Botón Guardar -->
             <button type="button" 
-                    class="bg-primary-200 text-white-50 px-8 py-3 rounded-lg font-semibold hover:bg-primary-300 transition-colors duration-200 flex items-center space-x-2">
+                    class="bg-primary-200 text-accent-50 px-8 py-3 rounded-lg font-semibold hover:bg-primary-300 transition-colors duration-200 flex items-center space-x-2">
                 <x-solar-check-circle-outline class="w-5 h-5" />
                 <span>Guardar Cambios</span>
             </button>
         </div>
 
         <!-- Información adicional -->
-        <div class="mt-6 pt-4 border-t border-white-100">
+        <div class="mt-6 pt-4 border-t border-accent-100">
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div class="flex items-center space-x-2 text-sm text-black-400">
                     <x-solar-clock-circle-outline class="w-4 h-4" />

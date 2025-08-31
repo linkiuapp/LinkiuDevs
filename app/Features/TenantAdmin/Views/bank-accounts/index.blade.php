@@ -45,8 +45,8 @@
     {{-- INFORMACIÓN DE LÍMITES DEL PLAN --}}
     {{-- ================================================================ --}}
     
-    <div class="bg-white-50 rounded-lg shadow-sm mb-6">
-        <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+    <div class="bg-accent-50 rounded-lg shadow-sm mb-6">
+        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
             <h2 class="text-lg font-semibold text-black-400 mb-0">Límites del Plan</h2>
         </div>
         <div class="p-6">
@@ -60,7 +60,7 @@
                 </div>
             </div>
             <div class="mt-4">
-                <div class="w-full bg-white-100 rounded-full h-2.5">
+                <div class="w-full bg-accent-100 rounded-full h-2.5">
                     <div class="bg-primary-200 h-2.5 rounded-full" style="width: {{ ($currentCount / $maxAccounts) * 100 }}%"></div>
                 </div>
             </div>
@@ -71,8 +71,8 @@
     {{-- CONTENIDO PRINCIPAL - TABLA DE CUENTAS BANCARIAS --}}
     {{-- ================================================================ --}}
     
-    <div class="bg-white-50 rounded-lg shadow-sm mb-6 overflow-hidden">
-        <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+    <div class="bg-accent-50 rounded-lg shadow-sm mb-6 overflow-hidden">
+        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
             <h2 class="text-lg font-semibold text-black-400 mb-0">Listado de Cuentas Bancarias</h2>
         </div>
         
@@ -100,8 +100,8 @@
                 </div>
             @else
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-white-100">
-                        <thead class="bg-white-100">
+                    <table class="min-w-full divide-y divide-accent-100">
+                        <thead class="bg-accent-100">
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-black-300 uppercase tracking-wider">
                                     Cuenta Bancaria
@@ -120,7 +120,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white-50 divide-y divide-white-100">
+                        <tbody class="bg-accent-50 divide-y divide-accent-100">
                             @foreach($bankAccounts as $account)
                                 <tr>
                                     <td class="px-4 py-3 whitespace-nowrap">

@@ -27,7 +27,7 @@
                             @endif
                             
                             <!-- Imagen del slider -->
-                            <div class="w-[170px] h-[100px] bg-white-100 rounded-lg overflow-hidden relative">
+                            <div class="w-[170px] h-[100px] bg-accent-100 rounded-lg overflow-hidden relative">
                                 @if($slider->image_path)
                                     <img src="{{ Storage::disk('public')->url($slider->image_path) }}" 
                                          alt="{{ $slider->name }}" 
@@ -41,8 +41,8 @@
                                 
                                 <!-- Indicador de enlace -->
                                 @if($slider->url && $slider->url_type !== 'none')
-                                    <div class="absolute top-1 right-1 bg-white-50/20 backdrop-blur-sm rounded-full p-0.5 opacity-70 group-hover:opacity-100 transition-opacity">
-                                        <x-solar-arrow-right-outline class="w-2 h-2 text-white-50" />
+                                    <div class="absolute top-1 right-1 bg-accent-50/20 backdrop-blur-sm rounded-full p-0.5 opacity-70 group-hover:opacity-100 transition-opacity">
+                                        <x-solar-arrow-right-outline class="w-2 h-2 text-accent-50" />
                                     </div>
                                 @endif
                             </div>
@@ -74,7 +74,7 @@
                                 @endif
                                 
                                 <!-- Imagen del slider -->
-                                <div class="w-[170px] h-[100px] bg-white-100 rounded-lg overflow-hidden relative">
+                                <div class="w-[170px] h-[100px] bg-accent-100 rounded-lg overflow-hidden relative">
                                     @if($slider->image_path)
                                         <img src="{{ Storage::disk('public')->url($slider->image_path) }}" 
                                              alt="{{ $slider->name }}" 
@@ -88,8 +88,8 @@
                                     
                                     <!-- Indicador de enlace -->
                                     @if($slider->url && $slider->url_type !== 'none')
-                                        <div class="absolute top-1 right-1 bg-white-50/20 backdrop-blur-sm rounded-full p-0.5 opacity-70 group-hover:opacity-100 transition-opacity">
-                                            <x-solar-arrow-right-outline class="w-2 h-2 text-white-50" />
+                                        <div class="absolute top-1 right-1 bg-accent-50/20 backdrop-blur-sm rounded-full p-0.5 opacity-70 group-hover:opacity-100 transition-opacity">
+                                            <x-solar-arrow-right-outline class="w-2 h-2 text-accent-50" />
                                         </div>
                                     @endif
                                 </div>
@@ -111,7 +111,7 @@
                     @foreach($sliders as $index => $slider)
                         <button @click="goToSlide({{ $index }})"
                                 class="w-2 h-2 rounded-full transition-all duration-300"
-                                :class="currentSlide === {{ $index }} ? 'bg-primary-300 w-6' : 'bg-white-300 hover:bg-white-400'">
+                                :class="currentSlide === {{ $index }} ? 'bg-primary-300 w-6' : 'bg-accent-300 hover:bg-accent-400'">
                         </button>
                     @endforeach
                 </div>
@@ -126,14 +126,14 @@
         @if($topProducts->count() > 0)
             <div class="space-y-3">
                 @foreach($topProducts as $product)
-                                         <div class="bg-white-50 rounded-lg p-3 flex items-center gap-3 border border-white-200 hover:shadow-sm transition-shadow relative">
+                                         <div class="bg-accent-50 rounded-lg p-3 flex items-center gap-3 border border-accent-200 hover:shadow-sm transition-shadow relative">
                          <!-- Badge MÁS VENDIDO -->
-                         <div class="absolute -top-1 -left-1 bg-error-300 text-white-50 text-xs px-2 py-1 rounded-full font-bold z-10">
+                         <div class="absolute -top-1 -left-1 bg-error-300 text-accent-50 text-xs px-2 py-1 rounded-full font-bold z-10">
                              🔥 MÁS VENDIDO
                          </div>
                          
                          <!-- Imagen del producto -->
-                         <div class="w-16 h-16 bg-white-100 rounded-lg flex-shrink-0 overflow-hidden">
+                         <div class="w-16 h-16 bg-accent-100 rounded-lg flex-shrink-0 overflow-hidden">
                              @if($product->mainImage)
                                  <img src="{{ $product->main_image_url }}" 
                                       alt="{{ $product->name }}" 
@@ -155,7 +155,7 @@
                         </div>
                         
                         <!-- Botón agregar -->
-                        <button class="add-to-cart-btn bg-secondary-300 hover:bg-secondary-200 text-white-50 w-8 h-8 rounded-full flex items-center justify-center transition-colors flex-shrink-0" 
+                        <button class="add-to-cart-btn bg-secondary-300 hover:bg-secondary-200 text-accent-50 w-8 h-8 rounded-full flex items-center justify-center transition-colors flex-shrink-0" 
                                 data-product-id="{{ $product->id }}"
                                 data-product-name="{{ $product->name }}"
                                 data-product-price="{{ $product->price }}"
@@ -180,14 +180,14 @@
         @if($newProducts->count() > 0)
             <div class="space-y-3">
                 @foreach($newProducts as $product)
-                                         <div class="bg-white-50 rounded-lg p-3 flex items-center gap-3 border border-white-200 hover:shadow-sm transition-shadow relative">
+                                         <div class="bg-accent-50 rounded-lg p-3 flex items-center gap-3 border border-accent-200 hover:shadow-sm transition-shadow relative">
                          <!-- Badge NUEVO -->
-                         <div class="absolute -top-1 -left-1 bg-success-300 text-white-50 text-xs px-2 py-1 rounded-full font-bold z-10">
+                         <div class="absolute -top-1 -left-1 bg-success-300 text-accent-50 text-xs px-2 py-1 rounded-full font-bold z-10">
                              ✨ NUEVO
                          </div>
                          
                          <!-- Imagen del producto -->
-                         <div class="w-16 h-16 bg-white-100 rounded-lg flex-shrink-0 overflow-hidden">
+                         <div class="w-16 h-16 bg-accent-100 rounded-lg flex-shrink-0 overflow-hidden">
                              @if($product->mainImage)
                                  <img src="{{ $product->main_image_url }}" 
                                       alt="{{ $product->name }}" 
@@ -209,7 +209,7 @@
                         </div>
                         
                         <!-- Botón agregar -->
-                        <button class="add-to-cart-btn bg-secondary-300 hover:bg-secondary-200 text-white-50 w-8 h-8 rounded-full flex items-center justify-center transition-colors flex-shrink-0" 
+                        <button class="add-to-cart-btn bg-secondary-300 hover:bg-secondary-200 text-accent-50 w-8 h-8 rounded-full flex items-center justify-center transition-colors flex-shrink-0" 
                                 data-product-id="{{ $product->id }}"
                                 data-product-name="{{ $product->name }}"
                                 data-product-price="{{ $product->price }}"
@@ -235,10 +235,10 @@
             <div class="grid grid-cols-4 gap-4">
                 @foreach($categories as $category)
                     <a href="{{ route('tenant.category', ['store' => $store->slug, 'categorySlug' => $category->slug]) }}" 
-                       class="flex flex-col items-center p-3 bg-white-50 rounded-lg border border-white-200 hover:shadow-sm hover:border-primary-200 transition-all group">
+                       class="flex flex-col items-center p-3 bg-accent-50 rounded-lg border border-accent-200 hover:shadow-sm hover:border-primary-200 transition-all group">
                         
                                                  <!-- Icono de la categoría -->
-                         <div class="w-12 h-12 mb-2 flex items-center justify-center rounded-lg bg-white-100 group-hover:bg-primary-50 transition-colors">
+                         <div class="w-12 h-12 mb-2 flex items-center justify-center rounded-lg bg-accent-100 group-hover:bg-primary-50 transition-colors">
                              @if($category->icon && $category->icon->image_url)
                                  <img src="{{ $category->icon->image_url }}" 
                                       alt="{{ $category->name }}" 
@@ -260,7 +260,7 @@
                 <x-solar-gallery-outline class="w-12 h-12 mx-auto mb-3 text-black-200" />
                 <p class="text-sm">No hay categorías disponibles</p>
                 <a href="{{ route('tenant.categories', $store->slug) }}" 
-                   class="inline-flex items-center mt-3 px-4 py-2 bg-primary-300 text-white-50 rounded-lg text-sm hover:bg-primary-200 transition-colors">
+                   class="inline-flex items-center mt-3 px-4 py-2 bg-primary-300 text-accent-50 rounded-lg text-sm hover:bg-primary-200 transition-colors">
                     <x-solar-gallery-outline class="w-4 h-4 mr-2" />
                     Explorar
                 </a>

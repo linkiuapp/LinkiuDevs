@@ -12,10 +12,10 @@
      class="fixed top-4 right-4 z-50 max-w-sm">
     
     <div :class="{
-        'bg-success-200 text-white-50': notificationType === 'success',
-        'bg-error-200 text-white-50': notificationType === 'error',
+        'bg-success-200 text-accent-50': notificationType === 'success',
+        'bg-error-200 text-accent-50': notificationType === 'error',
         'bg-warning-200 text-black-400': notificationType === 'warning',
-        'bg-info-200 text-white-50': notificationType === 'info'
+        'bg-info-200 text-accent-50': notificationType === 'info'
     }" class="rounded-lg shadow-lg p-4 flex items-center gap-3">
         
         <template x-if="notificationType === 'success'">

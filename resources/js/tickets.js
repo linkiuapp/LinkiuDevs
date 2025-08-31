@@ -32,10 +32,10 @@ window.ticketsUtils = {
         
         // Colores según tipo
         const colors = {
-            success: 'bg-success-300 text-white-50',
-            error: 'bg-error-300 text-white-50',
+            success: 'bg-success-300 text-accent-50',
+            error: 'bg-error-300 text-accent-50',
             warning: 'bg-warning-300 text-black-500',
-            info: 'bg-info-300 text-white-50'
+            info: 'bg-info-300 text-accent-50'
         };
         
         notification.className += ` ${colors[type] || colors.info}`;
@@ -308,7 +308,7 @@ window.ticketHelpers = {
             modal.innerHTML = `
                 <div class="max-w-4xl max-h-4xl p-4">
                     <img src="${url}" class="max-w-full max-h-full object-contain rounded">
-                    <button class="absolute top-4 right-4 text-white text-2xl" onclick="this.parentElement.parentElement.remove()">
+                    <button class="absolute top-4 right-4 text-accent text-2xl" onclick="this.parentElement.parentElement.remove()">
                         ×
                     </button>
                 </div>

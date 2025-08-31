@@ -104,7 +104,7 @@ class ImageUploadManager {
     // Crear contenedor de imagen con botón de eliminar
     createImageContainer(src) {
         const imgContainer = document.createElement("div");
-        imgContainer.classList.add("relative", "h-[120px]", "w-[120px]", "border", "border-dashed", "border-white-200", "rounded-lg", "overflow-hidden", "bg-white-100");
+        imgContainer.classList.add("relative", "h-[120px]", "w-[120px]", "border", "border-dashed", "border-accent-200", "rounded-lg", "overflow-hidden", "bg-accent-100");
 
         const removeButton = document.createElement("button");
         removeButton.type = "button";
@@ -150,7 +150,7 @@ class ImageUploadManager {
     // Crear elemento de lista de archivo
     createFileListItem(file) {
         const li = document.createElement("li");
-        li.classList.add("flex", "items-center", "gap-2", "p-2", "bg-white-100", "rounded-lg", "body-small", "text-black-400");
+        li.classList.add("flex", "items-center", "gap-2", "p-2", "bg-accent-100", "rounded-lg", "body-small", "text-black-400");
 
         const linkIcon = document.createElement("div");
         linkIcon.innerHTML = createSVGIcon('link', 'small');
@@ -289,7 +289,7 @@ class ImageUploadManager {
     handleDragDropFiles(files, container) {
         Array.from(files).forEach(file => {
             const fileDiv = document.createElement("div");
-            fileDiv.classList.add("flex", "items-center", "gap-3", "p-3", "bg-white-100", "rounded-lg", "body-small", "text-black-400");
+            fileDiv.classList.add("flex", "items-center", "gap-3", "p-3", "bg-accent-100", "rounded-lg", "body-small", "text-black-400");
 
             const fileIcon = document.createElement("div");
             fileIcon.innerHTML = createSVGIcon('file', 'small');
@@ -342,7 +342,7 @@ class ImageUploadManager {
 
         Array.from(files).forEach(file => {
             const fileDiv = document.createElement("div");
-            fileDiv.classList.add("flex", "items-center", "gap-3", "p-2", "bg-white-100", "rounded-lg", "body-small", "text-black-400");
+            fileDiv.classList.add("flex", "items-center", "gap-3", "p-2", "bg-accent-100", "rounded-lg", "body-small", "text-black-400");
 
             const fileIcon = document.createElement("div");
             fileIcon.innerHTML = createSVGIcon('file');
@@ -394,7 +394,7 @@ class ImageUploadManager {
 
     createProgressItem(file) {
         const progressDiv = document.createElement("div");
-        progressDiv.classList.add("p-4", "bg-white-100", "rounded-lg");
+        progressDiv.classList.add("p-4", "bg-accent-100", "rounded-lg");
 
         const fileInfo = document.createElement("div");
         fileInfo.classList.add("flex", "items-center", "justify-between", "mb-2");
@@ -408,7 +408,7 @@ class ImageUploadManager {
         fileSize.classList.add("body-small", "text-black-300");
 
         const progressBar = document.createElement("div");
-        progressBar.classList.add("w-full", "bg-white-200", "rounded-full", "h-2");
+        progressBar.classList.add("w-full", "bg-accent-200", "rounded-full", "h-2");
 
         const progressFill = document.createElement("div");
         progressFill.classList.add("bg-primary-400", "h-2", "rounded-full", "transition-all", "duration-300");

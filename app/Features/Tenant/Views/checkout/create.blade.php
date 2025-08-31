@@ -18,13 +18,13 @@
         <!-- Main Checkout Layout - Single Column -->
         <div class="max-w-2xl mx-auto">
             <!-- Checkout Form -->
-            <div class="bg-white-50 rounded-xl p-6 border border-white-200">
+            <div class="bg-accent-50 rounded-xl p-6 border border-accent-200">
                 <div class="space-y-6">
             
             <!-- CARD 1: DATOS PERSONALES -->
-            <div id="card-step1" class="bg-white-50 rounded-xl p-6 border border-white-200 shadow-sm">
+            <div id="card-step1" class="bg-accent-50 rounded-xl p-6 border border-accent-200 shadow-sm">
                 <div class="flex items-center mb-4">
-                    <div class="w-8 h-8 bg-primary-300 text-white-50 rounded-full flex items-center justify-center text-sm font-bold mr-3">1</div>
+                    <div class="w-8 h-8 bg-primary-300 text-accent-50 rounded-full flex items-center justify-center text-sm font-bold mr-3">1</div>
                     <h3 class="text-lg font-semibold text-black-500">Datos Personales</h3>
                 </div>
                 
@@ -35,7 +35,7 @@
                             type="text" 
                             id="customer_name" 
                             name="customer_name" 
-                            class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-colors"
+                            class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-colors"
                             placeholder="Tu nombre completo"
                         >
                         <div id="name_error" class="hidden mt-1 text-sm text-error-300"></div>
@@ -47,7 +47,7 @@
                             type="tel" 
                             id="customer_phone" 
                             name="customer_phone" 
-                            class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-colors"
+                            class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-colors"
                             placeholder="3001234567"
                         >
                         <div id="phone_error" class="hidden mt-1 text-sm text-error-300"></div>
@@ -57,7 +57,7 @@
                 <button 
                     type="button" 
                     id="btn-continue-step1" 
-                    class="w-full bg-primary-300 hover:bg-primary-200 text-white-50 py-2 px-4 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                    class="w-full bg-primary-300 hover:bg-primary-200 text-accent-50 py-2 px-4 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                     disabled
                 >
                     Continuar al Paso 2
@@ -65,9 +65,9 @@
             </div>
 
             <!-- CARD 2: MÉTODO DE ENVÍO -->
-            <div id="card-step2" class="bg-white-50 rounded-xl p-6 border border-white-200 shadow-sm hidden">
+            <div id="card-step2" class="bg-accent-50 rounded-xl p-6 border border-accent-200 shadow-sm hidden">
                 <div class="flex items-center mb-4">
-                    <div class="w-8 h-8 bg-primary-300 text-white-50 rounded-full flex items-center justify-center text-sm font-bold mr-3">2</div>
+                    <div class="w-8 h-8 bg-primary-300 text-accent-50 rounded-full flex items-center justify-center text-sm font-bold mr-3">2</div>
                     <h3 class="text-lg font-semibold text-black-500">Método de Envío</h3>
                 </div>
                 
@@ -87,7 +87,7 @@
                             <select 
                                 id="department" 
                                 name="department" 
-                                class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-colors"
+                                class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-colors"
                             >
                                 <option value="">Selecciona tu departamento</option>
                                 @foreach(['Amazonas', 'Antioquia', 'Arauca', 'Atlántico', 'Bolívar', 'Boyacá', 'Caldas', 'Caquetá', 'Casanare', 'Cauca', 'Cesar', 'Chocó', 'Córdoba', 'Cundinamarca', 'Guainía', 'Guaviare', 'Huila', 'La Guajira', 'Magdalena', 'Meta', 'Nariño', 'Norte de Santander', 'Putumayo', 'Quindío', 'Risaralda', 'San Andrés y Providencia', 'Santander', 'Sucre', 'Tolima', 'Valle del Cauca', 'Vaupés', 'Vichada'] as $dept)
@@ -102,7 +102,7 @@
                                 type="text" 
                                 id="city" 
                                 name="city" 
-                                class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-colors"
+                                class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-colors"
                                 placeholder="Escribe tu ciudad"
                             >
                         </div>
@@ -114,7 +114,7 @@
                             id="customer_address" 
                             name="customer_address" 
                             rows="2"
-                            class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-colors resize-none"
+                            class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-colors resize-none"
                             placeholder="Calle, carrera, número, apartamento, referencias..."
                         ></textarea>
                     </div>
@@ -124,14 +124,14 @@
                     <button 
                         type="button" 
                         id="btn-back-step2" 
-                        class="px-4 py-2 bg-white-100 hover:bg-white-200 text-black-400 rounded-lg font-medium transition-colors border border-white-200 text-sm"
+                        class="px-4 py-2 bg-accent-100 hover:bg-accent-200 text-black-400 rounded-lg font-medium transition-colors border border-accent-200 text-sm"
                     >
                         Volver
                     </button>
                     <button 
                         type="button" 
                         id="btn-continue-step2" 
-                        class="flex-1 bg-primary-300 hover:bg-primary-200 text-white-50 py-2 px-4 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                        class="flex-1 bg-primary-300 hover:bg-primary-200 text-accent-50 py-2 px-4 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                         disabled
                     >
                         Continuar al Paso 3
@@ -140,9 +140,9 @@
             </div>
 
             <!-- CARD 3: MÉTODO DE PAGO -->
-            <div id="card-step3" class="bg-white-50 rounded-xl p-6 border border-white-200 shadow-sm hidden">
+            <div id="card-step3" class="bg-accent-50 rounded-xl p-6 border border-accent-200 shadow-sm hidden">
                 <div class="flex items-center mb-4">
-                    <div class="w-8 h-8 bg-primary-300 text-white-50 rounded-full flex items-center justify-center text-sm font-bold mr-3">3</div>
+                    <div class="w-8 h-8 bg-primary-300 text-accent-50 rounded-full flex items-center justify-center text-sm font-bold mr-3">3</div>
                     <h3 class="text-lg font-semibold text-black-500">Método de Pago</h3>
                 </div>
                 
@@ -158,14 +158,14 @@
                     <button 
                         type="button" 
                         id="btn-back-step3" 
-                        class="px-4 py-2 bg-white-100 hover:bg-white-200 text-black-400 rounded-lg font-medium transition-colors border border-white-200 text-sm"
+                        class="px-4 py-2 bg-accent-100 hover:bg-accent-200 text-black-400 rounded-lg font-medium transition-colors border border-accent-200 text-sm"
                     >
                         Volver
                     </button>
                     <button 
                         type="button" 
                         id="btn-submit-order" 
-                        class="flex-1 bg-success-300 hover:bg-success-200 text-white-50 py-2 px-4 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                        class="flex-1 bg-success-300 hover:bg-success-200 text-accent-50 py-2 px-4 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                         disabled
                     >
                         Finalizar Pedido
@@ -174,7 +174,7 @@
             </div>
             
             <!-- Resumen integrado al final -->
-            <div class="border-t border-white-200 pt-6 mt-6">
+            <div class="border-t border-accent-200 pt-6 mt-6">
                 <h3 class="text-lg font-semibold text-black-500 mb-4">Resumen del Pedido</h3>
                 
                 <!-- Products List -->
@@ -186,7 +186,7 @@
                 </div>
                 
                 <!-- Coupon Section -->
-                <div class="border-t border-white-200 pt-4 mb-4">
+                <div class="border-t border-accent-200 pt-4 mb-4">
                     <div class="flex items-center gap-2 mb-3">
                         <span class="text-lg">🎟️</span>
                         <h4 class="text-sm font-medium text-black-500">Cupón de Descuento</h4>
@@ -197,14 +197,14 @@
                             type="text" 
                             id="coupon_code" 
                             name="coupon_code" 
-                            class="flex-1 px-3 py-2 border border-white-200 rounded-lg focus:ring-1 focus:ring-primary-300 focus:border-transparent transition-colors text-sm"
+                            class="flex-1 px-3 py-2 border border-accent-200 rounded-lg focus:ring-1 focus:ring-primary-300 focus:border-transparent transition-colors text-sm"
                             placeholder="Código de cupón"
                             maxlength="50"
                         >
                         <button 
                             type="button" 
                             id="apply-coupon-btn" 
-                            class="px-4 py-2 bg-primary-300 hover:bg-primary-200 text-white-50 rounded-lg text-sm font-medium transition-colors"
+                            class="px-4 py-2 bg-primary-300 hover:bg-primary-200 text-accent-50 rounded-lg text-sm font-medium transition-colors"
                         >
                             Aplicar
                         </button>
@@ -214,7 +214,7 @@
                 </div>
                 
                 <!-- Totals -->
-                <div class="border-t border-white-200 pt-4 space-y-3">
+                <div class="border-t border-accent-200 pt-4 space-y-3">
                     <!-- Subtotal productos -->
                     <div class="flex justify-between items-center">
                         <span class="text-sm text-black-400">Subtotal productos:</span>
@@ -234,7 +234,7 @@
                     </div>
                     
                     <!-- Línea separadora -->
-                    <div class="border-t border-white-200 pt-3">
+                    <div class="border-t border-accent-200 pt-3">
                         <div class="flex justify-between items-center">
                             <span class="text-lg font-semibold text-black-500">Total a pagar:</span>
                             <span class="text-lg font-bold text-primary-300" id="summary-total">$0</span>
@@ -242,7 +242,7 @@
                     </div>
                     
                     <!-- Desglose productos -->
-                    <div id="product-breakdown" class="hidden border-t border-white-200 pt-3">
+                    <div id="product-breakdown" class="hidden border-t border-accent-200 pt-3">
                         <div class="text-xs text-black-300 mb-2">
                             <span class="font-medium">Cantidad total de productos:</span>
                             <span id="total-quantity">0</span>
@@ -576,7 +576,7 @@ function displayOrderProducts(items) {
         totalQuantity += quantity;
         
         html += `
-            <div class="flex items-center gap-3 py-2 border-b border-white-200 last:border-b-0">
+            <div class="flex items-center gap-3 py-2 border-b border-accent-200 last:border-b-0">
                 <img src="${item.product.image_url || '{{ asset("assets/images/placeholder-product.svg") }}'}" 
                      alt="${item.product.name}" 
                      class="w-12 h-12 object-cover rounded-lg">
@@ -753,7 +753,7 @@ function renderShippingMethods() {
     shippingMethods.forEach(method => {
         if (method.type === 'pickup') {
             html += `
-                <div class="border border-white-200 rounded-lg p-4 hover:border-primary-300 transition-colors">
+                <div class="border border-accent-200 rounded-lg p-4 hover:border-primary-300 transition-colors">
                     <label class="flex items-center cursor-pointer">
                         <input 
                             type="radio" 
@@ -784,7 +784,7 @@ function renderShippingMethods() {
                 'Zonas disponibles';
                 
             html += `
-                <div class="border border-white-200 rounded-lg p-4 hover:border-primary-300 transition-colors">
+                <div class="border border-accent-200 rounded-lg p-4 hover:border-primary-300 transition-colors">
                     <label class="flex items-center cursor-pointer">
                         <input 
                             type="radio" 
@@ -860,7 +860,7 @@ function renderPaymentMethods() {
     paymentMethods.forEach(method => {
         if (method.type === 'cash') {
             html += `
-                <div class="border border-white-200 rounded-lg p-4 hover:border-primary-300 transition-colors">
+                <div class="border border-accent-200 rounded-lg p-4 hover:border-primary-300 transition-colors">
                     <label class="flex items-center cursor-pointer">
                         <input 
                             type="radio" 
@@ -880,7 +880,7 @@ function renderPaymentMethods() {
                     
                     <!-- Efectivo Fields -->
                     <div id="cash-fields-${method.id}" class="hidden mt-4 pl-16">
-                        <div class="bg-white-100 border border-white-200 rounded-lg p-4">
+                        <div class="bg-accent-100 border border-accent-200 rounded-lg p-4">
                             <label for="cash_amount" class="block text-sm font-medium text-black-500 mb-2">
                                 ¿Con cuánto vas a pagar? *
                             </label>
@@ -888,7 +888,7 @@ function renderPaymentMethods() {
                                 type="number" 
                                 id="cash_amount" 
                                 name="cash_amount" 
-                                class="w-full px-3 py-2 border border-white-200 rounded-lg focus:ring-1 focus:ring-primary-300 focus:border-transparent transition-colors text-sm"
+                                class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:ring-1 focus:ring-primary-300 focus:border-transparent transition-colors text-sm"
                                 placeholder="Ejemplo: 50000"
                                 min="0"
                             >
@@ -906,7 +906,7 @@ function renderPaymentMethods() {
             const accounts = method.bank_accounts || [];
             
             html += `
-                <div class="border border-white-200 rounded-lg p-4 hover:border-primary-300 transition-colors">
+                <div class="border border-accent-200 rounded-lg p-4 hover:border-primary-300 transition-colors">
                     <label class="flex items-center cursor-pointer">
                         <input 
                             type="radio" 
@@ -934,7 +934,7 @@ function renderPaymentMethods() {
                                 </h4>
                                 <div class="space-y-3">
                                     <!-- Tipo de Cuenta -->
-                                    <div class="bg-white-50 rounded-lg p-3 border border-white-200">
+                                    <div class="bg-accent-50 rounded-lg p-3 border border-accent-200">
                                         <div class="flex justify-between items-center">
                                             <span class="text-xs text-black-400 font-medium">Tipo de Cuenta:</span>
                                             <span class="text-sm font-bold text-black-500 bg-primary-100 px-2 py-1 rounded-full">${account.account_type || 'Cuenta Corriente'}</span>
@@ -942,7 +942,7 @@ function renderPaymentMethods() {
                                     </div>
                                     
                                     <!-- Número de Cuenta -->
-                                    <div class="bg-white-50 rounded-lg p-3 border border-white-200">
+                                    <div class="bg-accent-50 rounded-lg p-3 border border-accent-200">
                                         <div class="flex justify-between items-center">
                                             <span class="text-xs text-black-400 font-medium">Número de Cuenta:</span>
                                             <div class="flex items-center gap-2">
@@ -955,7 +955,7 @@ function renderPaymentMethods() {
                                     </div>
                                     
                                     <!-- Titular -->
-                                    <div class="bg-white-50 rounded-lg p-3 border border-white-200">
+                                    <div class="bg-accent-50 rounded-lg p-3 border border-accent-200">
                                         <div class="flex justify-between items-center">
                                             <span class="text-xs text-black-400 font-medium">Titular:</span>
                                             <span class="text-sm font-bold text-black-500">${account.account_holder}</span>
@@ -964,7 +964,7 @@ function renderPaymentMethods() {
                                     
                                     ${account.document_number ? `
                                         <!-- Documento -->
-                                        <div class="bg-white-50 rounded-lg p-3 border border-white-200">
+                                        <div class="bg-accent-50 rounded-lg p-3 border border-accent-200">
                                             <div class="flex justify-between items-center">
                                                 <span class="text-xs text-black-400 font-medium">Documento:</span>
                                                 <div class="flex items-center gap-2">
@@ -980,7 +980,7 @@ function renderPaymentMethods() {
                             </div>
                         `).join('')}
                         
-                        <div class="bg-white-100 border border-white-200 rounded-lg p-4">
+                        <div class="bg-accent-100 border border-accent-200 rounded-lg p-4">
                             <label for="payment_proof" class="block text-sm font-medium text-black-500 mb-2">
                                 Comprobante de Pago ${method.require_proof ? '*' : '(Opcional)'}
                             </label>
@@ -990,7 +990,7 @@ function renderPaymentMethods() {
                                 name="payment_proof" 
                                 accept=".jpg,.jpeg,.png,.pdf"
                                 ${method.require_proof ? 'required' : ''}
-                                class="w-full px-3 py-2 border border-white-200 rounded-lg focus:ring-1 focus:ring-primary-300 focus:border-transparent transition-colors text-sm"
+                                class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:ring-1 focus:ring-primary-300 focus:border-transparent transition-colors text-sm"
                             >
                             <p class="text-xs text-black-300 mt-1">
                                 ${method.require_proof ? 

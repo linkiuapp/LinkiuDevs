@@ -30,8 +30,8 @@
                 {{-- Columna principal (formulario) --}}
                 <div class="lg:col-span-2">
                     {{-- Información básica --}}
-                    <div class="bg-white-50 rounded-lg p-0 overflow-hidden mb-6">
-                        <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+                    <div class="bg-accent-50 rounded-lg p-0 overflow-hidden mb-6">
+                        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                             <h3 class="text-lg font-semibold text-black-500">Información Básica</h3>
                         </div>
                         <div class="p-6 space-y-4">
@@ -82,8 +82,8 @@
                     </div>
 
                     {{-- Configuración de descuento --}}
-                    <div class="bg-white-50 rounded-lg p-0 overflow-hidden mb-6">
-                        <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+                    <div class="bg-accent-50 rounded-lg p-0 overflow-hidden mb-6">
+                        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                             <h3 class="text-lg font-semibold text-black-500">Configuración de Descuento</h3>
                         </div>
                         <div class="p-6 space-y-4">
@@ -181,8 +181,8 @@
                     </div>
 
                     {{-- Aplicabilidad --}}
-                    <div class="bg-white-50 rounded-lg p-0 overflow-hidden mb-6" x-show="formData.type !== 'global'">
-                        <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+                    <div class="bg-accent-50 rounded-lg p-0 overflow-hidden mb-6" x-show="formData.type !== 'global'">
+                        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                             <h3 class="text-lg font-semibold text-black-500">
                                 <span x-text="formData.type === 'categories' ? 'Categorías Aplicables' : 'Productos Aplicables'"></span>
                             </h3>
@@ -193,9 +193,9 @@
                                 <p class="text-sm text-black-300 mb-3">Selecciona las categorías donde se puede aplicar este cupón:</p>
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                     @foreach($categories as $category)
-                                        <label class="flex items-center p-3 border border-white-200 rounded-lg hover:bg-white-100 cursor-pointer">
+                                        <label class="flex items-center p-3 border border-accent-200 rounded-lg hover:bg-accent-100 cursor-pointer">
                                             <input type="checkbox" name="categories[]" value="{{ $category->id }}" 
-                                                   class="rounded border-white-300 text-primary-200 focus:ring-primary-100"
+                                                   class="rounded border-accent-300 text-primary-200 focus:ring-primary-100"
                                                    {{ is_array(old('categories')) && in_array($category->id, old('categories')) ? 'checked' : '' }}>
                                             <span class="ml-3 text-sm text-black-400">{{ $category->name }}</span>
                                         </label>
@@ -209,11 +209,11 @@
                             <!-- Productos -->
                             <div x-show="formData.type === 'products'">
                                 <p class="text-sm text-black-300 mb-3">Selecciona los productos donde se puede aplicar este cupón:</p>
-                                <div class="max-h-64 overflow-y-auto border border-white-200 rounded-lg">
+                                <div class="max-h-64 overflow-y-auto border border-accent-200 rounded-lg">
                                     @foreach($products as $product)
-                                        <label class="flex items-center p-3 border-b border-white-100 last:border-b-0 hover:bg-white-50 cursor-pointer">
+                                        <label class="flex items-center p-3 border-b border-accent-100 last:border-b-0 hover:bg-accent-50 cursor-pointer">
                                             <input type="checkbox" name="products[]" value="{{ $product->id }}" 
-                                                   class="rounded border-white-300 text-primary-200 focus:ring-primary-100"
+                                                   class="rounded border-accent-300 text-primary-200 focus:ring-primary-100"
                                                    {{ is_array(old('products')) && in_array($product->id, old('products')) ? 'checked' : '' }}>
                                             <div class="ml-3">
                                                 <span class="text-sm text-black-400">{{ $product->name }}</span>
@@ -230,8 +230,8 @@
                     </div>
 
                     {{-- Configuración avanzada --}}
-                    <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                        <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+                    <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                             <h3 class="text-lg font-semibold text-black-500">Configuración Avanzada</h3>
                         </div>
                         <div class="p-6 space-y-6">
@@ -292,7 +292,7 @@
                             </div>
 
                             {{-- Restricciones horarias --}}
-                            <div class="border-t border-white-100 pt-6" x-data="{ showTimeRestrictions: false }">
+                            <div class="border-t border-accent-100 pt-6" x-data="{ showTimeRestrictions: false }">
                                 <div class="flex items-center justify-between mb-4">
                                     <h4 class="text-base font-semibold text-black-400">Restricciones Horarias</h4>
                                     <button type="button" @click="showTimeRestrictions = !showTimeRestrictions"
@@ -313,9 +313,9 @@
                                                 $days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
                                             @endphp
                                             @foreach($days as $index => $day)
-                                                <label class="flex items-center p-2 border border-white-200 rounded cursor-pointer hover:bg-white-100">
+                                                <label class="flex items-center p-2 border border-accent-200 rounded cursor-pointer hover:bg-accent-100">
                                                     <input type="checkbox" name="days_of_week[]" value="{{ $index }}" 
-                                                           class="rounded border-white-300 text-primary-200 focus:ring-primary-100"
+                                                           class="rounded border-accent-300 text-primary-200 focus:ring-primary-100"
                                                            {{ is_array(old('days_of_week')) && in_array($index, old('days_of_week')) ? 'checked' : '' }}>
                                                     <span class="ml-2 text-sm text-black-400">{{ $day }}</span>
                                                 </label>
@@ -356,15 +356,15 @@
                 {{-- Sidebar derecho --}}
                 <div class="lg:col-span-1">
                     {{-- Configuración general --}}
-                    <div class="bg-white-50 rounded-lg p-0 overflow-hidden mb-6">
-                        <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+                    <div class="bg-accent-50 rounded-lg p-0 overflow-hidden mb-6">
+                        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                             <h3 class="text-lg font-semibold text-black-500">Configuración</h3>
                         </div>
                         <div class="p-6 space-y-4">
                             <!-- Estado inicial -->
                             <div>
                                 <label class="flex items-center cursor-pointer">
-                                    <input type="checkbox" name="is_active" value="1" class="rounded border-white-300 text-primary-200 focus:ring-primary-100"
+                                    <input type="checkbox" name="is_active" value="1" class="rounded border-accent-300 text-primary-200 focus:ring-primary-100"
                                            {{ old('is_active', false) ? 'checked' : '' }}>
                                     <div class="ml-3">
                                         <span class="text-sm font-medium text-black-400">Activar cupón</span>
@@ -376,7 +376,7 @@
                             <!-- Visibilidad pública -->
                             <div>
                                 <label class="flex items-center cursor-pointer">
-                                    <input type="checkbox" name="is_public" value="1" class="rounded border-white-300 text-primary-200 focus:ring-primary-100"
+                                    <input type="checkbox" name="is_public" value="1" class="rounded border-accent-300 text-primary-200 focus:ring-primary-100"
                                            {{ old('is_public', false) ? 'checked' : '' }}>
                                     <div class="ml-3">
                                         <span class="text-sm font-medium text-black-400">Cupón público</span>
@@ -388,7 +388,7 @@
                             <!-- Aplicación automática -->
                             <div>
                                 <label class="flex items-center cursor-pointer">
-                                    <input type="checkbox" name="is_automatic" value="1" class="rounded border-white-300 text-primary-200 focus:ring-primary-100"
+                                    <input type="checkbox" name="is_automatic" value="1" class="rounded border-accent-300 text-primary-200 focus:ring-primary-100"
                                            {{ old('is_automatic', false) ? 'checked' : '' }}>
                                     <div class="ml-3">
                                         <span class="text-sm font-medium text-black-400">Aplicación automática</span>
@@ -400,12 +400,12 @@
                     </div>
 
                     {{-- Vista previa --}}
-                    <div class="bg-white-50 rounded-lg p-0 overflow-hidden mb-6">
-                        <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+                    <div class="bg-accent-50 rounded-lg p-0 overflow-hidden mb-6">
+                        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                             <h3 class="text-lg font-semibold text-black-500">Vista Previa</h3>
                         </div>
                         <div class="p-6">
-                            <div class="border border-white-200 rounded-lg p-4 bg-white-100">
+                            <div class="border border-accent-200 rounded-lg p-4 bg-accent-100">
                                 <div class="flex items-center justify-between mb-2">
                                     <span class="font-medium text-black-400" x-text="formData.name || 'Nombre del cupón'"></span>
                                     <span class="text-xs bg-primary-50 text-primary-200 px-2 py-1 rounded-full">
@@ -414,7 +414,7 @@
                                 </div>
                                 
                                 <div class="text-sm text-black-300 mb-2">
-                                    <span class="font-mono bg-white-200 px-2 py-1 rounded text-xs" x-text="formData.code || 'CÓDIGO-AUTO'"></span>
+                                    <span class="font-mono bg-accent-200 px-2 py-1 rounded text-xs" x-text="formData.code || 'CÓDIGO-AUTO'"></span>
                                 </div>
                                 
                                 <div class="text-lg font-bold text-secondary-200">

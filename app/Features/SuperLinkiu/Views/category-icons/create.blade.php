@@ -6,7 +6,7 @@
     <!-- Header Section -->
     <div class="flex items-center gap-4">
         <a href="{{ route('superlinkiu.category-icons.index') }}" 
-           class="p-2 text-black-300 hover:text-black-400 hover:bg-white-100 rounded-lg transition-colors">
+           class="p-2 text-black-300 hover:text-black-400 hover:bg-accent-100 rounded-lg transition-colors">
             <x-solar-arrow-left-outline class="w-5 h-5" />
         </a>
         <div>
@@ -21,9 +21,9 @@
             @csrf
 
             <!-- Main Content Card -->
-            <div class="bg-white-50 rounded-xl shadow-sm border border-white-100 overflow-hidden">
+            <div class="bg-accent-50 rounded-xl shadow-sm border border-accent-100 overflow-hidden">
                 <!-- Card Header -->
-                <div class="px-6 py-4 border-b border-white-100 bg-gradient-to-r from-white-50 to-white-100">
+                <div class="px-6 py-4 border-b border-accent-100 bg-gradient-to-r from-accent-50 to-accent-100">
                     <h2 class="text-xl font-semibold text-black-500">Información del Icono</h2>
                 </div>
 
@@ -38,11 +38,11 @@
                                     Archivo del Icono <span class="text-error-400">*</span>
                                 </label>
                                 
-                                <div class="relative border-2 border-dashed border-white-300 rounded-xl p-8 text-center hover:border-primary-200 hover:bg-primary-50 transition-all duration-200">
+                                <div class="relative border-2 border-dashed border-accent-300 rounded-xl p-8 text-center hover:border-primary-200 hover:bg-primary-50 transition-all duration-200">
                                     
                                     <!-- Default Upload State -->
                                     <div id="upload-area" class="space-y-4">
-                                        <div class="w-16 h-16 mx-auto bg-white-200 rounded-xl flex items-center justify-center">
+                                        <div class="w-16 h-16 mx-auto bg-accent-200 rounded-xl flex items-center justify-center">
                                             <x-solar-gallery-add-outline class="w-8 h-8 text-black-300" />
                                         </div>
                                         <div>
@@ -59,12 +59,12 @@
                                     <!-- Preview State (hidden initially) -->
                                     <div id="preview-area" class="space-y-4 hidden">
                                         <div class="relative">
-                                            <div class="w-32 h-32 mx-auto bg-white-100 rounded-xl p-4 flex items-center justify-center shadow-inner">
+                                            <div class="w-32 h-32 mx-auto bg-accent-100 rounded-xl p-4 flex items-center justify-center shadow-inner">
                                                 <img id="preview-image" class="max-w-full max-h-full object-contain" alt="Preview">
                                             </div>
                                             <button type="button" 
                                                     onclick="clearPreview()"
-                                                    class="absolute -top-2 -right-2 w-8 h-8 bg-error-400 text-white-50 rounded-full hover:bg-error-300 transition-colors flex items-center justify-center">
+                                                    class="absolute -top-2 -right-2 w-8 h-8 bg-error-400 text-accent-50 rounded-full hover:bg-error-300 transition-colors flex items-center justify-center">
                                                 <x-solar-close-circle-outline class="w-4 h-4" />
                                             </button>
                                         </div>
@@ -96,11 +96,11 @@
                                     Vista Previa en Diferentes Tamaños
                                 </label>
                                 
-                                <div class="bg-white-100 rounded-xl p-6 space-y-6">
+                                <div class="bg-accent-100 rounded-xl p-6 space-y-6">
                                     <div class="grid grid-cols-1 gap-4">
                                         <!-- Small -->
-                                        <div class="flex items-center gap-4 p-3 bg-white-50 rounded-lg">
-                                            <div class="w-8 h-8 bg-white-200 rounded-lg p-1 flex items-center justify-center">
+                                        <div class="flex items-center gap-4 p-3 bg-accent-50 rounded-lg">
+                                            <div class="w-8 h-8 bg-accent-200 rounded-lg p-1 flex items-center justify-center">
                                                 <img class="preview-small w-full h-full object-contain" alt="Pequeño">
                                             </div>
                                             <div>
@@ -110,8 +110,8 @@
                                         </div>
                                         
                                         <!-- Medium -->
-                                        <div class="flex items-center gap-4 p-3 bg-white-50 rounded-lg">
-                                            <div class="w-12 h-12 bg-white-200 rounded-lg p-2 flex items-center justify-center">
+                                        <div class="flex items-center gap-4 p-3 bg-accent-50 rounded-lg">
+                                            <div class="w-12 h-12 bg-accent-200 rounded-lg p-2 flex items-center justify-center">
                                                 <img class="preview-medium w-full h-full object-contain" alt="Mediano">
                                             </div>
                                             <div>
@@ -121,8 +121,8 @@
                                         </div>
                                         
                                         <!-- Large -->
-                                        <div class="flex items-center gap-4 p-3 bg-white-50 rounded-lg">
-                                            <div class="w-16 h-16 bg-white-200 rounded-lg p-3 flex items-center justify-center">
+                                        <div class="flex items-center gap-4 p-3 bg-accent-50 rounded-lg">
+                                            <div class="w-16 h-16 bg-accent-200 rounded-lg p-3 flex items-center justify-center">
                                                 <img class="preview-large w-full h-full object-contain" alt="Grande">
                                             </div>
                                             <div>
@@ -147,7 +147,7 @@
                                    name="display_name" 
                                    id="display_name"
                                    value="{{ old('display_name') }}"
-                                   class="w-full px-4 py-3 rounded-lg bg-white-100 border border-white-200 
+                                   class="w-full px-4 py-3 rounded-lg bg-accent-100 border border-accent-200 
                                           focus:ring-2 focus:ring-primary-200 focus:border-primary-200 transition-colors
                                           @error('display_name') border-error-200 focus:ring-error-200 @enderror"
                                    placeholder="Ej: Hamburguesas, Pizza, Bebidas..."
@@ -169,7 +169,7 @@
                                    name="name" 
                                    id="name"
                                    value="{{ old('name') }}"
-                                   class="w-full px-4 py-3 rounded-lg bg-white-100 border border-white-200 
+                                   class="w-full px-4 py-3 rounded-lg bg-accent-100 border border-accent-200 
                                           focus:ring-2 focus:ring-primary-200 focus:border-primary-200 transition-colors
                                           @error('name') border-error-200 focus:ring-error-200 @enderror"
                                    placeholder="Se genera automáticamente">
@@ -191,7 +191,7 @@
                         <!-- Status -->
                         <div class="space-y-3">
                             <label class="block text-sm font-semibold text-black-400">Estado Inicial</label>
-                            <div class="flex items-center gap-3 p-4 bg-white-100 rounded-lg">
+                            <div class="flex items-center gap-3 p-4 bg-accent-100 rounded-lg">
                                 <label class="relative inline-flex items-center cursor-pointer">
                                     <input type="hidden" name="is_active" value="0">
                                     <input type="checkbox" 
@@ -199,10 +199,10 @@
                                            value="1"
                                            class="sr-only peer"
                                            {{ old('is_active', true) ? 'checked' : '' }}>
-                                    <div class="w-11 h-6 bg-white-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary-200 rounded-full peer 
-                                                peer-checked:after:translate-x-full peer-checked:after:border-white-50 
+                                    <div class="w-11 h-6 bg-accent-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary-200 rounded-full peer 
+                                                peer-checked:after:translate-x-full peer-checked:after:border-accent-50 
                                                 after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
-                                                after:bg-white-50 after:rounded-full after:h-5 after:w-5 after:transition-all 
+                                                after:bg-accent-50 after:rounded-full after:h-5 after:w-5 after:transition-all 
                                                 peer-checked:bg-success-300"></div>
                                 </label>
                                 <div>
@@ -221,7 +221,7 @@
                                    name="sort_order" 
                                    id="sort_order"
                                    value="{{ old('sort_order') }}"
-                                   class="w-full px-4 py-3 rounded-lg bg-white-100 border border-white-200 
+                                   class="w-full px-4 py-3 rounded-lg bg-accent-100 border border-accent-200 
                                           focus:ring-2 focus:ring-primary-200 focus:border-primary-200 transition-colors
                                           @error('sort_order') border-error-200 focus:ring-error-200 @enderror"
                                    placeholder="Se asigna automáticamente"
@@ -242,7 +242,7 @@
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex items-center justify-between p-6 bg-white-50 rounded-xl border border-white-100">
+            <div class="flex items-center justify-between p-6 bg-accent-50 rounded-xl border border-accent-100">
                 <a href="{{ route('superlinkiu.category-icons.index') }}" 
                    class="btn-secondary flex items-center gap-2">
                     <x-solar-arrow-left-outline class="w-4 h-4" />

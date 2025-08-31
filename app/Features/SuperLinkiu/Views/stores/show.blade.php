@@ -14,10 +14,10 @@
          x-transition:leave-end="opacity-0 transform translate-y-2"
          class="fixed top-4 right-4 z-50 max-w-sm">
         <div :class="{
-            'bg-success-200 text-white-50': notificationType === 'success',
-            'bg-error-200 text-white-50': notificationType === 'error',
+            'bg-success-200 text-accent-50': notificationType === 'success',
+            'bg-error-200 text-accent-50': notificationType === 'error',
             'bg-warning-200 text-black-400': notificationType === 'warning',
-            'bg-info-200 text-white-50': notificationType === 'info'
+            'bg-info-200 text-accent-50': notificationType === 'info'
         }" class="rounded-lg shadow-lg p-4 flex items-center gap-3">
             <template x-if="notificationType === 'success'">
                 <x-solar-check-circle-bold class="w-5 h-5 flex-shrink-0" />
@@ -83,8 +83,8 @@
         <!-- Columna principal -->
         <div class="lg:col-span-2 space-y-6">
             <!-- Información básica -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-lg font-semibold text-black-400 mb-0">Información Básica</h2>
                 </div>
                 <div class="p-6">
@@ -131,8 +131,8 @@
             </div>
 
             <!-- Estado y verificación -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-lg font-semibold text-black-400 mb-0">Estado de la Tienda</h2>
                 </div>
                 <div class="p-6">
@@ -156,13 +156,13 @@
                                         {{ $store->verified ? 'checked' : '' }}
                                         data-store-id="{{ $store->id }}"
                                         data-url="{{ route('superlinkiu.stores.toggle-verified', $store) }}">
-                                    <div class="w-11 h-6 bg-white-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white-50 after:border-white-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200"></div>
+                                    <div class="w-11 h-6 bg-accent-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-accent-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-accent-50 after:border-accent-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200"></div>
                                 </label>
                                 <span class="text-sm text-black-300">{{ $store->verified ? 'Verificada' : 'No verificada' }}</span>
                             </div>
                         </div>
                     </div>
-                    <div class="mt-4 pt-4 border-t border-white-100">
+                    <div class="mt-4 pt-4 border-t border-accent-100">
                         <dl class="grid grid-cols-2 gap-4 text-sm">
                             <div>
                                 <dt class="text-black-300">Creada</dt>
@@ -178,13 +178,13 @@
             </div>
 
             <!-- Historial de extensiones -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-lg font-semibold text-black-400 mb-0">Historial de Extensiones</h2>
                 </div>
                 <div class="p-6">
                     @forelse($store->planExtensions()->latest()->take(5)->get() as $extension)
-                        <div class="p-4 bg-white-100 rounded-lg mb-3 last:mb-0">
+                        <div class="p-4 bg-accent-100 rounded-lg mb-3 last:mb-0">
                             <div class="flex justify-between items-start">
                                 <div>
                                     <p class="font-medium text-black-400">
@@ -219,8 +219,8 @@
         <!-- Columna lateral -->
         <div class="space-y-6">
             <!-- Plan actual -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-lg font-semibold text-black-400 mb-0">Plan Actual</h2>
                 </div>
                 <div class="p-6">
@@ -230,7 +230,7 @@
                         <p class="text-sm text-black-300">por mes</p>
                     </div>
                     
-                    <div class="space-y-3 pt-4 border-t border-white-100">
+                    <div class="space-y-3 pt-4 border-t border-accent-100">
                         @if($store->plan->max_products)
                         <div class="flex justify-between text-sm">
                             <span class="text-black-300">Productos máximos</span>
@@ -258,8 +258,8 @@
             </div>
 
             <!-- Extender plan -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-lg font-semibold text-black-400 mb-0">Extender Plan</h2>
                 </div>
                 <div class="p-6">
@@ -275,7 +275,7 @@
                                     name="days"
                                     min="1"
                                     max="365"
-                                    class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
+                                    class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
                                     required
                                     placeholder="30">
                             </div>
@@ -285,7 +285,7 @@
                                 </label>
                                 <textarea name="reason"
                                     rows="2"
-                                    class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
+                                    class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
                                     required
                                     placeholder="Motivo de la extensión..."></textarea>
                             </div>
@@ -300,8 +300,8 @@
             </div>
 
             <!-- Acciones rápidas -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-lg font-semibold text-black-400 mb-0">Acciones Rápidas</h2>
                 </div>
                 <div class="p-6 space-y-3">
@@ -344,8 +344,8 @@
                  x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
                  x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                  @click.stop
-                 class="inline-block align-bottom bg-white-50 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="bg-white-50 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                 class="inline-block align-bottom bg-accent-50 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-accent-50 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <div class="sm:flex sm:items-start">
                         <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-error-100 sm:mx-0 sm:h-10 sm:w-10">
                             <x-solar-trash-bin-trash-outline class="h-6 w-6 text-error-300" />
@@ -363,15 +363,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-white-100 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-2">
+                <div class="bg-accent-100 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-2">
                     <button type="button"
                             @click="confirmDelete"
-                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-error-200 text-base font-medium text-white-50 hover:bg-error-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-error-200 sm:ml-3 sm:w-auto sm:text-sm">
+                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-error-200 text-base font-medium text-accent-50 hover:bg-error-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-error-200 sm:ml-3 sm:w-auto sm:text-sm">
                         Eliminar
                     </button>
                     <button type="button"
                             @click="closeDeleteModal"
-                            class="mt-3 w-full inline-flex justify-center rounded-md border border-white-200 shadow-sm px-4 py-2 bg-white-50 text-base font-medium text-black-300 hover:bg-white-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-200 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                            class="mt-3 w-full inline-flex justify-center rounded-md border border-accent-200 shadow-sm px-4 py-2 bg-accent-50 text-base font-medium text-black-300 hover:bg-accent-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-200 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                         Cancelar
                     </button>
                 </div>

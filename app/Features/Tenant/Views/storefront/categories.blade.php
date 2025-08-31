@@ -23,11 +23,11 @@
         <div class="space-y-3">
             @foreach($categories as $category)
                 <a href="{{ route('tenant.category', [$store->slug, $category->slug]) }}" 
-                   class="block bg-white-50 rounded-xl p-4 border border-white-200 hover:border-primary-200 hover:shadow-md transition-all duration-200">
+                   class="block bg-accent-50 rounded-xl p-4 border border-accent-200 hover:border-primary-200 hover:shadow-md transition-all duration-200">
                     
                     <div class="flex items-center space-x-4">
                         <!-- Icono de la categoría -->
-                        <div class="w-12 h-12 bg-white-100 rounded-lg p-2 flex items-center justify-center flex-shrink-0">
+                        <div class="w-12 h-12 bg-accent-100 rounded-lg p-2 flex items-center justify-center flex-shrink-0">
                             @if($category->icon && $category->icon->image_path)
                                 <img src="{{ $category->icon->image_url }}" 
                                      alt="{{ $category->name }}" 
@@ -83,7 +83,7 @@
                 </p>
             </div>
             <a href="{{ route('tenant.home', $store->slug) }}" 
-               class="inline-flex items-center px-4 py-2 bg-primary-300 text-white-50 rounded-lg hover:bg-primary-200 transition-colors">
+               class="inline-flex items-center px-4 py-2 bg-primary-300 text-accent-50 rounded-lg hover:bg-primary-200 transition-colors">
                 <x-lucide-home class="w-4 h-4 mr-2" />
                 Ir al inicio
             </a>

@@ -63,7 +63,7 @@ use Illuminate\Support\Facades\Storage;
                                 <img src="{{ $user->avatar_url }}" alt="Avatar" class="rounded-full mx-auto" width="150">
                             @else
                                 <div class="w-32 h-32 bg-primary-200 rounded-full flex items-center justify-center mx-auto">
-                                    <span class="text-white-50 text-4xl font-medium">
+                                    <span class="text-accent-50 text-4xl font-medium">
                                         {{ substr($user->name, 0, 1) }}
                                     </span>
                                 </div>
@@ -88,7 +88,7 @@ use Illuminate\Support\Facades\Storage;
                         <p class="text-black-200">{{ $user->email }}</p>
                     </div>
                 </div>
-                <div class="border-t border-white-100 p-4">
+                <div class="border-t border-accent-100 p-4">
                     <div class="grid grid-cols-2 gap-4 text-center">
                         <div>
                             <span class="text-sm text-black-200">Rol</span>
@@ -107,7 +107,7 @@ use Illuminate\Support\Facades\Storage;
         <div class="lg:col-span-2">
             <div class="card">
                 <div class="card-header">
-                    <div class="flex border-b border-white-100">
+                    <div class="flex border-b border-accent-100">
                         <button type="button" class="tab-btn tab-active" data-tab="profile">
                             <x-solar-user-outline class="w-4 h-4 mr-2" />
                             Perfil

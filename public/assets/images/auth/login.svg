@@ -2,8 +2,8 @@
 <rect width="550.797" height="729.628" rx="11.6495" fill="#D9D9D9"/>
 <rect width="550.797" height="729.628" rx="11.6495" fill="url(#pattern0_142_4639)"/>
 <rect x="244.998" y="699.226" width="12.4261" height="3.88316" rx="1.94158" fill="#3869EB"/>
-<circle cx="262.472" cy="701.168" r="1.94158" fill="white"/>
-<circle cx="269.462" cy="701.168" r="1.94158" fill="white"/>
+<circle cx="262.472" cy="701.168" r="1.94158" fill="accent"/>
+<circle cx="269.462" cy="701.168" r="1.94158" fill="accent"/>
 <defs>
 <pattern id="pattern0_142_4639" patternContentUnits="objectBoundingBox" width="1" height="1">
 <use xlink:href="#image0_142_4639" transform="matrix(0.00211609 0 0 0.00159744 -0.162338 0)"/>

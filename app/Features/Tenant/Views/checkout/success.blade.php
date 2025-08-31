@@ -29,7 +29,7 @@
     <div class="bg-gradient-to-r from-primary-50 to-info-50 rounded-xl p-6 border border-primary-200 shadow-sm">
         <div class="text-center">
             <h2 class="text-sm font-medium text-primary-400 mb-2">CÓDIGO DE PEDIDO</h2>
-            <div class="bg-white-50 rounded-lg p-4 border-2 border-dashed border-primary-300">
+            <div class="bg-accent-50 rounded-lg p-4 border-2 border-dashed border-primary-300">
                 <p class="text-3xl font-bold text-primary-300 tracking-wider" id="order-code">{{ $order->order_number ?? 'N/A' }}</p>
                 <button onclick="copyOrderCode()" class="mt-2 text-xs bg-primary-200 hover:bg-primary-300 text-primary-400 px-3 py-1 rounded-full transition-colors">
                     📋 Copiar código
@@ -39,7 +39,7 @@
     </div>
 
     <!-- Estado del pedido en tiempo real -->
-    <div class="bg-white-50 rounded-xl p-6 border border-white-200 shadow-sm">
+    <div class="bg-accent-50 rounded-xl p-6 border border-accent-200 shadow-sm">
         <h3 class="text-lg font-semibold text-black-500 mb-4 flex items-center">
             <span class="mr-2">📊</span>
             Estado del Pedido
@@ -54,7 +54,7 @@
     </div>
 
     <!-- Detalles del pedido -->
-    <div class="bg-white-50 rounded-xl p-6 border border-white-200 shadow-sm">
+    <div class="bg-accent-50 rounded-xl p-6 border border-accent-200 shadow-sm">
         <h3 class="text-lg font-semibold text-black-500 mb-4 flex items-center">
             <span class="mr-2">📋</span>
             Detalles del Pedido
@@ -62,7 +62,7 @@
         
         <div class="space-y-4">
             <!-- Información del cliente -->
-            <div class="bg-white-100 rounded-lg p-4">
+            <div class="bg-accent-100 rounded-lg p-4">
                 <h4 class="font-medium text-black-500 mb-3 text-sm">👤 Información del Cliente</h4>
                 <div class="space-y-2 text-sm">
                     <div class="flex justify-between">
@@ -77,7 +77,7 @@
             </div>
 
             <!-- Información de entrega -->
-            <div class="bg-white-100 rounded-lg p-4">
+            <div class="bg-accent-100 rounded-lg p-4">
                 <h4 class="font-medium text-black-500 mb-3 text-sm">
                     @if(($order->delivery_type ?? '') === 'domicilio')
                         🚚 Información de Envío
@@ -109,7 +109,7 @@
             </div>
 
             <!-- Resumen de pago -->
-            <div class="bg-white-100 rounded-lg p-4">
+            <div class="bg-accent-100 rounded-lg p-4">
                 <h4 class="font-medium text-black-500 mb-3 text-sm">💳 Resumen de Pago</h4>
                 <div class="space-y-2 text-sm">
                     <div class="flex justify-between">
@@ -138,7 +138,7 @@
                             <span class="font-medium text-success-300">${{ number_format($order->cash_amount - $order->total, 0, ',', '.') }}</span>
                         </div>
                     @endif
-                    <div class="border-t border-white-200 pt-2">
+                    <div class="border-t border-accent-200 pt-2">
                         <div class="flex justify-between items-center">
                             <span class="font-semibold text-black-500">Total a pagar:</span>
                             <span class="text-lg font-bold text-primary-300">${{ number_format($order->total ?? 0, 0, ',', '.') }}</span>
@@ -150,7 +150,7 @@
     </div>
 
     <!-- Acciones de compartir -->
-    <div class="bg-white-50 rounded-xl p-6 border border-white-200 shadow-sm">
+    <div class="bg-accent-50 rounded-xl p-6 border border-accent-200 shadow-sm">
         <h3 class="text-lg font-semibold text-black-500 mb-4 flex items-center">
             <span class="mr-2">📱</span>
             Compartir
@@ -158,13 +158,13 @@
         
         <div class="grid grid-cols-1 gap-3">
             <!-- Compartir con el negocio -->
-            <button onclick="shareWithBusiness()" class="flex items-center justify-center w-full bg-success-300 hover:bg-success-200 text-white-50 py-3 px-4 rounded-lg font-medium transition-colors">
+            <button onclick="shareWithBusiness()" class="flex items-center justify-center w-full bg-success-300 hover:bg-success-200 text-accent-50 py-3 px-4 rounded-lg font-medium transition-colors">
                 <span class="mr-2">📞</span>
                 Contactar al negocio
             </button>
             
             <!-- Compartir con un amigo -->
-            <button onclick="shareWithFriend()" class="flex items-center justify-center w-full bg-info-300 hover:bg-info-200 text-white-50 py-3 px-4 rounded-lg font-medium transition-colors">
+            <button onclick="shareWithFriend()" class="flex items-center justify-center w-full bg-info-300 hover:bg-info-200 text-accent-50 py-3 px-4 rounded-lg font-medium transition-colors">
                 <span class="mr-2">👥</span>
                 Compartir con un amigo
             </button>
@@ -173,13 +173,13 @@
 
     <!-- Acciones principales -->
     <div class="grid grid-cols-1 gap-3">
-        <button onclick="refreshOrderStatus()" class="flex items-center justify-center w-full bg-primary-300 hover:bg-primary-200 text-white-50 py-3 px-4 rounded-lg font-semibold transition-colors">
+        <button onclick="refreshOrderStatus()" class="flex items-center justify-center w-full bg-primary-300 hover:bg-primary-200 text-accent-50 py-3 px-4 rounded-lg font-semibold transition-colors">
             <span class="mr-2">🔄</span>
             Actualizar estado
         </button>
         
         <a href="{{ route('tenant.home', $store->slug) }}" 
-           class="flex items-center justify-center w-full bg-white-200 hover:bg-white-300 text-black-500 py-3 px-4 rounded-lg font-medium transition-colors">
+           class="flex items-center justify-center w-full bg-accent-200 hover:bg-accent-300 text-black-500 py-3 px-4 rounded-lg font-medium transition-colors">
             <span class="mr-2">🛍️</span>
             Continuar comprando
         </a>
@@ -260,7 +260,7 @@ function renderOrderStatus(order) {
         <div class="bg-gradient-to-r from-primary-50 to-primary-100 rounded-lg p-4 mb-4 border border-primary-200">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <div class="w-10 h-10 bg-primary-300 rounded-full flex items-center justify-center text-white-50 text-lg mr-3">
+                    <div class="w-10 h-10 bg-primary-300 rounded-full flex items-center justify-center text-accent-50 text-lg mr-3">
                         ${currentStep ? currentStep.icon : '📋'}
                     </div>
                     <div>
@@ -285,9 +285,9 @@ function renderOrderStatus(order) {
         html += `
             <div class="flex items-center ${isActive ? 'bg-primary-50 border border-primary-200 rounded-lg p-3' : 'p-3'}">
                 <div class="w-8 h-8 rounded-full flex items-center justify-center mr-3 ${
-                    isCompleted ? 'bg-success-300 text-white-50' :
-                    isActive ? 'bg-primary-300 text-white-50' :
-                    'bg-white-200 text-black-400'
+                    isCompleted ? 'bg-success-300 text-accent-50' :
+                    isActive ? 'bg-primary-300 text-accent-50' :
+                    'bg-accent-200 text-black-400'
                 }">
                     ${isCompleted ? '✅' : step.icon}
                 </div>

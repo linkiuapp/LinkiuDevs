@@ -4,8 +4,8 @@
     @section('content')
     <div x-data="couponManagement" class="space-y-4">
         <!-- Header con contador y botón crear -->
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-            <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+            <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                 <div class="flex items-center justify-between">
                     <div>
                         <h2 class="text-lg font-semibold text-black-500 mb-2">Cupones</h2>
@@ -31,17 +31,17 @@
             </div>
 
             <!-- Barra de herramientas -->
-            <div class="px-6 py-3 border-b border-white-100 bg-white-50">
+            <div class="px-6 py-3 border-b border-accent-100 bg-accent-50">
                 <form method="GET" class="flex flex-wrap items-center gap-4">
                     <!-- Búsqueda -->
                     <div class="flex-1 min-w-64">
                         <input type="text" name="search" value="{{ request('search') }}" 
                                placeholder="Buscar por nombre o código..."
-                               class="w-full px-3 py-1.5 border border-white-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
+                               class="w-full px-3 py-1.5 border border-accent-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
                     </div>
 
                     <!-- Filtros -->
-                    <select name="status" class="px-3 py-1.5 border border-white-200 rounded-lg text-sm focus:outline-none">
+                    <select name="status" class="px-3 py-1.5 border border-accent-200 rounded-lg text-sm focus:outline-none">
                         <option value="">Todos los estados</option>
                         <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Activos</option>
                         <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactivos</option>
@@ -49,14 +49,14 @@
                         <option value="upcoming" {{ request('status') === 'upcoming' ? 'selected' : '' }}>Próximos</option>
                     </select>
 
-                    <select name="type" class="px-3 py-1.5 border border-white-200 rounded-lg text-sm focus:outline-none">
+                    <select name="type" class="px-3 py-1.5 border border-accent-200 rounded-lg text-sm focus:outline-none">
                         <option value="">Todos los tipos</option>
                         @foreach(\App\Features\TenantAdmin\Models\Coupon::TYPES as $key => $label)
                             <option value="{{ $key }}" {{ request('type') === $key ? 'selected' : '' }}>{{ $label }}</option>
                         @endforeach
                     </select>
 
-                    <select name="discount_type" class="px-3 py-1.5 border border-white-200 rounded-lg text-sm focus:outline-none">
+                    <select name="discount_type" class="px-3 py-1.5 border border-accent-200 rounded-lg text-sm focus:outline-none">
                         <option value="">Todos los descuentos</option>
                         @foreach(\App\Features\TenantAdmin\Models\Coupon::DISCOUNT_TYPES as $key => $label)
                             <option value="{{ $key }}" {{ request('discount_type') === $key ? 'selected' : '' }}>{{ $label }}</option>
@@ -76,7 +76,7 @@
                     <!-- Tabla de cupones -->
                     <div class="overflow-x-auto">
                         <table class="w-full">
-                            <thead class="border-b border-white-200">
+                            <thead class="border-b border-accent-200">
                                 <tr>
                                     <th class="px-0 py-3 text-left text-xs font-medium text-black-300 uppercase tracking-wider">Cupón</th>
                                     <th class="px-4 py-3 text-left text-xs font-medium text-black-300 uppercase tracking-wider">Tipo & Descuento</th>
@@ -86,9 +86,9 @@
                                     <th class="px-4 py-3 text-center text-xs font-medium text-black-300 uppercase tracking-wider">Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-white-100">
+                            <tbody class="divide-y divide-accent-100">
                                 @foreach($coupons as $coupon)
-                                    <tr class="hover:bg-white-100 transition-colors">
+                                    <tr class="hover:bg-accent-100 transition-colors">
                                         {{-- Información del cupón --}}
                                         <td class="px-0 py-4">
                                             <div>
@@ -102,7 +102,7 @@
                                                     @endif
                                                 </div>
                                                 <div class="text-sm text-black-300">
-                                                    <span class="font-mono bg-white-200 px-2 py-1 rounded text-xs">{{ $coupon->code }}</span>
+                                                    <span class="font-mono bg-accent-200 px-2 py-1 rounded text-xs">{{ $coupon->code }}</span>
                                                 </div>
                                                 @if($coupon->description)
                                                     <p class="text-xs text-black-200 mt-1">{{ Str::limit($coupon->description, 50) }}</p>
@@ -163,7 +163,7 @@
                                                         $percentage = round(($coupon->current_uses / $coupon->max_uses) * 100);
                                                         $colorClass = $percentage >= 80 ? 'bg-error-100' : ($percentage >= 60 ? 'bg-warning-100' : 'bg-success-100');
                                                     @endphp
-                                                    <div class="w-full bg-white-200 rounded-full h-2 mt-1">
+                                                    <div class="w-full bg-accent-200 rounded-full h-2 mt-1">
                                                         <div class="{{ $colorClass }} h-2 rounded-full" style="width: {{ $percentage }}%"></div>
                                                     </div>
                                                     <span class="text-xs text-black-200">{{ $percentage }}% usado</span>
@@ -239,7 +239,7 @@
 
                     {{-- Paginación --}}
                     @if($coupons->hasPages())
-                        <div class="mt-6 pt-4 border-t border-white-200">
+                        <div class="mt-6 pt-4 border-t border-accent-200">
                             {{ $coupons->links() }}
                         </div>
                     @endif
@@ -277,7 +277,7 @@
              style="display: none;">
             <div class="flex items-center justify-center min-h-screen px-4">
                 <div class="fixed inset-0 bg-black-400 opacity-75"></div>
-                <div class="relative bg-white-50 rounded-lg max-w-md w-full p-6">
+                <div class="relative bg-accent-50 rounded-lg max-w-md w-full p-6">
                     <div class="text-center">
                         <div class="w-12 h-12 bg-error-50 rounded-full flex items-center justify-center mx-auto mb-4">
                             <x-solar-danger-triangle-outline class="w-6 h-6 text-error-200" />

@@ -5,8 +5,8 @@
 <div x-data="ordersManager" x-init="init()" class="space-y-4">
     
     <!-- Header con estadísticas -->
-    <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-        <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+    <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="text-lg font-semibold text-black-500 mb-2">Gestión de Pedidos</h2>
@@ -15,7 +15,7 @@
                     </p>
                 </div>
                 <div class="flex items-center gap-3">
-                    <button onclick="exportOrders()" class="text-black-300 hover:text-black-400 p-2 rounded-lg hover:bg-white-100" title="Exportar">
+                    <button onclick="exportOrders()" class="text-black-300 hover:text-black-400 p-2 rounded-lg hover:bg-accent-100" title="Exportar">
                         <x-solar-download-outline class="w-5 h-5" />
                     </button>
                     <a href="{{ route('tenant.admin.orders.create', $store->slug) }}" 
@@ -28,9 +28,9 @@
         </div>
 
         <!-- Estadísticas Grid -->
-        <div class="px-6 py-3 border-b border-white-100 bg-white-50">
+        <div class="px-6 py-3 border-b border-accent-100 bg-accent-50">
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
-                <div class="text-center p-3 bg-white-100 rounded-lg">
+                <div class="text-center p-3 bg-accent-100 rounded-lg">
                     <div class="text-lg font-semibold text-black-500">{{ $stats['total'] }}</div>
                     <div class="text-xs text-black-300">Total</div>
                 </div>
@@ -66,12 +66,12 @@
         </div>
 
         <!-- Barra de herramientas y filtros -->
-        <div class="px-6 py-3 border-b border-white-100 bg-white-50">
+        <div class="px-6 py-3 border-b border-accent-100 bg-accent-50">
             <form method="GET" action="{{ route('tenant.admin.orders.index', $store->slug) }}">
                 <div class="flex justify-between items-center mb-4">
                     <div class="flex items-center gap-4">
                         <!-- Filtros rápidos -->
-                        <select name="status" class="px-3 py-1.5 border border-white-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
+                        <select name="status" class="px-3 py-1.5 border border-accent-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
                             <option value="">Todos los estados</option>
                             <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>Pendiente</option>
                             <option value="confirmed" {{ request('status') === 'confirmed' ? 'selected' : '' }}>Confirmado</option>
@@ -81,7 +81,7 @@
                             <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>Cancelado</option>
                         </select>
 
-                        <select name="payment_method" class="px-3 py-1.5 border border-white-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
+                        <select name="payment_method" class="px-3 py-1.5 border border-accent-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
                             <option value="">Todos los métodos</option>
                             <option value="transferencia" {{ request('payment_method') === 'transferencia' ? 'selected' : '' }}>Transferencia</option>
                             <option value="contra_entrega" {{ request('payment_method') === 'contra_entrega' ? 'selected' : '' }}>Contra Entrega</option>
@@ -90,13 +90,13 @@
 
                         <input type="text" name="search" value="{{ request('search') }}" 
                                placeholder="Buscar por número, cliente..." 
-                               class="px-3 py-1.5 border border-white-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
+                               class="px-3 py-1.5 border border-accent-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
 
-                        <button type="submit" class="px-3 py-1.5 bg-primary-200 text-white-50 rounded-lg text-sm hover:bg-primary-300 transition-colors">
+                        <button type="submit" class="px-3 py-1.5 bg-primary-200 text-accent-50 rounded-lg text-sm hover:bg-primary-300 transition-colors">
                             <x-solar-magnifer-outline class="w-4 h-4" />
                         </button>
 
-                        <a href="{{ route('tenant.admin.orders.index', $store->slug) }}" class="px-3 py-1.5 bg-white-100 text-black-300 rounded-lg text-sm hover:bg-white-200 transition-colors">
+                        <a href="{{ route('tenant.admin.orders.index', $store->slug) }}" class="px-3 py-1.5 bg-accent-100 text-black-300 rounded-lg text-sm hover:bg-accent-200 transition-colors">
                             <x-solar-restart-outline class="w-4 h-4" />
                         </a>
                     </div>
@@ -118,24 +118,24 @@
                         <div>
                             <label class="block text-xs text-black-400 mb-1">Fecha Desde</label>
                             <input type="date" name="date_from" value="{{ request('date_from') }}" 
-                                   class="w-full px-3 py-1.5 border border-white-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
+                                   class="w-full px-3 py-1.5 border border-accent-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
                         </div>
                         <div>
                             <label class="block text-xs text-black-400 mb-1">Fecha Hasta</label>
                             <input type="date" name="date_to" value="{{ request('date_to') }}" 
-                                   class="w-full px-3 py-1.5 border border-white-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
+                                   class="w-full px-3 py-1.5 border border-accent-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
                         </div>
                         <div>
                             <label class="block text-xs text-black-400 mb-1">Monto Desde</label>
                             <input type="number" name="amount_from" value="{{ request('amount_from') }}" 
                                    placeholder="0" min="0" step="1000"
-                                   class="w-full px-3 py-1.5 border border-white-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
+                                   class="w-full px-3 py-1.5 border border-accent-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
                         </div>
                         <div>
                             <label class="block text-xs text-black-400 mb-1">Monto Hasta</label>
                             <input type="number" name="amount_to" value="{{ request('amount_to') }}" 
                                    placeholder="Sin límite" min="0" step="1000"
-                                   class="w-full px-3 py-1.5 border border-white-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
+                                   class="w-full px-3 py-1.5 border border-accent-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-200">
                         </div>
                     </div>
                 </div>
@@ -145,7 +145,7 @@
         <!-- Tabla -->
         <div class="overflow-x-auto">
             <table class="w-full">
-                <thead class="bg-white-100">
+                <thead class="bg-accent-100">
                     <tr class="text-left text-xs font-medium text-black-400 uppercase tracking-wider">
                         <th class="px-6 py-3">Pedido</th>
                         <th class="px-6 py-3">Cliente</th>
@@ -156,9 +156,9 @@
                         <th class="px-6 py-3 text-center">Acciones</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white-50 divide-y divide-white-100">
+                <tbody class="bg-accent-50 divide-y divide-accent-100">
                     @forelse($orders as $order)
-                        <tr class="text-black-400 hover:bg-white-100">
+                        <tr class="text-black-400 hover:bg-accent-100">
                             <td class="px-6 py-4">
                                 <div class="flex items-center text-sm">
                                     <div class="w-10 h-10 mr-3 flex items-center justify-center bg-primary-50 rounded-lg">
@@ -231,12 +231,12 @@
                                             <x-solar-refresh-outline class="w-5 h-5" />
                                         </button>
                                         <div x-show="open" @click.away="open = false" 
-                                             class="absolute right-0 mt-2 w-48 bg-white-50 rounded-lg shadow-lg border border-white-200 z-10">
+                                             class="absolute right-0 mt-2 w-48 bg-accent-50 rounded-lg shadow-lg border border-accent-200 z-10">
                                             <div class="py-2">
                                                 @foreach(['pending' => 'Pendiente', 'confirmed' => 'Confirmado', 'preparing' => 'Preparando', 'shipped' => 'Enviado', 'delivered' => 'Entregado', 'cancelled' => 'Cancelado'] as $status => $label)
                                                     @if($status !== $order->status)
                                                         <button onclick="updateOrderStatus({{ $order->id }}, '{{ $status }}')" 
-                                                                class="block w-full text-left px-4 py-2 text-sm text-black-400 hover:bg-white-100">
+                                                                class="block w-full text-left px-4 py-2 text-sm text-black-400 hover:bg-accent-100">
                                                             {{ $label }}
                                                         </button>
                                                     @endif
@@ -289,7 +289,7 @@
 
         <!-- Paginación -->
         @if($orders->hasPages())
-            <div class="px-6 py-4 border-t border-white-100">
+            <div class="px-6 py-4 border-t border-accent-100">
                 {{ $orders->links() }}
             </div>
         @endif
@@ -327,9 +327,9 @@
                  x-transition:leave="transition ease-in duration-200"
                  x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
                  x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                 class="inline-block align-bottom bg-white-50 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                 class="inline-block align-bottom bg-accent-50 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                 
-                <div class="bg-white-50 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="bg-accent-50 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <div class="sm:flex sm:items-start">
                         <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-error-50 sm:mx-0 sm:h-10 sm:w-10">
                             <x-solar-trash-bin-trash-bold class="h-6 w-6 text-error-300" />
@@ -348,15 +348,15 @@
                     </div>
                 </div>
                 
-                <div class="bg-white-100 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <div class="bg-accent-100 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                     <button type="button" 
                             @click="confirmDelete()"
-                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-error-200 text-base font-medium text-white-50 hover:bg-error-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-error-200 sm:ml-3 sm:w-auto sm:text-sm">
+                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-error-200 text-base font-medium text-accent-50 hover:bg-error-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-error-200 sm:ml-3 sm:w-auto sm:text-sm">
                         Eliminar
                     </button>
                     <button type="button" 
                             @click="closeDeleteModal()"
-                            class="mt-3 w-full inline-flex justify-center rounded-md border border-white-300 shadow-sm px-4 py-2 bg-white-50 text-base font-medium text-black-400 hover:bg-white-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-200 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                            class="mt-3 w-full inline-flex justify-center rounded-md border border-accent-300 shadow-sm px-4 py-2 bg-accent-50 text-base font-medium text-black-400 hover:bg-accent-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-200 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                         Cancelar
                     </button>
                 </div>

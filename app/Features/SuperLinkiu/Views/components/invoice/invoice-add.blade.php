@@ -9,7 +9,7 @@
     </div>
     <div class="card-body">
         <div class="flex flex-wrap items-center justify-end gap-2 mb-6">
-            <button type="button" class="bg-primary-200 text-white-50 px-4 py-2 rounded-lg inline-flex items-center gap-2 hover:bg-primary-300 transition-colors">
+            <button type="button" class="bg-primary-200 text-accent-50 px-4 py-2 rounded-lg inline-flex items-center gap-2 hover:bg-primary-300 transition-colors">
                 <x-solar-check-circle-outline class="w-5 h-5" />
                 <span class="body-base">Guardar</span>
             </button>
@@ -17,9 +17,9 @@
 
         <div class="card-body">
             <div class="max-w-full mx-auto">
-                <div class="bg-white-50 border border-white-200 rounded-lg overflow-hidden">
+                <div class="bg-accent-50 border border-accent-200 rounded-lg overflow-hidden">
                     <!-- Header de la factura -->
-                    <div class="p-6 border-b border-white-200">
+                    <div class="p-6 border-b border-accent-200">
                         <div class="flex flex-wrap justify-between gap-4">
                             <div>
                                 <h3 class="text-xl font-semibold text-black-500 mb-2">Factura #3492</h3>
@@ -106,66 +106,66 @@
                         <!-- Tabla de items -->
                         <div class="mt-8">
                             <div class="overflow-x-auto">
-                                <table class="w-full border-collapse border border-white-200" id="invoice-table">
+                                <table class="w-full border-collapse border border-accent-200" id="invoice-table">
                                     <thead>
-                                        <tr class="bg-white-100">
-                                            <th class="border border-white-200 px-4 py-3 text-left text-base text-black-500">No.</th>
-                                            <th class="border border-white-200 px-4 py-3 text-left text-base text-black-500">Artículos</th>
-                                            <th class="border border-white-200 px-4 py-3 text-left text-base text-black-500">Cantidad</th>
-                                            <th class="border border-white-200 px-4 py-3 text-left text-base text-black-500">Unidades</th>
-                                            <th class="border border-white-200 px-4 py-3 text-left text-base text-black-500">Precio Unit.</th>
-                                            <th class="border border-white-200 px-4 py-3 text-left text-base text-black-500">Precio</th>
-                                            <th class="border border-white-200 px-4 py-3 text-center text-base text-black-500">Acción</th>
+                                        <tr class="bg-accent-100">
+                                            <th class="border border-accent-200 px-4 py-3 text-left text-base text-black-500">No.</th>
+                                            <th class="border border-accent-200 px-4 py-3 text-left text-base text-black-500">Artículos</th>
+                                            <th class="border border-accent-200 px-4 py-3 text-left text-base text-black-500">Cantidad</th>
+                                            <th class="border border-accent-200 px-4 py-3 text-left text-base text-black-500">Unidades</th>
+                                            <th class="border border-accent-200 px-4 py-3 text-left text-base text-black-500">Precio Unit.</th>
+                                            <th class="border border-accent-200 px-4 py-3 text-left text-base text-black-500">Precio</th>
+                                            <th class="border border-accent-200 px-4 py-3 text-center text-base text-black-500">Acción</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">01</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">Apple's Shoes</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">5</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">PC</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">$200</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">$1000.00</td>
-                                            <td class="border border-white-200 px-4 py-3 text-center">
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">01</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">Apple's Shoes</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">5</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">PC</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">$200</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">$1000.00</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-center">
                                                 <button type="button" class="remove-row text-error-200 hover:text-error-500 transition-colors">
                                                     <x-solar-close-circle-outline class="w-5 h-5" />
                                                 </button>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">02</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">Apple's Shoes</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">5</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">PC</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">$200</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">$1000.00</td>
-                                            <td class="border border-white-200 px-4 py-3 text-center">
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">02</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">Apple's Shoes</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">5</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">PC</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">$200</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">$1000.00</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-center">
                                                 <button type="button" class="remove-row text-error-200 hover:text-error-500 transition-colors">
                                                     <x-solar-close-circle-outline class="w-5 h-5" />
                                                 </button>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">03</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">Apple's Shoes</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">5</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">PC</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">$200</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">$1000.00</td>
-                                            <td class="border border-white-200 px-4 py-3 text-center">
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">03</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">Apple's Shoes</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">5</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">PC</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">$200</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">$1000.00</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-center">
                                                 <button type="button" class="remove-row text-error-200 hover:text-error-500 transition-colors">
                                                     <x-solar-close-circle-outline class="w-5 h-5" />
                                                 </button>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">04</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">Apple's Shoes</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">5</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">PC</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">$200</td>
-                                            <td class="border border-white-200 px-4 py-3 text-base text-black-400">$1000.00</td>
-                                            <td class="border border-white-200 px-4 py-3 text-center">
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">04</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">Apple's Shoes</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">5</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">PC</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">$200</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-base text-black-400">$1000.00</td>
+                                            <td class="border border-accent-200 px-4 py-3 text-center">
                                                 <button type="button" class="remove-row text-error-200 hover:text-error-500 transition-colors">
                                                     <x-solar-close-circle-outline class="w-5 h-5" />
                                                 </button>
@@ -176,7 +176,7 @@
                             </div>
 
                             <div class="mt-6">
-                                <button type="button" id="addRow" class="bg-primary-200 text-white-50 px-4 py-2 rounded-lg inline-flex items-center gap-2 hover:bg-primary-300 transition-colors">
+                                <button type="button" id="addRow" class="bg-primary-200 text-accent-50 px-4 py-2 rounded-lg inline-flex items-center gap-2 hover:bg-primary-300 transition-colors">
                                     <x-solar-add-circle-outline class="w-5 h-5" />
                                     <span class="text-base">Agregar Nuevo</span>
                                 </button>
@@ -206,8 +206,8 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td class="pr-16 py-1 border-b border-white-200 pb-4">Impuesto:</td>
-                                                <td class="pl-6 py-1 border-b border-white-200 pb-4">
+                                                <td class="pr-16 py-1 border-b border-accent-200 pb-4">Impuesto:</td>
+                                                <td class="pl-6 py-1 border-b border-accent-200 pb-4">
                                                     <span class="text-black-500 font-semibold">$0.00</span>
                                                 </td>
                                             </tr>
@@ -232,8 +232,8 @@
 
                         <!-- Firmas -->
                         <div class="flex flex-wrap justify-between items-end mt-16">
-                            <div class="text-base border-t border-white-200 inline-block px-3 pt-2">Firma del Cliente</div>
-                            <div class="text-base border-t border-white-200 inline-block px-3 pt-2">Firma del Autorizado</div>
+                            <div class="text-base border-t border-accent-200 inline-block px-3 pt-2">Firma del Cliente</div>
+                            <div class="text-base border-t border-accent-200 inline-block px-3 pt-2">Firma del Autorizado</div>
                         </div>
                     </div>
                 </div>

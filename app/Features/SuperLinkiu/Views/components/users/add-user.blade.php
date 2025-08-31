@@ -10,7 +10,7 @@
                 <div class="card-header">
                     <h2 class="title-card">Create New User</h2>
                 </div>
-                <div class="card-body bg-white-50">
+                <div class="card-body bg-accent-50">
                     <!-- Profile Image Section -->
                     <div class="mb-6">
                         <h4 class="text-base font-semibold text-black-500 mb-4">Profile Image</h4>
@@ -31,14 +31,14 @@
                                 <div id="avatar-preview" class="hidden relative w-32 h-32 rounded-full overflow-hidden">
                                     <img id="avatar-preview-img" src="#" alt="Preview" class="w-full h-full object-cover">
                                     <button type="button" id="avatar-remove" 
-                                            class="absolute top-2 right-2 w-6 h-6 bg-error-200 text-white-50 rounded-full flex items-center justify-center hover:bg-error-500 transition-colors">
+                                            class="absolute top-2 right-2 w-6 h-6 bg-error-200 text-accent-50 rounded-full flex items-center justify-center hover:bg-error-500 transition-colors">
                                         <x-solar-close-circle-outline class="w-4 h-4" />
                                     </button>
                                 </div>
                                 
                                 <!-- Edit Button for Preview -->
                                 <button type="button" id="avatar-edit" 
-                                        class="hidden absolute bottom-0 right-0 w-8 h-8 bg-primary-200 text-white-50 rounded-full flex items-center justify-center border-2 border-white-50 hover:bg-primary-500 transition-colors">
+                                        class="hidden absolute bottom-0 right-0 w-8 h-8 bg-primary-200 text-accent-50 rounded-full flex items-center justify-center border-2 border-accent-50 hover:bg-primary-500 transition-colors">
                                     <x-solar-camera-outline class="w-4 h-4" />
                                 </button>
                             </div>
@@ -49,14 +49,14 @@
                     <form class="space-y-6">
                         <!-- Basic Information -->
                         <div class="space-y-4">
-                            <h5 class="text-base font-semibold text-black-500 border-b border-white-100 pb-2">Basic Information</h5>
+                            <h5 class="text-base font-semibold text-black-500 border-b border-accent-100 pb-2">Basic Information</h5>
                             
                             <div>
                                 <label for="fullname" class="block text-base text-black-500 font-semibold mb-2">
                                     Full Name <span class="text-error-200">*</span>
                                 </label>
                                 <input type="text" id="fullname" name="fullname" required
-                                       class="w-full px-4 py-3 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none"
+                                       class="w-full px-4 py-3 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none"
                                        placeholder="Enter full name">
                             </div>
 
@@ -65,28 +65,28 @@
                                     Email Address <span class="text-error-200">*</span>
                                 </label>
                                 <input type="email" id="email" name="email" required
-                                       class="w-full px-4 py-3 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none"
+                                       class="w-full px-4 py-3 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none"
                                        placeholder="Enter email address">
                             </div>
 
                             <div>
                                 <label for="phone" class="block text-base text-black-500 font-semibold mb-2">Phone Number</label>
                                 <input type="tel" id="phone" name="phone"
-                                       class="w-full px-4 py-3 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none"
+                                       class="w-full px-4 py-3 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none"
                                        placeholder="Enter phone number">
                             </div>
                         </div>
 
                         <!-- Professional Information -->
                         <div class="space-y-4">
-                            <h5 class="text-base font-semibold text-black-500 border-b border-white-100 pb-2">Professional Information</h5>
+                            <h5 class="text-base font-semibold text-black-500 border-b border-accent-100 pb-2">Professional Information</h5>
                             
                             <div>
                                 <label for="department" class="block text-base text-black-500 font-semibold mb-2">
                                     Department <span class="text-error-400">*</span>
                                 </label>
                                 <select id="department" name="department" required
-                                        class="w-full px-4 py-3 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none">
+                                        class="w-full px-4 py-3 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none">
                                     <option value="">Select Department</option>
                                     <option value="design">Design</option>
                                     <option value="development">Development</option>
@@ -102,7 +102,7 @@
                                     Designation <span class="text-error-200">*</span>
                                 </label>
                                 <select id="designation" name="designation" required
-                                        class="w-full px-4 py-3 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none">
+                                        class="w-full px-4 py-3 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none">
                                     <option value="">Select Designation</option>
                                     <option value="manager">Manager</option>
                                     <option value="senior">Senior Developer</option>
@@ -118,7 +118,7 @@
                                     Primary Language <span class="text-error-200">*</span>
                                 </label>
                                 <select id="language" name="language" required
-                                        class="w-full px-4 py-3 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none">
+                                        class="w-full px-4 py-3 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none">
                                     <option value="">Select Language</option>
                                     <option value="english">English</option>
                                     <option value="spanish">Spanish</option>
@@ -132,12 +132,12 @@
 
                         <!-- Additional Information -->
                         <div class="space-y-4">
-                            <h5 class="text-base font-semibold text-black-500 border-b border-white-100 pb-2">Additional Information</h5>
+                            <h5 class="text-base font-semibold text-black-500 border-b border-accent-100 pb-2">Additional Information</h5>
                             
                             <div>
                                 <label for="bio" class="block text-base text-black-500 font-semibold mb-2">Bio / Description</label>
                                 <textarea id="bio" name="bio" rows="4"
-                                          class="w-full px-4 py-3 border border-white-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none resize-none"
+                                          class="w-full px-4 py-3 border border-accent-200 rounded-lg text-base text-black-400 focus:border-primary-400 focus:ring-1 focus:ring-primary-400 focus:outline-none resize-none"
                                           placeholder="Write a brief description about the user..."></textarea>
                             </div>
 
@@ -147,12 +147,12 @@
                                 <div class="flex items-center gap-6">
                                     <label class="flex items-center gap-2 cursor-pointer">
                                         <input type="radio" name="status" value="active" checked
-                                               class="w-4 h-4 text-primary-200 border-white-200 focus:ring-primary-400">
+                                               class="w-4 h-4 text-primary-200 border-accent-200 focus:ring-primary-400">
                                         <span class="text-base text-black-400">Active</span>
                                     </label>
                                     <label class="flex items-center gap-2 cursor-pointer">
                                         <input type="radio" name="status" value="inactive"
-                                               class="w-4 h-4 text-primary-200 border-white-200 focus:ring-primary-400">
+                                               class="w-4 h-4 text-primary-200 border-accent-200 focus:ring-primary-400">
                                         <span class="text-base text-black-400">Inactive</span>
                                     </label>
                                 </div>
@@ -164,17 +164,17 @@
                                 <div class="space-y-2">
                                     <label class="flex items-center gap-2 cursor-pointer">
                                         <input type="checkbox" name="permissions[]" value="read"
-                                               class="w-4 h-4 text-primary-200 border-white-200 focus:ring-primary-400 rounded">
+                                               class="w-4 h-4 text-primary-200 border-accent-200 focus:ring-primary-400 rounded">
                                         <span class="text-base text-black-400">Read Access</span>
                                     </label>
                                     <label class="flex items-center gap-2 cursor-pointer">
                                         <input type="checkbox" name="permissions[]" value="write"
-                                               class="w-4 h-4 text-primary-200 border-white-200 focus:ring-primary-400 rounded">
+                                               class="w-4 h-4 text-primary-200 border-accent-200 focus:ring-primary-400 rounded">
                                         <span class="text-base text-black-400">Write Access</span>
                                     </label>
                                     <label class="flex items-center gap-2 cursor-pointer">
                                         <input type="checkbox" name="permissions[]" value="admin"
-                                               class="w-4 h-4 text-primary-200 border-white-200 focus:ring-primary-400 rounded">
+                                               class="w-4 h-4 text-primary-200 border-accent-200 focus:ring-primary-400 rounded">
                                         <span class="text-base text-black-400">Admin Access</span>
                                     </label>
                                 </div>
@@ -182,11 +182,11 @@
                         </div>
 
                         <!-- Form Actions -->
-                        <div class="flex items-center justify-center gap-4 pt-6 border-t border-white-100">
-                            <button type="button" class="px-8 py-3 border border-error-200 text-error-200 text-base rounded-lg hover:bg-error-200 hover:text-white-50 transition-colors duration-200">
+                        <div class="flex items-center justify-center gap-4 pt-6 border-t border-accent-100">
+                            <button type="button" class="px-8 py-3 border border-error-200 text-error-200 text-base rounded-lg hover:bg-error-200 hover:text-accent-50 transition-colors duration-200">
                                 Cancel
                             </button>
-                            <button type="submit" class="px-8 py-3 bg-primary-200 text-white-50 text-base rounded-lg hover:bg-primary-500 transition-colors duration-200 flex items-center gap-2">
+                            <button type="submit" class="px-8 py-3 bg-primary-200 text-accent-50 text-base rounded-lg hover:bg-primary-500 transition-colors duration-200 flex items-center gap-2">
                                 <x-solar-user-plus-outline class="w-5 h-5" />
                                 Create User
                             </button>

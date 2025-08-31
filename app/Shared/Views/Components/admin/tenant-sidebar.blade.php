@@ -19,10 +19,10 @@ use Illuminate\Support\Facades\Storage;
                     @if($profileImage)
                         <img src="{{ $profileImage }}" 
                             alt="Perfil" 
-                            class="w-8 h-8 rounded-full object-cover border border-white-200">
+                            class="w-8 h-8 rounded-full object-cover border border-accent-200">
                     @else
                         <div class="w-8 h-8 bg-primary-300 rounded-full flex items-center justify-center">
-                            <span class="text-white-50 text-body-small font-bold">
+                            <span class="text-accent-50 text-body-small font-bold">
                                 {{ substr(auth()->user()->name, 0, 1) }}
                             </span>
                         </div>
@@ -281,7 +281,7 @@ use Illuminate\Support\Facades\Storage;
                         $openTicketsCount = $store->tickets()->whereIn('status', ['open', 'in_progress'])->count();
                     @endphp
                     @if($openTicketsCount > 0)
-                        <span class="ml-auto text-xs bg-error-300 text-white-50 px-2 py-1 rounded-full font-medium">
+                        <span class="ml-auto text-xs bg-error-300 text-accent-50 px-2 py-1 rounded-full font-medium">
                             {{ $openTicketsCount }}
                         </span>
                     @endif

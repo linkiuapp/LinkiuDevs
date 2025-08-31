@@ -12,7 +12,7 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-white-100 max-w-[480px] mx-auto">
+<body class="bg-accent-100 max-w-[480px] mx-auto">
 
     <!-- Header -->
     <header class="relative overflow-hidden" style="background: {{ $store->design && $store->design->is_published ? $store->design->header_background_color : '' }}">

@@ -21,7 +21,7 @@
                             <x-solar-upload-outline class="w-5 h-5" />
                             Click to upload
                         </label>
-                        <input type="file" id="basic-upload" class="block w-full body-small text-black-400 border border-white-200 rounded-lg cursor-pointer bg-white-50 mt-6 p-3">
+                        <input type="file" id="basic-upload" class="block w-full body-small text-black-400 border border-accent-200 rounded-lg cursor-pointer bg-accent-50 mt-6 p-3">
                     </div>
                 </div>
                 <div class="card">
@@ -33,7 +33,7 @@
                             <x-solar-upload-outline class="w-5 h-5" />
                             Upload Multiple Files
                         </label>
-                        <input type="file" id="multiple-upload" multiple class="block w-full body-small text-black-400 border border-white-200 rounded-lg cursor-pointer bg-white-50 mt-6 p-3">
+                        <input type="file" id="multiple-upload" multiple class="block w-full body-small text-black-400 border border-accent-200 rounded-lg cursor-pointer bg-accent-50 mt-6 p-3">
                     </div>
                 </div>
             </div>
@@ -47,20 +47,20 @@
         </div>
         <div class="card-body">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+                <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                     <div class="card-header">
                         <h6 class="title-card">Single Image Upload</h6>
                     </div>
                     <div class="card-body">
                         <div class="upload-image-wrapper flex items-center gap-3">
-                            <div class="uploaded-img hidden relative h-[120px] w-[120px] border border-dashed border-white-200 rounded-lg overflow-hidden bg-white-200">
+                            <div class="uploaded-img hidden relative h-[120px] w-[120px] border border-dashed border-accent-200 rounded-lg overflow-hidden bg-accent-200">
                                 <button type="button" class="uploaded-img__remove absolute top-0 right-0 z-10 text-error-200 hover:text-error-300 m-2 flex">
                                     <x-solar-close-circle-outline class="w-5 h-5" />
                                 </button>
                                 <img id="uploaded-img__preview" class="w-full h-full object-cover" src="#" alt="Preview">
                             </div>
 
-                            <label class="upload-file h-[120px] w-[120px] border border-dashed border-white-200 rounded-lg overflow-hidden bg-white-100 hover:bg-white-200 flex items-center flex-col justify-center gap-1 cursor-pointer" for="upload-file">
+                            <label class="upload-file h-[120px] w-[120px] border border-dashed border-accent-200 rounded-lg overflow-hidden bg-accent-100 hover:bg-accent-200 flex items-center flex-col justify-center gap-1 cursor-pointer" for="upload-file">
                                 <x-solar-camera-outline class="w-6 h-6 text-black-400" />
                                 <span class="text-sm text-black-400">Upload</span>
                                 <input id="upload-file" type="file" accept="image/*" class="hidden">
@@ -75,7 +75,7 @@
                     <div class="card-body">
                         <div class="upload-image-wrapper flex items-center gap-3 flex-wrap">
                             <div class="uploaded-imgs-container flex gap-3 flex-wrap"></div>
-                            <label class="upload-file-multiple h-[120px] w-[120px] border border-dashed border-white-200 rounded-lg overflow-hidden bg-white-200 hover:bg-white-300 flex items-center flex-col justify-center gap-1 cursor-pointer" for="upload-file-multiple">
+                            <label class="upload-file-multiple h-[120px] w-[120px] border border-dashed border-accent-200 rounded-lg overflow-hidden bg-accent-200 hover:bg-accent-300 flex items-center flex-col justify-center gap-1 cursor-pointer" for="upload-file-multiple">
                                 <x-solar-camera-outline class="w-6 h-6 text-black-400" />
                                 <span class="text-sm text-black-400">Upload</span>
                                 <input id="upload-file-multiple" type="file" accept="image/*" multiple class="hidden">
@@ -112,7 +112,7 @@
                         <h6 class="title-card">Drag & Drop Upload</h6>
                     </div>
                     <div class="card-body">
-                        <div class="border-2 border-dashed border-white-400 rounded-lg p-8 text-center bg-white-100 hover:bg-white-200 transition-colors duration-200 cursor-pointer" id="drag-drop-area">
+                        <div class="border-2 border-dashed border-accent-400 rounded-lg p-8 text-center bg-accent-100 hover:bg-accent-200 transition-colors duration-200 cursor-pointer" id="drag-drop-area">
                             <div class="flex flex-col items-center justify-center gap-4">
                                 <x-solar-cloud-upload-outline class="w-12 h-12 text-info-200" />
                                 <div>

@@ -8,7 +8,7 @@
     <div class="flex justify-between items-center mb-6">
         <div class="flex items-center gap-4">
             <a href="{{ route('superlinkiu.invoices.index') }}" 
-               class="bg-white-100 hover:bg-white-200 text-black-400 px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+               class="bg-accent-100 hover:bg-accent-200 text-black-400 px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
                 <x-solar-arrow-left-outline class="w-4 h-4" />
                 Volver
             </a>
@@ -21,20 +21,20 @@
         <div class="flex items-center gap-3">
             @if(!$invoice->isPaid() && !$invoice->isCancelled())
                 <button onclick="markAsPaid({{ $invoice->id }})" 
-                        class="bg-success-300 hover:bg-success-400 text-white-50 px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+                        class="bg-success-300 hover:bg-success-400 text-accent-50 px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
                     <x-solar-check-circle-outline class="w-4 h-4" />
                     Marcar como Pagada
                 </button>
                 
                 <button onclick="cancelInvoice({{ $invoice->id }})" 
-                        class="bg-error-300 hover:bg-error-400 text-white-50 px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+                        class="bg-error-300 hover:bg-error-400 text-accent-50 px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
                     <x-solar-close-circle-outline class="w-4 h-4" />
                     Cancelar Factura
                 </button>
             @endif
             
             <a href="{{ route('superlinkiu.invoices.edit', $invoice) }}" 
-               class="bg-primary-200 hover:bg-primary-300 text-white-50 px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+               class="bg-primary-200 hover:bg-primary-300 text-accent-50 px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
                 <x-solar-pen-outline class="w-4 h-4" />
                 Editar
             </a>
@@ -45,8 +45,8 @@
         <!-- Información Principal -->
         <div class="lg:col-span-2">
             <!-- Detalles de la Factura -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden shadow-sm mb-6">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden shadow-sm mb-6">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-lg text-black-500 mb-0 font-semibold">Detalles de la Factura</h2>
                 </div>
                 <div class="p-6">
@@ -101,9 +101,9 @@
                     </div>
                     
                     @if($invoice->notes)
-                        <div class="mt-6 pt-6 border-t border-white-100">
+                        <div class="mt-6 pt-6 border-t border-accent-100">
                             <h3 class="text-sm font-semibold text-black-400 mb-2">Notas</h3>
-                            <p class="text-sm text-black-300 bg-white-100 p-3 rounded-lg">{{ $invoice->notes }}</p>
+                            <p class="text-sm text-black-300 bg-accent-100 p-3 rounded-lg">{{ $invoice->notes }}</p>
                         </div>
                     @endif
                 </div>
@@ -111,14 +111,14 @@
 
             <!-- Historial de Estados -->
             @if($invoice->status_history)
-                <div class="bg-white-50 rounded-lg p-0 overflow-hidden shadow-sm">
-                    <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+                <div class="bg-accent-50 rounded-lg p-0 overflow-hidden shadow-sm">
+                    <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                         <h2 class="text-lg text-black-500 mb-0 font-semibold">Historial de Estados</h2>
                     </div>
                     <div class="p-6">
                         <div class="space-y-4">
                             @foreach($invoice->status_history as $history)
-                                <div class="flex items-center gap-3 p-3 bg-white-100 rounded-lg">
+                                <div class="flex items-center gap-3 p-3 bg-accent-100 rounded-lg">
                                     <div class="w-2 h-2 rounded-full {{ $history['status'] === 'paid' ? 'bg-success-300' : ($history['status'] === 'cancelled' ? 'bg-error-300' : 'bg-warning-300') }}"></div>
                                     <div class="flex-1">
                                         <div class="text-sm font-medium text-black-500">{{ $history['status_label'] }}</div>
@@ -138,14 +138,14 @@
         <!-- Sidebar -->
         <div class="lg:col-span-1">
             <!-- Información de la Tienda -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden shadow-sm mb-6">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden shadow-sm mb-6">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-lg text-black-500 mb-0 font-semibold">Tienda</h2>
                 </div>
                 <div class="p-6">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="w-10 h-10 bg-primary-200 rounded-full flex items-center justify-center">
-                            <span class="text-white-50 font-medium">{{ substr($invoice->store->name, 0, 1) }}</span>
+                            <span class="text-accent-50 font-medium">{{ substr($invoice->store->name, 0, 1) }}</span>
                         </div>
                         <div>
                             <h3 class="font-semibold text-black-500">{{ $invoice->store->name }}</h3>
@@ -176,7 +176,7 @@
                         @endif
                     </div>
                     
-                    <div class="mt-4 pt-4 border-t border-white-100">
+                    <div class="mt-4 pt-4 border-t border-accent-100">
                         <a href="{{ route('superlinkiu.stores.show', $invoice->store) }}" 
                            class="text-primary-200 hover:text-primary-300 text-sm font-medium transition-colors">
                             Ver tienda completa →
@@ -186,14 +186,14 @@
             </div>
 
             <!-- Información del Plan -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden shadow-sm mb-6">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden shadow-sm mb-6">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-lg text-black-500 mb-0 font-semibold">Plan</h2>
                 </div>
                 <div class="p-6">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="w-10 h-10 bg-secondary-200 rounded-full flex items-center justify-center">
-                            <x-solar-crown-outline class="w-5 h-5 text-white-50" />
+                            <x-solar-crown-outline class="w-5 h-5 text-accent-50" />
                         </div>
                         <div>
                             <h3 class="font-semibold text-black-500">{{ $invoice->plan->name }}</h3>
@@ -216,7 +216,7 @@
                         </div>
                     </div>
                     
-                    <div class="mt-4 pt-4 border-t border-white-100">
+                    <div class="mt-4 pt-4 border-t border-accent-100">
                         <a href="{{ route('superlinkiu.plans.show', $invoice->plan) }}" 
                            class="text-primary-200 hover:text-primary-300 text-sm font-medium transition-colors">
                             Ver plan completo →
@@ -226,42 +226,42 @@
             </div>
 
             <!-- Acciones Rápidas -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden shadow-sm">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden shadow-sm">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-lg text-black-500 mb-0 font-semibold">Acciones</h2>
                 </div>
                 <div class="p-6">
                     <div class="space-y-3">
                         @if(!$invoice->isPaid() && !$invoice->isCancelled())
                             <button onclick="markAsPaid({{ $invoice->id }})" 
-                                    class="w-full bg-success-300 hover:bg-success-400 text-white-50 px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
+                                    class="w-full bg-success-300 hover:bg-success-400 text-accent-50 px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
                                 <x-solar-check-circle-outline class="w-4 h-4" />
                                 Marcar como Pagada
                             </button>
                             
                             <button onclick="cancelInvoice({{ $invoice->id }})" 
-                                    class="w-full bg-error-300 hover:bg-error-400 text-white-50 px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
+                                    class="w-full bg-error-300 hover:bg-error-400 text-accent-50 px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
                                 <x-solar-close-circle-outline class="w-4 h-4" />
                                 Cancelar Factura
                             </button>
                         @endif
                         
                         <a href="{{ route('superlinkiu.invoices.edit', $invoice) }}" 
-                           class="w-full bg-primary-200 hover:bg-primary-300 text-white-50 px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
+                           class="w-full bg-primary-200 hover:bg-primary-300 text-accent-50 px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
                             <x-solar-pen-outline class="w-4 h-4" />
                             Editar Factura
                         </a>
                         
                         @if(!$invoice->isPaid())
                             <button onclick="deleteInvoice({{ $invoice->id }})" 
-                                    class="w-full bg-white-100 hover:bg-error-100 text-error-300 border border-error-200 hover:border-error-300 px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
+                                    class="w-full bg-accent-100 hover:bg-error-100 text-error-300 border border-error-200 hover:border-error-300 px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
                                 <x-solar-trash-bin-trash-outline class="w-4 h-4" />
                                 Eliminar Factura
                             </button>
                         @endif
                         
                         <a href="{{ route('superlinkiu.invoices.generate-for-store', $invoice->store) }}" 
-                           class="w-full bg-info-200 hover:bg-info-300 text-white-50 px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
+                           class="w-full bg-info-200 hover:bg-info-300 text-accent-50 px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2">
                             <x-solar-add-circle-outline class="w-4 h-4" />
                             Generar Nueva Factura
                         </a>
@@ -275,7 +275,7 @@
 <!-- Modales -->
 <!-- Modal Marcar como Pagada -->
 <div id="markAsPaidModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
-    <div class="bg-white-50 rounded-lg p-6 w-full max-w-md">
+    <div class="bg-accent-50 rounded-lg p-6 w-full max-w-md">
         <h3 class="text-lg font-semibold text-black-500 mb-4">Marcar como Pagada</h3>
         <form id="markAsPaidForm">
             <div class="mb-4">
@@ -285,7 +285,7 @@
                 <input type="date" 
                        id="paid_date" 
                        name="paid_date"
-                       class="w-full px-3 py-2 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300"
+                       class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300"
                        value="{{ now()->format('Y-m-d') }}">
             </div>
             <div class="flex gap-3 justify-end">
@@ -294,7 +294,7 @@
                     Cancelar
                 </button>
                 <button type="submit" 
-                        class="px-4 py-2 bg-success-300 text-white-50 rounded-lg hover:bg-success-400">
+                        class="px-4 py-2 bg-success-300 text-accent-50 rounded-lg hover:bg-success-400">
                     Confirmar Pago
                 </button>
             </div>
@@ -304,7 +304,7 @@
 
 <!-- Modal Cancelar Factura -->
 <div id="cancelInvoiceModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
-    <div class="bg-white-50 rounded-lg p-6 w-full max-w-md">
+    <div class="bg-accent-50 rounded-lg p-6 w-full max-w-md">
         <h3 class="text-lg font-semibold text-error-300 mb-4">Cancelar Factura</h3>
         <form id="cancelInvoiceForm">
             <div class="mb-4">
@@ -314,7 +314,7 @@
                 <textarea id="reason" 
                           name="reason"
                           rows="3"
-                          class="w-full px-3 py-2 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300"
+                          class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300"
                           placeholder="Describe la razón de la cancelación..."></textarea>
             </div>
             <div class="flex gap-3 justify-end">
@@ -323,7 +323,7 @@
                     Cancelar
                 </button>
                 <button type="submit" 
-                        class="px-4 py-2 bg-error-300 text-white-50 rounded-lg hover:bg-error-400">
+                        class="px-4 py-2 bg-error-300 text-accent-50 rounded-lg hover:bg-error-400">
                     Confirmar Cancelación
                 </button>
             </div>

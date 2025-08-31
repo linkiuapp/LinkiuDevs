@@ -8,8 +8,8 @@
         <!-- ================================================================= -->
         <!-- SECCIÓN 1: MI PLAN ACTUAL -->
         <!-- ================================================================= -->
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-            <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+            <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                 <h2 class="text-lg text-black-500 mb-0 font-semibold">Mi Plan Actual</h2>
             </div>
             
@@ -28,9 +28,9 @@
                         </div>
                         <div class="text-right">
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium 
-                                @if($subscription->is_active) bg-success-300 text-white-50
+                                @if($subscription->is_active) bg-success-300 text-accent-50
                                 @elseif($subscription->is_cancelled) bg-warning-300 text-black-500
-                                @else bg-error-300 text-white-50 @endif">
+                                @else bg-error-300 text-accent-50 @endif">
                                 @if($subscription->is_active) 
                                     <x-solar-check-circle-outline class="w-3 h-3 mr-1" />
                                     {{ $subscription->status_label }}
@@ -57,7 +57,7 @@
                                 <span class="text-black-500">Productos</span>
                                 <span class="text-black-300">{{ $usage['products'] }}/{{ $limits['products'] }} ({{ $percentages['products'] }}%)</span>
                             </div>
-                            <div class="w-full bg-white-200 rounded-full h-2">
+                            <div class="w-full bg-accent-200 rounded-full h-2">
                                 <div class="h-2 rounded-full transition-all duration-300 
                                     @if($percentages['products'] >= 90) bg-error-300
                                     @elseif($percentages['products'] >= 70) bg-warning-300
@@ -72,7 +72,7 @@
                                 <span class="text-black-500">Categorías</span>
                                 <span class="text-black-300">{{ $usage['categories'] }}/{{ $limits['categories'] }} ({{ $percentages['categories'] }}%)</span>
                             </div>
-                            <div class="w-full bg-white-200 rounded-full h-2">
+                            <div class="w-full bg-accent-200 rounded-full h-2">
                                 <div class="h-2 rounded-full transition-all duration-300 
                                     @if($percentages['categories'] >= 90) bg-error-300
                                     @elseif($percentages['categories'] >= 70) bg-warning-300
@@ -87,7 +87,7 @@
                                 <span class="text-black-500">Variables</span>
                                 <span class="text-black-300">{{ $usage['variables'] }}/{{ $limits['variables'] }} ({{ $percentages['variables'] }}%)</span>
                             </div>
-                            <div class="w-full bg-white-200 rounded-full h-2">
+                            <div class="w-full bg-accent-200 rounded-full h-2">
                                 <div class="h-2 rounded-full transition-all duration-300 
                                     @if($percentages['variables'] >= 90) bg-error-300
                                     @elseif($percentages['variables'] >= 70) bg-warning-300
@@ -102,7 +102,7 @@
                                 <span class="text-black-500">Sliders</span>
                                 <span class="text-black-300">{{ $usage['sliders'] }}/{{ $limits['sliders'] }} ({{ $percentages['sliders'] }}%)</span>
                             </div>
-                            <div class="w-full bg-white-200 rounded-full h-2">
+                            <div class="w-full bg-accent-200 rounded-full h-2">
                                 <div class="h-2 rounded-full transition-all duration-300 
                                     @if($percentages['sliders'] >= 90) bg-error-300
                                     @elseif($percentages['sliders'] >= 70) bg-warning-300
@@ -117,7 +117,7 @@
                                 <span class="text-black-500">Sedes</span>
                                 <span class="text-black-300">{{ $usage['locations'] }}/{{ $limits['locations'] }} ({{ $percentages['locations'] }}%)</span>
                             </div>
-                            <div class="w-full bg-white-200 rounded-full h-2">
+                            <div class="w-full bg-accent-200 rounded-full h-2">
                                 <div class="h-2 rounded-full transition-all duration-300 
                                     @if($percentages['locations'] >= 90) bg-error-300
                                     @elseif($percentages['locations'] >= 70) bg-warning-300
@@ -132,7 +132,7 @@
                                 <span class="text-black-500">Cuentas Bancarias</span>
                                 <span class="text-black-300">{{ $usage['bank_accounts'] }}/{{ $limits['bank_accounts'] }} ({{ $percentages['bank_accounts'] }}%)</span>
                             </div>
-                            <div class="w-full bg-white-200 rounded-full h-2">
+                            <div class="w-full bg-accent-200 rounded-full h-2">
                                 <div class="h-2 rounded-full transition-all duration-300 
                                     @if($percentages['bank_accounts'] >= 90) bg-error-300
                                     @elseif($percentages['bank_accounts'] >= 70) bg-warning-300
@@ -174,7 +174,7 @@
                 </div>
 
                 <!-- Acciones del Plan -->
-                <div class="flex flex-wrap gap-3 pt-4 border-t border-white-100">
+                <div class="flex flex-wrap gap-3 pt-4 border-t border-accent-100">
                     <button @click="showChangePlanModal = true" 
                             class="btn-primary">
                         <x-solar-arrow-up-outline class="w-4 h-4 mr-2" />
@@ -194,8 +194,8 @@
         <!-- ================================================================= -->
         <!-- SECCIÓN 2: FACTURACIÓN -->
         <!-- ================================================================= -->
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-            <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+            <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                 <h2 class="text-lg text-black-500 mb-0 font-semibold">Facturación</h2>
             </div>
             
@@ -230,14 +230,14 @@
                     @if($recentInvoices->count() > 0)
                         <div class="space-y-3">
                             @foreach($recentInvoices as $invoice)
-                                <div class="flex items-center justify-between p-4 border border-white-100 rounded-lg">
+                                <div class="flex items-center justify-between p-4 border border-accent-100 rounded-lg">
                                     <div class="flex-1">
                                         <div class="flex items-center gap-3 mb-1">
                                             <h5 class="text-sm font-semibold text-black-500">#{{ $invoice->invoice_number }}</h5>
                                             <span class="text-xs px-2 py-1 rounded-full 
-                                                @if($invoice->status === 'paid') bg-success-300 text-white-50
+                                                @if($invoice->status === 'paid') bg-success-300 text-accent-50
                                                 @elseif($invoice->status === 'pending') bg-warning-300 text-black-500
-                                                @else bg-error-300 text-white-50 @endif">
+                                                @else bg-error-300 text-accent-50 @endif">
                                                 @if($invoice->status === 'paid') Pagada
                                                 @elseif($invoice->status === 'pending') Pendiente
                                                 @elseif($invoice->status === 'overdue') Vencida
@@ -251,7 +251,7 @@
                                     
                                     @if($invoice->status === 'paid')
                                         <a href="{{ route('tenant.admin.billing.download-invoice', [$store->slug, $invoice->id]) }}" 
-                                           class="text-primary-200 hover:text-primary-300 p-2 rounded-lg hover:bg-white-100 transition-colors">
+                                           class="text-primary-200 hover:text-primary-300 p-2 rounded-lg hover:bg-accent-100 transition-colors">
                                             <x-solar-download-outline class="w-4 h-4" />
                                         </a>
                                     @endif
@@ -324,15 +324,15 @@
         <!-- ================================================================= -->
         <!-- SECCIÓN 3: GESTIÓN DE SUSCRIPCIÓN -->
         <!-- ================================================================= -->
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-            <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+            <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                 <h2 class="text-lg text-black-500 mb-0 font-semibold">Gestión de Suscripción</h2>
             </div>
             
             <div class="p-6 space-y-6">
                 
                 <!-- Estado de la Suscripción -->
-                <div class="bg-gradient-to-r from-primary-50 to-white-50 border border-primary-100 rounded-lg p-4">
+                <div class="bg-gradient-to-r from-primary-50 to-accent-50 border border-primary-100 rounded-lg p-4">
                     <div class="flex items-center justify-between">
                         <div>
                             <h4 class="text-sm font-medium text-primary-300 mb-1">Estado de la Suscripción</h4>
@@ -363,7 +363,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                             @foreach($availablePlans as $plan)
                                 @if($plan->id !== $subscription->plan_id)
-                                    <div class="p-4 border border-white-200 rounded-lg hover:border-primary-200 transition-colors">
+                                    <div class="p-4 border border-accent-200 rounded-lg hover:border-primary-200 transition-colors">
                                         <div class="flex items-center justify-between mb-2">
                                             <h5 class="text-sm font-semibold text-black-500">{{ $plan->name }}</h5>
                                             @if($plan->price > $subscription->plan->price)
@@ -394,7 +394,7 @@
                         <h4 class="text-sm font-medium text-black-400 mb-3">Historial de Cambios:</h4>
                         <div class="space-y-2">
                             @foreach($recentChanges->take(5) as $change)
-                                <div class="flex items-center justify-between py-2 px-3 bg-white-100 rounded">
+                                <div class="flex items-center justify-between py-2 px-3 bg-accent-100 rounded">
                                     <div class="flex items-center gap-3">
                                         <div class="w-2 h-2 rounded-full 
                                             @if($change->is_upgrade) bg-success-300
@@ -410,7 +410,7 @@
                 @endif
 
                 <!-- Acciones de Suscripción -->
-                <div class="pt-4 border-t border-white-100">
+                <div class="pt-4 border-t border-accent-100">
                     @if($subscription->is_active)
                         <div class="bg-error-50 border border-error-100 rounded-lg p-4">
                             <h4 class="text-sm font-medium text-error-300 mb-2">⚠️ Cancelar Suscripción</h4>
@@ -419,7 +419,7 @@
                                 Después pasará al plan Explorer automáticamente. Podrás reactivar en cualquier momento.
                             </p>
                             <button @click="showCancelModal = true" 
-                                    class="text-xs px-4 py-2 bg-error-300 text-white-50 rounded hover:bg-error-400 transition-colors">
+                                    class="text-xs px-4 py-2 bg-error-300 text-accent-50 rounded hover:bg-error-400 transition-colors">
                                 Cancelar Suscripción
                             </button>
                         </div>
@@ -430,7 +430,7 @@
                                 Puedes reactivar tu suscripción y continuar con todas las funcionalidades.
                             </p>
                             <button @click="showReactivateModal = true" 
-                                    class="text-xs px-4 py-2 bg-success-300 text-white-50 rounded hover:bg-success-400 transition-colors">
+                                    class="text-xs px-4 py-2 bg-success-300 text-accent-50 rounded hover:bg-success-400 transition-colors">
                                 Reactivar Suscripción
                             </button>
                         </div>

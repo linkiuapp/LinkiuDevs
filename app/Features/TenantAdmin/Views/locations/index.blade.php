@@ -45,8 +45,8 @@
     {{-- FILTROS Y BÚSQUEDA --}}
     {{-- ================================================================ --}}
     
-    <div class="bg-white-50 rounded-lg shadow-sm mb-6">
-        <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+    <div class="bg-accent-50 rounded-lg shadow-sm mb-6">
+        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
             <h2 class="text-lg font-semibold text-black-400 mb-0">Filtros y Búsqueda</h2>
         </div>
         
@@ -61,7 +61,7 @@
                             name="search"
                             value="{{ request('search') }}"
                             placeholder="Nombre, ciudad o encargado..."
-                            class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                            class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
                     </div>
                     
                     <div>
@@ -69,7 +69,7 @@
                             Estado
                         </label>
                         <select name="status"
-                            class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                            class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
                             <option value="">Todas</option>
                             <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Activas</option>
                             <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactivas</option>
@@ -94,14 +94,14 @@
     {{-- CONTENIDO PRINCIPAL - TABLA DE SEDES --}}
     {{-- ================================================================ --}}
     
-    <div class="bg-white-50 rounded-lg shadow-sm mb-6 overflow-hidden">
-        <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+    <div class="bg-accent-50 rounded-lg shadow-sm mb-6 overflow-hidden">
+        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
             <h2 class="text-lg font-semibold text-black-400 mb-0">Listado de Sedes</h2>
         </div>
         
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-white-100">
-                <thead class="bg-white-100">
+            <table class="min-w-full divide-y divide-accent-100">
+                <thead class="bg-accent-100">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-black-300 uppercase tracking-wider">
                             Sede
@@ -120,7 +120,7 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody class="bg-white-50 divide-y divide-white-100">
+                <tbody class="bg-accent-50 divide-y divide-accent-100">
                     @forelse($locations as $location)
                         <tr>
                             <td class="px-6 py-4">

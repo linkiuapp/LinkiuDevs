@@ -3,17 +3,17 @@
 @section('title', 'Email Details')
 
 @section('content')
-<div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-    <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+<div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+    <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
         <h2 class="text-3xl text-black-500 mb-0">Email Details</h2>
     </div>
     <div class="p-6">
         <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
             <!-- Sidebar -->
             <div class="col-span-12 xl:col-span-4 2xl:col-span-3">
-                <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+                <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                     <div class="p-6">
-                        <button type="button" class="bg-primary-400 hover:bg-primary-500 text-white-50 text-sm px-3 py-3 w-full rounded-lg flex items-center gap-2 mb-4 transition-colors">
+                        <button type="button" class="bg-primary-400 hover:bg-primary-500 text-accent-50 text-sm px-3 py-3 w-full rounded-lg flex items-center gap-2 mb-4 transition-colors">
                             <x-solar-add-square-outline class="w-5 h-5" />
                             Redactar
                         </button>
@@ -123,11 +123,11 @@
 
             <!-- Main Content -->
             <div class="col-span-12 xl:col-span-8 2xl:col-span-9">
-                <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+                <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                     <div class="flex flex-col justify-between h-full">
                         <div>
                             <!-- Header -->
-                            <div class="border-b border-white-100 bg-white-50 py-4 px-6 flex items-center gap-3 justify-between flex-wrap">
+                            <div class="border-b border-accent-100 bg-accent-50 py-4 px-6 flex items-center gap-3 justify-between flex-wrap">
                                 <div class="flex items-center gap-2">
                                     <button class="text-black-300 hover:text-black-500 transition-colors">
                                         <x-solar-arrow-left-outline class="w-5 h-5" />
@@ -151,7 +151,7 @@
                             <!-- Email Content -->
                             <div class="p-0">
                                 <!-- Email Messages -->
-                                <div class="py-4 px-6 border-b border-white-100">
+                                <div class="py-4 px-6 border-b border-accent-100">
                                     <div class="flex items-start gap-3">
                                         <div class="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
                                             <span class="text-primary-400 font-semibold">KM</span>
@@ -175,7 +175,7 @@
                                 </div>
 
                                 <!-- Reply Message -->
-                                <div class="py-4 px-6 border-b border-white-100">
+                                <div class="py-4 px-6 border-b border-accent-100">
                                     <div class="flex items-start gap-3">
                                         <div class="w-10 h-10 bg-secondary-100 rounded-full flex items-center justify-center">
                                             <span class="text-secondary-400 font-semibold">SS</span>
@@ -195,7 +195,7 @@
                         </div>
 
                         <!-- Reply Form -->
-                        <div class="py-4 px-6 bg-white-50 border-t border-white-100">
+                        <div class="py-4 px-6 bg-accent-50 border-t border-accent-100">
                             <form>
                                 <div class="flex items-end gap-4">
                                     <div class="flex-1">
@@ -220,7 +220,7 @@
                                             </label>
                                             <input type="file" id="gallery" class="hidden" accept="image/*">
                                         </div>
-                                        <button type="submit" class="bg-primary-400 hover:bg-primary-500 text-white-50 text-sm px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+                                        <button type="submit" class="bg-primary-400 hover:bg-primary-500 text-accent-50 text-sm px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
                                             <x-solar-plain-2-outline class="w-4 h-4" />
                                             Enviar
                                         </button>
@@ -239,7 +239,7 @@
 /* Estilos para el área de respuesta */
 .reply-textarea {
     scrollbar-width: thin;
-    scrollbar-color: rgb(var(--white-200)) transparent;
+    scrollbar-color: rgb(var(--accent-200)) transparent;
 }
 
 .reply-textarea::-webkit-scrollbar {
@@ -251,12 +251,12 @@
 }
 
 .reply-textarea::-webkit-scrollbar-thumb {
-    background: rgb(var(--white-200));
+    background: rgb(var(--accent-200));
     border-radius: 2px;
 }
 
 .reply-textarea::-webkit-scrollbar-thumb:hover {
-    background: rgb(var(--white-300));
+    background: rgb(var(--accent-300));
 }
 </style>
 

@@ -27,7 +27,7 @@
         @csrf
         
         <!-- Card principal -->
-        <div class="bg-white-50 rounded-lg p-6">
+        <div class="bg-accent-50 rounded-lg p-6">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Nombre -->
                 <div class="lg:col-span-2">
@@ -38,7 +38,7 @@
                            id="name" 
                            name="name" 
                            value="{{ old('name') }}"
-                           class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500 placeholder-black-200" 
+                           class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500 placeholder-black-200" 
                            placeholder="Ej: Talla, Color, Material"
                            required>
                     @error('name')
@@ -53,7 +53,7 @@
                     </label>
                     <select id="type" 
                             name="type" 
-                            class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500"
+                            class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500"
                             required>
                         <option value="">Selecciona un tipo</option>
                         <option value="radio" {{ old('type') == 'radio' ? 'selected' : '' }}>Selección única</option>
@@ -78,7 +78,7 @@
                                name="is_required_default" 
                                value="1"
                                {{ old('is_required_default', '0') == '1' ? 'checked' : '' }}
-                               class="w-4 h-4 text-primary-400 bg-white-50 border-white-200 rounded focus:ring-primary-200 focus:ring-2">
+                               class="w-4 h-4 text-primary-400 bg-accent-50 border-accent-200 rounded focus:ring-primary-200 focus:ring-2">
                         <label for="is_required_default" class="ml-2 text-sm text-black-400">
                             Requerido por defecto
                         </label>
@@ -100,7 +100,7 @@
                                    name="min_value" 
                                    value="{{ old('min_value') }}"
                                    step="0.01"
-                                   class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500" 
+                                   class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500" 
                                    placeholder="0.00">
                             @error('min_value')
                                 <p class="text-error-400 text-sm mt-1">{{ $message }}</p>
@@ -115,7 +115,7 @@
                                    name="max_value" 
                                    value="{{ old('max_value') }}"
                                    step="0.01"
-                                   class="w-full px-4 py-3 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500" 
+                                   class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500" 
                                    placeholder="100.00">
                             @error('max_value')
                                 <p class="text-error-400 text-sm mt-1">{{ $message }}</p>
@@ -136,7 +136,7 @@
                                name="is_active" 
                                value="1"
                                {{ old('is_active', '1') == '1' ? 'checked' : '' }}
-                               class="w-4 h-4 text-primary-400 bg-white-50 border-white-200 rounded focus:ring-primary-200 focus:ring-2">
+                               class="w-4 h-4 text-primary-400 bg-accent-50 border-accent-200 rounded focus:ring-primary-200 focus:ring-2">
                         <label for="is_active" class="ml-2 text-sm text-black-400">
                             Variable activa
                         </label>
@@ -150,7 +150,7 @@
 
         <!-- Opciones de Variable -->
         <div id="optionsSection" style="display: none;">
-            <div class="bg-white-50 rounded-lg p-6">
+            <div class="bg-accent-50 rounded-lg p-6">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-semibold text-black-500">Opciones de la Variable</h3>
                     <button type="button" 
@@ -170,11 +170,11 @@
         <!-- Botones -->
         <div class="flex items-center justify-end gap-3">
             <a href="{{ route('tenant.admin.variables.index', $store->slug) }}" 
-               class="px-4 py-2 border border-white-200 rounded-lg text-black-400 hover:bg-white-100 transition-colors">
+               class="px-4 py-2 border border-accent-200 rounded-lg text-black-400 hover:bg-accent-100 transition-colors">
                 Cancelar
             </a>
             <button type="submit" 
-                    class="px-4 py-2 bg-primary-200 text-white-50 rounded-lg hover:bg-primary-300 transition-colors flex items-center gap-2">
+                    class="px-4 py-2 bg-primary-200 text-accent-50 rounded-lg hover:bg-primary-300 transition-colors flex items-center gap-2">
                 <x-solar-diskette-outline class="w-5 h-5" />
                 Crear Variable
             </button>
@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function addOption() {
         const optionHtml = `
-            <div class="option-item bg-white-100 rounded-lg p-4">
+            <div class="option-item bg-accent-100 rounded-lg p-4">
                 <div class="flex items-center justify-between mb-3">
                     <h4 class="font-medium text-black-400">Opción ${optionIndex + 1}</h4>
                     <button type="button" class="remove-option text-error-400 hover:text-error-500">
@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         </label>
                         <input type="text" 
                                name="options[${optionIndex}][name]" 
-                               class="w-full px-3 py-2 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500" 
+                               class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500" 
                                placeholder="Ej: Rojo, Talla M, etc."
                                required>
                     </div>
@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <input type="number" 
                                name="options[${optionIndex}][price_modifier]" 
                                step="0.01"
-                               class="w-full px-3 py-2 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500" 
+                               class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500" 
                                placeholder="0.00">
                     </div>
                     <div>
@@ -252,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         </label>
                         <input type="text" 
                                name="options[${optionIndex}][color_hex]" 
-                               class="w-full px-3 py-2 border border-white-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500" 
+                               class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-200 focus:border-primary-300 transition-colors text-black-500" 
                                placeholder="#FF0000">
                     </div>
                 </div>

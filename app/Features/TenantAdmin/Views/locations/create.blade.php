@@ -20,8 +20,8 @@
         @csrf
         
         {{-- Card principal con toda la información --}}
-        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-            <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+            <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                 <h2 class="text-lg font-semibold text-black-400 mb-0">Información de la Sede</h2>
             </div>
             
@@ -41,7 +41,7 @@
                             <input type="text"
                                 name="name"
                                 value="{{ old('name') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('name') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('name') border-error-200 @enderror"
                                 required>
                             @error('name')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
@@ -55,7 +55,7 @@
                             <input type="text"
                                 name="manager_name"
                                 value="{{ old('manager_name') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('manager_name') border-error-200 @enderror">
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('manager_name') border-error-200 @enderror">
                             @error('manager_name')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
                             @enderror
@@ -68,7 +68,7 @@
                             <textarea
                                 name="description"
                                 rows="3"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('description') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('description') border-error-200 @enderror"
                                 placeholder="Breve descripción de la sede...">{{ old('description') }}</textarea>
                             @error('description')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
@@ -86,7 +86,7 @@
                                         value="1"
                                         class="sr-only peer" 
                                         {{ old('is_main') ? 'checked' : '' }}>
-                                    <div class="w-11 h-6 bg-white-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white-50 after:border-white-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200"></div>
+                                    <div class="w-11 h-6 bg-accent-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-accent-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-accent-50 after:border-accent-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200"></div>
                                 </label>
                                 <span class="text-sm text-black-300">Establecer como sede principal</span>
                             </div>
@@ -106,7 +106,7 @@
                                         value="1"
                                         class="sr-only peer" 
                                         {{ old('is_active', true) ? 'checked' : '' }}>
-                                    <div class="w-11 h-6 bg-white-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white-50 after:border-white-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200"></div>
+                                    <div class="w-11 h-6 bg-accent-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-accent-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-accent-50 after:border-accent-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200"></div>
                                 </label>
                                 <span class="text-sm text-black-300">Sede activa</span>
                             </div>
@@ -132,7 +132,7 @@
                             <input type="text"
                                 name="phone"
                                 value="{{ old('phone') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('phone') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('phone') border-error-200 @enderror"
                                 placeholder="+57 1 234 5678"
                                 required>
                             @error('phone')
@@ -147,7 +147,7 @@
                             <input type="text"
                                 name="whatsapp"
                                 value="{{ old('whatsapp') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('whatsapp') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('whatsapp') border-error-200 @enderror"
                                 placeholder="+57 300 123 4567">
                             @error('whatsapp')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
@@ -161,7 +161,7 @@
                             <input type="text"
                                 name="department"
                                 value="{{ old('department') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('department') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('department') border-error-200 @enderror"
                                 placeholder="Cundinamarca"
                                 required>
                             @error('department')
@@ -176,7 +176,7 @@
                             <input type="text"
                                 name="city"
                                 value="{{ old('city') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('city') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('city') border-error-200 @enderror"
                                 placeholder="Bogotá"
                                 required>
                             @error('city')
@@ -191,7 +191,7 @@
                             <input type="text"
                                 name="address"
                                 value="{{ old('address') }}"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('address') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('address') border-error-200 @enderror"
                                 placeholder="Calle 123 #45-67, Centro"
                                 required>
                             @error('address')
@@ -206,7 +206,7 @@
                             <textarea
                                 name="whatsapp_message"
                                 rows="2"
-                                class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('whatsapp_message') border-error-200 @enderror"
+                                class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('whatsapp_message') border-error-200 @enderror"
                                 placeholder="Hola, me interesa conocer más sobre sus productos en [Nombre Sede]">{{ old('whatsapp_message') }}</textarea>
                             <p class="text-xs text-black-200 mt-1">
                                 Este mensaje se usará cuando los clientes hagan clic en el botón de WhatsApp.
@@ -226,8 +226,8 @@
                     </h3>
                     
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-white-100">
-                            <thead class="bg-white-100">
+                        <table class="min-w-full divide-y divide-accent-100">
+                            <thead class="bg-accent-100">
                                 <tr>
                                     <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-black-300 uppercase tracking-wider">
                                         Día
@@ -243,7 +243,7 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white-50 divide-y divide-white-100">
+                            <tbody class="bg-accent-50 divide-y divide-accent-100">
                                 @php
                                     $days = [
                                         0 => 'Domingo',
@@ -290,13 +290,13 @@
                                                  :class="{ 'opacity-50': document.getElementById('day_{{ $dayNum }}_closed')?.checked }">
                                                 <input type="time"
                                                     name="day_{{ $dayNum }}_open_1"
-                                                    class="px-2 py-1 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none time-input"
+                                                    class="px-2 py-1 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none time-input"
                                                     value="{{ old("day_{$dayNum}_open_1", $defaultSchedules[$dayNum]['open_1'] ?? '') }}"
                                                     data-day="{{ $dayNum }}">
                                                 <span class="text-black-300">a</span>
                                                 <input type="time"
                                                     name="day_{{ $dayNum }}_close_1"
-                                                    class="px-2 py-1 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none time-input"
+                                                    class="px-2 py-1 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none time-input"
                                                     value="{{ old("day_{$dayNum}_close_1", $defaultSchedules[$dayNum]['close_1'] ?? '') }}"
                                                     data-day="{{ $dayNum }}">
                                             </div>
@@ -306,13 +306,13 @@
                                                  :class="{ 'opacity-50': document.getElementById('day_{{ $dayNum }}_closed')?.checked }">
                                                 <input type="time"
                                                     name="day_{{ $dayNum }}_open_2"
-                                                    class="px-2 py-1 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none time-input"
+                                                    class="px-2 py-1 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none time-input"
                                                     value="{{ old("day_{$dayNum}_open_2", $defaultSchedules[$dayNum]['open_2'] ?? '') }}"
                                                     data-day="{{ $dayNum }}">
                                                 <span class="text-black-300">a</span>
                                                 <input type="time"
                                                     name="day_{{ $dayNum }}_close_2"
-                                                    class="px-2 py-1 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none time-input"
+                                                    class="px-2 py-1 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none time-input"
                                                     value="{{ old("day_{$dayNum}_close_2", $defaultSchedules[$dayNum]['close_2'] ?? '') }}"
                                                     data-day="{{ $dayNum }}">
                                             </div>
@@ -343,7 +343,7 @@
                                 <input type="url"
                                     name="social_{{ $platform }}"
                                     value="{{ old("social_{$platform}") }}"
-                                    class="w-full px-4 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error("social_{$platform}") border-error-200 @enderror"
+                                    class="w-full px-4 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error("social_{$platform}") border-error-200 @enderror"
                                     placeholder="https://{{ $platform }}.com/mi-sede">
                                 @error("social_{$platform}")
                                     <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
@@ -355,7 +355,7 @@
             </div>
 
             {{-- Footer con botones --}}
-            <div class="border-t border-white-100 bg-white-50 px-6 py-4">
+            <div class="border-t border-accent-100 bg-accent-50 px-6 py-4">
                 <div class="flex justify-end gap-3">
                     <a href="{{ route('tenant.admin.locations.index', ['store' => $store->slug]) }}"
                         class="btn-outline-secondary px-6 py-2 rounded-lg">

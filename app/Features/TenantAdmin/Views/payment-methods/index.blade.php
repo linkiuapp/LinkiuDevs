@@ -71,7 +71,7 @@
     {{-- Loading Overlay --}}
     <div x-show="isLoading" 
          class="fixed inset-0 bg-black-400 bg-opacity-50 z-50 flex items-center justify-center">
-        <div class="bg-white-50 p-4 rounded-lg shadow-lg flex items-center gap-3">
+        <div class="bg-accent-50 p-4 rounded-lg shadow-lg flex items-center gap-3">
             <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary-200"></div>
             <span class="text-black-400">Actualizando orden...</span>
         </div>
@@ -93,7 +93,7 @@
     </div>
 
     {{-- Información de métodos de pago --}}
-    <div class="bg-white-50 rounded-lg p-6 mb-6 border border-white-100">
+    <div class="bg-accent-50 rounded-lg p-6 mb-6 border border-accent-100">
         <div class="flex items-start gap-4">
             <div class="rounded-full bg-primary-50 p-3 flex-shrink-0">
                 <x-solar-info-circle-outline class="w-6 h-6 text-primary-200" />
@@ -105,19 +105,19 @@
                     Puedes activar o desactivar métodos, cambiar su orden de visualización y configurar opciones específicas para cada uno.
                 </p>
                 <div class="flex flex-wrap gap-2 mt-2">
-                    <div class="bg-white-100 px-3 py-1 rounded-lg flex items-center gap-2">
+                    <div class="bg-accent-100 px-3 py-1 rounded-lg flex items-center gap-2">
                         <x-solar-sort-outline class="w-4 h-4 text-black-300" />
                         <span class="text-xs text-black-300">Arrastra para reordenar</span>
                     </div>
-                    <div class="bg-white-100 px-3 py-1 rounded-lg flex items-center gap-2">
+                    <div class="bg-accent-100 px-3 py-1 rounded-lg flex items-center gap-2">
                         <x-solar-eye-outline class="w-4 h-4 text-primary-200" />
                         <span class="text-xs text-black-300">Ver detalles</span>
                     </div>
-                    <div class="bg-white-100 px-3 py-1 rounded-lg flex items-center gap-2">
+                    <div class="bg-accent-100 px-3 py-1 rounded-lg flex items-center gap-2">
                         <x-solar-pen-2-outline class="w-4 h-4 text-warning-200" />
                         <span class="text-xs text-black-300">Editar método</span>
                     </div>
-                    <div class="bg-white-100 px-3 py-1 rounded-lg flex items-center gap-2">
+                    <div class="bg-accent-100 px-3 py-1 rounded-lg flex items-center gap-2">
                         <x-solar-server-path-outline class="w-4 h-4 text-success-200" />
                         <span class="text-xs text-black-300">Activar/Desactivar</span>
                     </div>
@@ -127,8 +127,8 @@
     </div>
 
     {{-- Lista de métodos de pago --}}
-    <div class="bg-white-50 rounded-lg p-0 overflow-hidden mb-6 shadow-sm">
-        <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+    <div class="bg-accent-50 rounded-lg p-0 overflow-hidden mb-6 shadow-sm">
+        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
             <h2 class="text-lg font-semibold text-black-400 mb-0">Métodos de Pago Disponibles</h2>
         </div>
         <div class="p-6">
@@ -146,8 +146,8 @@
                 </div>
             @else
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-white-100">
-                        <thead class="bg-white-100">
+                    <table class="min-w-full divide-y divide-accent-100">
+                        <thead class="bg-accent-100">
                             <tr>
                                 <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-black-300 uppercase tracking-wider">
                                     Orden
@@ -169,7 +169,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white-50 divide-y divide-white-100">
+                        <tbody class="bg-accent-50 divide-y divide-accent-100">
                             @foreach($paymentMethods as $method)
                                 <tr data-method-id="{{ $method->id }}">
                                     <td class="px-4 py-3 whitespace-nowrap">
@@ -277,7 +277,7 @@
     </div>
     
     {{-- Instrucciones para el usuario --}}
-    <div class="bg-white-50 rounded-lg p-6 border border-white-100">
+    <div class="bg-accent-50 rounded-lg p-6 border border-accent-100">
         <h3 class="text-lg font-semibold text-black-400 mb-3">¿Cómo configurar tus métodos de pago?</h3>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">

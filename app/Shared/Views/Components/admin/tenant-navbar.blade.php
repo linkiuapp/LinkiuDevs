@@ -9,7 +9,7 @@
                     <div class="breadcrumb">
                         <ul class="flex items-center gap-[2px]">
                             <li>
-                                <a href="{{ route('tenant.admin.dashboard', ['store' => $store->slug]) }}" class="flex items-center gap-2 hover:text-primary-600 dark:text-white-50">
+                                <a href="{{ route('tenant.admin.dashboard', ['store' => $store->slug]) }}" class="flex items-center gap-2 hover:text-primary-600 dark:text-accent-50">
                                     <x-lucide-layout-dashboard class="w-3 h-3" />
                                     Dashboard
                                 </a>
@@ -101,7 +101,7 @@
                             <span class="sr-only">Pedidos pendientes</span>
                             <div class="relative">
                                 <x-lucide-party-popper class="w-10 h-10 bg-secondary-50 hover:bg-secondary-300 p-2 rounded-lg transition-colors" />
-                                <div class="absolute inline-flex items-center justify-center w-5 h-5 text-small font-medium text-accent-300 bg-error-300 border-2 border-white-50 rounded-full -top-2 -end-2 dark:border-gray-900">
+                                <div class="absolute inline-flex items-center justify-center w-5 h-5 text-small font-medium text-accent-300 bg-error-300 border-2 border-accent-50 rounded-full -top-2 -end-2 dark:border-gray-900">
                                     {{ $store->pending_orders_count ?? 0 }}
                                 </div>
                             </div>
@@ -113,7 +113,7 @@
                             <span class="sr-only">Tickets de soporte</span>
                             <div class="relative">
                                 <x-lucide-message-square-more class="w-10 h-10 bg-secondary-50 hover:bg-secondary-300 p-2 rounded-lg transition-colors" />
-                                <div class="absolute inline-flex items-center justify-center w-5 h-5 text-small font-medium text-accent-300 bg-info-300 border-2 border-white-50 rounded-full -top-2 -end-2 dark:border-gray-900">
+                                <div class="absolute inline-flex items-center justify-center w-5 h-5 text-small font-medium text-accent-300 bg-info-300 border-2 border-accent-50 rounded-full -top-2 -end-2 dark:border-gray-900">
                                     {{ $store->open_tickets_count ?? 0 }}
                                 </div>
                             </div>
@@ -125,7 +125,7 @@
                             <span class="sr-only">Anuncios sin leer</span>
                             <div class="relative">
                                 <x-lucide-megaphone class="w-10 h-10 bg-secondary-50 hover:bg-secondary-300 p-2 rounded-lg transition-colors" />
-                                <div class="absolute inline-flex items-center justify-center w-5 h-5 text-small font-medium text-accent-300 bg-warning-300 border-2 border-white-50 rounded-full -top-2 -end-2 dark:border-gray-900">
+                                <div class="absolute inline-flex items-center justify-center w-5 h-5 text-small font-medium text-accent-300 bg-warning-300 border-2 border-accent-50 rounded-full -top-2 -end-2 dark:border-gray-900">
                                     {{ $store->unread_announcements_count ?? 0 }}
                                 </div>
                             </div>

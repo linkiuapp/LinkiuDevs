@@ -12,12 +12,12 @@ class SuperAdminSeeder extends Seeder
     {
         User::create([
             'name' => 'Super Admin',
-            'email' => 'admin@linkiu.bio',
+            'email' => 'admin@local.test',
             'password' => Hash::make('password'),
             'email_verified_at' => now(),
             'role' => 'super_admin',
             'last_login_at' => null,
-            'tenant_id' => null,
+            'store_id' => null,
         ]);
     }
 } 

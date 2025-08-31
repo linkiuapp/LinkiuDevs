@@ -30,7 +30,7 @@
             @csrf
 
             <!-- Card principal -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                 <div class="p-6 space-y-6">
                     <!-- Selector de icono -->
                     <div>
@@ -46,9 +46,9 @@
                                            class="sr-only peer"
                                            {{ old('icon_id') == $icon->id ? 'checked' : '' }}
                                            required>
-                                    <div class="w-full aspect-square bg-white-100 rounded-lg p-3 border-2 border-white-200 
+                                    <div class="w-full aspect-square bg-accent-100 rounded-lg p-3 border-2 border-accent-200 
                                                 peer-checked:border-primary-200 peer-checked:bg-primary-50 
-                                                hover:border-white-300 transition-all">
+                                                hover:border-accent-300 transition-all">
                                         <img src="{{ $icon->image_url }}" 
                                              alt="{{ $icon->display_name }}" 
                                              class="w-full h-full object-contain">
@@ -75,7 +75,7 @@
                                    name="name" 
                                    id="name"
                                    value="{{ old('name') }}"
-                                   class="w-full px-3 py-2 rounded-lg bg-white-100 border border-white-200 
+                                   class="w-full px-3 py-2 rounded-lg bg-accent-100 border border-accent-200 
                                           focus:ring-2 focus:ring-primary-200 focus:border-transparent
                                           @error('name') border-error-200 @enderror"
                                    placeholder="Ej: Hamburguesas"
@@ -94,7 +94,7 @@
                                    name="slug" 
                                    id="slug"
                                    value="{{ old('slug') }}"
-                                   class="w-full px-3 py-2 rounded-lg bg-white-100 border border-white-200 
+                                   class="w-full px-3 py-2 rounded-lg bg-accent-100 border border-accent-200 
                                           focus:ring-2 focus:ring-primary-200 focus:border-transparent
                                           @error('slug') border-error-200 @enderror"
                                    placeholder="Se genera automáticamente">
@@ -115,7 +115,7 @@
                         <textarea name="description" 
                                   id="description"
                                   rows="3"
-                                  class="w-full px-3 py-2 rounded-lg bg-white-100 border border-white-200 
+                                  class="w-full px-3 py-2 rounded-lg bg-accent-100 border border-accent-200 
                                          focus:ring-2 focus:ring-primary-200 focus:border-transparent
                                          @error('description') border-error-200 @enderror"
                                   placeholder="Descripción opcional de la categoría">{{ old('description') }}</textarea>
@@ -132,7 +132,7 @@
                             </label>
                             <select name="parent_id" 
                                     id="parent_id"
-                                    class="w-full px-3 py-2 rounded-lg bg-white-100 border border-white-200 
+                                    class="w-full px-3 py-2 rounded-lg bg-accent-100 border border-accent-200 
                                            focus:ring-2 focus:ring-primary-200 focus:border-transparent">
                                 <option value="">Ninguna (será categoría principal)</option>
                                 @foreach($parentCategories as $parent)
@@ -155,7 +155,7 @@
                                 <input type="checkbox" 
                                        name="is_active" 
                                        value="1"
-                                       class="rounded border-white-300 text-primary-200 focus:ring-primary-200"
+                                       class="rounded border-accent-300 text-primary-200 focus:ring-primary-200"
                                        {{ old('is_active', true) ? 'checked' : '' }}>
                                 <span class="text-sm font-medium text-black-400">Categoría activa</span>
                             </label>
@@ -174,7 +174,7 @@
                                    id="sort_order"
                                    value="{{ old('sort_order', 0) }}"
                                    min="0"
-                                   class="w-full px-3 py-2 rounded-lg bg-white-100 border border-white-200 
+                                   class="w-full px-3 py-2 rounded-lg bg-accent-100 border border-accent-200 
                                           focus:ring-2 focus:ring-primary-200 focus:border-transparent">
                             <p class="mt-1 text-xs text-black-300">
                                 Menor número = aparece primero
@@ -184,7 +184,7 @@
                 </div>
 
                 <!-- Footer con botones -->
-                <div class="bg-white-100 px-6 py-4 flex justify-between items-center">
+                <div class="bg-accent-100 px-6 py-4 flex justify-between items-center">
                     <a href="{{ route('tenant.admin.categories.index', $store->slug) }}" 
                        class="btn-outline-secondary">
                         Cancelar

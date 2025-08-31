@@ -24,6 +24,8 @@ Route::prefix('superlinkiu')->name('superlinkiu.')->middleware('web')->group(fun
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         // Gestión de tiendas
+        Route::get('stores/create-wizard', [StoreController::class, 'createWizard'])
+            ->name('stores.create-wizard');
         Route::resource('stores', StoreController::class)->names('stores');
         Route::post('stores/bulk-action', [StoreController::class, 'bulkAction'])
             ->name('stores.bulk-action');
@@ -33,6 +35,62 @@ Route::prefix('superlinkiu')->name('superlinkiu.')->middleware('web')->group(fun
             ->name('stores.update-status');
         Route::post('stores/{store}/extend-plan', [StoreController::class, 'extendPlan'])
             ->name('stores.extend-plan');
+            
+        // Bulk import routes - Requirements: 7.1, 7.2, 7.3, 7.4, 7.5, 7.6
+        Route::prefix('stores/bulk')->name('stores.bulk.')->group(function () {
+            Route::get('/import', [StoreController::class, 'showBulkImport'])->name('import');
+            Route::get('/template/download', [StoreController::class, 'downloadImportTemplate'])->name('template.download');
+            Route::post('/upload', [StoreController::class, 'uploadBulkFile'])->name('upload');
+            Route::post('/validate', [StoreController::class, 'validateBulkData'])->name('validate');
+            Route::post('/preview', [StoreController::class, 'previewBulkImport'])->name('preview');
+            Route::post('/process', [StoreController::class, 'processBulkImport'])->name('process');
+            Route::get('/status/{batchId}', [StoreController::class, 'getBulkImportStatus'])->name('status');
+            Route::get('/results/{batchId}', [StoreController::class, 'getBulkImportResults'])->name('results');
+            Route::get('/download-results/{batchId}', [StoreController::class, 'downloadBulkResults'])->name('download-results');
+            Route::post('/cancel/{batchId}', [StoreController::class, 'cancelBulkImport'])->name('cancel');
+            Route::post('/retry/{batchId}', [StoreController::class, 'retryBulkImport'])->name('retry');
+            Route::get('/queue-health', [StoreController::class, 'getBulkImportQueueHealth'])->name('queue-health');
+            Route::get('/dashboard', [StoreController::class, 'bulkImportDashboard'])->name('dashboard');
+        });
+            
+        // Template API endpoints
+        Route::prefix('api/templates')->name('api.templates.')->group(function () {
+            Route::get('/', [StoreController::class, 'getTemplates'])->name('index');
+            Route::get('/{templateId}/config', [StoreController::class, 'getTemplateConfig'])->name('config');
+            Route::get('/{templateId}/validation-rules', [StoreController::class, 'getTemplateValidationRules'])->name('validation-rules');
+            Route::get('/{templateId}/field-mapping', [StoreController::class, 'getTemplateFieldMapping'])->name('field-mapping');
+            Route::get('/by-capability/{capability}', [StoreController::class, 'getTemplatesByCapability'])->name('by-capability');
+        });
+
+        // Store validation API endpoints
+        Route::prefix('api/stores')->name('api.stores.')->group(function () {
+            Route::post('/validate-email', [StoreController::class, 'validateEmail'])->name('validate-email');
+            Route::post('/validate-slug', [StoreController::class, 'validateSlug'])->name('validate-slug');
+            Route::post('/suggest-slug', [StoreController::class, 'suggestSlug'])->name('suggest-slug');
+            Route::post('/suggest-email-domain', [StoreController::class, 'suggestEmailDomain'])->name('suggest-email-domain');
+            Route::post('/calculate-billing', [StoreController::class, 'calculateBilling'])->name('calculate-billing');
+            Route::get('/search-locations', [StoreController::class, 'searchLocations'])->name('search-locations');
+            Route::get('/departments/{countryCode}', [StoreController::class, 'getDepartmentsByCountry'])->name('departments-by-country');
+            Route::get('/cities/{countryCode}/{departmentCode}', [StoreController::class, 'getCitiesByDepartment'])->name('cities-by-department');
+            Route::post('/validate-location', [StoreController::class, 'validateLocation'])->name('validate-location');
+            Route::get('/location-suggestions', [StoreController::class, 'getLocationSuggestions'])->name('location-suggestions');
+            Route::post('/send-credentials-email', [StoreController::class, 'sendCredentialsByEmail'])->name('send-credentials-email');
+            Route::post('/send-welcome-email', [StoreController::class, 'sendWelcomeEmail'])->name('send-welcome-email');
+            Route::post('/validation-suggestions', [StoreController::class, 'getValidationSuggestions'])->name('validation-suggestions');
+            
+            // Fiscal validation endpoints - Requirements: 3.3, 3.4
+            Route::post('/validate-fiscal-document', [StoreController::class, 'validateFiscalDocument'])->name('validate-fiscal-document');
+            Route::get('/tax-regimes', [StoreController::class, 'getTaxRegimes'])->name('tax-regimes');
+            Route::get('/document-types', [StoreController::class, 'getDocumentTypes'])->name('document-types');
+            Route::post('/validate-fiscal-information', [StoreController::class, 'validateFiscalInformation'])->name('validate-fiscal-information');
+            
+            // Draft management endpoints - Requirements: 5.1, 5.2, 5.3
+            Route::post('/save-draft', [StoreController::class, 'saveDraft'])->name('save-draft');
+            Route::get('/get-draft', [StoreController::class, 'getDraft'])->name('get-draft');
+            Route::delete('/delete-draft/{draftId?}', [StoreController::class, 'deleteDraft'])->name('delete-draft');
+            Route::post('/check-draft-conflict', [StoreController::class, 'checkDraftConflict'])->name('check-draft-conflict');
+            Route::post('/extend-draft/{draftId}', [StoreController::class, 'extendDraft'])->name('extend-draft');
+        });
             
         // Gestión de planes
         Route::resource('plans', PlanController::class)->names('plans');

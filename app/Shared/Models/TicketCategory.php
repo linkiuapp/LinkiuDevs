@@ -50,13 +50,13 @@ class TicketCategory extends Model
     public function getColorClassAttribute(): string
     {
         return match($this->color) {
-            'primary' => 'bg-primary-300 text-white-50',
-            'secondary' => 'bg-secondary-300 text-white-50',
-            'success' => 'bg-success-300 text-white-50',
-            'error' => 'bg-error-300 text-white-50',
+            'primary' => 'bg-primary-300 text-accent-50',
+            'secondary' => 'bg-secondary-300 text-accent-50',
+            'success' => 'bg-success-300 text-accent-50',
+            'error' => 'bg-error-300 text-accent-50',
             'warning' => 'bg-warning-300 text-black-500',
-            'info' => 'bg-info-300 text-white-50',
-            default => 'bg-info-300 text-white-50'
+            'info' => 'bg-info-300 text-accent-50',
+            default => 'bg-info-300 text-accent-50'
         };
     }
 

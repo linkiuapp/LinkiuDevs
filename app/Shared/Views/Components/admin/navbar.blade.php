@@ -9,33 +9,33 @@
                     <div class="breadcrumb">
                         <ul class="flex items-center gap-[2px]">
                             <li>
-                                <a href="{{route('superlinkiu.dashboard')}}" class="flex items-center gap-2 hover:text-primary-600 dark:text-white-50">
+                                <a href="{{route('superlinkiu.dashboard')}}" class="flex items-center gap-2 hover:text-primary-600 dark:text-accent-50">
                                     <x-solar-widget-2-outline class="w-3 h-3" />
                                     Dashboard
                                 </a>
                             </li>
-                            <li class="dark:text-white-50"> > </li>
-                            <li class="font-medium dark:text-white-50">@yield('title')</li>
+                            <li class="dark:text-accent-50"> > </li>
+                            <li class="font-medium dark:text-accent-50">@yield('title')</li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="flex items-center">
                     <!-- Search mobile -->
-                    <button type="button" class="p-2 text-gray-500 rounded-lg lg:hidden hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white-50">
+                    <button type="button" class="p-2 text-gray-500 rounded-lg lg:hidden hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-accent-50">
                         <iconify-icon icon="heroicons:magnifying-glass" class="w-6 h-6"></iconify-icon>
                     </button>
 
                     <!-- Notifications -->
                     <div class="flex items-center gap-4">
-                        <a href="{{ route('superlinkiu.tickets.index') }}" class="pt-2 items-center text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white-50 dark:hover:bg-gray-700">
+                        <a href="{{ route('superlinkiu.tickets.index') }}" class="pt-2 items-center text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-accent-50 dark:hover:bg-gray-700">
                             <span class="sr-only">Ver tickets abiertos</span>
                             <div class="relative">
                                 <x-solar-ticker-star-outline class="w-6 h-6" data-badge="tickets" />
                                 @php
                                     $openTicketsCount = \App\Shared\Models\Ticket::whereIn('status', ['open', 'in_progress'])->count();
                                 @endphp
-                                <div class="absolute inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white-50 bg-red-500 border-2 border-white-50 rounded-full -top-2 -end-2 dark:border-gray-900" id="tickets-badge">
+                                <div class="absolute inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-accent-50 bg-red-500 border-2 border-accent-50 rounded-full -top-2 -end-2 dark:border-gray-900" id="tickets-badge">
                                     {{ max($openTicketsCount, 0) }}
                                 </div>
                             </div>
@@ -49,17 +49,17 @@
                                 ->where('created_at', '>=', now()->subDays(7))
                                 ->count();
                         @endphp
-                        <a href="{{ route('superlinkiu.tickets.index') }}" class="pt-2 items-center text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white-50 dark:hover:bg-gray-700" data-messages-link>
+                        <a href="{{ route('superlinkiu.tickets.index') }}" class="pt-2 items-center text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-accent-50 dark:hover:bg-gray-700" data-messages-link>
                             <span class="sr-only">Mensajes de tiendas</span>
                             <div class="relative">
                                 <x-solar-chat-round-dots-outline class="w-6 h-6" data-badge="messages" />
-                                <div class="absolute inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white-50 bg-primary-300 border-2 border-white-50 rounded-full -top-2 -end-2 dark:border-gray-900" id="messages-badge">
+                                <div class="absolute inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-accent-50 bg-primary-300 border-2 border-accent-50 rounded-full -top-2 -end-2 dark:border-gray-900" id="messages-badge">
                                     {{ max($newMessagesCount, 0) }}
                                 </div>
                             </div>
                         </a>
 
-                        <button type="button" class="pt-2 items-center text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white-50 dark:hover:bg-gray-700">
+                        <button type="button" class="pt-2 items-center text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-accent-50 dark:hover:bg-gray-700">
                             <span class="sr-only">Configurar perfil</span>
                             <div class="relative">
                                 <x-solar-settings-outline class="w-6 h-6" />

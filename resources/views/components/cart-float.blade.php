@@ -1,14 +1,14 @@
 <!-- Carrito flotante centrado -->
-<div id="cart-float" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 w-full max-w-[480px] bg-white-50 border border-white-200 rounded-xl shadow-lg z-[1000] transition-all duration-300">
+<div id="cart-float" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 w-full max-w-[480px] bg-accent-50 border border-accent-200 rounded-xl shadow-lg z-[1000] transition-all duration-300">
     <div class="px-6 py-4">
         <div class="flex items-center justify-between gap-4">
             <!-- Icono carrito con badge -->
             <div class="relative flex-shrink-0">
                 <div class="w-12 h-12 bg-primary-300 rounded-full flex items-center justify-center">
-                    <x-solar-bag-2-outline class="w-6 h-6 text-white-50" />
+                    <x-solar-bag-2-outline class="w-6 h-6 text-accent-50" />
                 </div>
                 <!-- Badge contador -->
-                <div class="cart-badge absolute -top-1 -right-1 bg-error-300 text-white-50 text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1" style="display: none;">
+                <div class="cart-badge absolute -top-1 -right-1 bg-error-300 text-accent-50 text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1" style="display: none;">
                     0
                 </div>
             </div>
@@ -26,11 +26,11 @@
             <!-- Botones de acción -->
             <div class="flex-shrink-0 flex gap-2">
                 <a href="{{ route('tenant.cart.index', $store->slug ?? 'store') }}" 
-                   class="view-cart-btn bg-white-200 hover:bg-white-300 text-black-500 px-4 py-3 rounded-xl text-sm font-medium transition-colors flex items-center gap-1">
+                   class="view-cart-btn bg-accent-200 hover:bg-accent-300 text-black-500 px-4 py-3 rounded-xl text-sm font-medium transition-colors flex items-center gap-1">
                     <span>Ver</span>
                 </a>
                 <a href="{{ route('tenant.checkout.create', $store->slug ?? 'store') }}" 
-                   class="checkout-btn bg-secondary-300 hover:bg-secondary-200 text-white-50 px-4 py-3 rounded-xl text-sm font-semibold transition-colors flex items-center gap-1">
+                   class="checkout-btn bg-secondary-300 hover:bg-secondary-200 text-accent-50 px-4 py-3 rounded-xl text-sm font-semibold transition-colors flex items-center gap-1">
                     <span>Comprar</span>
                     <x-solar-arrow-right-outline class="w-4 h-4" />
                 </a>

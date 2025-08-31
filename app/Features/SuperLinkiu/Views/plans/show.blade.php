@@ -11,11 +11,11 @@
             <p class="text-black-300 mt-1">Información detallada del plan</p>
         </div>
         <div class="flex gap-2">
-            <a href="{{ route('superlinkiu.plans.index') }}" class="bg-white-100 hover:bg-white-200 text-black-400 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+            <a href="{{ route('superlinkiu.plans.index') }}" class="bg-accent-100 hover:bg-accent-200 text-black-400 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
                 <x-solar-arrow-left-outline class="w-5 h-5" />
                 Volver a Planes
             </a>
-            <a href="{{ route('superlinkiu.plans.edit', $plan) }}" class="bg-primary-200 hover:bg-primary-300 text-white-50 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+            <a href="{{ route('superlinkiu.plans.edit', $plan) }}" class="bg-primary-200 hover:bg-primary-300 text-accent-50 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
                 <x-solar-pen-outline class="w-5 h-5" />
                 Editar Plan
             </a>
@@ -26,8 +26,8 @@
         <!-- Información Principal -->
         <div class="lg:col-span-2 space-y-6">
             <!-- Información Básica -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-3xl text-black-500 mb-0">Información Básica</h2>
                 </div>
                 <div class="p-6">
@@ -71,15 +71,15 @@
 
             <!-- Precios por Período -->
             @if($plan->prices)
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-3xl text-black-500 mb-0">Precios por Período</h2>
                 </div>
                 <div class="p-6">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         @foreach(['monthly' => 'Mensual', 'quarterly' => 'Trimestral', 'semester' => 'Semestral'] as $period => $label)
                             @if(isset($plan->prices[$period]) && $plan->prices[$period] > 0)
-                                <div class="text-center p-4 bg-white-100 rounded-lg">
+                                <div class="text-center p-4 bg-accent-100 rounded-lg">
                                     <h3 class="text-sm font-medium text-black-400 mb-1">{{ $label }}</h3>
                                     <p class="text-2xl font-bold text-primary-300">{{ $plan->getFormattedPriceForPeriod($period) }}</p>
                                     @if($discount = $plan->getDiscountForPeriod($period))
@@ -94,48 +94,48 @@
             @endif
 
             <!-- Límites del Plan -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-3xl text-black-500 mb-0">Límites del Plan</h2>
                 </div>
                 <div class="p-6">
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div class="text-center p-3 bg-white-100 rounded-lg">
+                        <div class="text-center p-3 bg-accent-100 rounded-lg">
                             <x-solar-box-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
                             <p class="text-sm text-black-400">Productos</p>
                             <p class="text-lg font-bold text-black-500">{{ $plan->max_products }}</p>
                         </div>
-                        <div class="text-center p-3 bg-white-100 rounded-lg">
+                        <div class="text-center p-3 bg-accent-100 rounded-lg">
                             <x-solar-gallery-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
                             <p class="text-sm text-black-400">Sliders</p>
                             <p class="text-lg font-bold text-black-500">{{ $plan->max_slider }}</p>
                         </div>
-                        <div class="text-center p-3 bg-white-100 rounded-lg">
+                        <div class="text-center p-3 bg-accent-100 rounded-lg">
                             <x-solar-tag-price-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
                             <p class="text-sm text-black-400">Promociones</p>
                             <p class="text-lg font-bold text-black-500">{{ $plan->max_active_promotions }}</p>
                         </div>
-                        <div class="text-center p-3 bg-white-100 rounded-lg">
+                        <div class="text-center p-3 bg-accent-100 rounded-lg">
                             <x-solar-ticket-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
                             <p class="text-sm text-black-400">Cupones</p>
                             <p class="text-lg font-bold text-black-500">{{ $plan->max_active_coupons }}</p>
                         </div>
-                        <div class="text-center p-3 bg-white-100 rounded-lg">
+                        <div class="text-center p-3 bg-accent-100 rounded-lg">
                             <x-solar-folder-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
                             <p class="text-sm text-black-400">Categorías</p>
                             <p class="text-lg font-bold text-black-500">{{ $plan->max_categories }}</p>
                         </div>
-                        <div class="text-center p-3 bg-white-100 rounded-lg">
+                        <div class="text-center p-3 bg-accent-100 rounded-lg">
                             <x-solar-buildings-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
                             <p class="text-sm text-black-400">Sedes</p>
                             <p class="text-lg font-bold text-black-500">{{ $plan->max_sedes }}</p>
                         </div>
-                        <div class="text-center p-3 bg-white-100 rounded-lg">
+                        <div class="text-center p-3 bg-accent-100 rounded-lg">
                             <x-solar-users-group-rounded-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
                             <p class="text-sm text-black-400">Admins</p>
                             <p class="text-lg font-bold text-black-500">{{ $plan->max_admins }}</p>
                         </div>
-                        <div class="text-center p-3 bg-white-100 rounded-lg">
+                        <div class="text-center p-3 bg-accent-100 rounded-lg">
                             <x-solar-map-point-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
                             <p class="text-sm text-black-400">Zonas Reparto</p>
                             <p class="text-lg font-bold text-black-500">{{ $plan->max_delivery_zones }}</p>
@@ -153,8 +153,8 @@
                 $features = is_array($features) ? $features : [];
             @endphp
             @if($features && count($features) > 0)
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-3xl text-black-500 mb-0">Características Incluidas</h2>
                 </div>
                 <div class="p-6">
@@ -174,25 +174,25 @@
         <!-- Panel Lateral -->
         <div class="space-y-6">
             <!-- Estado del Plan -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-3xl text-black-500 mb-0">Estado</h2>
                 </div>
                 <div class="p-6 space-y-4">
                     <div class="flex items-center justify-between">
                         <span class="text-black-400">Activo</span>
                         @if($plan->is_active)
-                            <span class="bg-success-200 text-white-50 px-2 py-1 rounded text-sm">Sí</span>
+                            <span class="bg-success-200 text-accent-50 px-2 py-1 rounded text-sm">Sí</span>
                         @else
-                            <span class="bg-error-200 text-white-50 px-2 py-1 rounded text-sm">No</span>
+                            <span class="bg-error-200 text-accent-50 px-2 py-1 rounded text-sm">No</span>
                         @endif
                     </div>
                     <div class="flex items-center justify-between">
                         <span class="text-black-400">Público</span>
                         @if($plan->is_public)
-                            <span class="bg-success-200 text-white-50 px-2 py-1 rounded text-sm">Sí</span>
+                            <span class="bg-success-200 text-accent-50 px-2 py-1 rounded text-sm">Sí</span>
                         @else
-                            <span class="bg-error-200 text-white-50 px-2 py-1 rounded text-sm">No</span>
+                            <span class="bg-error-200 text-accent-50 px-2 py-1 rounded text-sm">No</span>
                         @endif
                     </div>
                     <div class="flex items-center justify-between">
@@ -200,15 +200,15 @@
                         @if($plan->is_featured)
                             <span class="bg-warning-200 text-black-400 px-2 py-1 rounded text-sm">Sí</span>
                         @else
-                            <span class="bg-white-200 text-black-400 px-2 py-1 rounded text-sm">No</span>
+                            <span class="bg-accent-200 text-black-400 px-2 py-1 rounded text-sm">No</span>
                         @endif
                     </div>
                     <div class="flex items-center justify-between">
                         <span class="text-black-400">Slug Personalizado</span>
                         @if($plan->allow_custom_slug)
-                            <span class="bg-success-200 text-white-50 px-2 py-1 rounded text-sm">Permitido</span>
+                            <span class="bg-success-200 text-accent-50 px-2 py-1 rounded text-sm">Permitido</span>
                         @else
-                            <span class="bg-error-200 text-white-50 px-2 py-1 rounded text-sm">No Permitido</span>
+                            <span class="bg-error-200 text-accent-50 px-2 py-1 rounded text-sm">No Permitido</span>
                         @endif
                     </div>
                     <div class="flex items-center justify-between">
@@ -219,14 +219,14 @@
             </div>
 
             <!-- Soporte -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-3xl text-black-500 mb-0">Soporte</h2>
                 </div>
                 <div class="p-6 space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-black-400 mb-1">Nivel</label>
-                        <span class="bg-info-200 text-white-50 px-2 py-1 rounded text-sm capitalize">{{ $plan->support_level }}</span>
+                        <span class="bg-info-200 text-accent-50 px-2 py-1 rounded text-sm capitalize">{{ $plan->support_level }}</span>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-black-400 mb-1">Tiempo de Respuesta</label>
@@ -236,8 +236,8 @@
             </div>
 
             <!-- Estadísticas -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-3xl text-black-500 mb-0">Estadísticas</h2>
                 </div>
                 <div class="p-6 space-y-4">
@@ -257,8 +257,8 @@
             </div>
 
             <!-- Acciones -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <h2 class="text-3xl text-black-500 mb-0">Acciones</h2>
                 </div>
                 <div class="p-6 space-y-3">

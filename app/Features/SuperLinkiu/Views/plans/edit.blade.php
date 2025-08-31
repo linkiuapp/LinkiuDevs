@@ -11,11 +11,11 @@
             <p class="text-black-300 mt-1">Modifica la configuración del plan</p>
         </div>
         <div class="flex gap-2">
-            <a href="{{ route('superlinkiu.plans.show', $plan) }}" class="bg-white-100 hover:bg-white-200 text-black-400 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+            <a href="{{ route('superlinkiu.plans.show', $plan) }}" class="bg-accent-100 hover:bg-accent-200 text-black-400 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
                 <x-solar-arrow-left-outline class="w-5 h-5" />
                 Ver Plan
             </a>
-            <a href="{{ route('superlinkiu.plans.index') }}" class="bg-white-100 hover:bg-white-200 text-black-400 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+            <a href="{{ route('superlinkiu.plans.index') }}" class="bg-accent-100 hover:bg-accent-200 text-black-400 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
                 <x-solar-list-outline class="w-5 h-5" />
                 Lista de Planes
             </a>
@@ -23,8 +23,8 @@
     </div>
 
     <!-- Formulario -->
-    <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
-        <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+    <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
             <h2 class="text-3xl text-black-500 mb-0">Información del Plan</h2>
         </div>
         
@@ -41,7 +41,7 @@
                     <input type="text" 
                            name="name" 
                            value="{{ old('name', $plan->name) }}"
-                           class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('name') border-error-200 @enderror"
+                           class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('name') border-error-200 @enderror"
                            placeholder="Ej: Master Plan">
                     @error('name')
                         <p class="mt-1 text-sm text-error-300">{{ $message }}</p>
@@ -57,7 +57,7 @@
                            value="{{ old('price', $plan->price) }}"
                            min="0"
                            step="1000"
-                           class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('price') border-error-200 @enderror"
+                           class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('price') border-error-200 @enderror"
                            placeholder="60000">
                     @error('price')
                         <p class="mt-1 text-sm text-error-300">{{ $message }}</p>
@@ -72,7 +72,7 @@
                 </label>
                 <textarea name="description" 
                           rows="3"
-                          class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('description') border-error-200 @enderror"
+                          class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('description') border-error-200 @enderror"
                           placeholder="Describe las características principales del plan">{{ old('description', $plan->description) }}</textarea>
                 @error('description')
                     <p class="mt-1 text-sm text-error-300">{{ $message }}</p>
@@ -92,7 +92,7 @@
                                value="{{ old('prices.monthly', $plan->prices['monthly'] ?? '') }}"
                                min="0"
                                step="1000"
-                               class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent"
+                               class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent"
                                placeholder="60000">
                     </div>
                     <div>
@@ -104,7 +104,7 @@
                                value="{{ old('prices.quarterly', $plan->prices['quarterly'] ?? '') }}"
                                min="0"
                                step="1000"
-                               class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent"
+                               class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent"
                                placeholder="160000">
                     </div>
                     <div>
@@ -116,7 +116,7 @@
                                value="{{ old('prices.semester', $plan->prices['semester'] ?? '') }}"
                                min="0"
                                step="1000"
-                               class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent"
+                               class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent"
                                placeholder="320000">
                     </div>
                 </div>
@@ -134,7 +134,7 @@
                                name="max_products" 
                                value="{{ old('max_products', $plan->max_products) }}"
                                min="1"
-                               class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('max_products') border-error-200 @enderror">
+                               class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('max_products') border-error-200 @enderror">
                         @error('max_products')
                             <p class="mt-1 text-sm text-error-300">{{ $message }}</p>
                         @enderror
@@ -147,7 +147,7 @@
                                name="max_slider" 
                                value="{{ old('max_slider', $plan->max_slider) }}"
                                min="0"
-                               class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('max_slider') border-error-200 @enderror">
+                               class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('max_slider') border-error-200 @enderror">
                         @error('max_slider')
                             <p class="mt-1 text-sm text-error-300">{{ $message }}</p>
                         @enderror
@@ -160,7 +160,7 @@
                                name="max_active_promotions" 
                                value="{{ old('max_active_promotions', $plan->max_active_promotions) }}"
                                min="0"
-                               class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('max_active_promotions') border-error-200 @enderror">
+                               class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('max_active_promotions') border-error-200 @enderror">
                         @error('max_active_promotions')
                             <p class="mt-1 text-sm text-error-300">{{ $message }}</p>
                         @enderror
@@ -173,7 +173,7 @@
                                name="max_active_coupons" 
                                value="{{ old('max_active_coupons', $plan->max_active_coupons) }}"
                                min="0"
-                               class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('max_active_coupons') border-error-200 @enderror">
+                               class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('max_active_coupons') border-error-200 @enderror">
                         @error('max_active_coupons')
                             <p class="mt-1 text-sm text-error-300">{{ $message }}</p>
                         @enderror
@@ -186,7 +186,7 @@
                                name="max_categories" 
                                value="{{ old('max_categories', $plan->max_categories) }}"
                                min="1"
-                               class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('max_categories') border-error-200 @enderror">
+                               class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('max_categories') border-error-200 @enderror">
                         @error('max_categories')
                             <p class="mt-1 text-sm text-error-300">{{ $message }}</p>
                         @enderror
@@ -199,7 +199,7 @@
                                name="max_sedes" 
                                value="{{ old('max_sedes', $plan->max_sedes) }}"
                                min="1"
-                               class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('max_sedes') border-error-200 @enderror">
+                               class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('max_sedes') border-error-200 @enderror">
                         @error('max_sedes')
                             <p class="mt-1 text-sm text-error-300">{{ $message }}</p>
                         @enderror
@@ -212,7 +212,7 @@
                                name="max_admins" 
                                value="{{ old('max_admins', $plan->max_admins) }}"
                                min="1"
-                               class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('max_admins') border-error-200 @enderror">
+                               class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('max_admins') border-error-200 @enderror">
                         @error('max_admins')
                             <p class="mt-1 text-sm text-error-300">{{ $message }}</p>
                         @enderror
@@ -225,7 +225,7 @@
                                name="max_delivery_zones" 
                                value="{{ old('max_delivery_zones', $plan->max_delivery_zones) }}"
                                min="1"
-                               class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('max_delivery_zones') border-error-200 @enderror">
+                               class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('max_delivery_zones') border-error-200 @enderror">
                         @error('max_delivery_zones')
                             <p class="mt-1 text-sm text-error-300">{{ $message }}</p>
                         @enderror
@@ -242,7 +242,7 @@
                             Nivel de Soporte <span class="text-error-300">*</span>
                         </label>
                         <select name="support_level" 
-                                class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('support_level') border-error-200 @enderror">
+                                class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('support_level') border-error-200 @enderror">
                             <option value="basic" {{ old('support_level', $plan->support_level) == 'basic' ? 'selected' : '' }}>Básico</option>
                             <option value="priority" {{ old('support_level', $plan->support_level) == 'priority' ? 'selected' : '' }}>Prioritario</option>
                             <option value="premium" {{ old('support_level', $plan->support_level) == 'premium' ? 'selected' : '' }}>Premium</option>
@@ -259,7 +259,7 @@
                                name="support_response_time" 
                                value="{{ old('support_response_time', $plan->support_response_time) }}"
                                min="1"
-                               class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('support_response_time') border-error-200 @enderror">
+                               class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('support_response_time') border-error-200 @enderror">
                         @error('support_response_time')
                             <p class="mt-1 text-sm text-error-300">{{ $message }}</p>
                         @enderror
@@ -285,7 +285,7 @@
                                 <input type="text" 
                                        :name="`features_list[${index}]`"
                                        x-model="features[index]"
-                                       class="flex-1 px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent"
+                                       class="flex-1 px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent"
                                        placeholder="Característica del plan">
                                 <button type="button" 
                                         @click="features.splice(index, 1)"
@@ -313,7 +313,7 @@
                             Moneda <span class="text-error-300">*</span>
                         </label>
                         <select name="currency" 
-                                class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('currency') border-error-200 @enderror">
+                                class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('currency') border-error-200 @enderror">
                             <option value="COP" {{ old('currency', $plan->currency) == 'COP' ? 'selected' : '' }}>COP - Peso Colombiano</option>
                             <option value="USD" {{ old('currency', $plan->currency) == 'USD' ? 'selected' : '' }}>USD - Dólar Americano</option>
                         </select>
@@ -329,7 +329,7 @@
                                name="duration_in_days" 
                                value="{{ old('duration_in_days', $plan->duration_in_days) }}"
                                min="1"
-                               class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('duration_in_days') border-error-200 @enderror">
+                               class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent @error('duration_in_days') border-error-200 @enderror">
                         @error('duration_in_days')
                             <p class="mt-1 text-sm text-error-300">{{ $message }}</p>
                         @enderror
@@ -342,7 +342,7 @@
                                name="trial_days" 
                                value="{{ old('trial_days', $plan->trial_days) }}"
                                min="0"
-                               class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent">
+                               class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-black-400 mb-2">
@@ -352,7 +352,7 @@
                                name="sort_order" 
                                value="{{ old('sort_order', $plan->sort_order) }}"
                                min="0"
-                               class="w-full px-3 py-2 border border-white-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent">
+                               class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent">
                     </div>
                 </div>
             </div>
@@ -366,7 +366,7 @@
                                name="allow_custom_slug" 
                                value="1"
                                {{ old('allow_custom_slug', $plan->allow_custom_slug) ? 'checked' : '' }}
-                               class="w-4 h-4 text-primary-300 border-white-200 rounded focus:ring-primary-200">
+                               class="w-4 h-4 text-primary-300 border-accent-200 rounded focus:ring-primary-200">
                         <span class="ml-2 text-sm text-black-400">Permitir slug personalizado</span>
                     </label>
                     <label class="flex items-center">
@@ -374,7 +374,7 @@
                                name="is_active" 
                                value="1"
                                {{ old('is_active', $plan->is_active) ? 'checked' : '' }}
-                               class="w-4 h-4 text-primary-300 border-white-200 rounded focus:ring-primary-200">
+                               class="w-4 h-4 text-primary-300 border-accent-200 rounded focus:ring-primary-200">
                         <span class="ml-2 text-sm text-black-400">Plan activo</span>
                     </label>
                     <label class="flex items-center">
@@ -382,7 +382,7 @@
                                name="is_public" 
                                value="1"
                                {{ old('is_public', $plan->is_public) ? 'checked' : '' }}
-                               class="w-4 h-4 text-primary-300 border-white-200 rounded focus:ring-primary-200">
+                               class="w-4 h-4 text-primary-300 border-accent-200 rounded focus:ring-primary-200">
                         <span class="ml-2 text-sm text-black-400">Plan público</span>
                     </label>
                     <label class="flex items-center">
@@ -390,7 +390,7 @@
                                name="is_featured" 
                                value="1"
                                {{ old('is_featured', $plan->is_featured) ? 'checked' : '' }}
-                               class="w-4 h-4 text-primary-300 border-white-200 rounded focus:ring-primary-200">
+                               class="w-4 h-4 text-primary-300 border-accent-200 rounded focus:ring-primary-200">
                         <span class="ml-2 text-sm text-black-400">Plan destacado</span>
                     </label>
                 </div>
@@ -418,11 +418,11 @@
             <!-- Botones -->
             <div class="flex justify-end gap-3">
                 <a href="{{ route('superlinkiu.plans.show', $plan) }}" 
-                   class="bg-white-100 hover:bg-white-200 text-black-400 px-6 py-2 rounded-lg transition-colors">
+                   class="bg-accent-100 hover:bg-accent-200 text-black-400 px-6 py-2 rounded-lg transition-colors">
                     Cancelar
                 </a>
                 <button type="submit" 
-                        class="bg-primary-200 hover:bg-primary-300 text-white-50 px-6 py-2 rounded-lg transition-colors">
+                        class="bg-primary-200 hover:bg-primary-300 text-accent-50 px-6 py-2 rounded-lg transition-colors">
                     Actualizar Plan
                 </button>
             </div>

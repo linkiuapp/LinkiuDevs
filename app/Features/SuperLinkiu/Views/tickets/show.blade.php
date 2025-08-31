@@ -26,18 +26,18 @@
         <!-- Contenido principal -->
         <div class="lg:col-span-2 space-y-6">
             <!-- Información del ticket -->
-            <div class="bg-white-50 rounded-lg p-6">
+            <div class="bg-accent-50 rounded-lg p-6">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-lg font-semibold text-black-400">Información del Ticket</h2>
                     <div class="flex items-center gap-2">
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-{{ $ticket->priority_color }}-200 text-white-50">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-{{ $ticket->priority_color }}-200 text-accent-50">
                             {{ $ticket->priority_label }}
                         </span>
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-{{ $ticket->status_color }}-200 text-white-50">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-{{ $ticket->status_color }}-200 text-accent-50">
                             {{ $ticket->status_label }}
                         </span>
                         @if($ticket->is_overdue)
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-error-200 text-white-50">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-error-200 text-accent-50">
                                 <x-solar-clock-circle-outline class="w-4 h-4 mr-1" />
                                 Vencido
                             </span>
@@ -68,12 +68,12 @@
 
                 <div>
                     <label class="block text-sm font-medium text-black-300 mb-2">Descripción</label>
-                    <div class="bg-white-100 rounded-lg p-4">
+                    <div class="bg-accent-100 rounded-lg p-4">
                         <p class="text-sm text-black-400 whitespace-pre-wrap">{{ $ticket->description }}</p>
                         
                         <!-- Archivos adjuntos del ticket original -->
                         @if($ticket->attachments && count($ticket->attachments) > 0)
-                            <div class="mt-3 pt-3 border-t border-white-200">
+                            <div class="mt-3 pt-3 border-t border-accent-200">
                                 <label class="block text-xs font-medium text-black-300 mb-2">Archivos adjuntos:</label>
                                 <div class="space-y-1">
                                     @foreach($ticket->attachments as $attachment)
@@ -101,8 +101,8 @@
             </div>
 
             <!-- Conversación -->
-            <div class="bg-white-50 rounded-lg p-0 overflow-hidden" x-data="{ showAllMessages: {{ $ticket->responses->count() <= 3 ? 'true' : 'false' }} }">
-                <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden" x-data="{ showAllMessages: {{ $ticket->responses->count() <= 3 ? 'true' : 'false' }} }">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                     <div class="flex items-center justify-between">
                         <h2 class="text-lg font-semibold text-black-400 mb-0">Conversación ({{ $ticket->responses->count() }} respuestas)</h2>
                         @if($ticket->responses->count() > 3)
@@ -123,7 +123,7 @@
                              x-transition:enter="transition ease-out duration-300"
                              x-transition:enter-start="opacity-0"
                              x-transition:enter-end="opacity-100"
-                             class="text-center py-4 border border-white-200 rounded-lg bg-white-100">
+                             class="text-center py-4 border border-accent-200 rounded-lg bg-accent-100">
                             <div class="flex items-center justify-center gap-2 text-black-300">
                                 <x-solar-history-outline class="w-5 h-5" />
                                 <span class="font-medium">{{ $ticket->responses->count() - 3 }} mensajes anteriores ocultos</span>
@@ -147,11 +147,11 @@
                              class="flex gap-4 {{ $response->is_support_team ? 'justify-end' : 'justify-start' }}">
                             
                             <div class="w-full max-w-2xl {{ $response->is_support_team ? 'order-2' : 'order-1' }}">
-                                <div class="bg-{{ $response->is_support_team ? 'primary' : 'white' }}-100 rounded-lg p-4 border border-white-200">
+                                <div class="bg-{{ $response->is_support_team ? 'primary' : 'accent' }}-100 rounded-lg p-4 border border-accent-200">
                                     <div class="flex items-center justify-between mb-3">
                                         <div class="flex items-center gap-2">
                                             <div class="w-6 h-6 bg-{{ $response->is_support_team ? 'primary' : 'secondary' }}-200 rounded-full flex items-center justify-center">
-                                                <span class="text-xs text-white-50">{{ substr($response->user->name ?? 'U', 0, 1) }}</span>
+                                                <span class="text-xs text-accent-50">{{ substr($response->user->name ?? 'U', 0, 1) }}</span>
                                             </div>
                                             <span class="text-sm font-medium text-black-400">
                                                                                         @if($response->is_support_team)
@@ -173,7 +173,7 @@
                                     
                                     <!-- Archivos adjuntos de la respuesta -->
                                     @if($response->attachments && count($response->attachments) > 0)
-                                        <div class="mt-3 pt-3 border-t border-white-200">
+                                        <div class="mt-3 pt-3 border-t border-accent-200">
                                             <label class="block text-xs font-medium text-black-300 mb-2">Archivos adjuntos:</label>
                                             <div class="space-y-1">
                                                 @foreach($response->attachments as $attachment)
@@ -221,7 +221,7 @@
 
             <!-- Formulario de respuesta -->
             @if($ticket->status !== 'closed')
-                <div class="bg-white-50 rounded-lg p-6">
+                <div class="bg-accent-50 rounded-lg p-6">
                     <h2 class="text-lg font-semibold text-black-400 mb-4">Agregar Respuesta</h2>
                     
                     <form method="POST" action="{{ route('superlinkiu.tickets.add-response', $ticket) }}">
@@ -229,14 +229,14 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                             <div>
                                 <label class="block text-sm font-medium text-black-300 mb-2">Tipo de Respuesta</label>
-                                <select name="response_type" class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                                <select name="response_type" class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
                                     <option value="response">Respuesta Pública</option>
                                     <option value="internal_note">Nota Interna</option>
                                 </select>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-black-300 mb-2">Cambiar Estado</label>
-                                <select name="change_status" class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                                <select name="change_status" class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
                                     <option value="">Mantener estado actual</option>
                                     <option value="in_progress">En Progreso</option>
                                     <option value="resolved">Resuelto</option>
@@ -248,7 +248,7 @@
                         <div class="mb-4">
                             <label class="block text-sm font-medium text-black-300 mb-2">Mensaje</label>
                             <textarea name="message" rows="4" 
-                                      class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('message') border-error-200 @enderror"
+                                      class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none @error('message') border-error-200 @enderror"
                                       placeholder="Escribe tu respuesta aquí..." required>{{ old('message') }}</textarea>
                             @error('message')
                                 <p class="text-xs text-error-300 mt-1">{{ $message }}</p>
@@ -269,7 +269,7 @@
         <!-- Panel lateral -->
         <div class="space-y-6">
             <!-- Acciones rápidas -->
-            <div class="bg-white-50 rounded-lg p-6">
+            <div class="bg-accent-50 rounded-lg p-6">
                 <h3 class="text-lg font-semibold text-black-400 mb-4">Acciones Rápidas</h3>
                 
                 <div class="space-y-3">
@@ -277,7 +277,7 @@
                     <div>
                         <label class="block text-sm font-medium text-black-300 mb-2">Estado</label>
                         <select x-model="currentStatus" @change="updateStatus()" 
-                                class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                                class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
                             <option value="open" {{ $ticket->status === 'open' ? 'selected' : '' }}>Abierto</option>
                             <option value="in_progress" {{ $ticket->status === 'in_progress' ? 'selected' : '' }}>En Progreso</option>
                             <option value="resolved" {{ $ticket->status === 'resolved' ? 'selected' : '' }}>Resuelto</option>
@@ -289,7 +289,7 @@
                     <div>
                         <label class="block text-sm font-medium text-black-300 mb-2">Asignado a</label>
                         <select x-model="currentAssignedTo" @change="updateAssignment()" 
-                                class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                                class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
                             <option value="">Sin asignar</option>
                             @foreach($admins as $admin)
                                 <option value="{{ $admin->id }}" {{ $ticket->assigned_to == $admin->id ? 'selected' : '' }}>
@@ -303,7 +303,7 @@
                     <div>
                         <label class="block text-sm font-medium text-black-300 mb-2">Prioridad</label>
                         <select x-model="currentPriority" @change="updatePriority()" 
-                                class="w-full px-3 py-2 border border-white-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
+                                class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none">
                             <option value="low" {{ $ticket->priority === 'low' ? 'selected' : '' }}>Baja</option>
                             <option value="medium" {{ $ticket->priority === 'medium' ? 'selected' : '' }}>Media</option>
                             <option value="high" {{ $ticket->priority === 'high' ? 'selected' : '' }}>Alta</option>
@@ -314,7 +314,7 @@
             </div>
 
             <!-- Métricas -->
-            <div class="bg-white-50 rounded-lg p-6">
+            <div class="bg-accent-50 rounded-lg p-6">
                 <h3 class="text-lg font-semibold text-black-400 mb-4">Métricas</h3>
                 
                 <div class="space-y-3">

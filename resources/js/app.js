@@ -8,8 +8,18 @@ console.log('🟢 Imports loaded successfully');
 
 import Pusher from 'pusher-js'
 
-// Sistema de carrito
-import './cart.js'
+// Sistema de carrito - Solo cargar en storefront
+if (window.location.pathname.includes('/admin') === false && 
+    window.location.pathname.includes('/superlinkiu') === false &&
+    window.location.pathname !== '/' &&
+    window.location.pathname !== '/login' &&
+    window.location.pathname !== '/register') {
+    import('./cart.js').then(() => {
+        console.log('🛒 Cart.js loaded for storefront');
+    }).catch(error => {
+        console.log('ℹ️ Cart.js not loaded (not in storefront):', error.message);
+    });
+}
 
 console.log('🟢 Pusher imported successfully');
 
@@ -76,6 +86,15 @@ try {
     
     import('./store.js')
     console.log('🟢 store.js imported');
+    
+    import('./components/wizard-navigation.js')
+    console.log('🟢 wizard-navigation.js imported');
+    
+    import('./components/wizard-step.js')
+    console.log('🟢 wizard-step.js imported');
+    
+    import('./components/wizard-state-manager.js')
+    console.log('🟢 wizard-state-manager.js imported');
     
 } catch (error) {
     console.error('❌ Error importing component files:', error);

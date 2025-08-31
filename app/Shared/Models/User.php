@@ -118,4 +118,28 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Store::class);
     }
+
+    /**
+     * Get the store drafts for this user
+     */
+    public function storeDrafts()
+    {
+        return $this->hasMany(\App\Models\StoreDraft::class);
+    }
+
+    /**
+     * Get the active store drafts for this user
+     */
+    public function activeStoreDrafts()
+    {
+        return $this->storeDrafts()->active();
+    }
+
+    /**
+     * Get the latest active store draft for this user
+     */
+    public function latestStoreDraft()
+    {
+        return $this->activeStoreDrafts()->latest()->first();
+    }
 }

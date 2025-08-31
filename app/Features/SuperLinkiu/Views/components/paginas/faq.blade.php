@@ -8,14 +8,14 @@
     <div class="bg-gradient-to-r from-primary-200 to-primary-100 py-10 px-6 lg:px-12 rounded-t-lg">
         <div class="grid grid-cols-1 xl:grid-cols-2 items-center gap-8">
             <div class="col-span-1">
-                <h1 class="text-2xl font-black text-white-50 mb-4">Preguntas Frecuentes</h1>
-                <p class="text-base text-white-100">
+                <h1 class="text-2xl font-black text-accent-50 mb-4">Preguntas Frecuentes</h1>
+                <p class="text-base text-accent-100">
                     Encuentra respuestas a las preguntas más comunes sobre nuestros servicios y productos. 
                     Si no encuentras lo que buscas, no dudes en contactarnos.
                 </p>
             </div>
             <div class="col-span-1 hidden xl:flex justify-end">
-                <div class="bg-white-100 rounded-full p-8">
+                <div class="bg-accent-100 rounded-full p-8">
                     <x-solar-question-circle-outline class="w-24 h-24 text-primary-200" />
                 </div>
             </div>
@@ -27,15 +27,15 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8" x-data="{ activeTab: 'about', openAccordion: 1 }">
             <!-- Sidebar con tabs -->
             <div class="col-span-12 lg:col-span-4">
-                <div class="bg-white-50 rounded-lg p-0 overflow-hidden shadow-sm">
-                    <div class="border-b border-white-100 bg-white-50 py-4 px-6">
+                <div class="bg-accent-50 rounded-lg p-0 overflow-hidden shadow-sm">
+                    <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
                         <h2 class="text-xl font-black text-black-300">Categorías</h2>
                     </div>
                     <div class="p-2">
                         <nav class="space-y-1">
                             <button 
                                 @click="activeTab = 'about'; openAccordion = 1"
-                                x-bind:class="activeTab === 'about' ? 'bg-primary-200 text-primary-50 border-primary-200' : 'bg-white-50 text-black-300 border-white-100 hover:bg-white-100'"
+                                x-bind:class="activeTab === 'about' ? 'bg-primary-200 text-primary-50 border-primary-200' : 'bg-accent-50 text-black-300 border-accent-100 hover:bg-accent-100'"
                                 class="w-full text-left px-4 py-3 rounded-lg border transition-all duration-200 flex items-center space-x-3">
                                 <x-solar-info-circle-outline class="w-5 h-5" />
                                 <span class="font-semibold">Acerca de Nosotros</span>
@@ -43,7 +43,7 @@
                             
                             <button 
                                 @click="activeTab = 'design'; openAccordion = 1"
-                                x-bind:class="activeTab === 'design' ? 'bg-primary-200 text-primary-50 border-primary-200' : 'bg-white-50 text-black-300 border-white-100 hover:bg-white-100'"
+                                x-bind:class="activeTab === 'design' ? 'bg-primary-200 text-primary-50 border-primary-200' : 'bg-accent-50 text-black-300 border-accent-100 hover:bg-accent-100'"
                                 class="w-full text-left px-4 py-3 rounded-lg border transition-all duration-200 flex items-center space-x-3">
                                 <x-solar-palette-outline class="w-5 h-5" />
                                 <span class="font-semibold">Diseño UI/UX</span>
@@ -51,7 +51,7 @@
                             
                             <button 
                                 @click="activeTab = 'development'; openAccordion = 1"
-                                x-bind:class="activeTab === 'development' ? 'bg-primary-200 text-primary-50 border-primary-200' : 'bg-white-50 text-black-300 border-white-100 hover:bg-white-100'"
+                                x-bind:class="activeTab === 'development' ? 'bg-primary-200 text-primary-50 border-primary-200' : 'bg-accent-50 text-black-300 border-accent-100 hover:bg-accent-100'"
                                 class="w-full text-left px-4 py-3 rounded-lg border transition-all duration-200 flex items-center space-x-3">
                                 <x-solar-code-outline class="w-5 h-5" />
                                 <span class="font-semibold">Desarrollo</span>
@@ -59,7 +59,7 @@
                             
                             <button 
                                 @click="activeTab = 'platform'; openAccordion = 1"
-                                x-bind:class="activeTab === 'platform' ? 'bg-primary-200 text-primary-50 border-primary-200' : 'bg-white-50 text-black-300 border-white-100 hover:bg-white-100'"
+                                x-bind:class="activeTab === 'platform' ? 'bg-primary-200 text-primary-50 border-primary-200' : 'bg-accent-50 text-black-300 border-accent-100 hover:bg-accent-100'"
                                 class="w-full text-left px-4 py-3 rounded-lg border transition-all duration-200 flex items-center space-x-3">
                                 <x-solar-monitor-outline class="w-5 h-5" />
                                 <span class="font-semibold">Cómo usar la plataforma</span>
@@ -67,7 +67,7 @@
                             
                             <button 
                                 @click="activeTab = 'agency'; openAccordion = 1"
-                                x-bind:class="activeTab === 'agency' ? 'bg-primary-200 text-primary-50 border-primary-200' : 'bg-white-50 text-black-300 border-white-100 hover:bg-white-100'"
+                                x-bind:class="activeTab === 'agency' ? 'bg-primary-200 text-primary-50 border-primary-200' : 'bg-accent-50 text-black-300 border-accent-100 hover:bg-accent-100'"
                                 class="w-full text-left px-4 py-3 rounded-lg border transition-all duration-200 flex items-center space-x-3">
                                 <x-solar-buildings-outline class="w-5 h-5" />
                                 <span class="font-semibold">Servicios de Agencia</span>
@@ -86,7 +86,7 @@
                         <div class="card">
                             <button 
                                 @click="openAccordion = openAccordion === 1 ? 0 : 1"
-                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-white-100 hover:bg-white-100 transition-colors">
+                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-accent-100 hover:bg-accent-100 transition-colors">
                                 <span class="text-base font-semibold text-black-300">¿Hay una prueba gratuita disponible?</span>
                                 <x-solar-alt-arrow-down-outline 
                                     class="w-5 h-5 text-primary-200 transition-transform duration-200"
@@ -100,10 +100,10 @@
                         </div>
 
                         <!-- Pregunta 2 -->
-                        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+                        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                             <button 
                                 @click="openAccordion = openAccordion === 2 ? 0 : 2"
-                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-white-100 hover:bg-white-100 transition-colors">
+                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-accent-100 hover:bg-accent-100 transition-colors">
                                 <span class="text-base font-semibold text-black-300">¿Puedo cambiar mi plan más adelante?</span>
                                 <x-solar-alt-arrow-down-outline 
                                     class="w-5 h-5 text-primary-200 transition-transform duration-200"
@@ -117,10 +117,10 @@
                         </div>
 
                         <!-- Pregunta 3 -->
-                        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+                        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                             <button 
                                 @click="openAccordion = openAccordion === 3 ? 0 : 3"
-                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-white-100 hover:bg-white-100 transition-colors">
+                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-accent-100 hover:bg-accent-100 transition-colors">
                                 <span class="text-base font-semibold text-black-300">¿Cuál es su política de cancelación?</span>
                                 <x-solar-alt-arrow-down-outline 
                                     class="w-5 h-5 text-primary-200 transition-transform duration-200"
@@ -134,10 +134,10 @@
                         </div>
 
                         <!-- Pregunta 4 -->
-                        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+                        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                             <button 
                                 @click="openAccordion = openAccordion === 4 ? 0 : 4"
-                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-white-100 hover:bg-white-100 transition-colors">
+                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-accent-100 hover:bg-accent-100 transition-colors">
                                 <span class="text-base font-semibold text-black-300">¿Cómo funciona la facturación?</span>
                                 <x-solar-alt-arrow-down-outline 
                                     class="w-5 h-5 text-primary-200 transition-transform duration-200"
@@ -156,10 +156,10 @@
                 <div x-show="activeTab === 'design'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
                     <div class="space-y-4">
                         <!-- Pregunta 1 -->
-                        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+                        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                             <button 
                                 @click="openAccordion = openAccordion === 1 ? 0 : 1"
-                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-white-100 hover:bg-white-100 transition-colors">
+                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-accent-100 hover:bg-accent-100 transition-colors">
                                 <span class="text-base font-semibold text-black-300">¿Ofrecen servicios de diseño personalizado?</span>
                                 <x-solar-alt-arrow-down-outline 
                                     class="w-5 h-5 text-primary-200 transition-transform duration-200"
@@ -173,10 +173,10 @@
                         </div>
 
                         <!-- Pregunta 2 -->
-                        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+                        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                             <button 
                                 @click="openAccordion = openAccordion === 2 ? 0 : 2"
-                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-white-100 hover:bg-white-100 transition-colors">
+                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-accent-100 hover:bg-accent-100 transition-colors">
                                 <span class="text-base font-semibold text-black-300">¿Incluyen prototipado en sus servicios?</span>
                                 <x-solar-alt-arrow-down-outline 
                                     class="w-5 h-5 text-primary-200 transition-transform duration-200"
@@ -190,10 +190,10 @@
                         </div>
 
                         <!-- Pregunta 3 -->
-                        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+                        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                             <button 
                                 @click="openAccordion = openAccordion === 3 ? 0 : 3"
-                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-white-100 hover:bg-white-100 transition-colors">
+                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-accent-100 hover:bg-accent-100 transition-colors">
                                 <span class="text-base font-semibold text-black-300">¿Cuánto tiempo toma un proyecto de diseño?</span>
                                 <x-solar-alt-arrow-down-outline 
                                     class="w-5 h-5 text-primary-200 transition-transform duration-200"
@@ -212,10 +212,10 @@
                 <div x-show="activeTab === 'development'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
                     <div class="space-y-4">
                         <!-- Pregunta 1 -->
-                        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+                        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                             <button 
                                 @click="openAccordion = openAccordion === 1 ? 0 : 1"
-                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-white-100 hover:bg-white-100 transition-colors">
+                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-accent-100 hover:bg-accent-100 transition-colors">
                                 <span class="text-base font-semibold text-black-300">¿Qué tecnologías utilizan?</span>
                                 <x-solar-alt-arrow-down-outline 
                                     class="w-5 h-5 text-primary-200 transition-transform duration-200"
@@ -229,10 +229,10 @@
                         </div>
 
                         <!-- Pregunta 2 -->
-                        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+                        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                             <button 
                                 @click="openAccordion = openAccordion === 2 ? 0 : 2"
-                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-white-100 hover:bg-white-100 transition-colors">
+                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-accent-100 hover:bg-accent-100 transition-colors">
                                 <span class="text-base font-semibold text-black-300">¿Ofrecen soporte post-desarrollo?</span>
                                 <x-solar-alt-arrow-down-outline 
                                     class="w-5 h-5 text-primary-200 transition-transform duration-200"
@@ -251,10 +251,10 @@
                 <div x-show="activeTab === 'platform'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
                     <div class="space-y-4">
                         <!-- Pregunta 1 -->
-                        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+                        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                             <button 
                                 @click="openAccordion = openAccordion === 1 ? 0 : 1"
-                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-white-100 hover:bg-white-100 transition-colors">
+                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-accent-100 hover:bg-accent-100 transition-colors">
                                 <span class="text-base font-semibold text-black-300">¿Cómo empiezo a usar la plataforma?</span>
                                 <x-solar-alt-arrow-down-outline 
                                     class="w-5 h-5 text-primary-200 transition-transform duration-200"
@@ -268,10 +268,10 @@
                         </div>
 
                         <!-- Pregunta 2 -->
-                        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+                        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                             <button 
                                 @click="openAccordion = openAccordion === 2 ? 0 : 2"
-                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-white-100 hover:bg-white-100 transition-colors">
+                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-accent-100 hover:bg-accent-100 transition-colors">
                                 <span class="text-base font-semibold text-black-300">¿Hay tutoriales disponibles?</span>
                                 <x-solar-alt-arrow-down-outline 
                                     class="w-5 h-5 text-primary-200 transition-transform duration-200"
@@ -290,10 +290,10 @@
                 <div x-show="activeTab === 'agency'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
                     <div class="space-y-4">
                         <!-- Pregunta 1 -->
-                        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+                        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                             <button 
                                 @click="openAccordion = openAccordion === 1 ? 0 : 1"
-                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-white-100 hover:bg-white-100 transition-colors">
+                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-accent-100 hover:bg-accent-100 transition-colors">
                                 <span class="text-base font-semibold text-black-300">¿Ofrecen servicios de agencia completos?</span>
                                 <x-solar-alt-arrow-down-outline 
                                     class="w-5 h-5 text-primary-200 transition-transform duration-200"
@@ -307,10 +307,10 @@
                         </div>
 
                         <!-- Pregunta 2 -->
-                        <div class="bg-white-50 rounded-lg p-0 overflow-hidden">
+                        <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                             <button 
                                 @click="openAccordion = openAccordion === 2 ? 0 : 2"
-                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-white-100 hover:bg-white-100 transition-colors">
+                                class="w-full text-left px-6 py-4 flex items-center justify-between border-b border-accent-100 hover:bg-accent-100 transition-colors">
                                 <span class="text-base font-semibold text-black-300">¿Cómo funciona la colaboración con su agencia?</span>
                                 <x-solar-alt-arrow-down-outline 
                                     class="w-5 h-5 text-primary-200 transition-transform duration-200"
