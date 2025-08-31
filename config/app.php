@@ -123,4 +123,19 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Debug System Configuration
+    |--------------------------------------------------------------------------
+    |
+    | These options control the emergency debug system access.
+    |
+    */
+
+    'debug_access_enabled' => env('DEBUG_ACCESS_ENABLED', false),
+    'debug_username' => env('DEBUG_USERNAME', 'admin'),
+    'debug_password' => env('DEBUG_PASSWORD', 'password'),
+    'debug_notification_email' => env('DEBUG_NOTIFICATION_EMAIL', 'admin@example.com'),
+    'debug_notifications_enabled' => env('DEBUG_NOTIFICATIONS_ENABLED', false),
+
 ];

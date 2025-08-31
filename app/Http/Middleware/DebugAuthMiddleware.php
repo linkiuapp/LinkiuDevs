@@ -14,7 +14,7 @@ class DebugAuthMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         // Check if debug access is enabled
-        if (!env('DEBUG_ACCESS_ENABLED', false)) {
+        if (!config('app.debug_access_enabled', env('DEBUG_ACCESS_ENABLED', false))) {
             abort(404);
         }
 
@@ -28,8 +28,8 @@ class DebugAuthMiddleware
             $username = $request->input('username');
             $password = $request->input('password');
             
-            $validUsername = env('DEBUG_USERNAME');
-            $validPassword = env('DEBUG_PASSWORD');
+            $validUsername = config('app.debug_username', env('DEBUG_USERNAME'));
+            $validPassword = config('app.debug_password', env('DEBUG_PASSWORD'));
             
             if ($username === $validUsername && $password === $validPassword) {
                 $request->session()->put('debug_authenticated', true);
