@@ -1,0 +1,647 @@
+/**
+ * Wizard Navigation Styles
+ * 
+ * CSS for wizard navigation component including:
+ * - Progress bar styling
+ * - Step transition animations
+ * - Step status indicators
+ * - Responsive design
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    /* Wizard Container */
+    .wizard-container {
+        @apply relative w-full;
+    }
+
+    /* Progress Bar */
+    .wizard-progress {
+        @apply w-full bg-accent-200 rounded-full h-2 mb-6;
+    }
+
+    .wizard-progress-bar {
+        @apply bg-primary-300 h-2 rounded-full transition-all duration-500 ease-in-out;
+    }
+
+    .wizard-progress-text {
+        @apply text-sm text-black-200 mt-2 text-center;
+    }
+
+    /* Step Navigation */
+    .wizard-nav {
+        @apply flex items-center justify-between mb-8 overflow-x-auto;
+    }
+
+    .wizard-nav-step {
+        @apply flex items-center min-w-0 flex-1;
+    }
+
+    .wizard-nav-step:not(:last-child)::after {
+        content: '';
+        @apply flex-1 h-px bg-accent-300 mx-4;
+    }
+
+    .wizard-nav-step.completed:not(:last-child)::after {
+        @apply bg-success-300;
+    }
+
+    /* Enhanced Step Indicators with Animations */
+    .wizard-step-indicator {
+        @apply flex items-center justify-center w-8 h-8 rounded-full border-2 text-sm font-medium transition-all duration-300 ease-out;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .wizard-step-indicator::before {
+        content: '';
+        @apply absolute inset-0 rounded-full opacity-0 transition-opacity duration-300;
+        background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+    }
+
+    .wizard-step-indicator:hover::before {
+        @apply opacity-100;
+        animation: ripple 0.6s ease-out;
+    }
+
+    .wizard-step-indicator.current {
+        @apply bg-primary-300 border-primary-300 text-accent-50;
+        animation: pulseGlow 2s ease-in-out infinite;
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+    }
+
+    .wizard-step-indicator.completed {
+        @apply bg-success-300 border-success-300 text-accent-50;
+        animation: successPop 0.5s ease-out;
+    }
+
+    .wizard-step-indicator.available {
+        @apply bg-accent-50 border-primary-200 text-primary-300 cursor-pointer;
+        transition: all 0.3s ease;
+    }
+
+    .wizard-step-indicator.available:hover {
+        @apply bg-primary-50 border-primary-300 transform scale-110;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .wizard-step-indicator.disabled {
+        @apply bg-disabled-100 border-disabled-300 text-disabled-400 cursor-not-allowed opacity-60;
+    }
+
+    .wizard-step-indicator.error {
+        @apply bg-error-300 border-error-300 text-accent-50;
+        animation: errorShake 0.5s ease-out;
+    }
+
+    /* Step Labels */
+    .wizard-step-label {
+        @apply ml-3 text-sm font-medium;
+    }
+
+    .wizard-step-label.current {
+        @apply text-primary-300;
+    }
+
+    .wizard-step-label.completed {
+        @apply text-success-300;
+    }
+
+    .wizard-step-label.available {
+        @apply text-black-300 hover:text-primary-300 cursor-pointer;
+    }
+
+    .wizard-step-label.disabled {
+        @apply text-disabled-400;
+    }
+
+    .wizard-step-label.error {
+        @apply text-error-300;
+    }
+
+    /* Step Content */
+    .wizard-step-content {
+        @apply relative min-h-96;
+    }
+
+    .wizard-step {
+        @apply absolute inset-0 w-full;
+    }
+
+    .wizard-step.hidden {
+        @apply invisible opacity-0;
+    }
+
+    /* Enhanced Step Transitions */
+    .wizard-step-enter {
+        @apply opacity-0 transform transition-all duration-500 ease-out;
+    }
+
+    .wizard-step-enter-forward {
+        @apply translate-x-8 scale-95;
+        animation: slideInRight 0.5s ease-out forwards;
+    }
+
+    .wizard-step-enter-backward {
+        @apply -translate-x-8 scale-95;
+        animation: slideInLeft 0.5s ease-out forwards;
+    }
+
+    .wizard-step-exit {
+        @apply opacity-100 transform transition-all duration-300 ease-in;
+    }
+
+    .wizard-step-exit-forward {
+        @apply -translate-x-8 opacity-0 scale-95;
+        animation: slideOutLeft 0.3s ease-in forwards;
+    }
+
+    .wizard-step-exit-backward {
+        @apply translate-x-8 opacity-0 scale-95;
+        animation: slideOutRight 0.3s ease-in forwards;
+    }
+
+    /* Step Content Animations */
+    .wizard-step-content {
+        @apply relative min-h-96 overflow-hidden;
+    }
+
+    .wizard-step {
+        @apply absolute inset-0 w-full transition-all duration-300;
+    }
+
+    .wizard-step.active {
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    .wizard-step.hidden {
+        @apply invisible opacity-0 pointer-events-none;
+    }
+
+    /* Breadcrumbs */
+    .wizard-breadcrumbs {
+        @apply flex items-center space-x-2 text-sm text-black-200 mb-4;
+    }
+
+    .wizard-breadcrumb {
+        @apply hover:text-primary-300 cursor-pointer transition-colors duration-200;
+    }
+
+    .wizard-breadcrumb.current {
+        @apply text-primary-300 font-medium;
+    }
+
+    .wizard-breadcrumb-separator {
+        @apply text-disabled-400;
+    }
+
+    /* Enhanced Navigation Controls */
+    .wizard-controls {
+        @apply flex justify-between items-center mt-8 pt-6 border-t border-accent-200;
+        animation: slideInUp 0.4s ease-out 0.2s both;
+    }
+
+    .wizard-btn {
+        @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 relative overflow-hidden;
+        position: relative;
+    }
+
+    .wizard-btn::before {
+        content: '';
+        @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+        background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.2) 50%, transparent 70%);
+        transform: translateX(-100%);
+    }
+
+    .wizard-btn:hover::before {
+        @apply opacity-100;
+        animation: shimmer 0.6s ease-out;
+    }
+
+    .wizard-btn-primary {
+        @apply bg-primary-300 text-accent-50 focus:ring-primary-200;
+        transition: all 0.3s ease;
+    }
+
+    .wizard-btn-primary:hover:not(:disabled) {
+        @apply bg-primary-400 transform scale-105;
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+    }
+
+    .wizard-btn-primary:active:not(:disabled) {
+        @apply transform scale-95;
+    }
+
+    .wizard-btn-primary:disabled {
+        @apply bg-disabled-300 text-disabled-400 cursor-not-allowed opacity-60;
+    }
+
+    .wizard-btn-secondary {
+        @apply bg-accent-100 text-black-300 focus:ring-accent-300 border border-gray-200;
+        transition: all 0.3s ease;
+    }
+
+    .wizard-btn-secondary:hover:not(:disabled) {
+        @apply bg-accent-200 border-gray-300 transform scale-105;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .wizard-btn-secondary:active:not(:disabled) {
+        @apply transform scale-95;
+    }
+
+    .wizard-btn-secondary:disabled {
+        @apply bg-disabled-50 text-disabled-400 cursor-not-allowed opacity-60;
+    }
+
+    /* Loading States */
+    .wizard-loading {
+        @apply flex items-center justify-center py-8;
+    }
+
+    .wizard-spinner {
+        @apply animate-spin rounded-full h-8 w-8 border-b-2 border-primary-300;
+    }
+
+    /* Validation Errors */
+    .wizard-error {
+        @apply bg-error-50 border border-error-200 rounded-lg p-4 mb-4;
+    }
+
+    .wizard-error-title {
+        @apply text-error-400 font-medium mb-2;
+    }
+
+    .wizard-error-list {
+        @apply text-error-300 text-sm space-y-1;
+    }
+
+    /* Success States */
+    .wizard-success {
+        @apply bg-success-50 border border-success-200 rounded-lg p-4 mb-4;
+    }
+
+    .wizard-success-title {
+        @apply text-success-400 font-medium mb-2;
+    }
+
+    .wizard-success-message {
+        @apply text-success-300 text-sm;
+    }
+
+    /* Auto-save Indicator */
+    .wizard-autosave {
+        @apply fixed bottom-4 right-4 bg-black-400 text-accent-50 px-4 py-2 rounded-lg text-sm opacity-0 transition-opacity duration-300;
+    }
+
+    .wizard-autosave.visible {
+        @apply opacity-100;
+    }
+
+    .wizard-autosave.saving {
+        @apply bg-primary-300;
+    }
+
+    .wizard-autosave.saved {
+        @apply bg-success-300;
+    }
+
+    .wizard-autosave.error {
+        @apply bg-error-300;
+    }
+
+    /* Step Validation Icons */
+    .wizard-step-icon {
+        @apply w-5 h-5;
+    }
+
+    .wizard-step-check {
+        @apply text-success-300;
+    }
+
+    .wizard-step-error {
+        @apply text-error-300;
+    }
+
+    .wizard-step-warning {
+        @apply text-warning-300;
+    }
+
+    /* Compact Mode */
+    .wizard-compact .wizard-nav {
+        @apply mb-4;
+    }
+
+    .wizard-compact .wizard-step-label {
+        @apply hidden;
+    }
+
+    .wizard-compact .wizard-controls {
+        @apply mt-4 pt-4;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+    .wizard-nav {
+        @apply flex-col space-y-4;
+    }
+    
+    .wizard-nav-step:not(:last-child)::after {
+        @apply hidden;
+    }
+    
+    .wizard-controls {
+        @apply flex-col space-y-3;
+    }
+    
+    .wizard-btn {
+        @apply w-full;
+    }
+}
+
+/* Enhanced Animation Keyframes */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+@keyframes slideOutLeft {
+    from {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-30px) scale(0.95);
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(30px) scale(0.95);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulseGlow {
+    0% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(59, 130, 246, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    }
+}
+
+@keyframes successPop {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes errorShake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-3px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(3px);
+    }
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 53%, 80%, 100% {
+        transform: translate3d(0, 0, 0);
+    }
+    40%, 43% {
+        transform: translate3d(0, -8px, 0);
+    }
+    70% {
+        transform: translate3d(0, -4px, 0);
+    }
+    90% {
+        transform: translate3d(0, -2px, 0);
+    }
+}
+
+@keyframes heartbeat {
+    0% {
+        transform: scale(1);
+    }
+    14% {
+        transform: scale(1.1);
+    }
+    28% {
+        transform: scale(1);
+    }
+    42% {
+        transform: scale(1.1);
+    }
+    70% {
+        transform: scale(1);
+    }
+}
+
+/* Form Field Animations */
+.form-field-enter {
+    animation: fadeInUp 0.4s ease-out;
+}
+
+.form-field-focus {
+    animation: focusPulse 0.3s ease-out;
+}
+
+@keyframes focusPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 6px rgba(59, 130, 246, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+    }
+}
+
+/* Success Confirmation Animations */
+.success-checkmark {
+    animation: drawCheckmark 0.8s ease-out;
+}
+
+@keyframes drawCheckmark {
+    0% {
+        stroke-dasharray: 0 100;
+        stroke-dashoffset: 0;
+    }
+    100% {
+        stroke-dasharray: 100 0;
+        stroke-dashoffset: 0;
+    }
+}
+
+.success-celebration {
+    animation: celebrate 1s ease-out;
+}
+
+@keyframes celebrate {
+    0%, 100% {
+        transform: scale(1) rotate(0deg);
+    }
+    25% {
+        transform: scale(1.1) rotate(-5deg);
+    }
+    50% {
+        transform: scale(1.2) rotate(5deg);
+    }
+    75% {
+        transform: scale(1.1) rotate(-2deg);
+    }
+}
+
+/* Hover Effects */
+.hover-lift {
+    transition: all 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.hover-glow {
+    transition: all 0.3s ease;
+}
+
+.hover-glow:hover {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .wizard-progress {
+        @apply bg-black-200;
+    }
+    
+    .wizard-nav-step:not(:last-child)::after {
+        @apply bg-black-100;
+    }
+    
+    .wizard-step-indicator.available {
+        @apply bg-black-400 border-black-200 text-accent-300;
+    }
+    
+    .wizard-step-indicator.disabled {
+        @apply bg-black-400 border-black-300 text-disabled-400;
+    }
+    
+    .wizard-controls {
+        @apply border-black-200;
+    }
+    
+    .wizard-btn-secondary {
+        @apply bg-black-300 text-accent-300 hover:bg-black-200;
+    }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    .wizard-step-enter,
+    .wizard-step-exit,
+    .wizard-step.active,
+    .wizard-controls,
+    .wizard-btn,
+    .wizard-step-indicator,
+    .form-field-enter,
+    .success-checkmark,
+    .success-celebration,
+    .hover-lift,
+    .hover-glow {
+        animation: none !important;
+        transition: none !important;
+    }
+    
+    .wizard-step-indicator.current {
+        animation: none !important;
+    }
+    
+    .wizard-btn:hover::before {
+        animation: none !important;
+    }
+}

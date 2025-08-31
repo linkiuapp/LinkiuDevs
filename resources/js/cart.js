@@ -2,8 +2,29 @@
 class Cart {
     constructor() {
         this.items = []; // Solo para cache local temporal
-        this.initializeEvents();
-        this.syncWithServer();
+        
+        // Verificar que estamos en el contexto correcto
+        if (!this.isValidContext()) {
+            console.log('ℹ️ Cart: Invalid context, skipping initialization');
+            return;
+        }
+        
+        try {
+            this.initializeEvents();
+            this.syncWithServer();
+        } catch (error) {
+            console.error('❌ Cart: Error during initialization:', error);
+        }
+    }
+    
+    // Verificar que estamos en un contexto válido para el carrito
+    isValidContext() {
+        // Verificar que tenemos los elementos necesarios del DOM
+        const hasCSRFToken = document.querySelector('meta[name="csrf-token"]') !== null;
+        const isStorefront = !window.location.pathname.includes('/admin') && 
+                            !window.location.pathname.includes('/superlinkiu');
+        
+        return hasCSRFToken && isStorefront;
     }
 
     // Ya no usamos LocalStorage, todo se maneja en servidor
@@ -218,31 +239,61 @@ class Cart {
 
     // Obtener URL para agregar al carrito
     getCartAddUrl() {
-        const storeSlug = window.location.pathname.split('/')[1];
+        const pathParts = window.location.pathname.split('/').filter(part => part);
+        const storeSlug = pathParts[0] || '';
+        
+        if (!storeSlug) {
+            throw new Error('No se pudo determinar el slug de la tienda');
+        }
+        
         return `/${storeSlug}/carrito/agregar`;
     }
 
     // Obtener URL para obtener carrito
     getCartGetUrl() {
-        const storeSlug = window.location.pathname.split('/')[1];
+        const pathParts = window.location.pathname.split('/').filter(part => part);
+        const storeSlug = pathParts[0] || '';
+        
+        if (!storeSlug) {
+            throw new Error('No se pudo determinar el slug de la tienda');
+        }
+        
         return `/${storeSlug}/carrito/contenido`;
     }
 
     // Obtener URL para actualizar carrito
     getCartUpdateUrl() {
-        const storeSlug = window.location.pathname.split('/')[1];
+        const pathParts = window.location.pathname.split('/').filter(part => part);
+        const storeSlug = pathParts[0] || '';
+        
+        if (!storeSlug) {
+            throw new Error('No se pudo determinar el slug de la tienda');
+        }
+        
         return `/${storeSlug}/carrito/actualizar`;
     }
 
     // Obtener URL para eliminar del carrito
     getCartRemoveUrl() {
-        const storeSlug = window.location.pathname.split('/')[1];
+        const pathParts = window.location.pathname.split('/').filter(part => part);
+        const storeSlug = pathParts[0] || '';
+        
+        if (!storeSlug) {
+            throw new Error('No se pudo determinar el slug de la tienda');
+        }
+        
         return `/${storeSlug}/carrito/eliminar`;
     }
 
     // Obtener URL para limpiar carrito
     getCartClearUrl() {
-        const storeSlug = window.location.pathname.split('/')[1];
+        const pathParts = window.location.pathname.split('/').filter(part => part);
+        const storeSlug = pathParts[0] || '';
+        
+        if (!storeSlug) {
+            throw new Error('No se pudo determinar el slug de la tienda');
+        }
+        
         return `/${storeSlug}/carrito/limpiar`;
     }
 
@@ -279,7 +330,7 @@ class Cart {
     showAddedFeedback(productName) {
         // Crear notificación temporal
         const notification = document.createElement('div');
-        notification.className = 'fixed top-4 right-4 bg-success-300 text-white-50 px-4 py-2 rounded-lg shadow-lg z-50 transform transition-all duration-300 translate-x-full';
+        notification.className = 'fixed top-4 right-4 bg-success-300 text-accent-50 px-4 py-2 rounded-lg shadow-lg z-50 transform transition-all duration-300 translate-x-full';
         notification.innerHTML = `
             <div class="flex items-center gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -332,7 +383,7 @@ class Cart {
         }
 
         const notification = document.createElement('div');
-        notification.className = 'cart-error-notification fixed top-4 right-4 bg-error-300 text-white-50 px-4 py-2 rounded-lg shadow-lg z-50 transform transition-all duration-300 translate-x-full max-w-sm';
+        notification.className = 'cart-error-notification fixed top-4 right-4 bg-error-300 text-accent-50 px-4 py-2 rounded-lg shadow-lg z-50 transform transition-all duration-300 translate-x-full max-w-sm';
         notification.innerHTML = `
             <div class="flex items-start gap-2">
                 <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -342,7 +393,7 @@ class Cart {
                     <span class="text-sm font-medium block">${finalMessage}</span>
                     ${isNetworkError ? '<span class="text-xs opacity-75 block mt-1">Se reintentará automáticamente</span>' : ''}
                 </div>
-                <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-white-50 hover:text-white-200">
+                <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-accent-50 hover:text-accent-200">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
@@ -398,37 +449,77 @@ class Cart {
     }
 }
 
-// Inicializar carrito cuando carga la página
+// Inicializar carrito cuando carga la página (solo si estamos en storefront)
 document.addEventListener('DOMContentLoaded', function() {
-    window.cart = new Cart();
+    // Verificar que estamos en una página de storefront
+    const isStorefront = !window.location.pathname.includes('/admin') && 
+                        !window.location.pathname.includes('/superlinkiu') &&
+                        window.location.pathname !== '/' &&
+                        window.location.pathname !== '/login' &&
+                        window.location.pathname !== '/register';
+    
+    if (isStorefront) {
+        try {
+            window.cart = new Cart();
+            console.log('🛒 Cart initialized successfully');
+        } catch (error) {
+            console.error('❌ Error initializing cart:', error);
+        }
+    } else {
+        console.log('ℹ️ Cart not initialized (not in storefront context)');
+    }
 });
 
-// Exponer funciones globales si es necesario
+// Exponer funciones globales si es necesario (solo si el carrito está inicializado)
 window.addToCart = function(productId, productName, productPrice, productImage) {
-    if (window.cart) {
-        window.cart.addProduct({
-            id: productId,
-            name: productName,
-            price: productPrice,
-            image: productImage
-        });
+    if (window.cart && typeof window.cart.addProduct === 'function') {
+        try {
+            window.cart.addProduct({
+                id: productId,
+                name: productName,
+                price: productPrice,
+                image: productImage
+            });
+        } catch (error) {
+            console.error('❌ Error adding to cart:', error);
+        }
+    } else {
+        console.warn('⚠️ Cart not available or not initialized');
     }
 };
 
 window.removeFromCart = function(productId) {
-    if (window.cart) {
-        window.cart.removeProduct(productId);
+    if (window.cart && typeof window.cart.removeProduct === 'function') {
+        try {
+            window.cart.removeProduct(productId);
+        } catch (error) {
+            console.error('❌ Error removing from cart:', error);
+        }
+    } else {
+        console.warn('⚠️ Cart not available or not initialized');
     }
 };
 
 window.updateCartQuantity = function(productId, quantity) {
-    if (window.cart) {
-        window.cart.updateQuantity(productId, quantity);
+    if (window.cart && typeof window.cart.updateQuantity === 'function') {
+        try {
+            window.cart.updateQuantity(productId, quantity);
+        } catch (error) {
+            console.error('❌ Error updating cart quantity:', error);
+        }
+    } else {
+        console.warn('⚠️ Cart not available or not initialized');
     }
 };
 
 window.clearCart = function() {
-    if (window.cart) {
-        window.cart.clearCart();
+    if (window.cart && typeof window.cart.clearCart === 'function') {
+        try {
+            window.cart.clearCart();
+        } catch (error) {
+            console.error('❌ Error clearing cart:', error);
+        }
+    } else {
+        console.warn('⚠️ Cart not available or not initialized');
     }
 }; 

@@ -18,17 +18,17 @@
 
 @layer base {
     .table-container {
-        @apply bg-white-50 rounded-lg px-4 py-8 overflow-hidden;
+        @apply bg-accent-50 rounded-lg px-4 py-8 overflow-hidden;
     }
 
     .table-header {
-        @apply text-xs justify-between font-normal tracking-wide text-black-300 uppercase border-b border-white-300 bg-white-50;
+        @apply text-xs justify-between font-normal tracking-wide text-black-300 uppercase border-b border-accent-300 bg-accent-50;
     }
 }
 
 @layer components {
     .bagde-table-primary {
-        @apply bg-primary-200 text-white-50 px-4 py-1 rounded-full text-sm font-semibold;
+        @apply bg-primary-200 text-accent-50 px-4 py-1 rounded-full text-sm font-semibold;
     }
 
     .bagde-table-success {
@@ -40,19 +40,19 @@
     }
 
     .bagde-table-error {
-        @apply bg-error-200 text-white-50 px-4 py-1 rounded-full text-sm font-semibold;
+        @apply bg-error-200 text-accent-50 px-4 py-1 rounded-full text-sm font-semibold;
     }
 
     .table-toggle {
-        @apply w-11 h-6 bg-white-200 rounded-full peer-checked:after:translate-x-full peer-checked:after:border-white-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white-50 after:border-white-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200;
+        @apply w-11 h-6 bg-accent-200 rounded-full peer-checked:after:translate-x-full peer-checked:after:border-accent-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-accent-50 after:border-accent-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-200;
     }
 
     .table-action-show {
-        @apply bg-primary-50 hover:bg-primary-200 hover:text-white-50 text-primary-300 p-2 rounded-lg transition-colors;
+        @apply bg-primary-50 hover:bg-primary-200 hover:text-accent-50 text-primary-300 p-2 rounded-lg transition-colors;
     }
 
     .table-action-edit {
-        @apply bg-info-50 hover:bg-info-200 hover:text-white-50 text-info-300 p-2 rounded-lg transition-colors;
+        @apply bg-info-50 hover:bg-info-200 hover:text-accent-50 text-info-300 p-2 rounded-lg transition-colors;
     }
 
     .table-action-login {
@@ -60,7 +60,7 @@
     }
 
     .table-action-delete {
-        @apply bg-error-50 hover:bg-error-200 hover:text-white-50 text-error-300 p-2 rounded-lg transition-colors;
+        @apply bg-error-50 hover:bg-error-200 hover:text-accent-50 text-error-300 p-2 rounded-lg transition-colors;
     }
 
     .table-action-icon {

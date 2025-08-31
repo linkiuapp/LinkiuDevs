@@ -19,7 +19,7 @@
 
     /* Clases de colores personalizadas */
     .btn-primary {
-        @apply bg-primary-200 hover:bg-primary-300 text-white-50;
+        @apply bg-primary-200 hover:bg-primary-300 text-accent-50;
     }
 
     /* Backgrounds con opacidad */
@@ -70,11 +70,11 @@
     }
 
     .card {
-        @apply bg-white-50 rounded-xl p-1 overflow-hidden;
+        @apply bg-accent-50 rounded-xl p-1 overflow-hidden;
     }
 
     .card-header {
-        @apply border-b border-white-100 bg-white-50 py-4 px-6;
+        @apply border-b border-accent-100 bg-accent-50 py-4 px-6;
     }
 
     .title-card {
@@ -374,31 +374,31 @@
     }
 
     .badge-gradient-primary {
-        @apply text-sm font-semibold bg-gradient-to-r from-primary-300 to-primary-200 px-5 py-1.5 rounded text-white-50;
+        @apply text-sm font-semibold bg-gradient-to-r from-primary-300 to-primary-200 px-5 py-1.5 rounded text-accent-50;
     }
 
     .badge-gradient-secondary {
-        @apply text-sm font-semibold bg-gradient-to-r from-secondary-300 to-secondary-200 px-5 py-1.5 rounded text-white-50;
+        @apply text-sm font-semibold bg-gradient-to-r from-secondary-300 to-secondary-200 px-5 py-1.5 rounded text-accent-50;
     }
 
     .badge-gradient-success {
-        @apply text-sm font-semibold bg-gradient-to-r from-success-300 to-success-200 px-5 py-1.5 rounded text-white-50;
+        @apply text-sm font-semibold bg-gradient-to-r from-success-300 to-success-200 px-5 py-1.5 rounded text-accent-50;
     }
 
     .badge-gradient-info {
-        @apply text-sm font-semibold bg-gradient-to-r from-info-300 to-info-200 px-5 py-1.5 rounded text-white-50;
+        @apply text-sm font-semibold bg-gradient-to-r from-info-300 to-info-200 px-5 py-1.5 rounded text-accent-50;
     }
 
     .badge-gradient-warning {
-        @apply text-sm font-semibold bg-gradient-to-r from-warning-300 to-warning-200 px-5 py-1.5 rounded text-white-50;
+        @apply text-sm font-semibold bg-gradient-to-r from-warning-300 to-warning-200 px-5 py-1.5 rounded text-accent-50;
     }
 
     .badge-gradient-error {
-        @apply text-sm font-semibold bg-gradient-to-r from-error-300 to-error-200 px-5 py-1.5 rounded text-white-50;
+        @apply text-sm font-semibold bg-gradient-to-r from-error-300 to-error-200 px-5 py-1.5 rounded text-accent-50;
     }
 
     .badge-gradient-dark {
-        @apply text-sm font-semibold bg-gradient-to-r from-black-300 to-black-200 px-5 py-1.5 rounded text-white-50;
+        @apply text-sm font-semibold bg-gradient-to-r from-black-300 to-black-200 px-5 py-1.5 rounded text-accent-50;
     }
 
     .badge-with-button-primary {
@@ -430,31 +430,31 @@
     }
 
     .badge-span {
-        @apply text-black-400 bg-white-50 w-5 h-5 flex items-center justify-center rounded text-sm;
+        @apply text-black-400 bg-accent-50 w-5 h-5 flex items-center justify-center rounded text-sm;
     }
 
     .badge-circle-solid-primary {
-        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-primary-300 text-white-50;
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-primary-300 text-accent-50;
     }
 
     .badge-circle-solid-secondary {
-        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-secondary-200 text-white-50;
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-secondary-200 text-accent-50;
     }
 
     .badge-circle-solid-success {
-        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-success-300 text-white-50;
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-success-300 text-accent-50;
     }
 
     .badge-circle-solid-info {
-        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-info-300 text-white-50;
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-info-300 text-accent-50;
     }
 
     .badge-circle-solid-warning {
-        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-warning-300 text-white-50;
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-warning-300 text-accent-50;
     }
 
     .badge-circle-solid-error {
-        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-error-300 text-white-50;
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-full bg-error-300 text-accent-50;
     }
 
     .badge-circle-soft-primary {
@@ -506,19 +506,19 @@
     }
 
     .badge-square-solid-primary {
-        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg bg-primary-300 text-white-50;
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg bg-primary-300 text-accent-50;
     }
 
     .badge-square-solid-secondary {
-        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg bg-secondary-200 text-white-50;
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg bg-secondary-200 text-accent-50;
     }
 
     .badge-square-solid-success {
-        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg bg-success-300 text-white-50;
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg bg-success-300 text-accent-50;
     }
 
     .badge-square-solid-info {
-        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg bg-info-300 text-white-50;
+        @apply text-sm font-semibold w-8 h-8 flex justify-center items-center rounded-lg bg-info-300 text-accent-50;
     }
 
     .badge-square-solid-warning {
@@ -578,7 +578,7 @@
     }
 
     .badge-notification-primary {
-        @apply text-2xs font-semibold bg-primary-300 text-white-50 rounded relative px-5 py-2 flex items-center;
+        @apply text-2xs font-semibold bg-primary-300 text-accent-50 rounded relative px-5 py-2 flex items-center;
     }
 
     .badge-notification-secondary {
@@ -586,7 +586,7 @@
     }
 
     .badge-notification-counter {
-        @apply absolute top-0 -end-[10px] -translate-y-5 px-2 py-1 rounded-full bg-error-300 border-2 border-white-50 text-2xs;
+        @apply absolute top-0 -end-[10px] -translate-y-5 px-2 py-1 rounded-full bg-error-300 border-2 border-accent-50 text-2xs;
     }
 
     .badge-icon {
@@ -594,7 +594,7 @@
     }
 
     .badge-icon-counter {
-        @apply absolute top-0 -end-[12px] -translate-y-1/2 px-2 py-1 rounded-full bg-error-300 border-2 border-white-50 text-xs text-white-50;
+        @apply absolute top-0 -end-[12px] -translate-y-1/2 px-2 py-1 rounded-full bg-error-300 border-2 border-accent-50 text-xs text-accent-50;
     }
 
     .badge-dot-primary {
@@ -627,19 +627,19 @@
 @layer components {
 
     .btn-primary {
-        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-lg px-5 py-3 font-semibold text-base;
+        @apply bg-primary-200 hover:bg-primary-300 text-accent-50 rounded-lg px-5 py-3 font-semibold text-base;
     }
 
     .btn-secondary {
-        @apply bg-secondary-200 hover:bg-secondary-300 text-white-50 rounded-lg px-5 py-3 font-semibold text-base;
+        @apply bg-secondary-200 hover:bg-secondary-300 text-accent-50 rounded-lg px-5 py-3 font-semibold text-base;
     }
 
     .btn-success {
-        @apply bg-success-200 text-black-400 hover:bg-success-300 hover:text-white-50 rounded-lg px-5 py-3 font-semibold text-base;
+        @apply bg-success-200 text-black-400 hover:bg-success-300 hover:text-accent-50 rounded-lg px-5 py-3 font-semibold text-base;
     }
 
     .btn-info {
-        @apply bg-info-200 hover:bg-info-300 text-white-50 rounded-lg px-5 py-3 font-semibold text-base;
+        @apply bg-info-200 hover:bg-info-300 text-accent-50 rounded-lg px-5 py-3 font-semibold text-base;
     }
 
     .btn-warning {
@@ -647,55 +647,55 @@
     }
 
     .btn-error {
-        @apply bg-error-200 hover:bg-error-300 text-white-50 rounded-lg px-5 py-3 font-semibold text-base;
+        @apply bg-error-200 hover:bg-error-300 text-accent-50 rounded-lg px-5 py-3 font-semibold text-base;
     }
 
     .btn-dark {
-        @apply bg-black-200 hover:bg-black-400 text-white-50 rounded-lg px-5 py-3 font-semibold text-base;
+        @apply bg-black-200 hover:bg-black-400 text-accent-50 rounded-lg px-5 py-3 font-semibold text-base;
     }
 
     .btn-outline-primary {
-        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-white-50 rounded-lg px-5 py-3 text-base font-semibold;
+        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-accent-50 rounded-lg px-5 py-3 text-base font-semibold;
     }
 
     .btn-outline-secondary {
-        @apply border border-secondary-300 text-secondary-300 hover:bg-secondary-300 hover:text-white-50 rounded-lg px-5 py-3 text-base font-semibold;
+        @apply border border-secondary-300 text-secondary-300 hover:bg-secondary-300 hover:text-accent-50 rounded-lg px-5 py-3 text-base font-semibold;
     }
 
     .btn-outline-success {
-        @apply border border-success-300 text-success-300 hover:bg-success-300 hover:text-white-50 rounded-lg px-5 py-3 text-base font-semibold;
+        @apply border border-success-300 text-success-300 hover:bg-success-300 hover:text-accent-50 rounded-lg px-5 py-3 text-base font-semibold;
     }
 
     .btn-outline-info {
-        @apply border border-info-300 text-info-300 hover:bg-info-300 hover:text-white-50 rounded-lg px-5 py-3 text-base font-semibold;
+        @apply border border-info-300 text-info-300 hover:bg-info-300 hover:text-accent-50 rounded-lg px-5 py-3 text-base font-semibold;
     }
 
     .btn-outline-warning {
-        @apply border border-warning-300 text-warning-300 hover:bg-warning-300 hover:text-white-50 rounded-lg px-5 py-3 text-base font-semibold;
+        @apply border border-warning-300 text-warning-300 hover:bg-warning-300 hover:text-accent-50 rounded-lg px-5 py-3 text-base font-semibold;
     }
 
     .btn-outline-error {
-        @apply border border-error-300 text-error-300 hover:bg-error-300 hover:text-white-50 rounded-lg px-5 py-3 text-base font-semibold;
+        @apply border border-error-300 text-error-300 hover:bg-error-300 hover:text-accent-50 rounded-lg px-5 py-3 text-base font-semibold;
     }
 
     .btn-outline-dark {
-        @apply border border-black-300 text-black-300 hover:bg-black-300 hover:text-white-50 rounded-lg px-5 py-3 text-base font-semibold;
+        @apply border border-black-300 text-black-300 hover:bg-black-300 hover:text-accent-50 rounded-lg px-5 py-3 text-base font-semibold;
     }
 
     .btn-rounded-primary {
-        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+        @apply bg-primary-200 hover:bg-primary-300 text-accent-50 rounded-full px-5 py-3 font-semibold text-base;
     }
 
     .btn-rounded-secondary {
-        @apply bg-secondary-200 hover:bg-secondary-300 text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+        @apply bg-secondary-200 hover:bg-secondary-300 text-accent-50 rounded-full px-5 py-3 font-semibold text-base;
     }
 
     .btn-rounded-success {
-        @apply bg-success-200 text-black-400 hover:bg-success-300 hover:text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+        @apply bg-success-200 text-black-400 hover:bg-success-300 hover:text-accent-50 rounded-full px-5 py-3 font-semibold text-base;
     }
 
     .btn-rounded-info {
-        @apply bg-info-200 hover:bg-info-300 text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+        @apply bg-info-200 hover:bg-info-300 text-accent-50 rounded-full px-5 py-3 font-semibold text-base;
     }
 
     .btn-rounded-warning {
@@ -703,39 +703,39 @@
     }
 
     .btn-rounded-error {
-        @apply bg-error-200 hover:bg-error-300 text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+        @apply bg-error-200 hover:bg-error-300 text-accent-50 rounded-full px-5 py-3 font-semibold text-base;
     }
 
     .btn-rounded-dark {
-        @apply bg-black-200 hover:bg-black-400 text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+        @apply bg-black-200 hover:bg-black-400 text-accent-50 rounded-full px-5 py-3 font-semibold text-base;
     }
 
     .btn-rounded-outline-primary {
-        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-accent-50 rounded-full px-5 py-3 font-semibold text-base;
     }
 
     .btn-rounded-outline-secondary {
-        @apply border border-secondary-300 text-secondary-300 hover:bg-secondary-300 hover:text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+        @apply border border-secondary-300 text-secondary-300 hover:bg-secondary-300 hover:text-accent-50 rounded-full px-5 py-3 font-semibold text-base;
     }
 
     .btn-rounded-outline-success {
-        @apply border border-success-300 text-success-300 hover:bg-success-300 hover:text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+        @apply border border-success-300 text-success-300 hover:bg-success-300 hover:text-accent-50 rounded-full px-5 py-3 font-semibold text-base;
     }
 
     .btn-rounded-outline-info {
-        @apply border border-info-300 text-info-300 hover:bg-info-300 hover:text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+        @apply border border-info-300 text-info-300 hover:bg-info-300 hover:text-accent-50 rounded-full px-5 py-3 font-semibold text-base;
     }
 
     .btn-rounded-outline-warning {
-        @apply border border-warning-300 text-warning-300 hover:bg-warning-300 hover:text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+        @apply border border-warning-300 text-warning-300 hover:bg-warning-300 hover:text-accent-50 rounded-full px-5 py-3 font-semibold text-base;
     }
 
     .btn-rounded-outline-error {
-        @apply border border-error-300 text-error-300 hover:bg-error-300 hover:text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+        @apply border border-error-300 text-error-300 hover:bg-error-300 hover:text-accent-50 rounded-full px-5 py-3 font-semibold text-base;
     }
 
     .btn-rounded-outline-dark {
-        @apply border border-black-300 text-black-300 hover:bg-black-300 hover:text-white-50 rounded-full px-5 py-3 font-semibold text-base;
+        @apply border border-black-300 text-black-300 hover:bg-black-300 hover:text-accent-50 rounded-full px-5 py-3 font-semibold text-base;
     }
 
     .btn-soft-primary {
@@ -795,55 +795,55 @@
     }
 
     .btn-icon-left {
-        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-lg px-5 py-3 font-semibold text-base flex items-center gap-2;
+        @apply bg-primary-200 hover:bg-primary-300 text-accent-50 rounded-lg px-5 py-3 font-semibold text-base flex items-center gap-2;
     }
 
     .btn-icon-left-outline {
-        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-white-50 rounded-lg px-5 py-3 font-semibold text-base flex items-center gap-2;
+        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-accent-50 rounded-lg px-5 py-3 font-semibold text-base flex items-center gap-2;
     }
 
     .btn-icon-right {
-        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-lg px-5 py-3 font-semibold text-base flex items-center gap-2;
+        @apply bg-primary-200 hover:bg-primary-300 text-accent-50 rounded-lg px-5 py-3 font-semibold text-base flex items-center gap-2;
     }
 
     .btn-icon-right-outline {
-        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-white-50 rounded-lg px-5 py-3 font-semibold text-base flex items-center gap-2;
+        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-accent-50 rounded-lg px-5 py-3 font-semibold text-base flex items-center gap-2;
     }
 
     .btn-icon-only {
-        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-lg px-3 py-3 font-semibold text-base flex items-center gap-2;
+        @apply bg-primary-200 hover:bg-primary-300 text-accent-50 rounded-lg px-3 py-3 font-semibold text-base flex items-center gap-2;
     }
 
     .btn-icon-only-outline {
-        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-white-50 rounded-lg px-3 py-3 font-semibold text-base flex items-center gap-2;
+        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-accent-50 rounded-lg px-3 py-3 font-semibold text-base flex items-center gap-2;
     }
 
     .btn-icon-left-rounded {
-        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-full px-3 py-3 font-semibold text-base flex items-center gap-2;
+        @apply bg-primary-200 hover:bg-primary-300 text-accent-50 rounded-full px-3 py-3 font-semibold text-base flex items-center gap-2;
     }
 
     .btn-icon-left-rounded-outline {
-        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-white-50 rounded-full px-3 py-3 font-semibold text-base flex items-center gap-2;
+        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-accent-50 rounded-full px-3 py-3 font-semibold text-base flex items-center gap-2;
     }
 
     .btn-icon-right-rounded {
-        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-full px-3 py-3 font-semibold text-base flex items-center gap-2;
+        @apply bg-primary-200 hover:bg-primary-300 text-accent-50 rounded-full px-3 py-3 font-semibold text-base flex items-center gap-2;
     }
 
     .btn-icon-right-rounded-outline {
-        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-white-50 rounded-full px-3 py-3 font-semibold text-base flex items-center gap-2;
+        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-accent-50 rounded-full px-3 py-3 font-semibold text-base flex items-center gap-2;
     }
 
     .btn-icon-only-rounded {
-        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-full px-3 py-3 font-semibold text-base flex items-center gap-2;
+        @apply bg-primary-200 hover:bg-primary-300 text-accent-50 rounded-full px-3 py-3 font-semibold text-base flex items-center gap-2;
     }
 
     .btn-icon-only-rounded-outline {
-        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-white-50 rounded-full px-3 py-3 font-semibold text-base flex items-center gap-2;
+        @apply border border-primary-300 text-primary-300 hover:bg-primary-300 hover:text-accent-50 rounded-full px-3 py-3 font-semibold text-base flex items-center gap-2;
     }
 
     .btn-large {
-        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-lg px-8 py-4 text-base font-semibold;
+        @apply bg-primary-200 hover:bg-primary-300 text-accent-50 rounded-lg px-8 py-4 text-base font-semibold;
     }
 
     .btn-medium {
@@ -855,7 +855,7 @@
     }
 
     .btn-extra-small {
-        @apply bg-error-200 hover:bg-error-300 text-white-50 rounded-lg px-2 py-1 text-2xs font-semibold;
+        @apply bg-error-200 hover:bg-error-300 text-accent-50 rounded-lg px-2 py-1 text-2xs font-semibold;
     }
 
     .btn-large-soft {
@@ -875,51 +875,51 @@
     }
 
     .btn-group-left {
-        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-s-lg px-5 py-3 text-base font-semibold;
+        @apply bg-primary-200 hover:bg-primary-300 text-accent-50 rounded-s-lg px-5 py-3 text-base font-semibold;
     }
 
     .btn-group-middle {
-        @apply bg-primary-200 hover:bg-primary-300 text-white-50 px-5 py-3 text-base font-semibold;
+        @apply bg-primary-200 hover:bg-primary-300 text-accent-50 px-5 py-3 text-base font-semibold;
     }
 
     .btn-group-right {
-        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-e-lg px-5 py-3 text-base font-semibold;
+        @apply bg-primary-200 hover:bg-primary-300 text-accent-50 rounded-e-lg px-5 py-3 text-base font-semibold;
     }
 
     .btn-group-left-rounded {
-        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-s-full px-5 py-3 text-base font-semibold;
+        @apply bg-primary-200 hover:bg-primary-300 text-accent-50 rounded-s-full px-5 py-3 text-base font-semibold;
     }
 
     .btn-group-middle-rounded {
-        @apply bg-primary-200 hover:bg-primary-300 text-white-50 px-5 py-3 text-base font-semibold;
+        @apply bg-primary-200 hover:bg-primary-300 text-accent-50 px-5 py-3 text-base font-semibold;
     }
 
     .btn-group-right-rounded {
-        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-e-full px-5 py-3 text-base font-semibold;
+        @apply bg-primary-200 hover:bg-primary-300 text-accent-50 rounded-e-full px-5 py-3 text-base font-semibold;
     }
 
     .btn-group-icon-left {
-        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-s-lg px-5 py-3 text-base font-semibold;
+        @apply bg-primary-200 hover:bg-primary-300 text-accent-50 rounded-s-lg px-5 py-3 text-base font-semibold;
     }
 
     .btn-group-icon-right {
-        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-e-lg px-5 py-3 text-base font-semibold;
+        @apply bg-primary-200 hover:bg-primary-300 text-accent-50 rounded-e-lg px-5 py-3 text-base font-semibold;
     }
 
     .btn-group-icon-middle {
-        @apply bg-primary-200 hover:bg-primary-300 text-white-50 px-5 py-3 text-base font-semibold;
+        @apply bg-primary-200 hover:bg-primary-300 text-accent-50 px-5 py-3 text-base font-semibold;
     }
 
     .loading-state-loading {
-        @apply bg-primary-200 hover:bg-primary-300 text-white-50 rounded-lg px-5 py-3 text-base font-semibold flex items-center gap-2;
+        @apply bg-primary-200 hover:bg-primary-300 text-accent-50 rounded-lg px-5 py-3 text-base font-semibold flex items-center gap-2;
     }
 
     .btn-state-uploading {
-        @apply bg-success-200 text-black-400 hover:bg-success-300 hover:text-white-50 rounded-lg px-5 py-3 text-base font-semibold flex items-center gap-2;
+        @apply bg-success-200 text-black-400 hover:bg-success-300 hover:text-accent-50 rounded-lg px-5 py-3 text-base font-semibold flex items-center gap-2;
     }
 
     .btn-state-disabled {
-        @apply bg-black-200 hover:bg-black-400 text-white-50 rounded-lg px-5 py-3 text-base font-semibold flex items-center gap-2;
+        @apply bg-black-200 hover:bg-black-400 text-accent-50 rounded-lg px-5 py-3 text-base font-semibold flex items-center gap-2;
     }
 
 }
@@ -929,7 +929,7 @@
 @layer components {
 
     .tag-default {
-        @apply text-black-400 border border-white-200 rounded-lg px-3 py-2 text-sm font-semibold flex items-center gap-2;
+        @apply text-black-400 border border-accent-200 rounded-lg px-3 py-2 text-sm font-semibold flex items-center gap-2;
     }
 
     .remove-tag {
@@ -937,15 +937,15 @@
     }
 
     .tag-color-primary {
-        @apply text-white-50 bg-primary-300 border border-primary-300 rounded-lg px-3 py-2 text-sm font-semibold flex items-center gap-2;
+        @apply text-accent-50 bg-primary-300 border border-primary-300 rounded-lg px-3 py-2 text-sm font-semibold flex items-center gap-2;
     }
 
     .tag-color-secondary {
-        @apply text-white-50 bg-secondary-200 border border-secondary-200 rounded-lg px-3 py-2 text-sm font-semibold flex items-center gap-2;
+        @apply text-accent-50 bg-secondary-200 border border-secondary-200 rounded-lg px-3 py-2 text-sm font-semibold flex items-center gap-2;
     }
 
     .tag-color-success {
-        @apply text-white-50 bg-success-300 border border-success-300 rounded-lg px-3 py-2 text-sm font-semibold flex items-center gap-2;
+        @apply text-accent-50 bg-success-300 border border-success-300 rounded-lg px-3 py-2 text-sm font-semibold flex items-center gap-2;
     }
 
     .tag-color-warning {
@@ -953,7 +953,7 @@
     }
 
     .tag-color-error {
-        @apply text-white-50 bg-error-300 border border-error-300 rounded-lg px-3 py-2 text-sm font-semibold flex items-center gap-2;
+        @apply text-accent-50 bg-error-300 border border-error-300 rounded-lg px-3 py-2 text-sm font-semibold flex items-center gap-2;
     }
 
     .remove-tag-solid {
@@ -979,39 +979,39 @@
 @layer components {
 
     .radio-primary {
-        @apply w-4 h-4 appearance-none text-primary-200 bg-white-100 ring-2 ring-white-300 border-white-300 rounded-full checked:bg-primary-300 checked:border-primary-300 checked:text-white-50 checked:ring-primary-300 focus:ring-primary-300 focus:ring-2;
+        @apply w-4 h-4 appearance-none text-primary-200 bg-accent-100 ring-2 ring-accent-300 border-accent-300 rounded-full checked:bg-primary-300 checked:border-primary-300 checked:text-accent-50 checked:ring-primary-300 focus:ring-primary-300 focus:ring-2;
     }
 
     .radio-secondary {
-        @apply w-4 h-4 appearance-none text-secondary-200 bg-white-100 ring-2 ring-white-300 border-white-300 rounded-full checked:bg-secondary-200 checked:border-secondary-200 checked:text-white-50 checked:ring-secondary-200 focus:ring-secondary-100 focus:ring-2;
+        @apply w-4 h-4 appearance-none text-secondary-200 bg-accent-100 ring-2 ring-accent-300 border-accent-300 rounded-full checked:bg-secondary-200 checked:border-secondary-200 checked:text-accent-50 checked:ring-secondary-200 focus:ring-secondary-100 focus:ring-2;
     }
 
     .radio-success {
-        @apply w-4 h-4 appearance-none text-success-200 bg-white-100 ring-2 ring-white-300 border-white-300 rounded-full checked:bg-success-200 checked:border-success-200 checked:text-white-50 checked:ring-success-200 focus:ring-success-100 focus:ring-2;
+        @apply w-4 h-4 appearance-none text-success-200 bg-accent-100 ring-2 ring-accent-300 border-accent-300 rounded-full checked:bg-success-200 checked:border-success-200 checked:text-accent-50 checked:ring-success-200 focus:ring-success-100 focus:ring-2;
     }
 
     .radio-warning {
-        @apply w-4 h-4 appearance-none text-warning-200 bg-white-100 ring-2 ring-white-300 border-white-300 rounded-full checked:bg-warning-200 checked:border-warning-200 checked:text-black-400 checked:ring-warning-200 focus:ring-warning-100 focus:ring-2;
+        @apply w-4 h-4 appearance-none text-warning-200 bg-accent-100 ring-2 ring-accent-300 border-accent-300 rounded-full checked:bg-warning-200 checked:border-warning-200 checked:text-black-400 checked:ring-warning-200 focus:ring-warning-100 focus:ring-2;
     }
 
     .radio-error {
-        @apply w-4 h-4 appearance-none text-error-200 bg-white-100 ring-2 ring-white-300 border-white-300 rounded-full checked:bg-error-200 checked:border-error-200 checked:text-white-50 checked:ring-error-200 focus:ring-error-100 focus:ring-2;
+        @apply w-4 h-4 appearance-none text-error-200 bg-accent-100 ring-2 ring-accent-300 border-accent-300 rounded-full checked:bg-error-200 checked:border-error-200 checked:text-accent-50 checked:ring-error-200 focus:ring-error-100 focus:ring-2;
     }
 
     .radio-info {
-        @apply w-4 h-4 appearance-none text-info-200 bg-white-100 ring-2 ring-white-300 border-white-300 rounded-full checked:bg-info-200 checked:border-info-200 checked:text-white-50 checked:ring-info-200 focus:ring-info-100 focus:ring-2;
+        @apply w-4 h-4 appearance-none text-info-200 bg-accent-100 ring-2 ring-accent-300 border-accent-300 rounded-full checked:bg-info-200 checked:border-info-200 checked:text-accent-50 checked:ring-info-200 focus:ring-info-100 focus:ring-2;
     }
 
     .radio-inactive-primary {
-        @apply w-4 h-4 appearance-none text-black-200 bg-primary-50 ring-2 ring-primary-100 border-primary-100 rounded-full checked:bg-primary-100 checked:border-primary-100 checked:text-white-50 checked:ring-primary-100 focus:ring-primary-100 focus:ring-2;
+        @apply w-4 h-4 appearance-none text-black-200 bg-primary-50 ring-2 ring-primary-100 border-primary-100 rounded-full checked:bg-primary-100 checked:border-primary-100 checked:text-accent-50 checked:ring-primary-100 focus:ring-primary-100 focus:ring-2;
     }
 
     .radio-inactive-secondary {
-        @apply w-4 h-4 appearance-none text-black-200 bg-secondary-50 ring-2 ring-secondary-100 border-secondary-100 rounded-full checked:bg-secondary-100 checked:border-secondary-100 checked:text-white-50 checked:ring-secondary-100 focus:ring-secondary-100 focus:ring-2;
+        @apply w-4 h-4 appearance-none text-black-200 bg-secondary-50 ring-2 ring-secondary-100 border-secondary-100 rounded-full checked:bg-secondary-100 checked:border-secondary-100 checked:text-accent-50 checked:ring-secondary-100 focus:ring-secondary-100 focus:ring-2;
     }
 
     .radio-inactive-success {
-        @apply w-4 h-4 appearance-none text-black-200 bg-success-50 ring-2 ring-success-100 border-success-100 rounded-full checked:bg-success-100 checked:border-success-100 checked:text-white-50 checked:ring-success-100 focus:ring-success-100 focus:ring-2;
+        @apply w-4 h-4 appearance-none text-black-200 bg-success-50 ring-2 ring-success-100 border-success-100 rounded-full checked:bg-success-100 checked:border-success-100 checked:text-accent-50 checked:ring-success-100 focus:ring-success-100 focus:ring-2;
     }
 
     .radio-inactive-warning {
@@ -1019,35 +1019,35 @@
     }
 
     .radio-inactive-error {
-        @apply w-4 h-4 appearance-none text-black-200 bg-error-50 ring-2 ring-error-100 border-error-100 rounded-full checked:bg-error-100 checked:border-error-100 checked:text-white-50 checked:ring-error-100 focus:ring-error-100 focus:ring-2;
+        @apply w-4 h-4 appearance-none text-black-200 bg-error-50 ring-2 ring-error-100 border-error-100 rounded-full checked:bg-error-100 checked:border-error-100 checked:text-accent-50 checked:ring-error-100 focus:ring-error-100 focus:ring-2;
     }
 
     .radio-inactive-info {
-        @apply w-4 h-4 appearance-none text-black-200 bg-info-50 ring-2 ring-info-100 border-info-100 rounded-full checked:bg-info-100 checked:border-info-100 checked:text-white-50 checked:ring-info-100 focus:ring-info-100 focus:ring-2;
+        @apply w-4 h-4 appearance-none text-black-200 bg-info-50 ring-2 ring-info-100 border-info-100 rounded-full checked:bg-info-100 checked:border-info-100 checked:text-accent-50 checked:ring-info-100 focus:ring-info-100 focus:ring-2;
     }
 
     .radio-button-primary {
-        @apply w-4 h-4 appearance-none bg-primary-100 text-primary-300 border-white-300 focus:ring-primary-300 focus:ring-2 rounded-full checked:bg-primary-300 checked:border-primary-300 checked:text-white-50 checked:ring-primary-300;
+        @apply w-4 h-4 appearance-none bg-primary-100 text-primary-300 border-accent-300 focus:ring-primary-300 focus:ring-2 rounded-full checked:bg-primary-300 checked:border-primary-300 checked:text-accent-50 checked:ring-primary-300;
     }
 
     .radio-button-secondary {
-        @apply w-4 h-4 appearance-none bg-secondary-100 text-secondary-200 border-white-300 focus:ring-secondary-100 focus:ring-2 rounded-full checked:bg-secondary-200 checked:border-secondary-200 checked:text-white-50 checked:ring-secondary-200;
+        @apply w-4 h-4 appearance-none bg-secondary-100 text-secondary-200 border-accent-300 focus:ring-secondary-100 focus:ring-2 rounded-full checked:bg-secondary-200 checked:border-secondary-200 checked:text-accent-50 checked:ring-secondary-200;
     }
 
     .radio-button-success {
-        @apply w-4 h-4 appearance-none bg-success-100 text-success-200 border-white-300 focus:ring-success-100 focus:ring-2 rounded-full checked:bg-success-200 checked:border-success-200 checked:text-white-50 checked:ring-success-200;
+        @apply w-4 h-4 appearance-none bg-success-100 text-success-200 border-accent-300 focus:ring-success-100 focus:ring-2 rounded-full checked:bg-success-200 checked:border-success-200 checked:text-accent-50 checked:ring-success-200;
     }
 
     .radio-button-info {
-        @apply w-4 h-4 appearance-none bg-info-100 text-info-200 border-white-300 focus:ring-info-100 focus:ring-2 rounded-full checked:bg-info-200 checked:border-info-200 checked:text-white-50 checked:ring-info-200;
+        @apply w-4 h-4 appearance-none bg-info-100 text-info-200 border-accent-300 focus:ring-info-100 focus:ring-2 rounded-full checked:bg-info-200 checked:border-info-200 checked:text-accent-50 checked:ring-info-200;
     }
 
     .radio-button-warning {
-        @apply w-4 h-4 appearance-none bg-warning-100 text-warning-200 border-white-300 focus:ring-warning-100 focus:ring-2 rounded-full checked:bg-warning-200 checked:border-warning-200 checked:text-black-400 checked:ring-warning-200;
+        @apply w-4 h-4 appearance-none bg-warning-100 text-warning-200 border-accent-300 focus:ring-warning-100 focus:ring-2 rounded-full checked:bg-warning-200 checked:border-warning-200 checked:text-black-400 checked:ring-warning-200;
     }
 
     .radio-button-error {
-        @apply w-4 h-4 appearance-none bg-error-100 text-error-200 border-white-300 focus:ring-error-100 focus:ring-2 rounded-full checked:bg-error-200 checked:border-error-200 checked:text-white-50 checked:ring-error-200;
+        @apply w-4 h-4 appearance-none bg-error-100 text-error-200 border-accent-300 focus:ring-error-100 focus:ring-2 rounded-full checked:bg-error-200 checked:border-error-200 checked:text-accent-50 checked:ring-error-200;
     }
 
 }
