@@ -309,7 +309,7 @@ function insertVariable(variable) {
     // Show feedback
     const button = event.target.closest('button');
     const originalIcon = button.innerHTML;
-    button.innerHTML = '<x-solar-check-outline class="w-4 h-4" />';
+    button.innerHTML = '<x-solar-check-circle-outline class="w-4 h-4" />';
     button.classList.add('text-success-300');
     
     setTimeout(() => {

@@ -34,11 +34,11 @@ jobs:
         script: |
           cd /home/wwlink/linkiubio_app/
           
-          # Fix permissions
-          chmod -R 775 storage/
+          # Fix permissions (Apache runs as nobody user)
+          chmod -R 777 storage/
           chmod -R 775 bootstrap/cache/
-          chown -R wwlink:wwlink storage/
-          chown -R wwlink:wwlink bootstrap/cache/
+          chown -R nobody:nobody storage/
+          chown -R nobody:nobody bootstrap/cache/
           
           # Install dependencies
           composer install --no-dev --optimize-autoloader --no-interaction

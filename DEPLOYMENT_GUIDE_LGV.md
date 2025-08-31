@@ -1,3 +1,28 @@
+cd /home/wwlink/linkiubio_app
+
+
+# Cambiar propietario a nobody (el usuario correcto del servidor web)
+chown -R nobody:nobody storage/
+chown -R nobody:nobody bootstrap/cache/
+
+# Dar permisos de escritura
+chmod -R 777 storage/
+chmod -R 775 bootstrap/cache/
+
+# Limpiar cachés de Laravel
+php artisan view:clear
+php artisan config:clear
+php artisan cache:clear
+php artisan route:clear
+
+# Recrear cachés
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+
+
+
 # 🚀 Guía Completa de Deployment Automatizado
 ## Local → GitHub → VPS
 
@@ -66,7 +91,7 @@ jobs:
           php artisan config:cache
           php artisan route:cache
           php artisan view:cache
-          chown -R apache:apache storage/
+          chown -R nobody:nobody storage/
           chmod -R 777 storage/
 ```
 
@@ -195,8 +220,8 @@ LOG_LEVEL=error
 chown -R wwlink:wwlink /home/wwlink/linkiubio_app/
 chmod -R 755 /home/wwlink/linkiubio_app/
 
-# Storage (Apache necesita escribir)
-chown -R apache:apache /home/wwlink/linkiubio_app/storage/
+# Storage (Apache ejecuta como nobody, necesita escribir)
+chown -R nobody:nobody /home/wwlink/linkiubio_app/storage/
 chmod -R 777 /home/wwlink/linkiubio_app/storage/
 
 # Bootstrap cache
@@ -214,7 +239,7 @@ tail -20 /home/wwlink/linkiubio_app/storage/logs/laravel.log
 tail -20 /etc/apache2/logs/error_log
 
 # Arreglar permisos
-chown -R apache:apache /home/wwlink/linkiubio_app/storage/
+chown -R nobody:nobody /home/wwlink/linkiubio_app/storage/
 chmod -R 777 /home/wwlink/linkiubio_app/storage/
 ```
 
@@ -275,7 +300,7 @@ php artisan migrate --force
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
-chown -R apache:apache storage/
+chown -R nobody:nobody storage/
 chmod -R 777 storage/
 ```
 
