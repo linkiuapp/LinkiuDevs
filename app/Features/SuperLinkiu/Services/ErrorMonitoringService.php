@@ -270,12 +270,12 @@ class ErrorMonitoringService
         $subject = $this->getAlertSubject($alert);
         $message = $this->getAlertMessage($alert);
         
-        // Use EmailService for consistent email sending
+        // SOLUCIÓN: Usar EmailService::send() que funciona correctamente
         try {
-            \App\Services\EmailService::sendRaw(
-                $message,
+            \App\Services\EmailService::send(
                 $adminEmails,
                 $subject,
+                $message,
                 'support'
             );
         } catch (\Exception $e) {
