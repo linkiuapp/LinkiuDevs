@@ -2,654 +2,392 @@
 
 namespace App\Services;
 
-use App\Models\EmailSetting;
 use App\Models\EmailTemplate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Config;
 use Exception;
 
 class EmailService
 {
     /**
-     * Send email using template
+     * Configuración SMTP desde .env (configuración correcta cPanel)
+     */
+    private static array $smtpConfig = [
+        'host' => 'mail.linkiu.email',
+        'port' => 465,
+        'username' => 'no-responder@linkiu.email',
+        'encryption' => 'ssl',
+        'verify_peer' => false,
+        'verify_peer_name' => false,
+        'allow_self_signed' => true
+    ];
+
+    /**
+     * Enviar email usando plantilla
      */
     public static function sendWithTemplate(
-        string $templateKey, 
-        array $recipients, 
-        array $data = []
-    ): bool {
+        string $templateKey,
+        string $recipientEmail,
+        array $variables = [],
+        array $options = []
+    ): array {
         try {
-            // Validate recipients
-            $validatedRecipients = static::validateRecipients($recipients);
-            if (empty($validatedRecipients)) {
-                Log::warning("No valid recipients for email template: {$templateKey}", [
-                    'original_recipients' => $recipients
-                ]);
-                return false;
+            // Validar email del destinatario
+            if (!filter_var($recipientEmail, FILTER_VALIDATE_EMAIL)) {
+                return [
+                    'success' => false,
+                    'message' => 'Email del destinatario inválido'
+                ];
             }
 
-            // Get template
-            $template = EmailTemplate::getTemplate($templateKey);
-            
+            // Obtener plantilla
+            $template = EmailTemplate::getByKey($templateKey);
             if (!$template) {
-                Log::warning("Email template not found: {$templateKey}");
-                return false;
-            }
-
-            // Validate template variables
-            $templateIssues = $template->validateTemplateVariables();
-            if (!empty($templateIssues)) {
-                Log::warning("Template validation issues found", [
-                    'template_key' => $templateKey,
-                    'issues' => $templateIssues
-                ]);
-            }
-
-            // Get context email
-            $fromEmail = static::getContextEmail($template->context);
-            if (!filter_var($fromEmail, FILTER_VALIDATE_EMAIL)) {
-                Log::error("Invalid from email address", [
-                    'template_key' => $templateKey,
-                    'context' => $template->context,
-                    'from_email' => $fromEmail
-                ]);
-                return false;
-            }
-            
-            // Prepare mail data with sanitized variables
-            $mailData = static::prepareMailData($template, $data);
-            
-            // Send email to each validated recipient
-            foreach ($validatedRecipients as $recipient) {
-                Mail::send([], [], function ($message) use ($recipient, $fromEmail, $mailData) {
-                    $message->to($recipient)
-                           ->from($fromEmail)
-                           ->subject($mailData['subject']);
-                    
-                    if (!empty($mailData['body_html'])) {
-                        $message->html($mailData['body_html']);
-                    }
-                    
-                    if (!empty($mailData['body_text'])) {
-                        $message->text($mailData['body_text']);
-                    }
-                });
-            }
-            
-            // Log successful send
-            static::logEmailSent($templateKey, $validatedRecipients, $data);
-            
-            return true;
-            
-        } catch (Exception $e) {
-            Log::error("Failed to send email with template {$templateKey}", [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-                'recipients' => $recipients,
-                'data' => static::sanitizeLogData($data)
-            ]);
-            
-            return false;
-        }
-    }
-
-    /**
-     * Validate email recipients
-     */
-    private static function validateRecipients(array $recipients): array
-    {
-        $validRecipients = [];
-        $suspiciousDomains = ['tempmail.org', '10minutemail.com', 'guerrillamail.com', 'mailinator.com'];
-        
-        foreach ($recipients as $recipient) {
-            // Basic email validation
-            if (!filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
-                Log::warning("Invalid email recipient: {$recipient}");
-                continue;
-            }
-            
-            // Check for suspicious domains
-            $domain = substr(strrchr($recipient, "@"), 1);
-            if (in_array($domain, $suspiciousDomains)) {
-                Log::warning("Suspicious email domain blocked: {$recipient}");
-                continue;
-            }
-            
-            // Additional security checks
-            if (strlen($recipient) > 254) { // RFC 5321 limit
-                Log::warning("Email address too long: {$recipient}");
-                continue;
-            }
-            
-            $validRecipients[] = $recipient;
-        }
-        
-        return $validRecipients;
-    }
-
-    /**
-     * Sanitize log data to prevent sensitive information exposure
-     */
-    public static function sanitizeLogData(array $data): array
-    {
-        $sensitiveKeys = ['password', 'token', 'secret', 'key', 'credential'];
-        $sanitized = $data;
-        
-        foreach ($sensitiveKeys as $sensitiveKey) {
-            if (isset($sanitized[$sensitiveKey])) {
-                $sanitized[$sensitiveKey] = '***REDACTED***';
-            }
-        }
-        
-        return $sanitized;
-    }
-
-    /**
-     * Get email address for context - SOLO EmailConfiguration
-     */
-    public static function getContextEmail(string $context): string
-    {
-        // RADICAL: Solo usar EmailConfiguration, eliminar EmailSetting
-        $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
-        
-        if ($emailConfig && $emailConfig->isComplete()) {
-            return $emailConfig->from_email;
-        }
-        
-        // Si no hay EmailConfiguration, usar el email que sabemos que funciona
-        return 'no-responder@linkiu.email';
-    }
-
-    /**
-     * Validate email configuration
-     */
-    public static function validateEmailConfiguration(): array
-    {
-        $issues = [];
-        
-        // Check required contexts exist
-        $requiredContexts = ['store_management', 'support', 'billing'];
-        
-        foreach ($requiredContexts as $context) {
-            $email = EmailSetting::getEmail($context);
-            
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $issues[] = "Invalid email for context '{$context}': {$email}";
-            }
-        }
-        
-        // Check if we have basic templates
-        $requiredTemplates = [
-            'store_welcome',
-            'password_changed', 
-            'invoice_created',
-            'ticket_created'
-        ];
-        
-        foreach ($requiredTemplates as $templateKey) {
-            $template = EmailTemplate::getTemplate($templateKey);
-            if (!$template) {
-                $issues[] = "Missing template: {$templateKey}";
-            }
-        }
-        
-        return [
-            'valid' => empty($issues),
-            'issues' => $issues
-        ];
-    }
-
-    /**
-     * Prepare mail data from template and variables
-     */
-    private static function prepareMailData(EmailTemplate $template, array $data): array
-    {
-        // Add common variables
-        $data = array_merge([
-            'app_name' => config('app.name', 'Linkiu.bio'),
-            'app_url' => config('app.url'),
-            'support_email' => static::getContextEmail('support'),
-            'current_year' => date('Y')
-        ], $data);
-        
-        return $template->replaceVariables($data);
-    }
-
-    /**
-     * Log email sent for audit
-     */
-    private static function logEmailSent(string $templateKey, array $recipients, array $data = []): void
-    {
-        Log::info("Email sent successfully", [
-            'template' => $templateKey,
-            'recipients_count' => count($recipients),
-            'recipients_hash' => hash('sha256', implode(',', $recipients)), // Hash for privacy
-            'data_keys' => array_keys($data),
-            'user_id' => auth()->id(),
-            'ip_address' => request()->ip(),
-            'user_agent' => request()->userAgent(),
-            'timestamp' => now()
-        ]);
-    }
-
-    /**
-     * Send simple email without template (fallback)
-     */
-    public static function sendSimple(
-        string $context,
-        array $recipients,
-        string $subject,
-        string $body,
-        bool $isHtml = false
-    ): bool {
-        try {
-            // RADICAL: Usar EmailConfiguration que funciona
-            $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
-            
-            if (!$emailConfig || !$emailConfig->isComplete()) {
-                Log::warning("No hay configuración SMTP completa disponible");
-                return false;
-            }
-
-            // Aplicar configuración que funciona
-            $emailConfig->applyToMail();
-            
-            foreach ($recipients as $recipient) {
-                Mail::send([], [], function ($message) use ($recipient, $emailConfig, $subject, $body, $isHtml) {
-                    $message->to($recipient)
-                           ->from($emailConfig->from_email, $emailConfig->from_name)
-                           ->subject($subject);
-                    
-                    if ($isHtml) {
-                        $message->html($body);
-                    } else {
-                        $message->text($body);
-                    }
-                });
-            }
-            
-            Log::info("Simple email sent successfully (usando EmailConfiguration)", [
-                'context' => $context,
-                'recipients_count' => count($recipients),
-                'subject' => $subject,
-                'from' => $emailConfig->from_email
-            ]);
-            
-            return true;
-            
-        } catch (Exception $e) {
-            Log::error("Failed to send simple email", [
-                'context' => $context,
-                'error' => $e->getMessage(),
-                'recipients' => $recipients
-            ]);
-            
-            return false;
-        }
-    }
-
-    /**
-     * Send email with view template (backward compatibility)
-     */
-    public static function sendWithView(
-        string $view,
-        array $recipients,
-        array $data = [],
-        string $subject = null,
-        string $context = 'store_management'
-    ): bool {
-        try {
-            // RADICAL: Usar EmailConfiguration que funciona
-            $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
-            
-            if (!$emailConfig || !$emailConfig->isComplete()) {
-                Log::warning("No hay configuración SMTP completa disponible");
-                return false;
-            }
-
-            // Aplicar configuración que funciona
-            $emailConfig->applyToMail();
-
-            // Send email to each recipient
-            foreach ($recipients as $recipient) {
-                Mail::send($view, $data, function ($message) use ($recipient, $emailConfig, $subject) {
-                    $message->to($recipient)
-                           ->from($emailConfig->from_email, $emailConfig->from_name);
-                    
-                    if ($subject) {
-                        $message->subject($subject);
-                    }
-                });
-            }
-
-            // Log successful sending
-            Log::info("Email sent with view (usando EmailConfiguration)", [
-                'view' => $view,
-                'context' => $context,
-                'recipients_count' => count($recipients),
-                'from' => $emailConfig->from_email
-            ]);
-
-            return true;
-
-        } catch (Exception $e) {
-            Log::error("Failed to send email with view", [
-                'view' => $view,
-                'context' => $context,
-                'recipients' => $recipients,
-                'error' => $e->getMessage()
-            ]);
-
-            return false;
-        }
-    }
-
-    /**
-     * Send raw email (backward compatibility)
-     */
-    public static function sendRaw(
-        string $content,
-        array $recipients,
-        string $subject,
-        string $context = 'store_management'
-    ): bool {
-        try {
-            // SOLUCIÓN RADICAL: Usar EmailConfiguration que SÍ funciona
-            $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
-            
-            if (!$emailConfig || !$emailConfig->isComplete()) {
-                Log::warning("No hay configuración SMTP completa disponible");
-                return false;
-            }
-
-            // SOLUCIÓN NUCLEAR: NO usar Mail::raw(), solo log
-            Log::info("sendRaw llamado - NO enviando para debug", [
-                'context' => $context,
-                'recipients' => $recipients,
-                'subject' => $subject,
-                'content_preview' => substr($content, 0, 100),
-                'called_from' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3)
-            ]);
-            
-            // NO enviar email, solo simular éxito
-            // Mail::raw() DESHABILITADO para debug
-
-            // Log successful sending
-            Log::info("Raw email sent (usando EmailConfiguration)", [
-                'context' => $context,
-                'recipients_count' => count($recipients),
-                'from' => $emailConfig->from_email,
-                'subject' => $subject
-            ]);
-
-            return true;
-
-        } catch (Exception $e) {
-            // INVESTIGACIÓN RADICAL: Capturar stack trace completo
-            Log::error("Failed to send raw email", [
-                'context' => $context,
-                'recipients' => $recipients,
-                'error' => $e->getMessage(),
-                'stack_trace' => $e->getTraceAsString(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-                'called_from' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)
-            ]);
-
-            return false;
-        }
-    }
-
-    /**
-     * Send test email - Método unificado para Web y CLI
-     */
-    public static function sendTestEmail(string $email): array
-    {
-        try {
-            // Validar email
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 return [
                     'success' => false,
-                    'message' => 'Email inválido'
+                    'message' => "Plantilla '$templateKey' no encontrada"
                 ];
             }
-            
-            // Usar EmailConfiguration que sabemos que funciona siempre
-            $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
-            
-            if (!$emailConfig || !$emailConfig->isComplete()) {
-                return [
-                    'success' => false,
-                    'message' => 'No hay configuración SMTP completa disponible'
-                ];
-            }
-            
-            return $emailConfig->testConnection($email);
-            
-        } catch (Exception $e) {
-            Log::error('Test email failed', [
-                'email' => $email,
-                'error' => $e->getMessage()
-            ]);
-            
-            return [
-                'success' => false,
-                'message' => 'Error al enviar email: ' . $e->getMessage()
-            ];
-        }
-    }
 
-    /**
-     * Send test email - BACKUP: Configurar entorno como CLI y usar Mail::raw
-     */
-    public static function sendTestEmailBackup(string $email): array
-    {
-        try {
-            // Validar email
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                return [
-                    'success' => false,
-                    'message' => 'Email inválido'
-                ];
+            // Validar variables de la plantilla
+            $validationIssues = $template->validateVariables();
+            if (!empty($validationIssues)) {
+                Log::warning("Problemas de validación en plantilla $templateKey", $validationIssues);
             }
-            
-            // Obtener configuración SMTP
-            $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
-            if (!$emailConfig || !$emailConfig->isComplete()) {
-                return [
-                    'success' => false,
-                    'message' => 'No hay configuración SMTP completa disponible'
-                ];
-            }
-            
-            // Configurar variables de entorno temporalmente (como CLI)
-            $originalEnv = [];
-            $envVars = [
-                'MAIL_MAILER' => 'smtp',
-                'MAIL_HOST' => $emailConfig->smtp_host,
-                'MAIL_PORT' => $emailConfig->smtp_port,
-                'MAIL_USERNAME' => $emailConfig->smtp_username,
-                'MAIL_PASSWORD' => $emailConfig->smtp_password,
-                'MAIL_ENCRYPTION' => $emailConfig->smtp_encryption,
-                'MAIL_FROM_ADDRESS' => $emailConfig->from_email,
-                'MAIL_FROM_NAME' => $emailConfig->from_name,
-                'MAIL_VERIFY_PEER' => 'false'
-            ];
-            
-            // Guardar valores originales y establecer nuevos
-            foreach ($envVars as $key => $value) {
-                $originalEnv[$key] = env($key);
-                putenv("{$key}={$value}");
-                $_ENV[$key] = $value;
-                $_SERVER[$key] = $value;
-            }
-            
-            // Limpiar configuración de Mail para forzar recarga
-            app()->forgetInstance('mailer');
-            app()->forgetInstance('mail.manager');
-            
-            // Usar Mail::raw con configuración limpia
-            Mail::raw(
-                'Esta es una prueba de configuración SMTP desde Linkiu.bio. Si recibes este mensaje, la configuración está funcionando correctamente.',
-                function ($message) use ($email, $emailConfig) {
-                    $message->to($email)
-                           ->from($emailConfig->from_email, $emailConfig->from_name)
-                           ->subject('Prueba de configuración SMTP - Linkiu.bio');
-                }
-            );
-            
-            // Restaurar variables de entorno originales
-            foreach ($originalEnv as $key => $value) {
-                if ($value !== null) {
-                    putenv("{$key}={$value}");
-                    $_ENV[$key] = $value;
-                    $_SERVER[$key] = $value;
-                } else {
-                    putenv($key);
-                    unset($_ENV[$key], $_SERVER[$key]);
-                }
-            }
-            
-            return [
-                'success' => true,
-                'message' => 'Email de prueba enviado correctamente'
-            ];
-            
-        } catch (Exception $e) {
-            // Restaurar variables de entorno en caso de error
-            if (isset($originalEnv)) {
-                foreach ($originalEnv as $key => $value) {
-                    if ($value !== null) {
-                        putenv("{$key}={$value}");
-                        $_ENV[$key] = $value;
-                        $_SERVER[$key] = $value;
-                    } else {
-                        putenv($key);
-                        unset($_ENV[$key], $_SERVER[$key]);
-                    }
-                }
-            }
-            
-            Log::error('Test email failed (env config)', [
-                'email' => $email,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            
-            return [
-                'success' => false,
-                'message' => 'Error al enviar email: ' . $e->getMessage()
-            ];
-        }
-    }
 
-    /**
-     * Send test email with specific template
-     */
-    public static function sendTestEmailWithTemplate(string $email, EmailTemplate $template, array $data = []): array
-    {
-        try {
-            $rendered = $template->replaceVariables($data);
-            
-            Mail::send([], [], function ($message) use ($email, $rendered) {
-                $message->to($email)
-                        ->subject($rendered['subject'])
-                        ->from(config('mail.from.address'), config('mail.from.name'));
-                
+            // Renderizar plantilla
+            $rendered = $template->render($variables);
+
+            // Obtener email del contexto
+            $fromEmail = $template->getContextEmail();
+
+            // Configurar SMTP
+            self::configureSMTP();
+
+            // Enviar email
+            Mail::send([], [], function ($message) use ($recipientEmail, $fromEmail, $rendered) {
+                $message->to($recipientEmail)
+                       ->from($fromEmail, config('mail.from.name', 'LinkiuBio'))
+                       ->subject($rendered['subject']);
+
                 if (!empty($rendered['body_html'])) {
                     $message->html($rendered['body_html']);
                 }
-                
+
                 if (!empty($rendered['body_text'])) {
                     $message->text($rendered['body_text']);
                 }
             });
 
+            // Log del envío exitoso
+            self::logEmailSent($templateKey, $recipientEmail, $template->context);
+
             return [
                 'success' => true,
-                'message' => 'Email de prueba con plantilla enviado exitosamente'
+                'message' => 'Email enviado correctamente'
             ];
+
         } catch (Exception $e) {
-            Log::error('Test email with template failed', [
-                'email' => $email,
-                'template_id' => $template->id,
-                'error' => $e->getMessage()
+            // Log del error
+            Log::error("Error enviando email con plantilla $templateKey", [
+                'recipient' => $recipientEmail,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
             ]);
 
             return [
                 'success' => false,
-                'message' => 'Error al enviar email con plantilla: ' . $e->getMessage()
+                'message' => 'Error al enviar email: ' . $e->getMessage()
             ];
         }
     }
 
     /**
-     * Send test email for specific context
+     * Enviar email simple (sin plantilla)
      */
-    public static function sendTestEmailForContext(string $email, string $context): array
-    {
+    public static function sendSimple(
+        string $context,
+        string $recipientEmail,
+        string $subject,
+        string $body,
+        bool $isHtml = true
+    ): array {
         try {
-            // Get a template for this context
-            $template = EmailTemplate::where('context', $context)
-                                   ->where('is_active', true)
-                                   ->first();
-            
-            if (!$template) {
+            // Validar email
+            if (!filter_var($recipientEmail, FILTER_VALIDATE_EMAIL)) {
                 return [
                     'success' => false,
-                    'message' => "No hay plantillas activas para el contexto: {$context}"
+                    'message' => 'Email del destinatario inválido'
                 ];
             }
 
-            // Get sample data for context
-            $sampleData = self::getSampleDataForContext($context);
-            
-            return self::sendTestEmailWithTemplate($email, $template, $sampleData);
-            
+            // Obtener email del contexto
+            $fromEmail = self::getContextEmail($context);
+
+            // Configurar SMTP
+            self::configureSMTP();
+
+            // Enviar email
+            Mail::send([], [], function ($message) use ($recipientEmail, $fromEmail, $subject, $body, $isHtml) {
+                $message->to($recipientEmail)
+                       ->from($fromEmail, config('mail.from.name', 'LinkiuBio'))
+                       ->subject($subject);
+
+                if ($isHtml) {
+                    $message->html($body);
+                } else {
+                    $message->text($body);
+                }
+            });
+
+            // Log del envío
+            self::logEmailSent('simple', $recipientEmail, $context);
+
+            return [
+                'success' => true,
+                'message' => 'Email enviado correctamente'
+            ];
+
         } catch (Exception $e) {
-            Log::error('Test email for context failed', [
-                'email' => $email,
+            Log::error("Error enviando email simple", [
                 'context' => $context,
+                'recipient' => $recipientEmail,
+                'subject' => $subject,
                 'error' => $e->getMessage()
             ]);
 
             return [
                 'success' => false,
-                'message' => 'Error al enviar email de contexto: ' . $e->getMessage()
+                'message' => 'Error al enviar email: ' . $e->getMessage()
             ];
         }
     }
 
     /**
-     * Get sample data for context
+     * Enviar email de prueba
      */
-    private static function getSampleDataForContext(string $context): array
+    public static function sendTestEmail(string $recipientEmail): array
     {
-        $sampleData = [
-            'store_management' => [
-                'store_name' => 'Mi Tienda Demo',
-                'admin_name' => 'Juan Pérez',
-                'admin_email' => 'admin@mitienda.com',
-                'password' => '********',
-                'login_url' => 'https://mitienda.linkiu.bio/admin',
-                'support_email' => static::getContextEmail('support')
+        try {
+            // Validar email
+            if (!filter_var($recipientEmail, FILTER_VALIDATE_EMAIL)) {
+                return [
+                    'success' => false,
+                    'message' => 'Email inválido'
+                ];
+            }
+
+            // Configurar SMTP
+            self::configureSMTP();
+
+            $subject = 'Prueba de configuración SMTP - ' . config('app.name');
+            $body = '
+                <h1>¡Configuración SMTP funcionando correctamente!</h1>
+                <p>Este es un email de prueba desde <strong>' . config('app.name') . '</strong></p>
+                <p><strong>Fecha:</strong> ' . now()->format('d/m/Y H:i:s') . '</p>
+                <p><strong>Servidor SMTP:</strong> ' . self::$smtpConfig['host'] . '</p>
+                <p><strong>Puerto:</strong> ' . self::$smtpConfig['port'] . '</p>
+                <p>Si recibes este mensaje, la configuración de email está funcionando perfectamente.</p>
+                <hr>
+                <p style="color: #666; font-size: 12px;">
+                    Sistema de emails de LinkiuBio - ' . config('app.url') . '
+                </p>
+            ';
+
+            // Enviar desde soporte para pruebas
+            Mail::send([], [], function ($message) use ($recipientEmail, $subject, $body) {
+                $message->to($recipientEmail)
+                       ->from('soporte@linkiu.email', 'LinkiuBio Soporte')
+                       ->subject($subject)
+                       ->html($body);
+            });
+
+            Log::info('Email de prueba enviado exitosamente', [
+                'recipient' => $recipientEmail,
+                'smtp_host' => self::$smtpConfig['host']
+            ]);
+
+            return [
+                'success' => true,
+                'message' => 'Email de prueba enviado correctamente. Revisa tu bandeja de entrada.'
+            ];
+
+        } catch (Exception $e) {
+            Log::error('Error enviando email de prueba', [
+                'recipient' => $recipientEmail,
+                'error' => $e->getMessage(),
+                'smtp_config' => self::$smtpConfig
+            ]);
+
+            return [
+                'success' => false,
+                'message' => 'Error al enviar email de prueba: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Configurar SMTP usando la configuración de producción
+     */
+    private static function configureSMTP(): void
+    {
+        Config::set([
+            'mail.default' => 'smtp',
+            'mail.mailers.smtp' => [
+                'transport' => 'smtp',
+                'host' => env('MAIL_HOST', self::$smtpConfig['host']),
+                'port' => env('MAIL_PORT', self::$smtpConfig['port']),
+                'encryption' => env('MAIL_ENCRYPTION', self::$smtpConfig['encryption']),
+                'username' => env('MAIL_USERNAME', self::$smtpConfig['username']),
+                'password' => env('MAIL_PASSWORD'),
+                'verify_peer' => env('MAIL_VERIFY_PEER', self::$smtpConfig['verify_peer']),
+                'verify_peer_name' => env('MAIL_VERIFY_PEER_NAME', self::$smtpConfig['verify_peer_name']),
+                'allow_self_signed' => env('MAIL_ALLOW_SELF_SIGNED', self::$smtpConfig['allow_self_signed']),
             ],
-            'support' => [
-                'ticket_id' => '12345',
-                'ticket_subject' => 'Problema con mi tienda',
-                'customer_name' => 'María García',
-                'response' => 'Hemos revisado tu solicitud y encontramos la solución...',
-                'status' => 'Resuelto'
-            ],
-            'billing' => [
-                'invoice_number' => 'INV-2025-001',
-                'amount' => '29.99',
-                'due_date' => '15/09/2025',
-                'store_name' => 'Mi Tienda Demo',
-                'plan_name' => 'Plan Básico'
+            'mail.from' => [
+                'address' => env('MAIL_FROM_ADDRESS', self::$smtpConfig['username']),
+                'name' => env('MAIL_FROM_NAME', 'LinkiuBio')
+            ]
+        ]);
+
+        // Limpiar instancias de mail para forzar reconfiguración
+        app()->forgetInstance('mailer');
+        app()->forgetInstance('mail.manager');
+    }
+
+    /**
+     * Obtener email por contexto
+     */
+    public static function getContextEmail(string $context): string
+    {
+        return EmailTemplate::CONTEXTS[$context]['email'] ?? 'no-responder@linkiu.email';
+    }
+
+    /**
+     * Obtener información de todos los contextos
+     */
+    public static function getContexts(): array
+    {
+        return EmailTemplate::CONTEXTS;
+    }
+
+    /**
+     * Validar configuración SMTP
+     */
+    public static function validateConfiguration(): array
+    {
+        $issues = [];
+
+        // Verificar variables de entorno
+        if (!env('MAIL_HOST')) {
+            $issues[] = 'MAIL_HOST no configurado';
+        }
+
+        if (!env('MAIL_USERNAME')) {
+            $issues[] = 'MAIL_USERNAME no configurado';
+        }
+
+        if (!env('MAIL_PASSWORD')) {
+            $issues[] = 'MAIL_PASSWORD no configurado';
+        }
+
+        // Verificar que los emails de contexto sean válidos
+        foreach (EmailTemplate::CONTEXTS as $context => $config) {
+            if (!filter_var($config['email'], FILTER_VALIDATE_EMAIL)) {
+                $issues[] = "Email inválido para contexto '$context': {$config['email']}";
+            }
+        }
+
+        return [
+            'valid' => empty($issues),
+            'issues' => $issues,
+            'config' => [
+                'host' => env('MAIL_HOST', 'No configurado'),
+                'port' => env('MAIL_PORT', 'No configurado'),
+                'username' => env('MAIL_USERNAME', 'No configurado'),
+                'encryption' => env('MAIL_ENCRYPTION', 'No configurado')
             ]
         ];
+    }
 
-        return $sampleData[$context] ?? [];
+    /**
+     * Obtener estadísticas de emails (opcional para dashboard)
+     */
+    public static function getEmailStats(): array
+    {
+        // Aquí podrías consultar logs o una tabla de email_logs
+        // Por ahora retornamos stats básicas
+        return [
+            'templates_count' => EmailTemplate::where('is_active', true)->count(),
+            'contexts' => array_keys(EmailTemplate::CONTEXTS),
+            'last_test' => cache('last_email_test', 'Nunca'),
+            'config_valid' => self::validateConfiguration()['valid']
+        ];
+    }
+
+    /**
+     * Log del envío de email
+     */
+    private static function logEmailSent(string $type, string $recipient, string $context): void
+    {
+        Log::info('Email enviado exitosamente', [
+            'type' => $type,
+            'recipient_hash' => hash('sha256', $recipient), // Por privacidad
+            'context' => $context,
+            'from_email' => self::getContextEmail($context),
+            'timestamp' => now(),
+            'user_id' => auth()->id(),
+            'ip' => request()->ip()
+        ]);
+
+        // Guardar timestamp del último email enviado
+        cache(['last_email_sent' => now()], now()->addDays(30));
+    }
+
+    /**
+     * Métodos de conveniencia para diferentes tipos de emails
+     */
+
+    /**
+     * Enviar email de bienvenida para nueva tienda
+     */
+    public static function sendStoreWelcome(array $storeData): array
+    {
+        return self::sendWithTemplate('store_welcome', $storeData['admin_email'], $storeData);
+    }
+
+    /**
+     * Enviar notificación de cambio de contraseña
+     */
+    public static function sendPasswordChanged(array $storeData): array
+    {
+        return self::sendWithTemplate('password_changed', $storeData['admin_email'], $storeData);
+    }
+
+    /**
+     * Enviar notificación de nuevo ticket
+     */
+    public static function sendTicketCreated(array $ticketData): array
+    {
+        $adminEmails = ['soporte@linkiu.email']; // Aquí podrías obtener emails de admins
+        $results = [];
+
+        foreach ($adminEmails as $email) {
+            $results[] = self::sendWithTemplate('ticket_created', $email, $ticketData);
+        }
+
+        return [
+            'success' => collect($results)->every('success'),
+            'results' => $results
+        ];
+    }
+
+    /**
+     * Enviar nueva factura
+     */
+    public static function sendInvoiceCreated(array $invoiceData): array
+    {
+        return self::sendWithTemplate('invoice_created', $invoiceData['store_email'], $invoiceData);
     }
 }

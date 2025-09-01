@@ -223,13 +223,13 @@ use Illuminate\Support\Facades\Storage;
                 
                 <ul x-show="emailOpen" class="pl-4 mt-1 space-y-1">
                     <li>
-                        <a href="{{ route('superlinkiu.email.settings') }}" class="item-sidebar {{ request()->routeIs('superlinkiu.email.settings') ? 'item-sidebar-active' : '' }}">
-                            <x-solar-letter-outline class="w-4 h-4 mr-2" />
-                            Direcciones de Email
+                        <a href="{{ route('superlinkiu.email.index') }}" class="item-sidebar {{ request()->routeIs('superlinkiu.email.index') ? 'item-sidebar-active' : '' }}">
+                            <x-solar-settings-outline class="w-4 h-4 mr-2" />
+                            Dashboard de Emails
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('superlinkiu.email.templates.index') }}" class="item-sidebar {{ request()->routeIs('superlinkiu.email.templates.*') ? 'item-sidebar-active' : '' }}">
+                        <a href="{{ route('superlinkiu.email.templates') }}" class="item-sidebar {{ request()->routeIs('superlinkiu.email.templates*') ? 'item-sidebar-active' : '' }}">
                             <x-solar-document-text-outline class="w-4 h-4 mr-2" />
                             Plantillas de Email
                         </a>

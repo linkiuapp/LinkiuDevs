@@ -7,7 +7,7 @@ use App\Features\SuperLinkiu\Controllers\PlanController;
 use App\Features\SuperLinkiu\Controllers\InvoiceController;
 use App\Features\SuperLinkiu\Controllers\TicketController;
 use App\Features\SuperLinkiu\Controllers\AnnouncementController;
-use App\Features\SuperLinkiu\Controllers\EmailConfigurationController;
+use App\Features\SuperLinkiu\Controllers\EmailController;
 use App\Features\SuperLinkiu\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -158,36 +158,23 @@ Route::prefix('superlinkiu')->name('superlinkiu.')->middleware('web')->group(fun
 
 
 
-        // Configuración de Email (dentro de gestión de tickets)
+        // Sistema de Emails - Nueva implementación limpia
         Route::prefix('email')->name('email.')->group(function () {
-            Route::get('/', [EmailConfigurationController::class, 'index'])->name('index');
-            Route::post('/smtp', [EmailConfigurationController::class, 'updateSmtp'])->name('update-smtp');
-            Route::post('/templates', [EmailConfigurationController::class, 'updateTemplates'])->name('update-templates');
-            Route::post('/events', [EmailConfigurationController::class, 'updateEvents'])->name('update-events');
-            Route::post('/test', [EmailConfigurationController::class, 'testConnection'])->name('test');
-            Route::post('/restore-templates', [EmailConfigurationController::class, 'restoreDefaultTemplates'])->name('restore-templates');
-            Route::post('/toggle-active', [EmailConfigurationController::class, 'toggleActive'])->name('toggle-active');
+            Route::get('/', [EmailController::class, 'index'])->name('index');
+            Route::post('/test', [EmailController::class, 'sendTest'])->name('test');
+            Route::get('/configuration', [EmailController::class, 'configuration'])->name('configuration');
             
-            // Email Settings Configuration
-            Route::get('/settings', [EmailConfigurationController::class, 'emailSettings'])->name('settings');
-            Route::post('/settings', [EmailConfigurationController::class, 'updateEmailSettings'])
-                ->name('settings.update');
-            Route::post('/validate', [EmailConfigurationController::class, 'validateConfiguration'])->name('validate');
+            // Gestión de plantillas
+            Route::get('/templates', [EmailController::class, 'templates'])->name('templates');
+            Route::get('/template/{template}/edit', [EmailController::class, 'editTemplate'])->name('template-edit');
+            Route::put('/template/{template}', [EmailController::class, 'updateTemplate'])->name('template-update');
+            Route::post('/template/{template}/test', [EmailController::class, 'testTemplate'])->name('template-test');
+            Route::post('/template/{template}/preview', [EmailController::class, 'previewTemplate'])->name('template-preview');
+            Route::post('/template/{template}/toggle', [EmailController::class, 'toggleTemplate'])->name('template-toggle');
+            Route::post('/restore-defaults', [EmailController::class, 'restoreDefaults'])->name('restore-defaults');
             
-            // Template Management
-            Route::get('/templates', [EmailConfigurationController::class, 'templateIndex'])->name('templates.index');
-            Route::get('/templates/{template}/edit', [EmailConfigurationController::class, 'templateEdit'])->name('templates.edit');
-            Route::put('/templates/{template}', [EmailConfigurationController::class, 'templateUpdate'])
-                ->name('templates.update');
-            Route::post('/templates/{template}/preview', [EmailConfigurationController::class, 'templatePreview'])->name('templates.preview');
-            Route::post('/send-test', [EmailConfigurationController::class, 'sendTestEmail'])->name('send-test');
-            
-            // Additional email management routes
-            Route::post('/test-connection', [EmailConfigurationController::class, 'testConnection'])->name('test-connection');
-            Route::post('/restore-templates', [EmailConfigurationController::class, 'restoreDefaultTemplates'])->name('restore-templates');
-            
-            // Simple Email System - Nueva implementación que funciona
-            Route::post('/simple-test', [\App\Features\SuperLinkiu\Http\Controllers\SimpleEmailController::class, 'sendTest'])->name('simple-test');
+            // Envío de emails simples
+            Route::post('/send-simple', [EmailController::class, 'sendSimple'])->name('send-simple');
         });
 
         // Componentes de diseño
