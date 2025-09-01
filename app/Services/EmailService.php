@@ -375,25 +375,67 @@ class EmailService
     public static function sendTestEmail(string $email): array
     {
         try {
+            // Configurar opciones SSL temporalmente para Microsoft 365
+            $originalConfig = config('mail.mailers.smtp');
+            
+            // Aplicar configuración SSL más permisiva para Microsoft 365
+            config([
+                'mail.mailers.smtp.verify_peer' => false,
+                'mail.mailers.smtp.verify_peer_name' => false,
+                'mail.mailers.smtp.allow_self_signed' => true,
+                'mail.mailers.smtp.stream_options' => [
+                    'ssl' => [
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
+                        'allow_self_signed' => true,
+                        'crypto_method' => STREAM_CRYPTO_METHOD_TLS_CLIENT,
+                    ]
+                ]
+            ]);
+
             Mail::raw('Este es un email de prueba desde el sistema de configuración de emails de Linkiu.bio. Si recibes este mensaje, la configuración está funcionando correctamente.', function ($message) use ($email) {
                 $message->to($email)
                         ->subject('Email de Prueba - Linkiu.bio')
                         ->from(config('mail.from.address'), config('mail.from.name'));
             });
 
+            // Restaurar configuración original
+            config(['mail.mailers.smtp' => $originalConfig]);
+
             return [
                 'success' => true,
                 'message' => 'Email de prueba enviado exitosamente'
             ];
         } catch (Exception $e) {
+            // Restaurar configuración original en caso de error
+            if (isset($originalConfig)) {
+                config(['mail.mailers.smtp' => $originalConfig]);
+            }
+            
             Log::error('Test email failed', [
                 'email' => $email,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'mail_config' => [
+                    'host' => config('mail.mailers.smtp.host'),
+                    'port' => config('mail.mailers.smtp.port'),
+                    'encryption' => config('mail.mailers.smtp.encryption'),
+                    'username' => config('mail.mailers.smtp.username'),
+                ]
             ]);
+
+            // Proporcionar mensaje de error más específico
+            $errorMessage = $e->getMessage();
+            if (strpos($errorMessage, 'certificate verify failed') !== false) {
+                $errorMessage = 'Error de certificado SSL. Verificar configuración MAIL_VERIFY_PEER=false en .env';
+            } elseif (strpos($errorMessage, 'Connection refused') !== false) {
+                $errorMessage = 'No se puede conectar al servidor SMTP. Verificar MAIL_HOST y MAIL_PORT';
+            } elseif (strpos($errorMessage, 'Authentication failed') !== false) {
+                $errorMessage = 'Error de autenticación. Verificar MAIL_USERNAME y MAIL_PASSWORD (App Password)';
+            }
 
             return [
                 'success' => false,
-                'message' => 'Error al enviar email: ' . $e->getMessage()
+                'message' => 'Error al enviar email: ' . $errorMessage
             ];
         }
     }

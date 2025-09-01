@@ -20,7 +20,8 @@ php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
-
+#jSAiaU9wD^gofu&7q
+stsvhfzcgggrxtjd
 
 
 # 🚀 Guía Completa de Deployment Automatizado
