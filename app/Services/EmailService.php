@@ -145,10 +145,18 @@ class EmailService
     }
 
     /**
-     * Get email address for context
+     * Get email address for context - Usar EmailConfiguration que funciona
      */
     public static function getContextEmail(string $context): string
     {
+        // Usar EmailConfiguration que sabemos que funciona
+        $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
+        
+        if ($emailConfig && $emailConfig->isComplete()) {
+            return $emailConfig->from_email;
+        }
+        
+        // Fallback al método original
         return EmailSetting::getEmail($context);
     }
 
