@@ -270,13 +270,13 @@ class ErrorMonitoringService
         $subject = $this->getAlertSubject($alert);
         $message = $this->getAlertMessage($alert);
         
-        // SOLUCIÓN: Usar EmailService::send() que funciona correctamente
+        // SOLUCIÓN: Usar EmailService::sendSimple() que funciona correctamente
         try {
-            \App\Services\EmailService::send(
+            \App\Services\EmailService::sendSimple(
+                'support',
                 $adminEmails,
                 $subject,
-                $message,
-                'support'
+                $message
             );
         } catch (\Exception $e) {
             Log::error('Failed to send email alert', [
