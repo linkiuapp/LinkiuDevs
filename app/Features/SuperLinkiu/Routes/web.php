@@ -183,6 +183,10 @@ Route::prefix('superlinkiu')->name('superlinkiu.')->middleware('web')->group(fun
                 ->name('templates.update');
             Route::post('/templates/{template}/preview', [EmailConfigurationController::class, 'templatePreview'])->name('templates.preview');
             Route::post('/send-test', [EmailConfigurationController::class, 'sendTestEmail'])->name('send-test');
+            
+            // Additional email management routes
+            Route::post('/test-connection', [EmailConfigurationController::class, 'testConnection'])->name('test-connection');
+            Route::post('/restore-templates', [EmailConfigurationController::class, 'restoreDefaultTemplates'])->name('restore-templates');
         });
 
         // Componentes de diseño

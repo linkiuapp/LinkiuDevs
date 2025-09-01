@@ -11,31 +11,24 @@ class EmailConfigurationRateLimitMiddleware
 {
     /**
      * Handle an incoming request.
+     *
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $key = 'email-config:' . auth()->id() . ':' . $request->ip();
+        $key = 'email-config:' . $request->ip() . ':' . ($request->user()->id ?? 'guest');
         
-        // Allow 10 configuration changes per hour per user
         if (RateLimiter::tooManyAttempts($key, 10)) {
             $seconds = RateLimiter::availableIn($key);
             
-            \Log::warning('Email configuration rate limit exceeded', [
-                'user_id' => auth()->id(),
-                'ip_address' => $request->ip(),
-                'user_agent' => $request->userAgent(),
-                'route' => $request->route()->getName(),
-                'retry_after' => $seconds
-            ]);
-            
             return response()->json([
-                'message' => 'Demasiados intentos de configuración. Intenta nuevamente en ' . ceil($seconds / 60) . ' minutos.',
+                'success' => false,
+                'message' => "Demasiados intentos. Intenta de nuevo en {$seconds} segundos.",
                 'retry_after' => $seconds
             ], 429);
         }
         
-        // Hit the rate limiter
-        RateLimiter::hit($key, 3600); // 1 hour
+        RateLimiter::hit($key, 60); // 10 intentos por minuto
         
         return $next($request);
     }
