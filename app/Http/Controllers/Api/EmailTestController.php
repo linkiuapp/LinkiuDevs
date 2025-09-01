@@ -27,9 +27,18 @@ class EmailTestController extends Controller
                 'user_agent' => $request->userAgent()
             ]);
             
-            // Usar MailManager directamente
-            $mailManager = new MailManager();
-            $result = $mailManager->testConnection($email);
+            // Intentar con MailManager, fallback a PHP nativo
+            try {
+                $mailManager = new MailManager();
+                $result = $mailManager->testConnection($email);
+            } catch (\Exception $e) {
+                Log::warning('API: MailManager falló, usando PHP nativo', [
+                    'error' => $e->getMessage()
+                ]);
+                
+                $phpMailer = new \App\Mail\PHPMailerManager();
+                $result = $phpMailer->testConnection($email);
+            }
             
             Log::info('API: Resultado test de email', [
                 'email' => $email,

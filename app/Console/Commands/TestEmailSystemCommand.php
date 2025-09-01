@@ -20,8 +20,8 @@ class TestEmailSystemCommand extends Command
         $this->info("📧 Email destino: {$email}");
         $this->newLine();
         
-        // Test 1: MailManager directo
-        $this->info("1️⃣ Probando MailManager directo...");
+        // Test 1: MailManager directo (Symfony)
+        $this->info("1️⃣ Probando MailManager (Symfony)...");
         try {
             $mailManager = new MailManager();
             $result = $mailManager->testConnection($email);
@@ -33,6 +33,23 @@ class TestEmailSystemCommand extends Command
             }
         } catch (\Exception $e) {
             $this->error("❌ MailManager Exception: " . $e->getMessage());
+        }
+        
+        $this->newLine();
+        
+        // Test 1.5: PHPMailerManager (PHP Nativo)
+        $this->info("1️⃣.5 Probando PHPMailerManager (PHP Nativo)...");
+        try {
+            $phpMailer = new \App\Mail\PHPMailerManager();
+            $result = $phpMailer->testConnection($email);
+            
+            if ($result['success']) {
+                $this->info("✅ PHPMailerManager: " . $result['message']);
+            } else {
+                $this->error("❌ PHPMailerManager: " . $result['message']);
+            }
+        } catch (\Exception $e) {
+            $this->error("❌ PHPMailerManager Exception: " . $e->getMessage());
         }
         
         $this->newLine();

@@ -48,21 +48,20 @@ class MailManager
      */
     private function createTransport(): EsmtpTransport
     {
-        $dsn = sprintf(
-            'smtp://%s:%s@%s:%d',
-            urlencode($this->config['username']),
-            urlencode($this->config['password']),
+        // Crear transporte manualmente (compatible con versiones anteriores)
+        $transport = new EsmtpTransport(
             $this->config['host'],
             $this->config['port']
         );
         
-        $transport = EsmtpTransport::fromDsn($dsn);
+        $transport->setUsername($this->config['username']);
+        $transport->setPassword($this->config['password']);
         
         // Configurar encriptación
         if ($this->config['encryption'] === 'tls') {
-            $transport->setPort(587);
+            $transport->setEncryption('tls');
         } elseif ($this->config['encryption'] === 'ssl') {
-            $transport->setPort(465);
+            $transport->setEncryption('ssl');
         }
         
         return $transport;
