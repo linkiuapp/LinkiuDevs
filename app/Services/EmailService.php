@@ -375,6 +375,9 @@ class EmailService
     public static function sendTestEmail(string $email): array
     {
         try {
+            // Guardar configuración original
+            $originalConfig = config('mail.mailers.smtp');
+            
             // Obtener configuración de la base de datos
             $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
             
