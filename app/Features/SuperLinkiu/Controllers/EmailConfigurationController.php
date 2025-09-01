@@ -583,6 +583,14 @@ class EmailConfigurationController extends Controller
         try {
             $testEmail = $validated['email'];
             
+            // Log para debugging - ver qué está pasando en el controlador
+            Log::info('EmailConfigurationController::sendTestEmail called', [
+                'email' => $testEmail,
+                'template_id' => $validated['template_id'] ?? null,
+                'context' => $validated['context'] ?? null,
+                'request_data' => $request->all()
+            ]);
+            
             // If template_id is provided, send specific template
             if (!empty($validated['template_id'])) {
                 $template = EmailTemplate::findOrFail($validated['template_id']);
