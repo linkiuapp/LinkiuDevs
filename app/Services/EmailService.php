@@ -378,30 +378,47 @@ class EmailService
             // Obtener configuración de la base de datos
             $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
             
-            // Configurar opciones SSL temporalmente
-            $originalConfig = config('mail.mailers.smtp');
-            
-            // Aplicar configuración desde la base de datos si existe
+            // Si hay configuración en BD, usar esa; si no, usar .env
             if ($emailConfig && $emailConfig->isComplete()) {
-                $emailConfig->applyToMail();
+                // FORZAR configuración completa desde BD
+                config([
+                    'mail.mailers.smtp.host' => $emailConfig->smtp_host,
+                    'mail.mailers.smtp.port' => $emailConfig->smtp_port,
+                    'mail.mailers.smtp.username' => $emailConfig->smtp_username,
+                    'mail.mailers.smtp.password' => $emailConfig->smtp_password,
+                    'mail.mailers.smtp.encryption' => $emailConfig->smtp_encryption,
+                    'mail.from.address' => $emailConfig->from_email,
+                    'mail.from.name' => $emailConfig->from_name,
+                    'mail.mailers.smtp.verify_peer' => false,
+                    'mail.mailers.smtp.verify_peer_name' => false,
+                    'mail.mailers.smtp.allow_self_signed' => true,
+                    'mail.mailers.smtp.stream_options' => [
+                        'ssl' => [
+                            'verify_peer' => false,
+                            'verify_peer_name' => false,
+                            'allow_self_signed' => true,
+                            'crypto_method' => STREAM_CRYPTO_METHOD_TLS_CLIENT,
+                        ]
+                    ]
+                ]);
+            } else {
+                // Usar configuración del .env con SSL permisivo
+                config([
+                    'mail.mailers.smtp.verify_peer' => false,
+                    'mail.mailers.smtp.verify_peer_name' => false,
+                    'mail.mailers.smtp.allow_self_signed' => true,
+                    'mail.mailers.smtp.stream_options' => [
+                        'ssl' => [
+                            'verify_peer' => false,
+                            'verify_peer_name' => false,
+                            'allow_self_signed' => true,
+                            'crypto_method' => STREAM_CRYPTO_METHOD_TLS_CLIENT,
+                        ]
+                    ]
+                ]);
             }
             
-            // Aplicar configuración SSL más permisiva
-            config([
-                'mail.mailers.smtp.verify_peer' => false,
-                'mail.mailers.smtp.verify_peer_name' => false,
-                'mail.mailers.smtp.allow_self_signed' => true,
-                'mail.mailers.smtp.stream_options' => [
-                    'ssl' => [
-                        'verify_peer' => false,
-                        'verify_peer_name' => false,
-                        'allow_self_signed' => true,
-                        'crypto_method' => STREAM_CRYPTO_METHOD_TLS_CLIENT,
-                    ]
-                ]
-            ]);
-            
-            // FORZAR recreación del mailer para que use la nueva configuración
+            // FORZAR recreación del mailer
             app()->forgetInstance('mail.manager');
             app()->forgetInstance('mailer');
 
