@@ -392,23 +392,30 @@ class EmailService
                 ];
             }
             
-            // Usar Swift Mailer directamente (bypass Laravel Mail)
-            $transport = new \Swift_SmtpTransport($emailConfig->smtp_host, $emailConfig->smtp_port);
-            $transport->setUsername($emailConfig->smtp_username);
-            $transport->setPassword($emailConfig->smtp_password);
+            // Usar Symfony Mailer directamente (bypass Laravel Mail)
+            $dsn = sprintf(
+                'smtp://%s:%s@%s:%d',
+                urlencode($emailConfig->smtp_username),
+                urlencode($emailConfig->smtp_password),
+                $emailConfig->smtp_host,
+                $emailConfig->smtp_port
+            );
             
             if ($emailConfig->smtp_encryption && $emailConfig->smtp_encryption !== 'none') {
-                $transport->setEncryption($emailConfig->smtp_encryption);
+                $dsn .= '?encryption=' . $emailConfig->smtp_encryption;
             }
             
-            $mailer = new \Swift_Mailer($transport);
+            $transport = \Symfony\Component\Mailer\Transport::fromDsn($dsn);
+            $mailer = new \Symfony\Component\Mailer\Mailer($transport);
             
-            $message = new \Swift_Message('Prueba de configuración SMTP - Linkiu.bio');
-            $message->setFrom([$emailConfig->from_email => $emailConfig->from_name]);
-            $message->setTo([$email]);
-            $message->setBody('Esta es una prueba de configuración SMTP desde Linkiu.bio usando Swift Mailer directo.');
+            $message = (new \Symfony\Component\Mime\Email())
+                ->from(new \Symfony\Component\Mime\Address($emailConfig->from_email, $emailConfig->from_name))
+                ->to($email)
+                ->subject('Prueba de configuración SMTP - Linkiu.bio')
+                ->text('Esta es una prueba de configuración SMTP desde Linkiu.bio usando Symfony Mailer directo.');
             
-            $result = $mailer->send($message);
+            $mailer->send($message);
+            $result = 1; // Symfony Mailer no retorna count, asumimos éxito si no hay excepción
             
             if ($result > 0) {
                 return [
