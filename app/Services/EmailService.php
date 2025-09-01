@@ -370,37 +370,35 @@ class EmailService
     }
 
     /**
-     * Send test email - Uses Mail::raw() directly like testConnection() does internally
+     * Send test email - Replica exactamente testConnection() que funciona
      */
     public static function sendTestEmail(string $email): array
     {
         try {
-            // Obtener configuración activa
+            // Obtener configuración activa (igual que testConnection)
             $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
             
             if (!$emailConfig || !$emailConfig->isComplete()) {
                 return [
                     'success' => false,
-                    'message' => 'No hay configuración SMTP completa disponible'
+                    'message' => 'Configuración incompleta. Faltan datos obligatorios.'
                 ];
             }
             
-            // Aplicar configuración SMTP
+            // Aplicar configuración temporalmente (igual que testConnection)
             $emailConfig->applyToMail();
             
-            // Usar Mail::raw() directamente (como testConnection() internamente)
-            Mail::raw(
-                'Este es un email de prueba desde el sistema de configuración de emails de Linkiu.bio. Si recibes este mensaje, la configuración está funcionando correctamente.',
-                function ($message) use ($email) {
-                    $message->to($email)
-                           ->from(config('mail.from.address'), config('mail.from.name'))
-                           ->subject('Email de Prueba - Linkiu.bio');
-                }
+            // Usar EmailService::sendRaw EXACTAMENTE como testConnection()
+            static::sendRaw(
+                'Esta es una prueba de configuración SMTP desde Linkiu.bio',
+                [$email],
+                'Prueba de configuración SMTP - Linkiu.bio',
+                'support'
             );
             
             return [
                 'success' => true,
-                'message' => 'Email de prueba enviado exitosamente'
+                'message' => 'Email de prueba enviado correctamente.'
             ];
             
         } catch (Exception $e) {
@@ -410,19 +408,9 @@ class EmailService
                 'trace' => $e->getTraceAsString()
             ]);
             
-            // Proporcionar mensaje de error más específico
-            $errorMessage = $e->getMessage();
-            if (strpos($errorMessage, 'certificate verify failed') !== false) {
-                $errorMessage = 'Error de certificado SSL. Verificar configuración MAIL_VERIFY_PEER=false en .env';
-            } elseif (strpos($errorMessage, 'Connection refused') !== false) {
-                $errorMessage = 'No se puede conectar al servidor SMTP. Verificar MAIL_HOST y MAIL_PORT';
-            } elseif (strpos($errorMessage, 'Authentication failed') !== false || strpos($errorMessage, 'Incorrect authentication data') !== false) {
-                $errorMessage = 'Error de autenticación SMTP. Verificar MAIL_USERNAME y MAIL_PASSWORD';
-            }
-            
             return [
                 'success' => false,
-                'message' => 'Error al enviar email: ' . $errorMessage
+                'message' => 'Error al enviar email: ' . $e->getMessage()
             ];
         }
     }
