@@ -228,7 +228,7 @@ function testEmailSending() {
             controller.abort();
         }, 60000); // 60 segundos
 
-        fetch('/api/email/test', {
+        fetch('{{ route("superlinkiu.email.simple-test") }}', {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),

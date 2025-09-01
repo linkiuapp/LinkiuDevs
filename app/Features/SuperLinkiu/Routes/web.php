@@ -185,6 +185,9 @@ Route::prefix('superlinkiu')->name('superlinkiu.')->middleware('web')->group(fun
             // Additional email management routes
             Route::post('/test-connection', [EmailConfigurationController::class, 'testConnection'])->name('test-connection');
             Route::post('/restore-templates', [EmailConfigurationController::class, 'restoreDefaultTemplates'])->name('restore-templates');
+            
+            // Simple Email System - Nueva implementación que funciona
+            Route::post('/simple-test', [\App\Features\SuperLinkiu\Http\Controllers\SimpleEmailController::class, 'sendTest'])->name('simple-test');
         });
 
         // Componentes de diseño
