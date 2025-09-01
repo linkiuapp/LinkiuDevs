@@ -370,7 +370,7 @@ class EmailService
     }
 
     /**
-     * Send test email - Versión con fallback a PHP nativo
+     * Send test email - Usando PHP nativo como método principal
      */
     public static function sendTestEmail(string $email): array
     {
@@ -383,24 +383,20 @@ class EmailService
                 ];
             }
             
-            // Intentar con MailManager (Symfony)
-            try {
-                $mailManager = new \App\Mail\MailManager();
-                return $mailManager->testConnection($email);
-            } catch (Exception $e) {
-                Log::warning('MailManager falló, intentando con PHP nativo', [
-                    'error' => $e->getMessage()
-                ]);
-                
-                // Fallback a PHP nativo
-                $phpMailer = new \App\Mail\PHPMailerManager();
-                return $phpMailer->testConnection($email);
-            }
+            Log::info('Iniciando test de email', [
+                'email' => $email,
+                'method' => 'php_native_primary'
+            ]);
+            
+            // Usar PHP nativo como método principal (más confiable)
+            $phpMailer = new \App\Mail\PHPMailerManager();
+            return $phpMailer->testConnection($email);
             
         } catch (Exception $e) {
-            Log::error('Test email failed completamente', [
+            Log::error('Test email failed', [
                 'email' => $email,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
             ]);
             
             return [

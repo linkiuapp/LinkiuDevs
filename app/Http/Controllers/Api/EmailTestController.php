@@ -27,18 +27,9 @@ class EmailTestController extends Controller
                 'user_agent' => $request->userAgent()
             ]);
             
-            // Intentar con MailManager, fallback a PHP nativo
-            try {
-                $mailManager = new MailManager();
-                $result = $mailManager->testConnection($email);
-            } catch (\Exception $e) {
-                Log::warning('API: MailManager falló, usando PHP nativo', [
-                    'error' => $e->getMessage()
-                ]);
-                
-                $phpMailer = new \App\Mail\PHPMailerManager();
-                $result = $phpMailer->testConnection($email);
-            }
+            // Usar PHP nativo directamente (más confiable)
+            $phpMailer = new \App\Mail\PHPMailerManager();
+            $result = $phpMailer->testConnection($email);
             
             Log::info('API: Resultado test de email', [
                 'email' => $email,
@@ -74,8 +65,8 @@ class EmailTestController extends Controller
     public function validateConfig()
     {
         try {
-            $mailManager = new MailManager();
-            $result = $mailManager->validateConfig();
+            $phpMailer = new \App\Mail\PHPMailerManager();
+            $result = $phpMailer->validateConfig();
             
             return response()->json($result);
             
@@ -97,8 +88,8 @@ class EmailTestController extends Controller
     public function getConfig()
     {
         try {
-            $mailManager = new MailManager();
-            $config = $mailManager->getConfigInfo();
+            $phpMailer = new \App\Mail\PHPMailerManager();
+            $config = $phpMailer->getConfigInfo();
             
             return response()->json([
                 'success' => true,

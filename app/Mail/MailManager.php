@@ -3,9 +3,8 @@
 namespace App\Mail;
 
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
-use Symfony\Component\Mailer\Mailer;
-use Symfony\Component\Mime\Email;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Config;
 use Exception;
 
 /**
@@ -44,55 +43,80 @@ class MailManager
     }
     
     /**
-     * Crear transporte SMTP usando Symfony Mailer directamente
+     * Configurar Laravel Mail temporalmente
      */
-    private function createTransport(): EsmtpTransport
+    private function configureMailTemporarily()
     {
-        // Crear transporte manualmente (compatible con versiones anteriores)
-        $transport = new EsmtpTransport(
-            $this->config['host'],
-            $this->config['port']
-        );
+        // Backup configuración actual
+        $backup = [
+            'host' => config('mail.mailers.smtp.host'),
+            'port' => config('mail.mailers.smtp.port'),
+            'username' => config('mail.mailers.smtp.username'),
+            'password' => config('mail.mailers.smtp.password'),
+            'encryption' => config('mail.mailers.smtp.encryption'),
+            'from_address' => config('mail.from.address'),
+            'from_name' => config('mail.from.name'),
+        ];
         
-        $transport->setUsername($this->config['username']);
-        $transport->setPassword($this->config['password']);
+        // Aplicar nueva configuración
+        Config::set([
+            'mail.mailers.smtp.host' => $this->config['host'],
+            'mail.mailers.smtp.port' => $this->config['port'],
+            'mail.mailers.smtp.username' => $this->config['username'],
+            'mail.mailers.smtp.password' => $this->config['password'],
+            'mail.mailers.smtp.encryption' => $this->config['encryption'] === 'none' ? null : $this->config['encryption'],
+            'mail.from.address' => $this->config['from_email'],
+            'mail.from.name' => $this->config['from_name'],
+        ]);
         
-        // Configurar encriptación
-        if ($this->config['encryption'] === 'tls') {
-            $transport->setEncryption('tls');
-        } elseif ($this->config['encryption'] === 'ssl') {
-            $transport->setEncryption('ssl');
-        }
+        // Limpiar instancias de Mail para forzar recarga
+        app()->forgetInstance('mailer');
+        app()->forgetInstance('mail.manager');
         
-        return $transport;
+        return $backup;
     }
     
     /**
-     * Enviar email usando Symfony Mailer directamente
+     * Restaurar configuración de Mail
+     */
+    private function restoreMailConfig(array $backup)
+    {
+        Config::set([
+            'mail.mailers.smtp.host' => $backup['host'],
+            'mail.mailers.smtp.port' => $backup['port'],
+            'mail.mailers.smtp.username' => $backup['username'],
+            'mail.mailers.smtp.password' => $backup['password'],
+            'mail.mailers.smtp.encryption' => $backup['encryption'],
+            'mail.from.address' => $backup['from_address'],
+            'mail.from.name' => $backup['from_name'],
+        ]);
+        
+        app()->forgetInstance('mailer');
+        app()->forgetInstance('mail.manager');
+    }
+    
+    /**
+     * Enviar email usando Laravel Mail con configuración temporal
      */
     public function send(string $to, string $subject, string $body, bool $isHtml = false): array
     {
+        $backup = null;
+        
         try {
-            $transport = $this->createTransport();
-            $mailer = new Mailer($transport);
+            // Configurar Mail temporalmente
+            $backup = $this->configureMailTemporarily();
             
-            $email = (new Email())
-                ->from($this->config['from_email'])
-                ->to($to)
-                ->subject($subject);
+            // Enviar email
+            Mail::raw($body, function ($message) use ($to, $subject) {
+                $message->to($to)
+                       ->from($this->config['from_email'], $this->config['from_name'])
+                       ->subject($subject);
+            });
             
-            if ($isHtml) {
-                $email->html($body);
-            } else {
-                $email->text($body);
-            }
-            
-            $mailer->send($email);
-            
-            Log::info('Email enviado exitosamente', [
+            Log::info('Email enviado exitosamente (Laravel Mail)', [
                 'to' => $to,
                 'subject' => $subject,
-                'method' => 'symfony_direct'
+                'method' => 'laravel_mail_temp_config'
             ]);
             
             return [
@@ -101,7 +125,7 @@ class MailManager
             ];
             
         } catch (Exception $e) {
-            Log::error('Error enviando email', [
+            Log::error('Error enviando email (Laravel Mail)', [
                 'to' => $to,
                 'subject' => $subject,
                 'error' => $e->getMessage(),
@@ -114,6 +138,11 @@ class MailManager
                 'success' => false,
                 'message' => 'Error al enviar email: ' . $e->getMessage()
             ];
+        } finally {
+            // Restaurar configuración original
+            if ($backup) {
+                $this->restoreMailConfig($backup);
+            }
         }
     }
     
@@ -136,14 +165,9 @@ class MailManager
     public function validateConfig(): array
     {
         try {
-            $transport = $this->createTransport();
-            $transport->start();
-            $transport->stop();
-            
-            return [
-                'success' => true,
-                'message' => 'Configuración SMTP válida'
-            ];
+            // Usar PHPMailerManager para validación
+            $phpMailer = new \App\Mail\PHPMailerManager($this->config);
+            return $phpMailer->validateConfig();
             
         } catch (Exception $e) {
             return [
