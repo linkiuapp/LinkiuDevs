@@ -400,6 +400,10 @@ class EmailService
                     ]
                 ]
             ]);
+            
+            // FORZAR recreación del mailer para que use la nueva configuración
+            app()->forgetInstance('mail.manager');
+            app()->forgetInstance('mailer');
 
             Mail::raw('Este es un email de prueba desde el sistema de configuración de emails de Linkiu.bio. Si recibes este mensaje, la configuración está funcionando correctamente.', function ($message) use ($email) {
                 $message->to($email)
