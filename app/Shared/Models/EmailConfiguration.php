@@ -142,12 +142,14 @@ class EmailConfiguration extends Model
             // Email de prueba
             $testEmail = $testEmail ?: $this->from_email;
             
-            // Use EmailService sendRaw directamente
-            \App\Services\EmailService::sendRaw(
+            // SOLUCIÓN: Usar Mail::raw directamente con la configuración aplicada
+            \Illuminate\Support\Facades\Mail::raw(
                 'Esta es una prueba de configuración SMTP desde Linkiu.bio',
-                [$testEmail],
-                'Prueba de configuración SMTP - Linkiu.bio',
-                'support'
+                function ($message) use ($testEmail) {
+                    $message->to($testEmail)
+                           ->from($this->from_email, $this->from_name)
+                           ->subject('Prueba de configuración SMTP - Linkiu.bio');
+                }
             );
 
             // Actualizar resultado de la prueba
