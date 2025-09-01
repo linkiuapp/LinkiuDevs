@@ -375,10 +375,18 @@ class EmailService
     public static function sendTestEmail(string $email): array
     {
         try {
-            // Configurar opciones SSL temporalmente para Microsoft 365
+            // Obtener configuración de la base de datos
+            $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
+            
+            // Configurar opciones SSL temporalmente
             $originalConfig = config('mail.mailers.smtp');
             
-            // Aplicar configuración SSL más permisiva para Microsoft 365
+            // Aplicar configuración desde la base de datos si existe
+            if ($emailConfig && $emailConfig->isComplete()) {
+                $emailConfig->applyToMail();
+            }
+            
+            // Aplicar configuración SSL más permisiva
             config([
                 'mail.mailers.smtp.verify_peer' => false,
                 'mail.mailers.smtp.verify_peer_name' => false,
