@@ -393,7 +393,7 @@ class EmailService
                 'Este es un email de prueba desde el sistema de configuración de emails de Linkiu.bio. Si recibes este mensaje, la configuración está funcionando correctamente.',
                 [$email],
                 'Email de Prueba - Linkiu.bio',
-                'store_management' // Usar store_management que coincide con la configuración SMTP
+                'support' // Usar el mismo contexto que testConnection()
             );
             
             if ($result) {
