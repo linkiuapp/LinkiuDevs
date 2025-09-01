@@ -27,9 +27,9 @@ class EmailTestController extends Controller
                 'user_agent' => $request->userAgent()
             ]);
             
-            // Usar CLI Manager que ejecuta el comando que funciona
-            $cliMailer = new \App\Mail\CLIMailManager();
-            $result = $cliMailer->testConnection($email);
+            // Usar DirectSMTPManager que usa sendRaw internamente
+            $directMailer = new \App\Mail\DirectSMTPManager();
+            $result = $directMailer->testConnection($email);
             
             Log::info('API: Resultado test de email', [
                 'email' => $email,
@@ -65,8 +65,8 @@ class EmailTestController extends Controller
     public function validateConfig()
     {
         try {
-            $cliMailer = new \App\Mail\CLIMailManager();
-            $result = $cliMailer->validateConfig();
+            $directMailer = new \App\Mail\DirectSMTPManager();
+            $result = $directMailer->validateConfig();
             
             return response()->json($result);
             
@@ -88,8 +88,8 @@ class EmailTestController extends Controller
     public function getConfig()
     {
         try {
-            $cliMailer = new \App\Mail\CLIMailManager();
-            $config = $cliMailer->getConfigInfo();
+            $directMailer = new \App\Mail\DirectSMTPManager();
+            $config = $directMailer->getConfigInfo();
             
             return response()->json([
                 'success' => true,

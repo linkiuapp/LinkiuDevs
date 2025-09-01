@@ -54,19 +54,19 @@ class TestEmailSystemCommand extends Command
         
         $this->newLine();
         
-        // Test 1.6: CLIMailManager (Comando Artisan)
-        $this->info("1️⃣.6 Probando CLIMailManager (Comando Artisan)...");
+        // Test 1.6: DirectSMTPManager (sendRaw directo)
+        $this->info("1️⃣.6 Probando DirectSMTPManager (sendRaw directo)...");
         try {
-            $cliMailer = new \App\Mail\CLIMailManager();
-            $result = $cliMailer->testConnection($email);
+            $directMailer = new \App\Mail\DirectSMTPManager();
+            $result = $directMailer->testConnection($email);
             
             if ($result['success']) {
-                $this->info("✅ CLIMailManager: " . $result['message']);
+                $this->info("✅ DirectSMTPManager: " . $result['message']);
             } else {
-                $this->error("❌ CLIMailManager: " . $result['message']);
+                $this->error("❌ DirectSMTPManager: " . $result['message']);
             }
         } catch (\Exception $e) {
-            $this->error("❌ CLIMailManager Exception: " . $e->getMessage());
+            $this->error("❌ DirectSMTPManager Exception: " . $e->getMessage());
         }
         
         $this->newLine();

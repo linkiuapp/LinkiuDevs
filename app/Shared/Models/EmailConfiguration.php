@@ -136,17 +136,30 @@ class EmailConfiguration extends Model
                 'from_name' => $this->from_name,
             ];
             
-            // Usar CLIMailManager que ejecuta el comando que funciona
-            $cliMailer = new \App\Mail\CLIMailManager($config);
-            $result = $cliMailer->testConnection($testEmail);
+            // Usar el método original que funciona en CLI (evitar bucle infinito)
+            $this->applyToMail();
+
+            // Email de prueba
+            $testEmail = $testEmail ?: $this->from_email;
+            
+            // Use EmailService sendRaw directamente
+            \App\Services\EmailService::sendRaw(
+                'Esta es una prueba de configuración SMTP desde Linkiu.bio',
+                [$testEmail],
+                'Prueba de configuración SMTP - Linkiu.bio',
+                'support'
+            );
 
             // Actualizar resultado de la prueba
             $this->update([
                 'last_test_at' => now(),
-                'last_test_result' => $result['success'] ? 'Conexión exitosa' : $result['message']
+                'last_test_result' => 'Conexión exitosa'
             ]);
 
-            return $result;
+            return [
+                'success' => true,
+                'message' => 'Email de prueba enviado correctamente.'
+            ];
 
         } catch (\Exception $e) {
             // Actualizar resultado de la prueba con error

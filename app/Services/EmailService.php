@@ -370,7 +370,7 @@ class EmailService
     }
 
     /**
-     * Send test email - Usando CLI que sabemos que funciona
+     * Send test email - Usando método directo sendRaw que funciona
      */
     public static function sendTestEmail(string $email): array
     {
@@ -385,12 +385,12 @@ class EmailService
             
             Log::info('Iniciando test de email', [
                 'email' => $email,
-                'method' => 'cli_artisan'
+                'method' => 'direct_sendraw'
             ]);
             
-            // Usar CLI Manager que ejecuta el comando que funciona
-            $cliMailer = new \App\Mail\CLIMailManager();
-            return $cliMailer->testConnection($email);
+            // Usar DirectSMTPManager que usa sendRaw internamente
+            $directMailer = new \App\Mail\DirectSMTPManager();
+            return $directMailer->testConnection($email);
             
         } catch (Exception $e) {
             Log::error('Test email failed', [
