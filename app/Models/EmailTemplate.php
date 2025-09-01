@@ -290,6 +290,35 @@ El equipo de {{app_name}}
                 'body_text' => 'Nueva factura generada\n\nHola,\n\nSe ha generado una nueva factura para la tienda {{store_name}}:\n\n- Número de factura: {{invoice_number}}\n- Monto: ${{amount}}\n- Fecha de vencimiento: {{due_date}}\n- Plan: {{plan_name}}\n\nVer factura completa: {{invoice_url}}\n\nEquipo de Facturación - {{app_name}}',
                 'variables' => ['invoice_number', 'amount', 'due_date', 'store_name', 'plan_name', 'invoice_url'],
                 'is_active' => true
+            ],
+            [
+                'key' => 'ticket_response',
+                'name' => 'Respuesta de Ticket',
+                'context' => 'support',
+                'subject' => 'Respuesta a tu ticket #{{ticket_id}}: {{ticket_subject}}',
+                'body_html' => '
+                    <h1>Respuesta a tu ticket de soporte</h1>
+                    <p>Hola {{customer_name}},</p>
+                    <p>Hemos respondido a tu ticket de soporte:</p>
+                    
+                    <ul>
+                        <li><strong>Ticket ID:</strong> #{{ticket_id}}</li>
+                        <li><strong>Asunto:</strong> {{ticket_subject}}</li>
+                        <li><strong>Estado:</strong> {{status}}</li>
+                    </ul>
+                    
+                    <div style="background: #f5f5f5; padding: 15px; margin: 15px 0; border-left: 4px solid #007cba;">
+                        <h3>Respuesta:</h3>
+                        <p>{{response}}</p>
+                    </div>
+                    
+                    <p><a href="{{ticket_url}}">Ver ticket completo</a></p>
+                    
+                    <p>Equipo de Soporte - {{app_name}}</p>
+                ',
+                'body_text' => 'Respuesta a tu ticket de soporte\n\nHola {{customer_name}},\n\nHemos respondido a tu ticket de soporte:\n\n- Ticket ID: #{{ticket_id}}\n- Asunto: {{ticket_subject}}\n- Estado: {{status}}\n\nRespuesta:\n{{response}}\n\nVer ticket completo: {{ticket_url}}\n\nEquipo de Soporte - {{app_name}}',
+                'variables' => ['ticket_id', 'ticket_subject', 'customer_name', 'status', 'response', 'ticket_url'],
+                'is_active' => true
             ]
         ];
 

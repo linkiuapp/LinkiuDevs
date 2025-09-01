@@ -367,7 +367,7 @@ class TicketController extends Controller
             if ($storeAdminEmail) {
                 \App\Services\EmailService::sendWithTemplate(
                     'ticket_created',
-                    [$storeAdminEmail],
+                    $storeAdminEmail,
                     [
                         'ticket_id' => $ticket->ticket_number,
                         'ticket_subject' => $ticket->title,
@@ -382,7 +382,7 @@ class TicketController extends Controller
             if ($supportEmail && $supportEmail !== $storeAdminEmail) {
                 \App\Services\EmailService::sendWithTemplate(
                     'ticket_created',
-                    [$supportEmail],
+                    $supportEmail,
                     [
                         'ticket_id' => $ticket->ticket_number,
                         'ticket_subject' => $ticket->title,
@@ -412,7 +412,7 @@ class TicketController extends Controller
             if ($storeAdminEmail) {
                 \App\Services\EmailService::sendWithTemplate(
                     'ticket_response',
-                    [$storeAdminEmail],
+                    $storeAdminEmail,
                     [
                         'ticket_id' => $ticket->ticket_number,
                         'ticket_subject' => $ticket->title,
