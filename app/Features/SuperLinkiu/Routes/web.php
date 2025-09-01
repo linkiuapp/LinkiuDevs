@@ -171,7 +171,6 @@ Route::prefix('superlinkiu')->name('superlinkiu.')->middleware('web')->group(fun
             // Email Settings Configuration
             Route::get('/settings', [EmailConfigurationController::class, 'emailSettings'])->name('settings');
             Route::post('/settings', [EmailConfigurationController::class, 'updateEmailSettings'])
-                ->middleware('email.config.rate.limit')
                 ->name('settings.update');
             Route::post('/validate', [EmailConfigurationController::class, 'validateConfiguration'])->name('validate');
             
@@ -179,7 +178,6 @@ Route::prefix('superlinkiu')->name('superlinkiu.')->middleware('web')->group(fun
             Route::get('/templates', [EmailConfigurationController::class, 'templateIndex'])->name('templates.index');
             Route::get('/templates/{template}/edit', [EmailConfigurationController::class, 'templateEdit'])->name('templates.edit');
             Route::put('/templates/{template}', [EmailConfigurationController::class, 'templateUpdate'])
-                ->middleware('email.config.rate.limit')
                 ->name('templates.update');
             Route::post('/templates/{template}/preview', [EmailConfigurationController::class, 'templatePreview'])->name('templates.preview');
             Route::post('/send-test', [EmailConfigurationController::class, 'sendTestEmail'])->name('send-test');

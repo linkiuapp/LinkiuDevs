@@ -201,6 +201,20 @@ class EmailConfigurationController extends Controller
      */
     public function updateEmailSettings(Request $request): RedirectResponse
     {
+        // Rate limiting
+        $key = 'email-config:' . $request->ip() . ':' . ($request->user()->id ?? 'guest');
+        
+        if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($key, 10)) {
+            $seconds = \Illuminate\Support\Facades\RateLimiter::availableIn($key);
+            
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', "Demasiados intentos. Intenta de nuevo en {$seconds} segundos.");
+        }
+        
+        \Illuminate\Support\Facades\RateLimiter::hit($key, 60);
+        
         // Enhanced validation with custom rules
         $validated = $request->validate([
             'store_management_email' => [
@@ -316,6 +330,20 @@ class EmailConfigurationController extends Controller
      */
     public function templateUpdate(Request $request, EmailTemplate $template): RedirectResponse
     {
+        // Rate limiting
+        $key = 'email-config:' . $request->ip() . ':' . ($request->user()->id ?? 'guest');
+        
+        if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($key, 10)) {
+            $seconds = \Illuminate\Support\Facades\RateLimiter::availableIn($key);
+            
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', "Demasiados intentos. Intenta de nuevo en {$seconds} segundos.");
+        }
+        
+        \Illuminate\Support\Facades\RateLimiter::hit($key, 60);
+        
         $validated = $request->validate([
             'name' => [
                 'required',
