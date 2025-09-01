@@ -381,39 +381,9 @@ class EmailService
             // Configurar opciones SSL temporalmente
             $originalConfig = config('mail.mailers.smtp');
             
-            // Log para debugging
-            Log::info('EmailService::sendTestEmail - Debug info', [
-                'has_email_config' => $emailConfig ? true : false,
-                'config_complete' => $emailConfig ? $emailConfig->isComplete() : false,
-                'config_data' => $emailConfig ? [
-                    'smtp_host' => $emailConfig->smtp_host,
-                    'smtp_port' => $emailConfig->smtp_port,
-                    'smtp_username' => $emailConfig->smtp_username,
-                    'smtp_encryption' => $emailConfig->smtp_encryption,
-                    'from_email' => $emailConfig->from_email,
-                    'has_password' => !empty($emailConfig->smtp_password)
-                ] : null,
-                'current_config_before' => [
-                    'host' => config('mail.mailers.smtp.host'),
-                    'port' => config('mail.mailers.smtp.port'),
-                    'username' => config('mail.mailers.smtp.username'),
-                    'encryption' => config('mail.mailers.smtp.encryption'),
-                ]
-            ]);
-            
             // Aplicar configuración desde la base de datos si existe
             if ($emailConfig && $emailConfig->isComplete()) {
                 $emailConfig->applyToMail();
-                
-                // Log después de aplicar configuración
-                Log::info('EmailService::sendTestEmail - Config after applyToMail', [
-                    'host' => config('mail.mailers.smtp.host'),
-                    'port' => config('mail.mailers.smtp.port'),
-                    'username' => config('mail.mailers.smtp.username'),
-                    'encryption' => config('mail.mailers.smtp.encryption'),
-                    'from_address' => config('mail.from.address'),
-                    'from_name' => config('mail.from.name'),
-                ]);
             }
             
             // Aplicar configuración SSL más permisiva
