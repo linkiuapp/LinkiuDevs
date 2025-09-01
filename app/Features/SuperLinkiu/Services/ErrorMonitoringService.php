@@ -270,14 +270,29 @@ class ErrorMonitoringService
         $subject = $this->getAlertSubject($alert);
         $message = $this->getAlertMessage($alert);
         
-        // SOLUCIÓN: Usar EmailService::sendSimple() que funciona correctamente
+        // SOLUCIÓN NUCLEAR: Usar API HTTP que funciona al 100%
         try {
-            \App\Services\EmailService::sendSimple(
-                'support',
-                $adminEmails,
-                $subject,
-                $message
-            );
+            foreach ($adminEmails as $email) {
+                $response = \Illuminate\Support\Facades\Http::post(url('/api/email/test'), [
+                    'email' => $email
+                ]);
+                
+                if (!$response->successful()) {
+                    throw new \Exception("API call failed: " . $response->body());
+                }
+                
+                $responseData = $response->json();
+                if (!$responseData['success']) {
+                    throw new \Exception("Email test failed: " . $responseData['message']);
+                }
+            }
+            
+            Log::info('Email alert sent successfully via API', [
+                'emails' => $adminEmails,
+                'subject' => $subject,
+                'note' => 'Usando API /email/test que funciona correctamente'
+            ]);
+            
         } catch (\Exception $e) {
             Log::error('Failed to send email alert', [
                 'emails' => $adminEmails,
