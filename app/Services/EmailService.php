@@ -279,16 +279,16 @@ class EmailService
     {
         $issues = [];
 
-        // Verificar variables de entorno
-        if (!env('MAIL_HOST')) {
+        // Verificar configuración SMTP (usando config() para soporte de cache)
+        if (!config('mail.mailers.smtp.host')) {
             $issues[] = 'MAIL_HOST no configurado';
         }
 
-        if (!env('MAIL_USERNAME')) {
+        if (!config('mail.mailers.smtp.username')) {
             $issues[] = 'MAIL_USERNAME no configurado';
         }
 
-        if (!env('MAIL_PASSWORD')) {
+        if (!config('mail.mailers.smtp.password')) {
             $issues[] = 'MAIL_PASSWORD no configurado';
         }
 
@@ -303,10 +303,10 @@ class EmailService
             'valid' => empty($issues),
             'issues' => $issues,
             'config' => [
-                'host' => env('MAIL_HOST', 'No configurado'),
-                'port' => env('MAIL_PORT', 'No configurado'),
-                'username' => env('MAIL_USERNAME', 'No configurado'),
-                'encryption' => env('MAIL_ENCRYPTION', 'No configurado')
+                'host' => config('mail.mailers.smtp.host', 'No configurado'),
+                'port' => config('mail.mailers.smtp.port', 'No configurado'),
+                'username' => config('mail.mailers.smtp.username', 'No configurado'),
+                'encryption' => config('mail.mailers.smtp.encryption', 'No configurado')
             ]
         ];
     }
