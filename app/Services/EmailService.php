@@ -370,12 +370,12 @@ class EmailService
     }
 
     /**
-     * Send test email - Uses the same logic as testConnection() that works
+     * Send test email - Uses Mail::raw() directly like testConnection() does internally
      */
     public static function sendTestEmail(string $email): array
     {
         try {
-            // USAR EXACTAMENTE EL MISMO MÉTODO QUE testConnection()
+            // Obtener configuración activa
             $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
             
             if (!$emailConfig || !$emailConfig->isComplete()) {
@@ -385,28 +385,23 @@ class EmailService
                 ];
             }
             
-            // Aplicar configuración (igual que testConnection)
+            // Aplicar configuración SMTP
             $emailConfig->applyToMail();
             
-            // Usar EmailService::sendRaw (igual que testConnection)
-            $result = static::sendRaw(
+            // Usar Mail::raw() directamente (como testConnection() internamente)
+            Mail::raw(
                 'Este es un email de prueba desde el sistema de configuración de emails de Linkiu.bio. Si recibes este mensaje, la configuración está funcionando correctamente.',
-                [$email],
-                'Email de Prueba - Linkiu.bio',
-                'support' // Usar el mismo contexto que testConnection()
+                function ($message) use ($email) {
+                    $message->to($email)
+                           ->from(config('mail.from.address'), config('mail.from.name'))
+                           ->subject('Email de Prueba - Linkiu.bio');
+                }
             );
             
-            if ($result) {
-                return [
-                    'success' => true,
-                    'message' => 'Email de prueba enviado exitosamente'
-                ];
-            } else {
-                return [
-                    'success' => false,
-                    'message' => 'Error al enviar email de prueba'
-                ];
-            }
+            return [
+                'success' => true,
+                'message' => 'Email de prueba enviado exitosamente'
+            ];
             
         } catch (Exception $e) {
             Log::error('Test email failed', [
