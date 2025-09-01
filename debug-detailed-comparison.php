@@ -1,9 +1,20 @@
 <?php
 
-require_once 'bootstrap/app.php';
+echo "Iniciando script...\n";
 
-$app = require_once 'bootstrap/app.php';
-$app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+try {
+    require_once 'bootstrap/app.php';
+    echo "Bootstrap cargado...\n";
+    
+    $app = require_once 'bootstrap/app.php';
+    echo "App creada...\n";
+    
+    $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+    echo "Kernel bootstrap completado...\n";
+} catch (Exception $e) {
+    echo "Error en bootstrap: " . $e->getMessage() . "\n";
+    exit;
+}
 
 echo "=== DEBUG DETALLADO COMPARACIÓN ===\n\n";
 
