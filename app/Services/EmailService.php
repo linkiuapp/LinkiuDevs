@@ -370,7 +370,7 @@ class EmailService
     }
 
     /**
-     * Send test email - Usando método directo sendRaw que funciona
+     * Send test email - Método unificado para Web y CLI
      */
     public static function sendTestEmail(string $email): array
     {
@@ -383,20 +383,22 @@ class EmailService
                 ];
             }
             
-            Log::info('Iniciando test de email', [
-                'email' => $email,
-                'method' => 'direct_sendraw'
-            ]);
+            // Usar EmailConfiguration que sabemos que funciona siempre
+            $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
             
-            // Usar DirectSMTPManager que usa sendRaw internamente
-            $directMailer = new \App\Mail\DirectSMTPManager();
-            return $directMailer->testConnection($email);
+            if (!$emailConfig || !$emailConfig->isComplete()) {
+                return [
+                    'success' => false,
+                    'message' => 'No hay configuración SMTP completa disponible'
+                ];
+            }
+            
+            return $emailConfig->testConnection($email);
             
         } catch (Exception $e) {
             Log::error('Test email failed', [
                 'email' => $email,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'error' => $e->getMessage()
             ]);
             
             return [

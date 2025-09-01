@@ -27,9 +27,17 @@ class EmailTestController extends Controller
                 'user_agent' => $request->userAgent()
             ]);
             
-            // Usar DirectSMTPManager que usa sendRaw internamente
-            $directMailer = new \App\Mail\DirectSMTPManager();
-            $result = $directMailer->testConnection($email);
+            // Usar EmailConfiguration que funciona tanto en CLI como Web
+            $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
+            
+            if (!$emailConfig || !$emailConfig->isComplete()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No hay configuración SMTP completa disponible'
+                ], 400);
+            }
+            
+            $result = $emailConfig->testConnection($email);
             
             Log::info('API: Resultado test de email', [
                 'email' => $email,
@@ -65,10 +73,21 @@ class EmailTestController extends Controller
     public function validateConfig()
     {
         try {
-            $directMailer = new \App\Mail\DirectSMTPManager();
-            $result = $directMailer->validateConfig();
+            $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
             
-            return response()->json($result);
+            if (!$emailConfig) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No hay configuración SMTP disponible'
+                ], 404);
+            }
+            
+            $isComplete = $emailConfig->isComplete();
+            
+            return response()->json([
+                'success' => $isComplete,
+                'message' => $isComplete ? 'Configuración válida' : 'Configuración incompleta'
+            ]);
             
         } catch (\Exception $e) {
             Log::error('API: Error validando configuración', [
@@ -88,12 +107,25 @@ class EmailTestController extends Controller
     public function getConfig()
     {
         try {
-            $directMailer = new \App\Mail\DirectSMTPManager();
-            $config = $directMailer->getConfigInfo();
+            $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
+            
+            if (!$emailConfig) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No hay configuración disponible'
+                ], 404);
+            }
             
             return response()->json([
                 'success' => true,
-                'config' => $config
+                'config' => [
+                    'host' => $emailConfig->smtp_host,
+                    'port' => $emailConfig->smtp_port,
+                    'username' => $emailConfig->smtp_username,
+                    'encryption' => $emailConfig->smtp_encryption,
+                    'from_email' => $emailConfig->from_email,
+                    'from_name' => $emailConfig->from_name,
+                ]
             ]);
             
         } catch (\Exception $e) {
