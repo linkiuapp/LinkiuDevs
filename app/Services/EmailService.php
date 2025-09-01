@@ -450,6 +450,7 @@ class EmailService
                 'from_name' => config('mail.from.name')
             ]);
 
+            // Usar el mismo método que testConnection() - sin contexto específico
             Mail::raw('Este es un email de prueba desde el sistema de configuración de emails de Linkiu.bio. Si recibes este mensaje, la configuración está funcionando correctamente.', function ($message) use ($email) {
                 $message->to($email)
                         ->subject('Email de Prueba - Linkiu.bio')
