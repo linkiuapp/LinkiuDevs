@@ -214,14 +214,20 @@ function testEmailSending() {
     const email = prompt('Ingresa tu email para recibir un mensaje de prueba:');
     if (email && email.includes('@')) {
         // Show loading state
-        const originalText = event.target.textContent;
-        event.target.textContent = 'Enviando...';
-        event.target.disabled = true;
-        
-        // SOLUCIÓN RADICAL: Usar API que funciona sin errores
+        const button = event.target;
+        const originalText = button.textContent;
+        button.textContent = 'Enviando...';
+        button.disabled = true;
+
+        console.log('🚀 Iniciando envío de email de prueba:', email);
+
+        // SOLUCIÓN MEJORADA: Más timeout y mejor debugging
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 30000);
-        
+        const timeoutId = setTimeout(() => {
+            console.log('⏰ Timeout alcanzado (60 segundos)');
+            controller.abort();
+        }, 60000); // 60 segundos
+
         fetch('/api/email/test', {
             method: 'POST',
             headers: {
@@ -236,33 +242,45 @@ function testEmailSending() {
         })
         .then(response => {
             clearTimeout(timeoutId);
+            console.log('📡 Response status:', response.status);
+            console.log('📡 Response headers:', response.headers);
+            
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                return response.text().then(text => {
+                    console.error('❌ Response error body:', text);
+                    throw new Error(`HTTP ${response.status}: ${text}`);
+                });
             }
             return response.json();
         })
         .then(data => {
-            console.log('Response received:', data);
-            if (data.success) {
-                alert('✅ ' + data.message);
+            console.log('✅ Response data:', data);
+            if (data && data.success) {
+                alert('✅ Email enviado correctamente: ' + (data.message || 'Sin mensaje'));
             } else {
-                alert('❌ ' + data.message);
+                const errorMsg = data ? data.message : 'Respuesta inválida del servidor';
+                console.error('❌ API returned error:', errorMsg);
+                alert('❌ Error: ' + errorMsg);
             }
         })
         .catch(error => {
             clearTimeout(timeoutId);
-            console.error('Error:', error);
+            console.error('💥 Fetch error:', error);
+            
+            let errorMessage = 'Error desconocido';
             if (error.name === 'AbortError') {
-                alert('❌ Timeout: El envío del email está tardando demasiado');
-            } else {
-                alert('❌ Error al enviar el email de prueba: ' + error.message);
+                errorMessage = 'Timeout: El envío está tardando más de 60 segundos';
+            } else if (error.message) {
+                errorMessage = error.message;
             }
+            
+            alert('❌ Error al enviar email: ' + errorMessage);
         })
         .finally(() => {
             // Restore button state
-            console.log('Restoring button state');
-            event.target.textContent = originalText;
-            event.target.disabled = false;
+            console.log('🔄 Restaurando estado del botón');
+            button.textContent = originalText;
+            button.disabled = false;
         });
     }
 }
