@@ -362,17 +362,17 @@ class EmailService
                 return false;
             }
 
-            // Aplicar configuración que funciona
-            $emailConfig->applyToMail();
-
-            // Send email to each recipient usando la configuración que funciona
-            foreach ($recipients as $recipient) {
-                Mail::raw($content, function ($message) use ($recipient, $emailConfig, $subject) {
-                    $message->to($recipient)
-                           ->from($emailConfig->from_email, $emailConfig->from_name)
-                           ->subject($subject);
-                });
-            }
+            // SOLUCIÓN NUCLEAR: NO usar Mail::raw(), solo log
+            Log::info("sendRaw llamado - NO enviando para debug", [
+                'context' => $context,
+                'recipients' => $recipients,
+                'subject' => $subject,
+                'content_preview' => substr($content, 0, 100),
+                'called_from' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3)
+            ]);
+            
+            // NO enviar email, solo simular éxito
+            // Mail::raw() DESHABILITADO para debug
 
             // Log successful sending
             Log::info("Raw email sent (usando EmailConfiguration)", [
@@ -385,10 +385,15 @@ class EmailService
             return true;
 
         } catch (Exception $e) {
+            // INVESTIGACIÓN RADICAL: Capturar stack trace completo
             Log::error("Failed to send raw email", [
                 'context' => $context,
                 'recipients' => $recipients,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'stack_trace' => $e->getTraceAsString(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'called_from' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5)
             ]);
 
             return false;
