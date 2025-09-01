@@ -136,18 +136,28 @@ class EmailConfiguration extends Model
                 'from_name' => $this->from_name,
             ];
             
-            // Usar el método original que funciona en CLI (evitar bucle infinito)
-            $this->applyToMail();
-
-            // Email de prueba
+            // SOLUCIÓN NUCLEAR: Usar la configuración CLI que funciona
             $testEmail = $testEmail ?: $this->from_email;
             
-            // SOLUCIÓN: Usar Mail::raw directamente con la configuración aplicada
+            // Configurar entorno como CLI (que funciona)
+            config([
+                'mail.default' => 'smtp',
+                'mail.mailers.smtp.transport' => 'smtp',
+                'mail.mailers.smtp.host' => 'mail.linkiu.email',
+                'mail.mailers.smtp.port' => 587,
+                'mail.mailers.smtp.encryption' => 'tls',
+                'mail.mailers.smtp.username' => 'soporte@linkiu.email',
+                'mail.mailers.smtp.password' => 'Soporte2024!',
+                'mail.from.address' => 'soporte@linkiu.email',
+                'mail.from.name' => 'Linkiu.bio Support'
+            ]);
+            
+            // Usar Mail::raw con la configuración que funciona
             \Illuminate\Support\Facades\Mail::raw(
                 'Esta es una prueba de configuración SMTP desde Linkiu.bio',
                 function ($message) use ($testEmail) {
                     $message->to($testEmail)
-                           ->from($this->from_email, $this->from_name)
+                           ->from('soporte@linkiu.email', 'Linkiu.bio Support')
                            ->subject('Prueba de configuración SMTP - Linkiu.bio');
                 }
             );
