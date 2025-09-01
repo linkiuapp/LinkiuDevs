@@ -218,6 +218,10 @@ function testEmailSending() {
         event.target.textContent = 'Enviando...';
         event.target.disabled = true;
         
+        // Add timeout to prevent hanging
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+        
         fetch('{{ route("superlinkiu.email.send-test") }}', {
             method: 'POST',
             headers: {
@@ -227,10 +231,18 @@ function testEmailSending() {
             },
             body: JSON.stringify({
                 email: email
-            })
+            }),
+            signal: controller.signal
         })
-        .then(response => response.json())
+        .then(response => {
+            clearTimeout(timeoutId);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log('Response received:', data);
             if (data.success) {
                 alert('✅ ' + data.message);
             } else {
@@ -238,11 +250,17 @@ function testEmailSending() {
             }
         })
         .catch(error => {
+            clearTimeout(timeoutId);
             console.error('Error:', error);
-            alert('❌ Error al enviar el email de prueba');
+            if (error.name === 'AbortError') {
+                alert('❌ Timeout: El envío del email está tardando demasiado');
+            } else {
+                alert('❌ Error al enviar el email de prueba: ' + error.message);
+            }
         })
         .finally(() => {
             // Restore button state
+            console.log('Restoring button state');
             event.target.textContent = originalText;
             event.target.disabled = false;
         });

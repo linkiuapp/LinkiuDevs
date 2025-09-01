@@ -607,8 +607,12 @@ class EmailConfigurationController extends Controller
             }
             // Send general test email
             else {
+                Log::info('Calling EmailService::sendTestEmail', ['email' => $testEmail]);
                 $result = EmailService::sendTestEmail($testEmail);
+                Log::info('EmailService::sendTestEmail result', $result);
             }
+
+            Log::info('Final result before response', $result);
 
             if ($result['success']) {
                 // Log successful test email
