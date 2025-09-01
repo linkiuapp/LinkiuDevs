@@ -370,7 +370,7 @@ class EmailService
     }
 
     /**
-     * Send test email - Bypass completo del sistema Laravel Mail
+     * Send test email - Configurar entorno como CLI y usar Mail::raw
      */
     public static function sendTestEmail(string $email): array
     {
@@ -392,45 +392,75 @@ class EmailService
                 ];
             }
             
-            // Usar Symfony Mailer directamente (bypass Laravel Mail)
-            $dsn = sprintf(
-                'smtp://%s:%s@%s:%d',
-                urlencode($emailConfig->smtp_username),
-                urlencode($emailConfig->smtp_password),
-                $emailConfig->smtp_host,
-                $emailConfig->smtp_port
+            // Configurar variables de entorno temporalmente (como CLI)
+            $originalEnv = [];
+            $envVars = [
+                'MAIL_MAILER' => 'smtp',
+                'MAIL_HOST' => $emailConfig->smtp_host,
+                'MAIL_PORT' => $emailConfig->smtp_port,
+                'MAIL_USERNAME' => $emailConfig->smtp_username,
+                'MAIL_PASSWORD' => $emailConfig->smtp_password,
+                'MAIL_ENCRYPTION' => $emailConfig->smtp_encryption,
+                'MAIL_FROM_ADDRESS' => $emailConfig->from_email,
+                'MAIL_FROM_NAME' => $emailConfig->from_name,
+                'MAIL_VERIFY_PEER' => 'false'
+            ];
+            
+            // Guardar valores originales y establecer nuevos
+            foreach ($envVars as $key => $value) {
+                $originalEnv[$key] = env($key);
+                putenv("{$key}={$value}");
+                $_ENV[$key] = $value;
+                $_SERVER[$key] = $value;
+            }
+            
+            // Limpiar configuración de Mail para forzar recarga
+            app()->forgetInstance('mailer');
+            app()->forgetInstance('mail.manager');
+            
+            // Usar Mail::raw con configuración limpia
+            Mail::raw(
+                'Esta es una prueba de configuración SMTP desde Linkiu.bio. Si recibes este mensaje, la configuración está funcionando correctamente.',
+                function ($message) use ($email, $emailConfig) {
+                    $message->to($email)
+                           ->from($emailConfig->from_email, $emailConfig->from_name)
+                           ->subject('Prueba de configuración SMTP - Linkiu.bio');
+                }
             );
             
-            if ($emailConfig->smtp_encryption && $emailConfig->smtp_encryption !== 'none') {
-                $dsn .= '?encryption=' . $emailConfig->smtp_encryption;
+            // Restaurar variables de entorno originales
+            foreach ($originalEnv as $key => $value) {
+                if ($value !== null) {
+                    putenv("{$key}={$value}");
+                    $_ENV[$key] = $value;
+                    $_SERVER[$key] = $value;
+                } else {
+                    putenv($key);
+                    unset($_ENV[$key], $_SERVER[$key]);
+                }
             }
             
-            $transport = \Symfony\Component\Mailer\Transport::fromDsn($dsn);
-            $mailer = new \Symfony\Component\Mailer\Mailer($transport);
-            
-            $message = (new \Symfony\Component\Mime\Email())
-                ->from(new \Symfony\Component\Mime\Address($emailConfig->from_email, $emailConfig->from_name))
-                ->to($email)
-                ->subject('Prueba de configuración SMTP - Linkiu.bio')
-                ->text('Esta es una prueba de configuración SMTP desde Linkiu.bio usando Symfony Mailer directo.');
-            
-            $mailer->send($message);
-            $result = 1; // Symfony Mailer no retorna count, asumimos éxito si no hay excepción
-            
-            if ($result > 0) {
-                return [
-                    'success' => true,
-                    'message' => 'Email de prueba enviado correctamente'
-                ];
-            } else {
-                return [
-                    'success' => false,
-                    'message' => 'No se pudo enviar el email'
-                ];
-            }
+            return [
+                'success' => true,
+                'message' => 'Email de prueba enviado correctamente'
+            ];
             
         } catch (Exception $e) {
-            Log::error('Test email failed (Swift direct)', [
+            // Restaurar variables de entorno en caso de error
+            if (isset($originalEnv)) {
+                foreach ($originalEnv as $key => $value) {
+                    if ($value !== null) {
+                        putenv("{$key}={$value}");
+                        $_ENV[$key] = $value;
+                        $_SERVER[$key] = $value;
+                    } else {
+                        putenv($key);
+                        unset($_ENV[$key], $_SERVER[$key]);
+                    }
+                }
+            }
+            
+            Log::error('Test email failed (env config)', [
                 'email' => $email,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
