@@ -145,19 +145,19 @@ class EmailService
     }
 
     /**
-     * Get email address for context - Usar EmailConfiguration que funciona
+     * Get email address for context - SOLO EmailConfiguration
      */
     public static function getContextEmail(string $context): string
     {
-        // Usar EmailConfiguration que sabemos que funciona
+        // RADICAL: Solo usar EmailConfiguration, eliminar EmailSetting
         $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
         
         if ($emailConfig && $emailConfig->isComplete()) {
             return $emailConfig->from_email;
         }
         
-        // Fallback al método original
-        return EmailSetting::getEmail($context);
+        // Si no hay EmailConfiguration, usar el email que sabemos que funciona
+        return 'no-responder@linkiu.email';
     }
 
     /**
@@ -243,12 +243,21 @@ class EmailService
         bool $isHtml = false
     ): bool {
         try {
-            $fromEmail = static::getContextEmail($context);
+            // RADICAL: Usar EmailConfiguration que funciona
+            $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
+            
+            if (!$emailConfig || !$emailConfig->isComplete()) {
+                Log::warning("No hay configuración SMTP completa disponible");
+                return false;
+            }
+
+            // Aplicar configuración que funciona
+            $emailConfig->applyToMail();
             
             foreach ($recipients as $recipient) {
-                Mail::send([], [], function ($message) use ($recipient, $fromEmail, $subject, $body, $isHtml) {
+                Mail::send([], [], function ($message) use ($recipient, $emailConfig, $subject, $body, $isHtml) {
                     $message->to($recipient)
-                           ->from($fromEmail)
+                           ->from($emailConfig->from_email, $emailConfig->from_name)
                            ->subject($subject);
                     
                     if ($isHtml) {
@@ -259,10 +268,11 @@ class EmailService
                 });
             }
             
-            Log::info("Simple email sent successfully", [
+            Log::info("Simple email sent successfully (usando EmailConfiguration)", [
                 'context' => $context,
                 'recipients_count' => count($recipients),
-                'subject' => $subject
+                'subject' => $subject,
+                'from' => $emailConfig->from_email
             ]);
             
             return true;
@@ -289,18 +299,22 @@ class EmailService
         string $context = 'store_management'
     ): bool {
         try {
-            // Get context email
-            $fromEmail = static::getContextEmail($context);
-            if (!$fromEmail) {
-                Log::warning("No email configured for context: {$context}");
+            // RADICAL: Usar EmailConfiguration que funciona
+            $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
+            
+            if (!$emailConfig || !$emailConfig->isComplete()) {
+                Log::warning("No hay configuración SMTP completa disponible");
                 return false;
             }
 
+            // Aplicar configuración que funciona
+            $emailConfig->applyToMail();
+
             // Send email to each recipient
             foreach ($recipients as $recipient) {
-                Mail::send($view, $data, function ($message) use ($recipient, $fromEmail, $subject) {
+                Mail::send($view, $data, function ($message) use ($recipient, $emailConfig, $subject) {
                     $message->to($recipient)
-                           ->from($fromEmail);
+                           ->from($emailConfig->from_email, $emailConfig->from_name);
                     
                     if ($subject) {
                         $message->subject($subject);
@@ -309,11 +323,11 @@ class EmailService
             }
 
             // Log successful sending
-            Log::info("Email sent with view", [
+            Log::info("Email sent with view (usando EmailConfiguration)", [
                 'view' => $view,
                 'context' => $context,
                 'recipients_count' => count($recipients),
-                'from' => $fromEmail
+                'from' => $emailConfig->from_email
             ]);
 
             return true;
@@ -340,27 +354,31 @@ class EmailService
         string $context = 'store_management'
     ): bool {
         try {
-            // Get context email
-            $fromEmail = static::getContextEmail($context);
-            if (!$fromEmail) {
-                Log::warning("No email configured for context: {$context}");
+            // SOLUCIÓN RADICAL: Usar EmailConfiguration que SÍ funciona
+            $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
+            
+            if (!$emailConfig || !$emailConfig->isComplete()) {
+                Log::warning("No hay configuración SMTP completa disponible");
                 return false;
             }
 
-            // Send email to each recipient
+            // Aplicar configuración que funciona
+            $emailConfig->applyToMail();
+
+            // Send email to each recipient usando la configuración que funciona
             foreach ($recipients as $recipient) {
-                Mail::raw($content, function ($message) use ($recipient, $fromEmail, $subject) {
+                Mail::raw($content, function ($message) use ($recipient, $emailConfig, $subject) {
                     $message->to($recipient)
-                           ->from($fromEmail)
+                           ->from($emailConfig->from_email, $emailConfig->from_name)
                            ->subject($subject);
                 });
             }
 
             // Log successful sending
-            Log::info("Raw email sent", [
+            Log::info("Raw email sent (usando EmailConfiguration)", [
                 'context' => $context,
                 'recipients_count' => count($recipients),
-                'from' => $fromEmail,
+                'from' => $emailConfig->from_email,
                 'subject' => $subject
             ]);
 
