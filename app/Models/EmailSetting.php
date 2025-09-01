@@ -68,12 +68,12 @@ class EmailSetting extends Model
     private static function getDefaultEmail(string $context): string
     {
         $defaults = [
-            'store_management' => 'no-responder@linkiudev.co',
-            'support' => 'soporte@linkiudev.co',
-            'billing' => 'contabilidad@linkiudev.co'
+            'store_management' => 'no-responder@linkiu.email',
+            'support' => 'soporte@linkiu.email',
+            'billing' => 'contabilidad@linkiu.email'
         ];
 
-        return $defaults[$context] ?? 'no-responder@linkiudev.co';
+        return $defaults[$context] ?? 'no-responder@linkiu.email';
     }
 
     /**

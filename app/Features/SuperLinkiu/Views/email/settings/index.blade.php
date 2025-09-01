@@ -204,9 +204,9 @@ function validateConfiguration() {
 
 function resetToDefaults() {
     if (confirm('¿Estás seguro de restaurar los valores por defecto? Se perderán los cambios no guardados.')) {
-        document.getElementById('store_management_email').value = 'no-responder@linkiudev.co';
-        document.getElementById('support_email').value = 'soporte@linkiudev.co';
-        document.getElementById('billing_email').value = 'contabilidad@linkiudev.co';
+        document.getElementById('store_management_email').value = 'no-responder@linkiu.email';
+        document.getElementById('support_email').value = 'soporte@linkiu.email';
+        document.getElementById('billing_email').value = 'contabilidad@linkiu.email';
     }
 }
 

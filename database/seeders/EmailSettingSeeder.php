@@ -16,19 +16,19 @@ class EmailSettingSeeder extends Seeder
         $settings = [
             [
                 'context' => 'store_management',
-                'email' => 'no-responder@linkiudev.co',
+                'email' => 'no-responder@linkiu.email',
                 'name' => 'Gestión de Tiendas',
                 'is_active' => true
             ],
             [
                 'context' => 'support',
-                'email' => 'soporte@linkiudev.co',
+                'email' => 'soporte@linkiu.email',
                 'name' => 'Soporte',
                 'is_active' => true
             ],
             [
                 'context' => 'billing',
-                'email' => 'contabilidad@linkiudev.co',
+                'email' => 'contabilidad@linkiu.email',
                 'name' => 'Facturación',
                 'is_active' => true
             ]

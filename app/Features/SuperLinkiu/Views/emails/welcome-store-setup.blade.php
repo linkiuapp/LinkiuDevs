@@ -381,7 +381,7 @@
                 <h3>🆘 ¿Necesitas Ayuda?</h3>
                 <p>Nuestro equipo está aquí para ayudarte en cada paso del camino:</p>
                 <ul style="padding-left: 20px; color: #374151;">
-                    <li>📧 Email de soporte: soporte@superlinkiu.com</li>
+                    <li>📧 Email de soporte: {{ \App\Services\EmailService::getContextEmail('support') }}</li>
                     <li>📱 WhatsApp: +57 300 123 4567</li>
                     <li>🌐 Centro de ayuda: https://ayuda.superlinkiu.com</li>
                     <li>📚 Documentación: https://docs.superlinkiu.com</li>

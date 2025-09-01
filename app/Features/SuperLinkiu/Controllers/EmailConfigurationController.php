@@ -180,17 +180,17 @@ class EmailConfigurationController extends Controller
             'store_management' => [
                 'name' => 'Gestión de Tiendas',
                 'description' => 'Creación de tiendas, cambios de contraseña, notificaciones admin-tienda',
-                'default_email' => 'no-responder@linkiudev.co'
+                'default_email' => 'no-responder@linkiu.email'
             ],
             'support' => [
                 'name' => 'Soporte',
                 'description' => 'CRUD de tickets, notificaciones de soporte',
-                'default_email' => 'soporte@linkiudev.co'
+                'default_email' => 'soporte@linkiu.email'
             ],
             'billing' => [
                 'name' => 'Facturación',
                 'description' => 'Todo relacionado con facturación',
-                'default_email' => 'contabilidad@linkiudev.co'
+                'default_email' => 'contabilidad@linkiu.email'
             ]
         ];
 
@@ -542,7 +542,7 @@ class EmailConfigurationController extends Controller
                 'admin_email' => 'admin@mitienda.com',
                 'password' => '********',
                 'login_url' => 'https://mitienda.linkiu.bio/admin',
-                'support_email' => 'soporte@linkiudev.co'
+                'support_email' => \App\Services\EmailService::getContextEmail('support')
             ],
             'support' => [
                 'ticket_id' => '12345',
@@ -656,7 +656,7 @@ class EmailConfigurationController extends Controller
                 'admin_email' => 'admin@mitienda.com',
                 'password' => '********',
                 'login_url' => 'https://mitienda.linkiu.bio/admin',
-                'support_email' => 'soporte@linkiudev.co'
+                'support_email' => \App\Services\EmailService::getContextEmail('support')
             ],
             'support' => [
                 'ticket_id' => '12345',

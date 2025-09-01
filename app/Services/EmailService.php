@@ -600,7 +600,7 @@ class EmailService
                 'admin_email' => 'admin@mitienda.com',
                 'password' => '********',
                 'login_url' => 'https://mitienda.linkiu.bio/admin',
-                'support_email' => 'soporte@linkiudev.co'
+                'support_email' => static::getContextEmail('support')
             ],
             'support' => [
                 'ticket_id' => '12345',
