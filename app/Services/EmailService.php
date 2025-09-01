@@ -370,7 +370,7 @@ class EmailService
     }
 
     /**
-     * Send test email - Ejecuta comando CLI que sabemos que funciona
+     * Send test email - Llama directamente a testConnection() que funciona
      */
     public static function sendTestEmail(string $email): array
     {
@@ -383,7 +383,7 @@ class EmailService
                 ];
             }
             
-            // Verificar que hay configuración
+            // Obtener configuración y llamar directamente a testConnection()
             $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
             if (!$emailConfig || !$emailConfig->isComplete()) {
                 return [
@@ -392,32 +392,8 @@ class EmailService
                 ];
             }
             
-            // Ejecutar comando CLI que sabemos que funciona
-            $command = 'php artisan email:send-test ' . escapeshellarg($email) . ' 2>&1';
-            $output = [];
-            $returnCode = 0;
-            
-            exec($command, $output, $returnCode);
-            
-            $outputString = implode("\n", $output);
-            
-            if ($returnCode === 0 && strpos($outputString, 'SUCCESS:') !== false) {
-                return [
-                    'success' => true,
-                    'message' => 'Email de prueba enviado correctamente'
-                ];
-            } else {
-                Log::error('Command failed', [
-                    'command' => $command,
-                    'output' => $outputString,
-                    'return_code' => $returnCode
-                ]);
-                
-                return [
-                    'success' => false,
-                    'message' => 'Error al enviar email de prueba'
-                ];
-            }
+            // Llamar directamente al método que sabemos que funciona
+            return $emailConfig->testConnection($email);
             
         } catch (Exception $e) {
             Log::error('Test email failed', [
