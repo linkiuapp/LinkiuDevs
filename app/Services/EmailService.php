@@ -388,12 +388,14 @@ class EmailService
             // Aplicar configuración temporalmente (igual que testConnection)
             $emailConfig->applyToMail();
             
-            // Usar EmailService::sendRaw EXACTAMENTE como testConnection()
-            static::sendRaw(
+            // Usar Mail::raw directamente con la configuración SMTP aplicada
+            Mail::raw(
                 'Esta es una prueba de configuración SMTP desde Linkiu.bio',
-                [$email],
-                'Prueba de configuración SMTP - Linkiu.bio',
-                'support'
+                function ($message) use ($email, $emailConfig) {
+                    $message->to($email)
+                           ->from($emailConfig->from_email, $emailConfig->from_name)
+                           ->subject('Prueba de configuración SMTP - Linkiu.bio');
+                }
             );
             
             return [
