@@ -370,7 +370,7 @@ class EmailService
     }
 
     /**
-     * Send test email - Usar Queue Job para evitar problemas de contexto web
+     * Send test email - Versión simplificada usando MailManager
      */
     public static function sendTestEmail(string $email): array
     {
@@ -383,48 +383,19 @@ class EmailService
                 ];
             }
             
-            // Generar ID único para el job
-            $jobId = uniqid('test_email_', true);
-            
-            // Dispatch job síncrono (ejecutar inmediatamente)
-            \App\Jobs\SendTestEmailJob::dispatchSync($email, $jobId);
-            
-            // Job ejecutado síncronamente, verificar resultado
-            sleep(1);
-            
-            // Verificar resultado en logs
-            $logFile = storage_path('logs/laravel.log');
-            if (file_exists($logFile)) {
-                $logs = file_get_contents($logFile);
-                if (strpos($logs, "job_id\":\"{$jobId}\"") !== false) {
-                    if (strpos($logs, "\"success\":true") !== false) {
-                        return [
-                            'success' => true,
-                            'message' => 'Email de prueba enviado correctamente'
-                        ];
-                    } else {
-                        return [
-                            'success' => false,
-                            'message' => 'Error al enviar email de prueba'
-                        ];
-                    }
-                }
-            }
-            
-            return [
-                'success' => true,
-                'message' => 'Email de prueba enviado en background'
-            ];
+            // Usar MailManager para envío directo
+            $mailManager = new \App\Mail\MailManager();
+            return $mailManager->testConnection($email);
             
         } catch (Exception $e) {
-            Log::error('Test email job dispatch failed', [
+            Log::error('Test email failed', [
                 'email' => $email,
                 'error' => $e->getMessage()
             ]);
             
             return [
                 'success' => false,
-                'message' => 'Error al procesar solicitud: ' . $e->getMessage()
+                'message' => 'Error al enviar email: ' . $e->getMessage()
             ];
         }
     }

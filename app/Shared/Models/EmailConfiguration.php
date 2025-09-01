@@ -125,30 +125,28 @@ class EmailConfiguration extends Model
         }
 
         try {
-            // Aplicar configuración temporalmente
-            $this->applyToMail();
-
-            // Email de prueba
-            $testEmail = $testEmail ?: $this->from_email;
+            // Crear configuración para MailManager
+            $config = [
+                'host' => $this->smtp_host,
+                'port' => $this->smtp_port,
+                'username' => $this->smtp_username,
+                'password' => $this->smtp_password,
+                'encryption' => $this->smtp_encryption,
+                'from_email' => $this->from_email,
+                'from_name' => $this->from_name,
+            ];
             
-            // Use EmailService for consistent email sending
-            \App\Services\EmailService::sendRaw(
-                'Esta es una prueba de configuración SMTP desde Linkiu.bio',
-                [$testEmail],
-                'Prueba de configuración SMTP - Linkiu.bio',
-                'support'
-            );
+            // Usar MailManager para envío directo
+            $mailManager = new \App\Mail\MailManager($config);
+            $result = $mailManager->testConnection($testEmail);
 
             // Actualizar resultado de la prueba
             $this->update([
                 'last_test_at' => now(),
-                'last_test_result' => 'Conexión exitosa'
+                'last_test_result' => $result['success'] ? 'Conexión exitosa' : $result['message']
             ]);
 
-            return [
-                'success' => true,
-                'message' => 'Email de prueba enviado correctamente.'
-            ];
+            return $result;
 
         } catch (\Exception $e) {
             // Actualizar resultado de la prueba con error
