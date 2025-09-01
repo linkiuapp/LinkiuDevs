@@ -370,130 +370,51 @@ class EmailService
     }
 
     /**
-     * Send test email
+     * Send test email - Uses the same logic as testConnection() that works
      */
     public static function sendTestEmail(string $email): array
     {
         try {
-            // Guardar configuración original
-            $originalConfig = config('mail.mailers.smtp');
-            $originalFrom = config('mail.from');
-            
-            // Obtener configuración de la base de datos
+            // USAR EXACTAMENTE EL MISMO MÉTODO QUE testConnection()
             $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
             
-            // Si hay configuración en BD, usar esa; si no, usar .env
-            if ($emailConfig && $emailConfig->isComplete()) {
-                // Log para debugging
-                Log::info('EmailService::sendTestEmail using database config', [
-                    'host' => $emailConfig->smtp_host,
-                    'port' => $emailConfig->smtp_port,
-                    'username' => $emailConfig->smtp_username,
-                    'encryption' => $emailConfig->smtp_encryption,
-                    'from_email' => $emailConfig->from_email,
-                    'password_length' => strlen($emailConfig->smtp_password ?? '')
-                ]);
-                
-                // USAR EL MISMO MÉTODO QUE FUNCIONA EN CLI: applyToMail()
-                $emailConfig->applyToMail();
-                
-                // Configuración SSL adicional para mayor compatibilidad
-                config([
-                    'mail.mailers.smtp.verify_peer' => false,
-                    'mail.mailers.smtp.verify_peer_name' => false,
-                    'mail.mailers.smtp.allow_self_signed' => true,
-                    'mail.mailers.smtp.stream_options' => [
-                        'ssl' => [
-                            'verify_peer' => false,
-                            'verify_peer_name' => false,
-                            'allow_self_signed' => true,
-                            'crypto_method' => STREAM_CRYPTO_METHOD_TLS_CLIENT,
-                        ]
-                    ]
-                ]);
+            if (!$emailConfig || !$emailConfig->isComplete()) {
+                return [
+                    'success' => false,
+                    'message' => 'No hay configuración SMTP completa disponible'
+                ];
+            }
+            
+            // Aplicar configuración (igual que testConnection)
+            $emailConfig->applyToMail();
+            
+            // Usar EmailService::sendRaw (igual que testConnection)
+            $result = static::sendRaw(
+                'Este es un email de prueba desde el sistema de configuración de emails de Linkiu.bio. Si recibes este mensaje, la configuración está funcionando correctamente.',
+                [$email],
+                'Email de Prueba - Linkiu.bio',
+                'store_management' // Usar store_management que coincide con la configuración SMTP
+            );
+            
+            if ($result) {
+                return [
+                    'success' => true,
+                    'message' => 'Email de prueba enviado exitosamente'
+                ];
             } else {
-                Log::info('EmailService::sendTestEmail using .env config');
-                
-                // Usar configuración del .env con SSL permisivo
-                config([
-                    'mail.mailers.smtp.verify_peer' => false,
-                    'mail.mailers.smtp.verify_peer_name' => false,
-                    'mail.mailers.smtp.allow_self_signed' => true,
-                    'mail.mailers.smtp.stream_options' => [
-                        'ssl' => [
-                            'verify_peer' => false,
-                            'verify_peer_name' => false,
-                            'allow_self_signed' => true,
-                            'crypto_method' => STREAM_CRYPTO_METHOD_TLS_CLIENT,
-                        ]
-                    ]
-                ]);
+                return [
+                    'success' => false,
+                    'message' => 'Error al enviar email de prueba'
+                ];
             }
             
-            // FORZAR recreación completa del mailer y manager
-            app()->forgetInstance('mail.manager');
-            app()->forgetInstance('mailer');
-            app()->forgetInstance('swift.mailer');
-            
-            // Purgar el mailer del container para forzar recreación
-            if (app()->bound('mail.manager')) {
-                app()->offsetUnset('mail.manager');
-            }
-
-            // Log configuración final antes de enviar
-            Log::info('EmailService::sendTestEmail final config', [
-                'host' => config('mail.mailers.smtp.host'),
-                'port' => config('mail.mailers.smtp.port'),
-                'username' => config('mail.mailers.smtp.username'),
-                'encryption' => config('mail.mailers.smtp.encryption'),
-                'from_address' => config('mail.from.address'),
-                'from_name' => config('mail.from.name')
-            ]);
-
-            // Usar el mismo método que testConnection() - sin contexto específico
-            Mail::raw('Este es un email de prueba desde el sistema de configuración de emails de Linkiu.bio. Si recibes este mensaje, la configuración está funcionando correctamente.', function ($message) use ($email) {
-                $message->to($email)
-                        ->subject('Email de Prueba - Linkiu.bio')
-                        ->from(config('mail.from.address'), config('mail.from.name'));
-            });
-
-            // Restaurar configuración original
-            config(['mail.mailers.smtp' => $originalConfig]);
-            config(['mail.from' => $originalFrom]);
-            
-            // Limpiar instancias nuevamente para restaurar estado
-            app()->forgetInstance('mail.manager');
-            app()->forgetInstance('mailer');
-
-            return [
-                'success' => true,
-                'message' => 'Email de prueba enviado exitosamente'
-            ];
         } catch (Exception $e) {
-            // Restaurar configuración original en caso de error
-            if (isset($originalConfig)) {
-                config(['mail.mailers.smtp' => $originalConfig]);
-            }
-            if (isset($originalFrom)) {
-                config(['mail.from' => $originalFrom]);
-            }
-            
-            // Limpiar instancias en caso de error
-            app()->forgetInstance('mail.manager');
-            app()->forgetInstance('mailer');
-            
             Log::error('Test email failed', [
                 'email' => $email,
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-                'mail_config' => [
-                    'host' => config('mail.mailers.smtp.host'),
-                    'port' => config('mail.mailers.smtp.port'),
-                    'encryption' => config('mail.mailers.smtp.encryption'),
-                    'username' => config('mail.mailers.smtp.username'),
-                ]
+                'trace' => $e->getTraceAsString()
             ]);
-
+            
             // Proporcionar mensaje de error más específico
             $errorMessage = $e->getMessage();
             if (strpos($errorMessage, 'certificate verify failed') !== false) {
@@ -503,7 +424,7 @@ class EmailService
             } elseif (strpos($errorMessage, 'Authentication failed') !== false || strpos($errorMessage, 'Incorrect authentication data') !== false) {
                 $errorMessage = 'Error de autenticación SMTP. Verificar MAIL_USERNAME y MAIL_PASSWORD';
             }
-
+            
             return [
                 'success' => false,
                 'message' => 'Error al enviar email: ' . $errorMessage
