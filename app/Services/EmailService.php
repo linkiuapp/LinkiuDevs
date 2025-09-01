@@ -195,10 +195,10 @@ class EmailService
                 </p>
             ';
 
-            // Enviar desde soporte para pruebas
+            // Enviar desde la cuenta autenticada
             Mail::send([], [], function ($message) use ($recipientEmail, $subject, $body) {
                 $message->to($recipientEmail)
-                       ->from('soporte@linkiu.email', 'LinkiuBio Soporte')
+                       ->from(env('MAIL_FROM_ADDRESS', 'no-responder@linkiu.email'), 'LinkiuBio Sistema')
                        ->subject($subject)
                        ->html($body);
             });
