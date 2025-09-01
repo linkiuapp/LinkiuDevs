@@ -3,7 +3,8 @@
 namespace App\Mail;
 
 use Illuminate\Support\Facades\Log;
-use App\Services\EmailService;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Config;
 use Exception;
 
 /**
@@ -59,7 +60,7 @@ class DirectSMTPManager
     }
     
     /**
-     * Enviar email usando exactamente el mismo método que EmailConfiguration
+     * Enviar email usando Mail::raw directamente (sin dependencias)
      */
     public function send(string $to, string $subject, string $body): array
     {
@@ -67,19 +68,18 @@ class DirectSMTPManager
             Log::info('DirectSMTP: Iniciando envío', [
                 'to' => $to,
                 'subject' => $subject,
-                'method' => 'direct_sendraw_exact'
+                'method' => 'mail_raw_direct'
             ]);
             
             // Aplicar configuración exactamente como EmailConfiguration
             $this->applyToMail();
             
-            // Usar EmailService::sendRaw exactamente como EmailConfiguration
-            EmailService::sendRaw(
-                $body,
-                [$to],
-                $subject,
-                'support'
-            );
+            // Usar Mail::raw directamente (sin EmailService que puede causar problemas)
+            Mail::raw($body, function ($message) use ($to, $subject) {
+                $message->to($to)
+                       ->from($this->config['from_email'], $this->config['from_name'])
+                       ->subject($subject);
+            });
             
             Log::info('DirectSMTP: Email enviado exitosamente', [
                 'to' => $to,
