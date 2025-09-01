@@ -236,18 +236,18 @@ class EmailService
             'mail.default' => 'smtp',
             'mail.mailers.smtp' => [
                 'transport' => 'smtp',
-                'host' => env('MAIL_HOST', self::$smtpConfig['host']),
-                'port' => env('MAIL_PORT', self::$smtpConfig['port']),
-                'encryption' => env('MAIL_ENCRYPTION', self::$smtpConfig['encryption']),
-                'username' => env('MAIL_USERNAME', self::$smtpConfig['username']),
-                'password' => env('MAIL_PASSWORD'),
-                'verify_peer' => env('MAIL_VERIFY_PEER', self::$smtpConfig['verify_peer']),
-                'verify_peer_name' => env('MAIL_VERIFY_PEER_NAME', self::$smtpConfig['verify_peer_name']),
-                'allow_self_signed' => env('MAIL_ALLOW_SELF_SIGNED', self::$smtpConfig['allow_self_signed']),
+                'host' => config('mail.mailers.smtp.host', self::$smtpConfig['host']),
+                'port' => config('mail.mailers.smtp.port', self::$smtpConfig['port']),
+                'encryption' => config('mail.mailers.smtp.encryption', self::$smtpConfig['encryption']),
+                'username' => config('mail.mailers.smtp.username', self::$smtpConfig['username']),
+                'password' => config('mail.mailers.smtp.password'),
+                'verify_peer' => config('mail.mailers.smtp.verify_peer', self::$smtpConfig['verify_peer']),
+                'verify_peer_name' => config('mail.mailers.smtp.verify_peer_name', self::$smtpConfig['verify_peer_name']),
+                'allow_self_signed' => config('mail.mailers.smtp.allow_self_signed', self::$smtpConfig['allow_self_signed']),
             ],
             'mail.from' => [
-                'address' => env('MAIL_FROM_ADDRESS', self::$smtpConfig['username']),
-                'name' => env('MAIL_FROM_NAME', 'LinkiuBio')
+                'address' => config('mail.from.address', self::$smtpConfig['username']),
+                'name' => config('mail.from.name', 'LinkiuBio')
             ]
         ]);
 
