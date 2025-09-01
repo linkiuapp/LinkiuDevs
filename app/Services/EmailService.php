@@ -370,7 +370,7 @@ class EmailService
     }
 
     /**
-     * Send test email - Llama directamente a testConnection() que funciona
+     * Send test email - Bypass completo del sistema Laravel Mail
      */
     public static function sendTestEmail(string $email): array
     {
@@ -383,7 +383,7 @@ class EmailService
                 ];
             }
             
-            // Obtener configuración y llamar directamente a testConnection()
+            // Obtener configuración SMTP
             $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
             if (!$emailConfig || !$emailConfig->isComplete()) {
                 return [
@@ -392,11 +392,38 @@ class EmailService
                 ];
             }
             
-            // Llamar directamente al método que sabemos que funciona
-            return $emailConfig->testConnection($email);
+            // Usar Swift Mailer directamente (bypass Laravel Mail)
+            $transport = new \Swift_SmtpTransport($emailConfig->smtp_host, $emailConfig->smtp_port);
+            $transport->setUsername($emailConfig->smtp_username);
+            $transport->setPassword($emailConfig->smtp_password);
+            
+            if ($emailConfig->smtp_encryption && $emailConfig->smtp_encryption !== 'none') {
+                $transport->setEncryption($emailConfig->smtp_encryption);
+            }
+            
+            $mailer = new \Swift_Mailer($transport);
+            
+            $message = new \Swift_Message('Prueba de configuración SMTP - Linkiu.bio');
+            $message->setFrom([$emailConfig->from_email => $emailConfig->from_name]);
+            $message->setTo([$email]);
+            $message->setBody('Esta es una prueba de configuración SMTP desde Linkiu.bio usando Swift Mailer directo.');
+            
+            $result = $mailer->send($message);
+            
+            if ($result > 0) {
+                return [
+                    'success' => true,
+                    'message' => 'Email de prueba enviado correctamente'
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'message' => 'No se pudo enviar el email'
+                ];
+            }
             
         } catch (Exception $e) {
-            Log::error('Test email failed', [
+            Log::error('Test email failed (Swift direct)', [
                 'email' => $email,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
