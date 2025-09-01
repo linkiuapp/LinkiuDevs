@@ -24,4 +24,8 @@ Route::get('/store/{slug}/status', function($slug) {
     } catch (\Exception $e) {
         return response()->json(['error' => 'Server error'], 500);
     }
-}); 
+});
+
+// API para test de email (contexto diferente)
+Route::post('/email/test', [\App\Http\Controllers\Api\EmailTestController::class, 'sendTest'])
+    ->middleware('auth:sanctum'); 

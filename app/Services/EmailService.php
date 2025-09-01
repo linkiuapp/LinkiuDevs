@@ -370,9 +370,69 @@ class EmailService
     }
 
     /**
-     * Send test email - Configurar entorno como CLI y usar Mail::raw
+     * Send test email - Usar Queue Job para evitar problemas de contexto web
      */
     public static function sendTestEmail(string $email): array
+    {
+        try {
+            // Validar email
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                return [
+                    'success' => false,
+                    'message' => 'Email inválido'
+                ];
+            }
+            
+            // Generar ID único para el job
+            $jobId = uniqid('test_email_', true);
+            
+            // Dispatch job en background
+            \App\Jobs\SendTestEmailJob::dispatch($email, $jobId);
+            
+            // Esperar un momento para que el job se ejecute
+            sleep(3);
+            
+            // Verificar resultado en logs
+            $logFile = storage_path('logs/laravel.log');
+            if (file_exists($logFile)) {
+                $logs = file_get_contents($logFile);
+                if (strpos($logs, "job_id\":\"{$jobId}\"") !== false) {
+                    if (strpos($logs, "\"success\":true") !== false) {
+                        return [
+                            'success' => true,
+                            'message' => 'Email de prueba enviado correctamente'
+                        ];
+                    } else {
+                        return [
+                            'success' => false,
+                            'message' => 'Error al enviar email de prueba'
+                        ];
+                    }
+                }
+            }
+            
+            return [
+                'success' => true,
+                'message' => 'Email de prueba enviado en background'
+            ];
+            
+        } catch (Exception $e) {
+            Log::error('Test email job dispatch failed', [
+                'email' => $email,
+                'error' => $e->getMessage()
+            ]);
+            
+            return [
+                'success' => false,
+                'message' => 'Error al procesar solicitud: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Send test email - BACKUP: Configurar entorno como CLI y usar Mail::raw
+     */
+    public static function sendTestEmailBackup(string $email): array
     {
         try {
             // Validar email
