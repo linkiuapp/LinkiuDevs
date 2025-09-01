@@ -377,21 +377,28 @@ class EmailService
         try {
             // Guardar configuración original
             $originalConfig = config('mail.mailers.smtp');
+            $originalFrom = config('mail.from');
             
             // Obtener configuración de la base de datos
             $emailConfig = \App\Shared\Models\EmailConfiguration::getActive();
             
             // Si hay configuración en BD, usar esa; si no, usar .env
             if ($emailConfig && $emailConfig->isComplete()) {
-                // FORZAR configuración completa desde BD
+                // Log para debugging
+                Log::info('EmailService::sendTestEmail using database config', [
+                    'host' => $emailConfig->smtp_host,
+                    'port' => $emailConfig->smtp_port,
+                    'username' => $emailConfig->smtp_username,
+                    'encryption' => $emailConfig->smtp_encryption,
+                    'from_email' => $emailConfig->from_email,
+                    'password_length' => strlen($emailConfig->smtp_password ?? '')
+                ]);
+                
+                // USAR EL MISMO MÉTODO QUE FUNCIONA EN CLI: applyToMail()
+                $emailConfig->applyToMail();
+                
+                // Configuración SSL adicional para mayor compatibilidad
                 config([
-                    'mail.mailers.smtp.host' => $emailConfig->smtp_host,
-                    'mail.mailers.smtp.port' => $emailConfig->smtp_port,
-                    'mail.mailers.smtp.username' => $emailConfig->smtp_username,
-                    'mail.mailers.smtp.password' => $emailConfig->smtp_password,
-                    'mail.mailers.smtp.encryption' => $emailConfig->smtp_encryption,
-                    'mail.from.address' => $emailConfig->from_email,
-                    'mail.from.name' => $emailConfig->from_name,
                     'mail.mailers.smtp.verify_peer' => false,
                     'mail.mailers.smtp.verify_peer_name' => false,
                     'mail.mailers.smtp.allow_self_signed' => true,
@@ -405,6 +412,8 @@ class EmailService
                     ]
                 ]);
             } else {
+                Log::info('EmailService::sendTestEmail using .env config');
+                
                 // Usar configuración del .env con SSL permisivo
                 config([
                     'mail.mailers.smtp.verify_peer' => false,
@@ -421,9 +430,25 @@ class EmailService
                 ]);
             }
             
-            // FORZAR recreación del mailer
+            // FORZAR recreación completa del mailer y manager
             app()->forgetInstance('mail.manager');
             app()->forgetInstance('mailer');
+            app()->forgetInstance('swift.mailer');
+            
+            // Purgar el mailer del container para forzar recreación
+            if (app()->bound('mail.manager')) {
+                app()->offsetUnset('mail.manager');
+            }
+
+            // Log configuración final antes de enviar
+            Log::info('EmailService::sendTestEmail final config', [
+                'host' => config('mail.mailers.smtp.host'),
+                'port' => config('mail.mailers.smtp.port'),
+                'username' => config('mail.mailers.smtp.username'),
+                'encryption' => config('mail.mailers.smtp.encryption'),
+                'from_address' => config('mail.from.address'),
+                'from_name' => config('mail.from.name')
+            ]);
 
             Mail::raw('Este es un email de prueba desde el sistema de configuración de emails de Linkiu.bio. Si recibes este mensaje, la configuración está funcionando correctamente.', function ($message) use ($email) {
                 $message->to($email)
@@ -433,6 +458,11 @@ class EmailService
 
             // Restaurar configuración original
             config(['mail.mailers.smtp' => $originalConfig]);
+            config(['mail.from' => $originalFrom]);
+            
+            // Limpiar instancias nuevamente para restaurar estado
+            app()->forgetInstance('mail.manager');
+            app()->forgetInstance('mailer');
 
             return [
                 'success' => true,
@@ -443,10 +473,18 @@ class EmailService
             if (isset($originalConfig)) {
                 config(['mail.mailers.smtp' => $originalConfig]);
             }
+            if (isset($originalFrom)) {
+                config(['mail.from' => $originalFrom]);
+            }
+            
+            // Limpiar instancias en caso de error
+            app()->forgetInstance('mail.manager');
+            app()->forgetInstance('mailer');
             
             Log::error('Test email failed', [
                 'email' => $email,
                 'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
                 'mail_config' => [
                     'host' => config('mail.mailers.smtp.host'),
                     'port' => config('mail.mailers.smtp.port'),
@@ -461,8 +499,8 @@ class EmailService
                 $errorMessage = 'Error de certificado SSL. Verificar configuración MAIL_VERIFY_PEER=false en .env';
             } elseif (strpos($errorMessage, 'Connection refused') !== false) {
                 $errorMessage = 'No se puede conectar al servidor SMTP. Verificar MAIL_HOST y MAIL_PORT';
-            } elseif (strpos($errorMessage, 'Authentication failed') !== false) {
-                $errorMessage = 'Error de autenticación. Verificar MAIL_USERNAME y MAIL_PASSWORD (App Password)';
+            } elseif (strpos($errorMessage, 'Authentication failed') !== false || strpos($errorMessage, 'Incorrect authentication data') !== false) {
+                $errorMessage = 'Error de autenticación SMTP. Verificar MAIL_USERNAME y MAIL_PASSWORD';
             }
 
             return [
