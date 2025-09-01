@@ -156,8 +156,20 @@ class PHPMailerManager
             fwrite($socket, $command . "\r\n");
         }
         
-        $response = fgets($socket, 512);
-        $code = substr($response, 0, 3);
+        // Leer respuesta completa (puede ser multilinea)
+        $response = '';
+        $code = '';
+        
+        do {
+            $line = fgets($socket, 512);
+            $response .= $line;
+            
+            if (empty($code)) {
+                $code = substr($line, 0, 3);
+            }
+            
+            // Continuar leyendo si hay más líneas (formato: "220-mensaje" vs "220 mensaje")
+        } while (strlen($line) >= 4 && $line[3] === '-');
         
         if ($code !== $expectedCode) {
             throw new Exception("SMTP Error: Expected {$expectedCode}, got {$code} - {$response}");

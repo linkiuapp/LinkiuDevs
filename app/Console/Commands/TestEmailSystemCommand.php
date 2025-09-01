@@ -54,6 +54,23 @@ class TestEmailSystemCommand extends Command
         
         $this->newLine();
         
+        // Test 1.6: CLIMailManager (Comando Artisan)
+        $this->info("1️⃣.6 Probando CLIMailManager (Comando Artisan)...");
+        try {
+            $cliMailer = new \App\Mail\CLIMailManager();
+            $result = $cliMailer->testConnection($email);
+            
+            if ($result['success']) {
+                $this->info("✅ CLIMailManager: " . $result['message']);
+            } else {
+                $this->error("❌ CLIMailManager: " . $result['message']);
+            }
+        } catch (\Exception $e) {
+            $this->error("❌ CLIMailManager Exception: " . $e->getMessage());
+        }
+        
+        $this->newLine();
+        
         // Test 2: EmailService
         $this->info("2️⃣ Probando EmailService...");
         try {

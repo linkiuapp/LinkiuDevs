@@ -370,7 +370,7 @@ class EmailService
     }
 
     /**
-     * Send test email - Usando PHP nativo como método principal
+     * Send test email - Usando CLI que sabemos que funciona
      */
     public static function sendTestEmail(string $email): array
     {
@@ -385,12 +385,12 @@ class EmailService
             
             Log::info('Iniciando test de email', [
                 'email' => $email,
-                'method' => 'php_native_primary'
+                'method' => 'cli_artisan'
             ]);
             
-            // Usar PHP nativo como método principal (más confiable)
-            $phpMailer = new \App\Mail\PHPMailerManager();
-            return $phpMailer->testConnection($email);
+            // Usar CLI Manager que ejecuta el comando que funciona
+            $cliMailer = new \App\Mail\CLIMailManager();
+            return $cliMailer->testConnection($email);
             
         } catch (Exception $e) {
             Log::error('Test email failed', [

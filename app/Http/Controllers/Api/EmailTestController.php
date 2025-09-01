@@ -27,9 +27,9 @@ class EmailTestController extends Controller
                 'user_agent' => $request->userAgent()
             ]);
             
-            // Usar PHP nativo directamente (más confiable)
-            $phpMailer = new \App\Mail\PHPMailerManager();
-            $result = $phpMailer->testConnection($email);
+            // Usar CLI Manager que ejecuta el comando que funciona
+            $cliMailer = new \App\Mail\CLIMailManager();
+            $result = $cliMailer->testConnection($email);
             
             Log::info('API: Resultado test de email', [
                 'email' => $email,
@@ -65,8 +65,8 @@ class EmailTestController extends Controller
     public function validateConfig()
     {
         try {
-            $phpMailer = new \App\Mail\PHPMailerManager();
-            $result = $phpMailer->validateConfig();
+            $cliMailer = new \App\Mail\CLIMailManager();
+            $result = $cliMailer->validateConfig();
             
             return response()->json($result);
             
@@ -88,8 +88,8 @@ class EmailTestController extends Controller
     public function getConfig()
     {
         try {
-            $phpMailer = new \App\Mail\PHPMailerManager();
-            $config = $phpMailer->getConfigInfo();
+            $cliMailer = new \App\Mail\CLIMailManager();
+            $config = $cliMailer->getConfigInfo();
             
             return response()->json([
                 'success' => true,

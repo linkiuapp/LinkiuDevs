@@ -136,9 +136,9 @@ class EmailConfiguration extends Model
                 'from_name' => $this->from_name,
             ];
             
-            // Usar PHPMailerManager para envío directo (más confiable)
-            $phpMailer = new \App\Mail\PHPMailerManager($config);
-            $result = $phpMailer->testConnection($testEmail);
+            // Usar CLIMailManager que ejecuta el comando que funciona
+            $cliMailer = new \App\Mail\CLIMailManager($config);
+            $result = $cliMailer->testConnection($testEmail);
 
             // Actualizar resultado de la prueba
             $this->update([
