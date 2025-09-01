@@ -218,11 +218,11 @@ function testEmailSending() {
         event.target.textContent = 'Enviando...';
         event.target.disabled = true;
         
-        // Usar endpoint API alternativo
+        // Usar endpoint original con Queue Job
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 30000);
         
-        fetch('/api/email/test', {
+        fetch('{{ route("superlinkiu.email.send-test") }}', {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),

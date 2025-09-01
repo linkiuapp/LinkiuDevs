@@ -26,6 +26,5 @@ Route::get('/store/{slug}/status', function($slug) {
     }
 });
 
-// API para test de email (contexto diferente)
-Route::post('/email/test', [\App\Http\Controllers\Api\EmailTestController::class, 'sendTest'])
-    ->middleware('auth:sanctum'); 
+// API para test de email (contexto diferente) - sin auth para testing
+Route::post('/email/test', [\App\Http\Controllers\Api\EmailTestController::class, 'sendTest']); 

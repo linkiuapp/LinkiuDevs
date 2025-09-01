@@ -386,11 +386,11 @@ class EmailService
             // Generar ID único para el job
             $jobId = uniqid('test_email_', true);
             
-            // Dispatch job en background
-            \App\Jobs\SendTestEmailJob::dispatch($email, $jobId);
+            // Dispatch job síncrono (ejecutar inmediatamente)
+            \App\Jobs\SendTestEmailJob::dispatchSync($email, $jobId);
             
-            // Esperar un momento para que el job se ejecute
-            sleep(3);
+            // Job ejecutado síncronamente, verificar resultado
+            sleep(1);
             
             // Verificar resultado en logs
             $logFile = storage_path('logs/laravel.log');
