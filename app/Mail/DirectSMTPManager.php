@@ -41,24 +41,11 @@ class DirectSMTPManager
     }
     
     /**
-     * Aplicar configuración SMTP temporalmente (como hace el CLI)
+     * Aplicar configuración SMTP exactamente como EmailConfiguration
      */
-    private function applyConfigTemporarily()
+    private function applyToMail()
     {
-        // Backup configuración actual
-        $backup = [
-            'MAIL_MAILER' => env('MAIL_MAILER'),
-            'MAIL_HOST' => env('MAIL_HOST'),
-            'MAIL_PORT' => env('MAIL_PORT'),
-            'MAIL_USERNAME' => env('MAIL_USERNAME'),
-            'MAIL_PASSWORD' => env('MAIL_PASSWORD'),
-            'MAIL_ENCRYPTION' => env('MAIL_ENCRYPTION'),
-            'MAIL_FROM_ADDRESS' => env('MAIL_FROM_ADDRESS'),
-            'MAIL_FROM_NAME' => env('MAIL_FROM_NAME'),
-        ];
-        
-        // Establecer configuración temporal
-        config([
+        \Illuminate\Support\Facades\Config::set([
             'mail.mailers.smtp.host' => $this->config['host'],
             'mail.mailers.smtp.port' => $this->config['port'],
             'mail.mailers.smtp.username' => $this->config['username'],
@@ -68,64 +55,41 @@ class DirectSMTPManager
             'mail.from.name' => $this->config['from_name'],
         ]);
         
-        // Limpiar instancias para forzar recarga
-        app()->forgetInstance('mailer');
-        app()->forgetInstance('mail.manager');
-        
-        return $backup;
+        return true;
     }
     
     /**
-     * Restaurar configuración original
-     */
-    private function restoreConfig(array $backup)
-    {
-        foreach ($backup as $key => $value) {
-            if ($value !== null) {
-                putenv("{$key}={$value}");
-            }
-        }
-        
-        app()->forgetInstance('mailer');
-        app()->forgetInstance('mail.manager');
-    }
-    
-    /**
-     * Enviar email usando el método sendRaw que funciona
+     * Enviar email usando exactamente el mismo método que EmailConfiguration
      */
     public function send(string $to, string $subject, string $body): array
     {
-        $backup = null;
-        
         try {
             Log::info('DirectSMTP: Iniciando envío', [
                 'to' => $to,
                 'subject' => $subject,
-                'method' => 'direct_sendraw'
+                'method' => 'direct_sendraw_exact'
             ]);
             
-            // Aplicar configuración temporalmente
-            $backup = $this->applyConfigTemporarily();
+            // Aplicar configuración exactamente como EmailConfiguration
+            $this->applyToMail();
             
-            // Usar EmailService::sendRaw que sabemos que funciona
-            $success = EmailService::sendRaw(
+            // Usar EmailService::sendRaw exactamente como EmailConfiguration
+            EmailService::sendRaw(
                 $body,
                 [$to],
                 $subject,
                 'support'
             );
             
-            if ($success) {
-                return [
-                    'success' => true,
-                    'message' => 'Email enviado correctamente'
-                ];
-            } else {
-                return [
-                    'success' => false,
-                    'message' => 'Error al enviar email'
-                ];
-            }
+            Log::info('DirectSMTP: Email enviado exitosamente', [
+                'to' => $to,
+                'subject' => $subject
+            ]);
+            
+            return [
+                'success' => true,
+                'message' => 'Email enviado correctamente'
+            ];
             
         } catch (Exception $e) {
             Log::error('DirectSMTP: Error enviando email', [
@@ -138,11 +102,6 @@ class DirectSMTPManager
                 'success' => false,
                 'message' => 'Error al enviar email: ' . $e->getMessage()
             ];
-        } finally {
-            // Restaurar configuración original
-            if ($backup) {
-                $this->restoreConfig($backup);
-            }
         }
     }
     
