@@ -93,7 +93,7 @@
                                         <div class="flex flex-wrap gap-1">
                                             @foreach($template->variables as $variable)
                                                 <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-mono bg-primary-100 text-primary-300">
-                                                    {{{{$variable}}}}
+                                                    &#123;&#123; {{ $variable }} &#125;&#125;
                                                 </span>
                                             @endforeach
                                         </div>

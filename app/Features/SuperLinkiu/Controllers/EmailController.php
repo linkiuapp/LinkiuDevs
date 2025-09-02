@@ -57,8 +57,20 @@ class EmailController extends Controller
             ], 429);
         }
 
-        // Enviar email de prueba
-        $result = EmailService::sendTestEmail($request->test_email);
+        // Enviar email de prueba usando sistema de colas
+        try {
+            \App\Jobs\SendEmailJob::dispatch('test', $request->test_email);
+            
+            $result = [
+                'success' => true,
+                'message' => 'Email de prueba enviado a la cola de procesamiento. Se entregará en breve.'
+            ];
+        } catch (\Exception $e) {
+            $result = [
+                'success' => false,
+                'message' => 'Error al encolar email: ' . $e->getMessage()
+            ];
+        }
 
         // Cache del rate limiting
         if ($result['success']) {

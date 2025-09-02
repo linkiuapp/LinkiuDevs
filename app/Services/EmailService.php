@@ -178,33 +178,48 @@ class EmailService
                 ];
             }
 
-            // Configurar SMTP
-            self::configureSMTP();
+            // Detectar contexto y usar método apropiado
+            if (php_sapi_name() === 'cli') {
+                // CLI: usar Mail::send (funciona)
+                self::configureSMTP();
 
-            $subject = 'Prueba de configuración SMTP - ' . config('app.name');
-            $body = '
-                <h1>¡Configuración SMTP funcionando correctamente!</h1>
-                <p>Este es un email de prueba desde <strong>' . config('app.name') . '</strong></p>
-                <p><strong>Fecha:</strong> ' . now()->format('d/m/Y H:i:s') . '</p>
-                <p><strong>Servidor SMTP:</strong> ' . self::$smtpConfig['host'] . '</p>
-                <p><strong>Puerto:</strong> ' . self::$smtpConfig['port'] . '</p>
-                <p>Si recibes este mensaje, la configuración de email está funcionando perfectamente.</p>
-                <hr>
-                <p style="color: #666; font-size: 12px;">
-                    Sistema de emails de LinkiuBio - ' . config('app.url') . '
-                </p>
-            ';
+                $subject = 'Prueba de configuración SMTP - ' . config('app.name');
+                $body = '
+                    <h1>¡Configuración SMTP funcionando correctamente!</h1>
+                    <p>Este es un email de prueba desde <strong>' . config('app.name') . '</strong></p>
+                    <p><strong>Fecha:</strong> ' . now()->format('d/m/Y H:i:s') . '</p>
+                    <p><strong>Servidor SMTP:</strong> ' . self::$smtpConfig['host'] . '</p>
+                    <p><strong>Puerto:</strong> ' . self::$smtpConfig['port'] . '</p>
+                    <p>Si recibes este mensaje, la configuración de email está funcionando perfectamente.</p>
+                    <hr>
+                    <p style="color: #666; font-size: 12px;">
+                        Sistema de emails de LinkiuBio - ' . config('app.url') . '
+                    </p>
+                ';
 
-            // Enviar desde la cuenta autenticada
-            Mail::send([], [], function ($message) use ($recipientEmail, $subject, $body) {
-                $message->to($recipientEmail)
-                       ->from(env('MAIL_FROM_ADDRESS', 'no-responder@linkiu.email'), 'LinkiuBio Sistema')
-                       ->subject($subject)
-                       ->html($body);
-            });
+                // Enviar desde la cuenta autenticada
+                Mail::send([], [], function ($message) use ($recipientEmail, $subject, $body) {
+                    $message->to($recipientEmail)
+                           ->from(env('MAIL_FROM_ADDRESS', 'no-responder@linkiu.email'), 'LinkiuBio Sistema')
+                           ->subject($subject)
+                           ->html($body);
+                });
+            } else {
+                // WEB: usar implementación SMTP manual
+                $result = self::sendEmailManual(
+                    $recipientEmail,
+                    'Prueba de configuración SMTP - ' . config('app.name'),
+                    'Este es un email de prueba desde ' . config('app.name') . ' enviado el ' . now()->format('d/m/Y H:i:s')
+                );
+                
+                if (!$result['success']) {
+                    return $result;
+                }
+            }
 
             Log::info('Email de prueba enviado exitosamente', [
                 'recipient' => $recipientEmail,
+                'method' => php_sapi_name() === 'cli' ? 'Laravel Mail' : 'Manual SMTP',
                 'smtp_host' => self::$smtpConfig['host']
             ]);
 
@@ -228,6 +243,112 @@ class EmailService
     }
 
     /**
+     * Envío SMTP manual para contexto WEB (evita problemas con Symfony Mailer)
+     */
+    private static function sendEmailManual(string $to, string $subject, string $body): array
+    {
+        try {
+            $context = stream_context_create([
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true,
+                ]
+            ]);
+            
+            $socket = stream_socket_client('ssl://mail.linkiu.email:465', $errno, $errstr, 30, STREAM_CLIENT_CONNECT, $context);
+            
+            if (!$socket) {
+                return ['success' => false, 'message' => "Error conectando: $errstr"];
+            }
+            
+            // Leer banner completo (múltiples líneas 220-)
+            do {
+                $line = fgets($socket);
+            } while (substr($line, 3, 1) !== ' ');
+            
+            // EHLO completo
+            fwrite($socket, "EHLO linkiu.bio\r\n");
+            do {
+                $line = fgets($socket);
+            } while (substr($line, 3, 1) !== ' ');
+            
+            // AUTH LOGIN
+            fwrite($socket, "AUTH LOGIN\r\n");
+            $auth_response = fgets($socket);
+            if (strpos($auth_response, '334') !== 0) {
+                fclose($socket);
+                return ['success' => false, 'message' => "AUTH LOGIN falló: $auth_response"];
+            }
+            
+            // Username
+            fwrite($socket, base64_encode('no-responder@linkiu.email') . "\r\n");
+            $user_response = fgets($socket);
+            if (strpos($user_response, '334') !== 0) {
+                fclose($socket);
+                return ['success' => false, 'message' => "Username falló: $user_response"];
+            }
+            
+            // Password
+            fwrite($socket, base64_encode('t1fChP1pYbDYVt80e6') . "\r\n");
+            $pass_response = fgets($socket);
+            if (strpos($pass_response, '235') !== 0) {
+                fclose($socket);
+                return ['success' => false, 'message' => "Password falló: $pass_response"];
+            }
+            
+            // MAIL FROM
+            fwrite($socket, "MAIL FROM: <no-responder@linkiu.email>\r\n");
+            $from_response = fgets($socket);
+            if (strpos($from_response, '250') !== 0) {
+                fclose($socket);
+                return ['success' => false, 'message' => "MAIL FROM falló: $from_response"];
+            }
+            
+            // RCPT TO
+            fwrite($socket, "RCPT TO: <$to>\r\n");
+            $rcpt_response = fgets($socket);
+            if (strpos($rcpt_response, '250') !== 0) {
+                fclose($socket);
+                return ['success' => false, 'message' => "RCPT TO falló: $rcpt_response"];
+            }
+            
+            // DATA
+            fwrite($socket, "DATA\r\n");
+            $data_response = fgets($socket);
+            if (strpos($data_response, '354') !== 0) {
+                fclose($socket);
+                return ['success' => false, 'message' => "DATA falló: $data_response"];
+            }
+            
+            // Email content
+            $email = "From: no-responder@linkiu.email\r\n";
+            $email .= "To: $to\r\n";
+            $email .= "Subject: $subject\r\n";
+            $email .= "Content-Type: text/plain; charset=UTF-8\r\n";
+            $email .= "\r\n";
+            $email .= "$body\r\n";
+            $email .= ".\r\n";
+            
+            fwrite($socket, $email);
+            $send_response = fgets($socket);
+            if (strpos($send_response, '250') !== 0) {
+                fclose($socket);
+                return ['success' => false, 'message' => "Envío falló: $send_response"];
+            }
+            
+            // QUIT
+            fwrite($socket, "QUIT\r\n");
+            fclose($socket);
+            
+            return ['success' => true, 'message' => 'Email enviado exitosamente via SMTP manual'];
+            
+        } catch (Exception $e) {
+            return ['success' => false, 'message' => "Error SMTP manual: " . $e->getMessage()];
+        }
+    }
+
+    /**
      * Configurar SMTP usando la configuración de producción
      */
     private static function configureSMTP(): void
@@ -241,9 +362,16 @@ class EmailService
                 'encryption' => config('mail.mailers.smtp.encryption', self::$smtpConfig['encryption']),
                 'username' => config('mail.mailers.smtp.username', self::$smtpConfig['username']),
                 'password' => config('mail.mailers.smtp.password'),
-                'verify_peer' => config('mail.mailers.smtp.verify_peer', self::$smtpConfig['verify_peer']),
-                'verify_peer_name' => config('mail.mailers.smtp.verify_peer_name', self::$smtpConfig['verify_peer_name']),
-                'allow_self_signed' => config('mail.mailers.smtp.allow_self_signed', self::$smtpConfig['allow_self_signed']),
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true,
+                'stream' => [
+                    'ssl' => [
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
+                        'allow_self_signed' => true,
+                    ]
+                ]
             ],
             'mail.from' => [
                 'address' => config('mail.from.address', self::$smtpConfig['username']),

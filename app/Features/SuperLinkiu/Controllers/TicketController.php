@@ -260,12 +260,16 @@ class TicketController extends Controller
         }
 
         // Crear nota interna del cambio
+        $oldStatusLabel = $ticket->getStatusLabelAttribute();
         $ticket->addResponse(
             auth()->id(),
-            "Estado cambiado de '{$ticket->getStatusLabelAttribute()}' a '{$ticket->fresh()->getStatusLabelAttribute()}'",
+            "Estado cambiado de '{$oldStatusLabel}' a '{$ticket->fresh()->getStatusLabelAttribute()}'",
             'status_change',
             false
         );
+
+        // Enviar notificación de actualización
+        $this->sendTicketUpdateNotification($ticket, "Estado cambiado de '{$oldStatusLabel}' a '{$ticket->fresh()->getStatusLabelAttribute()}'");
 
         return response()->json([
             'success' => true,
@@ -301,6 +305,9 @@ class TicketController extends Controller
             false
         );
 
+        // Enviar notificación de actualización
+        $this->sendTicketUpdateNotification($ticket, $message);
+
         return response()->json([
             'success' => true,
             'message' => 'Asignación actualizada exitosamente',
@@ -326,6 +333,9 @@ class TicketController extends Controller
             'status_change',
             false
         );
+
+        // Enviar notificación de actualización
+        $this->sendTicketUpdateNotification($ticket, "Prioridad cambiada de '{$oldPriority}' a '{$newPriority}'");
 
         return response()->json([
             'success' => true,
@@ -365,14 +375,17 @@ class TicketController extends Controller
             $storeAdminEmail = $ticket->store->admin_email ?? $ticket->store->email;
             
             if ($storeAdminEmail) {
-                \App\Services\EmailService::sendWithTemplate(
-                    'ticket_created',
+                \App\Jobs\SendEmailJob::dispatch(
+                    'template',
                     $storeAdminEmail,
                     [
-                        'ticket_id' => $ticket->ticket_number,
-                        'ticket_subject' => $ticket->title,
-                        'customer_name' => $ticket->store->name,
-                        'status' => $ticket->status_label
+                        'template_key' => 'ticket_created',
+                        'variables' => [
+                            'ticket_id' => $ticket->ticket_number,
+                            'ticket_subject' => $ticket->title,
+                            'customer_name' => $ticket->store->name,
+                            'status' => $ticket->status_label
+                        ]
                     ]
                 );
             }
@@ -380,14 +393,17 @@ class TicketController extends Controller
             // Also notify support team
             $supportEmail = \App\Services\EmailService::getContextEmail('support');
             if ($supportEmail && $supportEmail !== $storeAdminEmail) {
-                \App\Services\EmailService::sendWithTemplate(
-                    'ticket_created',
+                \App\Jobs\SendEmailJob::dispatch(
+                    'template',
                     $supportEmail,
                     [
-                        'ticket_id' => $ticket->ticket_number,
-                        'ticket_subject' => $ticket->title,
-                        'customer_name' => $ticket->store->name,
-                        'status' => $ticket->status_label
+                        'template_key' => 'ticket_created',
+                        'variables' => [
+                            'ticket_id' => $ticket->ticket_number,
+                            'ticket_subject' => $ticket->title,
+                            'customer_name' => $ticket->store->name,
+                            'status' => $ticket->status_label
+                        ]
                     ]
                 );
             }
@@ -410,15 +426,18 @@ class TicketController extends Controller
             $storeAdminEmail = $ticket->store->admin_email ?? $ticket->store->email;
             
             if ($storeAdminEmail) {
-                \App\Services\EmailService::sendWithTemplate(
-                    'ticket_response',
+                \App\Jobs\SendEmailJob::dispatch(
+                    'template',
                     $storeAdminEmail,
                     [
-                        'ticket_id' => $ticket->ticket_number,
-                        'ticket_subject' => $ticket->title,
-                        'customer_name' => $ticket->store->name,
-                        'response' => $response->message,
-                        'status' => $ticket->status_label
+                        'template_key' => 'ticket_response',
+                        'variables' => [
+                            'ticket_id' => $ticket->ticket_number,
+                            'ticket_subject' => $ticket->title,
+                            'customer_name' => $ticket->store->name,
+                            'response' => $response->message,
+                            'status' => $ticket->status_label
+                        ]
                     ]
                 );
             }
@@ -427,6 +446,42 @@ class TicketController extends Controller
             \Log::error('Error sending ticket response notification', [
                 'ticket_id' => $ticket->id,
                 'response_id' => $response->id,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * Send ticket update notification email
+     */
+    private function sendTicketUpdateNotification(Ticket $ticket, string $updateDescription): void
+    {
+        try {
+            // Get store admin email
+            $storeAdminEmail = $ticket->store->admin_email ?? $ticket->store->email;
+            
+            if ($storeAdminEmail) {
+                \App\Jobs\SendEmailJob::dispatch(
+                    'template',
+                    $storeAdminEmail,
+                    [
+                        'template_key' => 'ticket_updated',
+                        'variables' => [
+                            'ticket_id' => $ticket->ticket_number,
+                            'ticket_subject' => $ticket->title,
+                            'customer_name' => $ticket->store->name,
+                            'update_description' => $updateDescription,
+                            'status' => $ticket->status_label,
+                            'priority' => $ticket->priority_label,
+                            'ticket_url' => route('superlinkiu.tickets.show', $ticket)
+                        ]
+                    ]
+                );
+            }
+
+        } catch (\Exception $e) {
+            \Log::error('Error sending ticket update notification', [
+                'ticket_id' => $ticket->id,
                 'error' => $e->getMessage()
             ]);
         }

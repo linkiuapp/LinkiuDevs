@@ -319,6 +319,36 @@ El equipo de {{app_name}}
                 'body_text' => 'Respuesta a tu ticket de soporte\n\nHola {{customer_name}},\n\nHemos respondido a tu ticket de soporte:\n\n- Ticket ID: #{{ticket_id}}\n- Asunto: {{ticket_subject}}\n- Estado: {{status}}\n\nRespuesta:\n{{response}}\n\nVer ticket completo: {{ticket_url}}\n\nEquipo de Soporte - {{app_name}}',
                 'variables' => ['ticket_id', 'ticket_subject', 'customer_name', 'status', 'response', 'ticket_url'],
                 'is_active' => true
+            ],
+            [
+                'key' => 'ticket_updated',
+                'name' => 'Actualizacion de Ticket',
+                'context' => 'support',
+                'subject' => 'Actualizacion en tu ticket #{{ticket_id}}',
+                'body_html' => '
+                    <h1>Actualizacion en tu ticket de soporte</h1>
+                    <p>Hola {{customer_name}},</p>
+                    <p>Tu ticket de soporte ha sido actualizado:</p>
+                    
+                    <ul>
+                        <li><strong>Ticket ID:</strong> #{{ticket_id}}</li>
+                        <li><strong>Asunto:</strong> {{ticket_subject}}</li>
+                        <li><strong>Estado:</strong> {{status}}</li>
+                        <li><strong>Prioridad:</strong> {{priority}}</li>
+                    </ul>
+                    
+                    <div style="background: #e8f5e8; padding: 15px; margin: 15px 0; border-left: 4px solid #28a745;">
+                        <h3>Actualizacion:</h3>
+                        <p>{{update_description}}</p>
+                    </div>
+                    
+                    <p><a href="{{ticket_url}}">Ver ticket completo</a></p>
+                    
+                    <p>Equipo de Soporte - {{app_name}}</p>
+                ',
+                'body_text' => 'Actualizacion en tu ticket de soporte\n\nHola {{customer_name}},\n\nTu ticket de soporte ha sido actualizado:\n\n- Ticket ID: #{{ticket_id}}\n- Asunto: {{ticket_subject}}\n- Estado: {{status}}\n- Prioridad: {{priority}}\n\nActualizacion:\n{{update_description}}\n\nVer ticket completo: {{ticket_url}}\n\nEquipo de Soporte - {{app_name}}',
+                'variables' => ['ticket_id', 'ticket_subject', 'customer_name', 'status', 'priority', 'update_description', 'ticket_url'],
+                'is_active' => true
             ]
         ];
 

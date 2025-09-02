@@ -57,14 +57,14 @@
             @foreach($availableVariables as $variable)
                 <button @click="insertVariable('{{ $variable }}')"
                         class="text-left p-3 bg-white border border-accent-200 rounded-lg hover:border-primary-200 transition-colors">
-                    <code class="text-sm font-mono text-primary-300">{{{{{{ $variable }}}}}}</code>
+                    <code class="text-sm font-mono text-primary-300">&#123;&#123; {{ $variable }} &#125;&#125;</code>
                 </button>
             @endforeach
             <!-- Variables comunes -->
             @foreach(['app_name', 'app_url', 'current_year', 'support_email'] as $common)
                 <button @click="insertVariable('{{ $common }}')"
                         class="text-left p-3 bg-primary-50 border border-primary-200 rounded-lg hover:border-primary-300 transition-colors">
-                    <code class="text-sm font-mono text-primary-400">{{{{{{ $common }}}}}}</code>
+                    <code class="text-sm font-mono text-primary-400">&#123;&#123; {{ $common }} &#125;&#125;</code>
                 </button>
             @endforeach
         </div>
@@ -280,7 +280,7 @@ function templateEditor() {
 
         insertVariable(variable) {
             const activeElement = document.activeElement;
-            const variableText = `{{${variable}}}`;
+            const variableText = '{{' + variable + '}}';
             
             if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
                 const start = activeElement.selectionStart;

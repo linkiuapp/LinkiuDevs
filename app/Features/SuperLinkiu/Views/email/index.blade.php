@@ -14,7 +14,7 @@
             <button @click="showTestModal = true" 
                     class="btn-outline-info px-4 py-2 rounded-lg flex items-center gap-2">
                 <x-solar-verified-check-outline class="w-4 h-4" />
-                Probar SMTP
+                🚀 Probar SMTP (Cola)
             </button>
             <a href="{{ route('superlinkiu.email.templates') }}" 
                class="btn-primary px-4 py-2 rounded-lg flex items-center gap-2">
@@ -190,15 +190,15 @@
                                x-model="testEmail"
                                class="w-full px-3 py-2 border border-accent-200 rounded-lg focus:border-primary-200 focus:ring-1 focus:ring-primary-200 focus:outline-none"
                                placeholder="tu-email@ejemplo.com">
-                        <p class="text-xs text-black-300 mt-1">Se enviará un email de prueba a esta dirección.</p>
+                        <p class="text-xs text-black-300 mt-1">📤 Se enviará un email de prueba a esta dirección usando el sistema de colas (procesamiento en background).</p>
                     </div>
                 </div>
                 <div class="bg-accent-100 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                     <button @click="sendTestEmail()" 
                             :disabled="testing || !testEmail"
                             class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-primary-300 text-base font-medium text-accent-50 hover:bg-primary-400 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50">
-                        <span x-show="!testing">Enviar Prueba</span>
-                        <span x-show="testing">Enviando...</span>
+                        <span x-show="!testing">🚀 Enviar a Cola</span>
+                        <span x-show="testing">Encolando...</span>
                     </button>
                     <button @click="showTestModal = false" 
                             type="button" 
