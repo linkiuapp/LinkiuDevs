@@ -130,6 +130,77 @@
                 </div>
             </div>
 
+            <!-- 👤 INFORMACIÓN DE ADMINISTRADORES -->
+            <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
+                <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
+                    <h2 class="text-lg font-semibold text-black-400 mb-0 flex items-center gap-2">
+                        <x-solar-user-outline class="w-5 h-5" />
+                        Administradores de la Tienda
+                    </h2>
+                </div>
+                <div class="p-6">
+                    @if($store->admins && $store->admins->count() > 0)
+                        <div class="space-y-4">
+                            @foreach($store->admins as $admin)
+                            <div class="bg-accent-100 rounded-lg p-4 border border-accent-200">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center">
+                                            <span class="text-primary-300 font-bold">
+                                                {{ $admin->getInitialsAttribute() }}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold text-black-400">{{ $admin->name }}</h3>
+                                            <p class="text-sm text-black-300">{{ $admin->email }}</p>
+                                            <div class="flex items-center gap-2 mt-1">
+                                                <span class="badge-soft-info text-xs">{{ ucfirst($admin->role) }}</span>
+                                                @if($admin->last_login_at)
+                                                    <span class="text-xs text-black-200">
+                                                        Último acceso: {{ $admin->last_login_at->diffForHumans() }}
+                                                    </span>
+                                                @else
+                                                    <span class="text-xs text-warning-300">Nunca ha ingresado</span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        @if($admin->last_login_at && $admin->last_login_at->gt(now()->subDays(7)))
+                                            <span class="w-3 h-3 bg-success-300 rounded-full" title="Activo recientemente"></span>
+                                        @elseif($admin->last_login_at)
+                                            <span class="w-3 h-3 bg-warning-300 rounded-full" title="Inactivo"></span>
+                                        @else
+                                            <span class="w-3 h-3 bg-error-300 rounded-full" title="Nunca ha ingresado"></span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                        
+                        <!-- 🔗 LINK DIRECTO AL PANEL DEL ADMIN -->
+                        <div class="mt-4 pt-4 border-t border-accent-200">
+                            <div class="flex items-center gap-3">
+                                <x-solar-settings-outline class="w-5 h-5 text-blue-600" />
+                                <a href="{{ route('tenant.admin.login', $store->slug) }}" 
+                                   target="_blank" 
+                                   class="text-blue-600 hover:text-blue-800 font-medium text-sm flex items-center gap-1">
+                                    Panel de administración de la tienda
+                                    <x-solar-link-outline class="w-3 h-3" />
+                                </a>
+                            </div>
+                        </div>
+                    @else
+                        <div class="text-center py-8">
+                            <x-solar-user-outline class="w-12 h-12 text-black-200 mx-auto mb-3" />
+                            <p class="text-black-300 font-medium">No hay administradores asignados</p>
+                            <p class="text-sm text-black-200">Esta tienda no tiene usuarios administradores activos</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
             <!-- Estado y verificación -->
             <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
                 <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">

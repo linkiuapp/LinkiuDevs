@@ -474,6 +474,11 @@
 @endsection
 
 @push('scripts')
+{{-- 🚀 VALIDACIONES EN TIEMPO REAL --}}
+<script src="{{ asset('js/stores/real-time-validation.js') }}"></script>
+{{-- 🛡️ MANEJO DE ERRORES --}}
+<script src="{{ asset('js/stores/error-handling.js') }}"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const planSelect = document.querySelector('select[name="plan_id"]');

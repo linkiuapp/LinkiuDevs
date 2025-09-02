@@ -19,6 +19,10 @@ use App\Features\SuperLinkiu\Services\ValidationCacheService;
 use App\Features\SuperLinkiu\Services\PerformanceMonitoringService;
 use App\Features\SuperLinkiu\Models\BulkImportLog;
 use Illuminate\Support\Facades\Log;
+use App\Features\SuperLinkiu\Requests\CreateStoreRequest;
+use App\Features\SuperLinkiu\Requests\UpdateStoreRequest;
+use App\Features\SuperLinkiu\Services\StoreService;
+use App\Features\SuperLinkiu\Services\StoreValidationService;
 
 class StoreController extends Controller
 {
@@ -27,23 +31,34 @@ class StoreController extends Controller
     protected BulkImportBatchManager $batchManager;
     protected ValidationCacheService $cacheService;
     protected PerformanceMonitoringService $performanceService;
+    protected StoreService $storeService;
+    protected StoreValidationService $validationService;
 
     public function __construct(
         StoreTemplateService $templateService, 
         LocationService $locationService,
         BulkImportBatchManager $batchManager,
         ValidationCacheService $cacheService,
-        PerformanceMonitoringService $performanceService
+        PerformanceMonitoringService $performanceService,
+        StoreService $storeService,
+        StoreValidationService $validationService
     ) {
         $this->templateService = $templateService;
         $this->locationService = $locationService;
         $this->batchManager = $batchManager;
         $this->cacheService = $cacheService;
         $this->performanceService = $performanceService;
+        $this->storeService = $storeService;
+        $this->validationService = $validationService;
     }
     public function index(Request $request)
     {
-        $query = Store::with('plan');
+        // 🚀 OPTIMIZACIÓN: Eager loading para evitar consultas N+1
+        $query = Store::with([
+            'plan:id,name,price,allow_custom_slug',
+            'admins:id,name,email,store_id',
+            'design:id,store_id,logo_url,is_published'
+        ]);
 
         // Búsqueda global
         if ($search = $request->get('search')) {
@@ -133,376 +148,103 @@ class StoreController extends Controller
         return view('superlinkiu::stores.create-wizard', compact('plans', 'templates'));
     }
 
-    public function store(Request $request)
+    public function store(CreateStoreRequest $request)
     {
-        \Log::info('🏪 STORE CREATE: Iniciando creación de tienda', [
-            'request_data' => $request->all(),
-            'user_id' => auth()->id(),
-            'request_method' => $request->method(),
-            'content_type' => $request->header('Content-Type'),
-            'user_agent' => $request->header('User-Agent')
-        ]);
-        
         try {
-            $validated = $request->validate([
-            // Información del propietario
-            'owner_name' => 'required|string|max:255',
-            'admin_email' => 'required|email|unique:users,email',
-            'owner_document_type' => 'required|string|in:cedula,nit,pasaporte',
-            'owner_document_number' => 'required|string|max:20',
-            'owner_country' => 'required|string|max:100',
-            'owner_department' => 'required|string|max:100',
-            'owner_city' => 'required|string|max:100',
-            'admin_password' => 'required|string|min:8',
+            $result = $this->storeService->createStore($request->validated(), $request);
             
-            // Información de la tienda
-            'name' => 'required|string|max:255',
-            'plan_id' => 'required|exists:plans,id',
-            'slug' => 'required|string|max:255|unique:stores,slug|regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/',
-            'email' => 'nullable|email|unique:stores,email',
-            'document_type' => 'nullable|string|in:nit,cedula',
-            'document_number' => 'nullable|string|max:20',
-            'phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:255',
-            'country' => 'nullable|string|max:100',
-            'department' => 'nullable|string|max:100',
-            'city' => 'nullable|string|max:100',
-            'description' => 'nullable|string',
-            'status' => 'nullable|in:active,inactive,suspended',
-            'verified' => 'nullable|boolean',
-            'billing_period' => 'nullable|in:monthly,quarterly,biannual',
-            'initial_payment_status' => 'nullable|in:pending,paid',
-            'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string',
-            'meta_keywords' => 'nullable|string|max:255',
-        ], [
-            'slug.regex' => 'La URL debe contener solo letras minúsculas, números y guiones. No se permiten espacios ni caracteres especiales.',
-            'slug.unique' => 'Esta URL ya está en uso por otra tienda.',
-            'slug.required' => 'La URL de la tienda es obligatoria.',
-        ]);
-
-        // 🔍 VALIDACIÓN DE SLUG SEGÚN PLAN
-        $plan = Plan::findOrFail($validated['plan_id']);
-        
-        // Si el plan NO permite slug personalizado, generar uno automático
-        if (!$plan->allow_custom_slug) {
-            $validated['slug'] = $this->generateRandomSlug();
-        } else {
-            // Si permite personalización, sanitizar el slug por si acaso
-            $validated['slug'] = $this->sanitizeSlug($validated['slug']);
-        }
-
-        // Verificar que el slug no sea reservado
-        if (RouteServiceProvider::isReservedSlug($validated['slug'])) {
-            return back()->withErrors(['slug' => 'Este slug está reservado por el sistema.'])->withInput();
-        }
-
-        // Preparar datos de la tienda (sin los campos del propietario)
-        $storeData = collect($validated)->except([
-            'owner_name', 'admin_email', 'owner_document_type', 'owner_document_number',
-            'owner_country', 'owner_department', 'owner_city', 'admin_password'
-        ])->filter(function ($value) {
-            return $value !== null && $value !== '';
-        })->toArray();
-
-        // 🔒 CREAR TIENDA Y ADMIN EN TRANSACCIÓN ATÓMICA
-        try {
-            \DB::beginTransaction();
-
-            // Crear la tienda
-            $store = Store::create([
-                ...$storeData,
-                'status' => $validated['status'] ?? 'active',
-                'verified' => false,
-            ]);
-
-            // 🔧 ASEGURAR QUE billing_period esté disponible para el Observer
-            // El Observer usa request('billing_period') para crear la suscripción automática
-            if (!$request->has('billing_period') && isset($validated['billing_period'])) {
-                $request->merge(['billing_period' => $validated['billing_period']]);
-            }
-
-            // 🔧 ASEGURAR QUE initial_payment_status esté disponible para el Observer
-            // El Observer usa request('initial_payment_status') para establecer el estado de la primera factura
-            if (!$request->has('initial_payment_status') && isset($validated['initial_payment_status'])) {
-                $request->merge(['initial_payment_status' => $validated['initial_payment_status']]);
-            }
-
-            // 🔧 PASAR CONTEXTO DE TIENDA CREADA AL UserObserver
-            $request->merge(['_created_store' => $store, 'store_id' => $store->id]);
-
-            // Crear el usuario administrador de la tienda
-            $storeAdmin = User::create([
-                'name' => $validated['owner_name'],
-                'email' => $validated['admin_email'],
-                'password' => bcrypt($validated['admin_password']),
-                'role' => 'store_admin',
-                'store_id' => $store->id,
-            ]);
-
-            // ✅ VERIFICAR QUE EL ADMIN SE CREÓ CORRECTAMENTE
-            if (!$storeAdmin || !$storeAdmin->store_id) {
-                throw new \Exception('Failed to create store admin with store_id');
-            }
-
-            // ✅ VERIFICAR QUE LA TIENDA TIENE AL MENOS UN ADMIN
-            $adminCount = $store->admins()->count();
-            if ($adminCount === 0) {
-                throw new \Exception('Store created but no admin was assigned');
-            }
-
-            \DB::commit();
-
-            // Log de éxito
-            Log::info('Store created successfully with admin', [
-                'store_id' => $store->id,
-                'store_slug' => $store->slug,
-                'admin_id' => $storeAdmin->id,
-                'admin_email' => $storeAdmin->email,
-                'admin_count' => $adminCount
-            ]);
-
+            return redirect()
+                ->route('superlinkiu.stores.index')
+                ->with('success', 'Tienda creada exitosamente.')
+                ->with('admin_credentials', $result['admin_credentials']);
+                
         } catch (\Exception $e) {
-            \DB::rollBack();
-            
-            // Log del error
-            Log::error('Failed to create store with admin', [
-                'error' => $e->getMessage(),
-                'store_data' => $storeData,
-                'admin_email' => $validated['admin_email'],
-                'trace' => $e->getTraceAsString()
-            ]);
-
-            return back()
-                ->withErrors(['general' => 'Error al crear la tienda: ' . $e->getMessage()])
-                ->withInput();
-        }
-
-        // Preparar datos para el modal de éxito
-        $adminCredentials = [
-            'name' => $validated['owner_name'],
-            'email' => $validated['admin_email'],
-            'password' => $validated['admin_password'], // Solo para mostrar una vez
-            'store_name' => $store->name,
-            'store_slug' => $store->slug,
-            'frontend_url' => url('/' . $store->slug),
-            'admin_url' => url('/' . $store->slug . '/admin'),
-        ];
-
-        \Log::info('🏪 STORE CREATE: Tienda creada exitosamente', [
-            'store_id' => $store->id,
-            'store_name' => $store->name,
-            'store_slug' => $store->slug
-        ]);
-
-        return redirect()
-            ->route('superlinkiu.stores.index')
-            ->with('success', 'Tienda creada exitosamente.')
-            ->with('admin_credentials', $adminCredentials);
-            
-        } catch (\Exception $e) {
-            \Log::error('🏪 STORE CREATE: Error crítico', [
-                'error_message' => $e->getMessage(),
-                'error_file' => $e->getFile(),
-                'error_line' => $e->getLine(),
-                'request_data' => $request->all(),
-                'stack_trace' => $e->getTraceAsString()
-            ]);
-            
             return back()
                 ->withErrors(['general' => 'Error interno: ' . $e->getMessage()])
                 ->withInput();
         }
     }
 
-    /**
-     * Generar un slug aleatorio para planes que no permiten personalización
-     */
-    private function generateRandomSlug(): string
-    {
-        do {
-            $characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
-            $slug = 'tienda-';
-            
-            for ($i = 0; $i < 8; $i++) {
-                $slug .= $characters[rand(0, strlen($characters) - 1)];
-            }
-            
-            // Verificar que no exista en la BD
-            $exists = Store::where('slug', $slug)->exists();
-            
-        } while ($exists || RouteServiceProvider::isReservedSlug($slug));
-        
-        return $slug;
-    }
 
-    /**
-     * Sanitizar slug personalizado para asegurar formato correcto
-     */
-    private function sanitizeSlug(string $slug): string
-    {
-        // Convertir a minúsculas
-        $slug = strtolower($slug);
-        
-        // Eliminar acentos usando alternativa que no requiere iconv
-        $accents = [
-            'á' => 'a', 'à' => 'a', 'ä' => 'a', 'â' => 'a', 'ā' => 'a', 'ã' => 'a',
-            'é' => 'e', 'è' => 'e', 'ë' => 'e', 'ê' => 'e', 'ē' => 'e',
-            'í' => 'i', 'ì' => 'i', 'ï' => 'i', 'î' => 'i', 'ī' => 'i',
-            'ó' => 'o', 'ò' => 'o', 'ö' => 'o', 'ô' => 'o', 'ō' => 'o', 'õ' => 'o',
-            'ú' => 'u', 'ù' => 'u', 'ü' => 'u', 'û' => 'u', 'ū' => 'u',
-            'ñ' => 'n', 'ç' => 'c'
-        ];
-        $slug = strtr($slug, $accents);
-        
-        // Reemplazar espacios y caracteres no permitidos con guiones
-        $slug = preg_replace('/[^a-z0-9\-]/', '-', $slug);
-        
-        // Eliminar múltiples guiones consecutivos
-        $slug = preg_replace('/-+/', '-', $slug);
-        
-        // Eliminar guiones al inicio y final
-        $slug = trim($slug, '-');
-        
-        // Si queda vacío, generar uno básico
-        if (empty($slug)) {
-            $slug = 'tienda-' . rand(1000, 9999);
-        }
-        
-        return $slug;
-    }
 
     public function show(Store $store)
     {
-        $store->load(['plan', 'planExtensions' => function($query) {
-            $query->with('superAdmin')->latest();
-        }]);
+        $store->load([
+            'plan', 
+            'admins', // 👤 CARGAR ADMINISTRADORES
+            'planExtensions' => function($query) {
+                $query->with('superAdmin')->latest();
+            }
+        ]);
         
         return view('superlinkiu::stores.show', compact('store'));
     }
 
     public function edit(Store $store)
     {
+        $store->load(['plan', 'admins']); // 👤 CARGAR ADMINISTRADORES
         $plans = Plan::active()->get();
         return view('superlinkiu::stores.edit', compact('store', 'plans'));
     }
 
-    public function update(Request $request, Store $store)
+    public function update(UpdateStoreRequest $request, Store $store)
     {
-        $rules = [
-            'name' => 'required|string|max:255',
-            'plan_id' => 'required|exists:plans,id',
-            'email' => 'required|email|unique:stores,email,' . $store->id,
-            'document_type' => 'nullable|string|in:nit,cedula',
-            'document_number' => 'nullable|string|max:20',
-            'phone' => 'nullable|string|max:20',
-            'address' => 'nullable|string|max:255',
-            'country' => 'nullable|string|max:100',
-            'department' => 'nullable|string|max:100',
-            'city' => 'nullable|string|max:100',
-            'description' => 'nullable|string',
-            'status' => 'nullable|in:active,inactive,suspended',
-            'verified' => 'nullable|boolean',
-            'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string',
-            'meta_keywords' => 'nullable|string|max:255',
-        ];
-
-        // Manejar lógica de slug mejorada
-        $oldPlan = $store->plan;
-        $newPlan = Plan::find($request->plan_id);
-        
-        \Log::info('🔧 STORE UPDATE: Verificando cambio de plan y slug', [
-            'store_id' => $store->id,
-            'old_plan_id' => $oldPlan?->id,
-            'old_plan_allow_custom' => $oldPlan?->allow_custom_slug,
-            'new_plan_id' => $newPlan?->id,
-            'new_plan_allow_custom' => $newPlan?->allow_custom_slug,
-            'request_slug' => $request->slug,
-            'current_slug' => $store->slug
-        ]);
-        
-        $slugHandling = $this->handleSlugUpdate($store, $oldPlan, $newPlan, $request);
-        
-        if ($slugHandling['error']) {
-            return back()->withErrors(['slug' => $slugHandling['message']])->withInput();
+        try {
+            $result = $this->storeService->updateStore($store, $request->validated());
+            
+            return redirect()
+                ->route('superlinkiu.stores.index')
+                ->with('success', 'Tienda actualizada exitosamente.');
+                
+        } catch (\Exception $e) {
+            return back()
+                ->withErrors(['general' => 'Error interno: ' . $e->getMessage()])
+                ->withInput();
         }
-        
-        // Agregar validación de slug si es necesario
-        if ($slugHandling['validate']) {
-            $rules['slug'] = [
-                'required',
-                'string',
-                'max:255',
-                'unique:stores,slug,' . $store->id,
-                'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/'
-            ];
-        }
-
-        $validated = $request->validate($rules);
-
-        // Si verified viene como checkbox, convertir a boolean
-        if ($request->has('verified')) {
-            $validated['verified'] = $request->boolean('verified');
-        }
-
-        // Usar el slug procesado
-        $validated['slug'] = $slugHandling['slug'];
-
-        $store->update($validated);
-
-        return redirect()
-            ->route('superlinkiu.stores.index')
-            ->with('success', 'Tienda actualizada exitosamente.');
     }
 
     public function destroy(Store $store)
     {
-        \Log::info('🗑️ STORE DESTROY: Método llamado', [
-            'store_id' => $store->id,
-            'store_name' => $store->name,
-            'request_method' => request()->method(),
-            'request_url' => request()->fullUrl(),
-            'user_id' => auth()->id(),
-            'user_role' => auth()->user()?->role
-        ]);
-        
-        $store->delete();
-        
-        \Log::info('🗑️ STORE DESTROY: Tienda eliminada exitosamente', [
-            'store_id' => $store->id
-        ]);
+        try {
+            $this->storeService->deleteStore($store);
 
-        if (request()->expectsJson()) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Tienda eliminada exitosamente.'
-            ]);
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Tienda eliminada exitosamente.'
+                ]);
+            }
+
+            return redirect()
+                ->route('superlinkiu.stores.index')
+                ->with('success', 'Tienda eliminada exitosamente.');
+                
+        } catch (\Exception $e) {
+            if (request()->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error al eliminar tienda: ' . $e->getMessage()
+                ], 500);
+            }
+
+            return back()->withErrors(['general' => 'Error al eliminar tienda: ' . $e->getMessage()]);
         }
-
-        return redirect()
-            ->route('superlinkiu.stores.index')
-            ->with('success', 'Tienda eliminada exitosamente.');
     }
 
     public function toggleVerified(Store $store)
-{
-    try {
-        $store->toggleVerified();
-        
-        return response()->json([
-            'success' => true,
-            'verified' => $store->verified,
-            'message' => $store->verified ? 'Tienda verificada exitosamente.' : 'Verificación de tienda removida.'
-        ]);
-        
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Error al cambiar verificación: ' . $e->getMessage()
-        ], 500);
+    {
+        try {
+            $result = $this->storeService->toggleVerified($store);
+            
+            return response()->json($result);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al cambiar verificación: ' . $e->getMessage()
+            ], 500);
+        }
     }
-}
 
     /**
      * Maneja la lógica de actualización del slug según el cambio de plan
@@ -618,7 +360,7 @@ class StoreController extends Controller
     private function validateCustomSlug($slug, $storeId)
     {
         // Sanitizar
-        $slug = $this->sanitizeSlug($slug);
+        $slug = $this->validationService->sanitizeSlug($slug);
         
         // Validar formato
         if (!preg_match('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', $slug)) {
@@ -676,12 +418,21 @@ class StoreController extends Controller
             'status' => 'required|in:active,inactive,suspended'
         ]);
 
-        $store->updateStatus($validated['status']);
-
-        return response()->json([
-            'status' => $store->status,
-            'message' => 'Estado de la tienda actualizado exitosamente.'
-        ]);
+        try {
+            $result = $this->storeService->updateStatus($store, $validated['status']);
+            
+            return response()->json([
+                'success' => true,
+                'status' => $result['status'],
+                'message' => $result['message']
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar estado: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function extendPlan(Request $request, Store $store)
@@ -910,7 +661,6 @@ class StoreController extends Controller
     public function validateEmail(Request $request)
     {
         $startTime = microtime(true);
-        $cacheHit = false;
         
         try {
             $request->validate([
@@ -923,7 +673,6 @@ class StoreController extends Controller
             // Check cache first
             $cached = $this->cacheService->getCachedEmailValidation($email, $storeId);
             if ($cached) {
-                $cacheHit = true;
                 $responseTime = (microtime(true) - $startTime) * 1000;
                 $this->performanceService->recordValidationPerformance('validateEmail', $responseTime, true);
                 
@@ -933,43 +682,18 @@ class StoreController extends Controller
                 ]);
             }
 
-            // Check if email exists in users table
-            $userExists = User::where('email', $email)
-                ->when($storeId, function($query) use ($storeId) {
-                    // If updating, exclude current store's admin
-                    $store = Store::find($storeId);
-                    if ($store && $store->admins()->count() > 0) {
-                        $query->whereNotIn('id', $store->admins()->pluck('id'));
-                    }
-                })
-                ->exists();
-
-            // Check if email exists in stores table
-            $storeExists = Store::where('email', $email)
-                ->when($storeId, function($query) use ($storeId) {
-                    $query->where('id', '!=', $storeId);
-                })
-                ->exists();
-
-            $isValid = !$userExists && !$storeExists;
-            $message = null;
-
-            if (!$isValid) {
-                if ($userExists) {
-                    $message = 'Este email ya está registrado como usuario.';
-                } else {
-                    $message = 'Este email ya está registrado para otra tienda.';
-                }
-            }
-
-            $result = [
-                'is_valid' => $isValid,
-                'message' => $message,
+            // Use validation service
+            $result = $this->validationService->validateEmailAvailability($email, $storeId);
+            
+            // Adapt result format for backwards compatibility
+            $adaptedResult = [
+                'is_valid' => $result['available'],
+                'message' => $result['message'],
                 'field' => 'email'
             ];
 
             // Cache the result
-            $this->cacheService->cacheEmailValidation($email, $storeId, $result);
+            $this->cacheService->cacheEmailValidation($email, $storeId, $adaptedResult);
 
             // Record performance metrics
             $responseTime = (microtime(true) - $startTime) * 1000;
@@ -977,7 +701,7 @@ class StoreController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $result
+                'data' => $adaptedResult
             ]);
 
         } catch (\Exception $e) {
@@ -1012,7 +736,7 @@ class StoreController extends Controller
                 'slug' => 'required|string'
             ]);
 
-            $slug = $this->sanitizeSlug($request->input('slug'));
+            $slug = $this->validationService->sanitizeSlug($request->input('slug'));
             $storeId = $request->input('store_id'); // For updates
 
             // Check cache first
@@ -1028,32 +752,15 @@ class StoreController extends Controller
                 ]);
             }
 
-            // Check if slug is reserved
-            $isReserved = RouteServiceProvider::isReservedSlug($slug);
+            // Use validation service
+            $validationResult = $this->validationService->validateSlugAvailability($slug, $storeId);
             
-            // Check if slug exists in database
-            $exists = Store::where('slug', $slug)
-                ->when($storeId, function($query) use ($storeId) {
-                    $query->where('id', '!=', $storeId);
-                })
-                ->exists();
-
-            $isValid = !$isReserved && !$exists;
-            $message = null;
-
-            if (!$isValid) {
-                if ($isReserved) {
-                    $message = 'Este slug está reservado por el sistema.';
-                } else {
-                    $message = 'Este slug ya está en uso por otra tienda.';
-                }
-            }
-
+            // Adapt result format for backwards compatibility
             $result = [
-                'is_valid' => $isValid,
-                'message' => $message,
+                'is_valid' => $validationResult['available'],
+                'message' => $validationResult['message'],
                 'field' => 'slug',
-                'sanitized_value' => $slug
+                'sanitized_value' => $validationResult['clean'] ?? $slug
             ];
 
             // Cache the result
@@ -1099,7 +806,7 @@ class StoreController extends Controller
                 'slug' => 'required|string'
             ]);
 
-            $baseSlug = $this->sanitizeSlug($request->input('slug'));
+            $baseSlug = $this->validationService->sanitizeSlug($request->input('slug'));
 
             // Check cache first
             $cached = $this->cacheService->getCachedSlugSuggestions($baseSlug);
@@ -1113,72 +820,11 @@ class StoreController extends Controller
                 ]);
             }
 
-            $suggestions = [];
-            $maxSuggestions = 8;
-
-            // Strategy 1: Numbered alternatives
-            for ($i = 1; $i <= 3; $i++) {
-                $suggestion = $baseSlug . '-' . $i;
-                if ($this->isSlugAvailable($suggestion)) {
-                    $suggestions[] = $suggestion;
-                }
-            }
-
-            // Strategy 2: Year-based alternatives
-            $currentYear = date('Y');
-            $yearSuggestion = $baseSlug . '-' . $currentYear;
-            if ($this->isSlugAvailable($yearSuggestion)) {
-                $suggestions[] = $yearSuggestion;
-            }
-
-            // Strategy 3: Business-related suffixes
-            $businessSuffixes = ['store', 'shop', 'online', 'web', 'digital', 'co', 'market'];
-            foreach ($businessSuffixes as $suffix) {
-                if (count($suggestions) >= $maxSuggestions) break;
-                
-                $suggestion = $baseSlug . '-' . $suffix;
-                if ($this->isSlugAvailable($suggestion) && !in_array($suggestion, $suggestions)) {
-                    $suggestions[] = $suggestion;
-                }
-            }
-
-            // Strategy 4: Location-based (if we can infer location)
-            $locationSuffixes = ['bogota', 'medellin', 'cali', 'colombia', 'co'];
-            foreach ($locationSuffixes as $location) {
-                if (count($suggestions) >= $maxSuggestions) break;
-                
-                $suggestion = $baseSlug . '-' . $location;
-                if ($this->isSlugAvailable($suggestion) && !in_array($suggestion, $suggestions)) {
-                    $suggestions[] = $suggestion;
-                }
-            }
-
-            // Strategy 5: Abbreviated versions
-            if (strlen($baseSlug) > 6) {
-                $abbreviated = substr($baseSlug, 0, 6);
-                for ($i = 1; $i <= 2; $i++) {
-                    if (count($suggestions) >= $maxSuggestions) break;
-                    
-                    $suggestion = $abbreviated . $i;
-                    if ($this->isSlugAvailable($suggestion) && !in_array($suggestion, $suggestions)) {
-                        $suggestions[] = $suggestion;
-                    }
-                }
-            }
-
-            // Strategy 6: Random suffix if still need more
-            if (count($suggestions) < $maxSuggestions) {
-                for ($i = 0; $i < 3; $i++) {
-                    $randomSuffix = rand(100, 999);
-                    $suggestion = $baseSlug . '-' . $randomSuffix;
-                    if ($this->isSlugAvailable($suggestion) && !in_array($suggestion, $suggestions)) {
-                        $suggestions[] = $suggestion;
-                    }
-                }
-            }
-
+            // Use validation service for suggestions
+            $suggestions = $this->validationService->suggestSlugFromName($baseSlug);
+            
             $result = [
-                'suggestions' => array_slice($suggestions, 0, $maxSuggestions),
+                'suggestions' => array_column($suggestions, 'slug'),
                 'base_slug' => $baseSlug,
                 'total_generated' => count($suggestions)
             ];
@@ -1531,7 +1177,7 @@ class StoreController extends Controller
                             ];
                         }, $slugSuggestions);
                     } elseif ($errorType === 'format') {
-                        $sanitized = $this->sanitizeSlug($value);
+                        $sanitized = $this->validationService->sanitizeSlug($value);
                         $suggestions[] = [
                             'type' => 'replacement',
                             'value' => $sanitized,
@@ -2300,7 +1946,7 @@ class StoreController extends Controller
     private function generateSlugSuggestions(string $baseSlug): array
     {
         $suggestions = [];
-        $sanitized = $this->sanitizeSlug($baseSlug);
+        $sanitized = $this->validationService->sanitizeSlug($baseSlug);
         
         for ($i = 1; $i <= 3; $i++) {
             $suggestion = $sanitized . '-' . $i;
@@ -2677,55 +2323,97 @@ class StoreController extends Controller
         }
     }
     /**
-     * Send credentials by email
+     * Send credentials by email from creation modal
      * Requirements: 4.2 - Credential email delivery option
      */
     public function sendCredentialsByEmail(Request $request)
     {
         try {
-            $request->validate([
-                'email' => 'required|email',
-                'credentials' => 'required|array',
-                'credentials.store_name' => 'required|string',
-                'credentials.name' => 'required|string',
-                'credentials.password' => 'required|string',
-                'credentials.store_slug' => 'required|string',
-                'credentials.frontend_url' => 'required|url',
-                'credentials.admin_url' => 'required|url'
-            ]);
+            // 📧 MODAL DE CREACIÓN - Envío con credenciales completas
+            if ($request->has('credentials')) {
+                $request->validate([
+                    'email' => 'required|email',
+                    'credentials' => 'required|array',
+                    'credentials.store_name' => 'required|string',
+                    'credentials.name' => 'required|string',
+                    'credentials.password' => 'required|string',
+                    'credentials.store_slug' => 'required|string',
+                    'credentials.frontend_url' => 'required|url',
+                    'credentials.admin_url' => 'required|url'
+                ]);
 
-            $email = $request->input('email');
-            $credentials = $request->input('credentials');
+                $email = $request->input('email');
+                $credentials = $request->input('credentials');
 
-            // Send email with credentials using EmailService template system
-            \App\Services\EmailService::sendWithTemplate(
-                'store_credentials',
-                [$email],
-                [
-                    'store_name' => $credentials['store_name'],
-                    'admin_name' => $credentials['name'],
-                    'password' => $credentials['password'],
-                    'admin_url' => $credentials['admin_url'],
-                    'frontend_url' => $credentials['frontend_url'],
-                    'support_email' => \App\Services\EmailService::getContextEmail('support')
-                ]
-            );
+                \App\Jobs\SendEmailJob::dispatch('template', $email, [
+                    'template_key' => 'store_credentials',
+                    'variables' => [
+                        'store_name' => $credentials['store_name'],
+                        'admin_name' => $credentials['name'],
+                        'admin_email' => $email,
+                        'password' => $credentials['password'],
+                        'dashboard_url' => $credentials['admin_url'],
+                        'support_email' => 'soporte@linkiu.email'
+                    ]
+                ]);
 
-            Log::info('Store credentials sent by email', [
-                'email' => $email,
-                'store_name' => $credentials['store_name'],
-                'store_slug' => $credentials['store_slug']
-            ]);
+                Log::info('Store credentials sent by email from creation modal', [
+                    'email' => $email,
+                    'store_name' => $credentials['store_name']
+                ]);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Credenciales enviadas exitosamente'
-            ]);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Credenciales enviadas exitosamente'
+                ]);
+            }
+
+            // 🔄 REENVÍO - Desde vista de edición con store_id y admin_id
+            elseif ($request->has('store_id') && $request->has('admin_id')) {
+                $request->validate([
+                    'store_id' => 'required|exists:stores,id',
+                    'admin_id' => 'required|exists:users,id'
+                ]);
+
+                $store = Store::with(['plan', 'admins'])->findOrFail($request->store_id);
+                $admin = $store->admins()->findOrFail($request->admin_id);
+
+                \App\Jobs\SendEmailJob::dispatch('template', $admin->email, [
+                    'template_key' => 'store_credentials',
+                    'variables' => [
+                        'store_name' => $store->name,
+                        'admin_name' => $admin->name,
+                        'admin_email' => $admin->email,
+                        'password' => 'Para nueva contraseña, contacta soporte',
+                        'login_url' => route('tenant.admin.login', $store->slug),
+                        'store_url' => url($store->slug),
+                        'support_email' => 'soporte@linkiu.email'
+                    ]
+                ]);
+
+                Log::info('Store credentials resent by email', [
+                    'admin_email' => $admin->email,
+                    'admin_name' => $admin->name,
+                    'store_name' => $store->name
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => "Credenciales reenviadas a {$admin->email}"
+                ]);
+            }
+
+            else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Datos insuficientes para enviar credenciales'
+                ], 400);
+            }
 
         } catch (\Exception $e) {
             Log::error('Error sending credentials by email', [
-                'email' => $request->input('email'),
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'request_data' => $request->all()
             ]);
 
             return response()->json([

@@ -59,23 +59,23 @@
             x-transition:leave="transition ease-in duration-200"
             x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
             x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            class="inline-block align-bottom bg-accent rounded-xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full"
+            class="inline-block align-bottom bg-white rounded-xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full"
         >
             {{-- Header --}}
             <div class="bg-gradient-to-r from-green-500 to-emerald-600 px-6 py-6">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-4">
-                        <div class="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-accent/20 backdrop-blur-sm">
-                            <x-solar-check-circle-bold class="h-7 w-7 text-accent" />
+                        <div class="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-white/20 backdrop-blur-sm">
+                            <x-solar-check-circle-bold class="h-7 w-7 text-white" />
                         </div>
                         <div>
-                            <h3 class="text-xl font-bold text-accent">¡Tienda Creada Exitosamente!</h3>
+                            <h3 class="text-xl font-bold text-white">¡Tienda Creada Exitosamente!</h3>
                             <p class="text-green-100 mt-1">Credenciales de acceso generadas</p>
                         </div>
                     </div>
                     <button 
                         @click="closeModal()"
-                        class="text-accent/80 hover:text-accent transition-colors"
+                        class="text-white/80 hover:text-white transition-colors"
                     >
                         <x-solar-close-circle-outline class="w-6 h-6" />
                     </button>
@@ -83,7 +83,7 @@
             </div>
 
             {{-- Body --}}
-            <div class="bg-accent-50 px-6 py-6">
+            <div class="bg-gray-50 px-6 py-6">
                 {{-- Store Information --}}
                 <div class="mb-8">
                     <div class="flex items-center gap-3 mb-4">
@@ -101,7 +101,7 @@
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-600 font-medium">URL:</span>
                                     <div class="flex items-center gap-2">
-                                        <span class="font-mono text-sm bg-accent px-2 py-1 rounded border" x-text="credentials.store_slug"></span>
+                                        <span class="font-mono text-sm bg-blue-50 px-2 py-1 rounded border border-blue-200" x-text="credentials.store_slug"></span>
                                         <button 
                                             @click="copyToClipboard(credentials.store_slug, 'URL de la tienda')"
                                             class="text-blue-600 hover:text-blue-800 transition-colors"
@@ -185,7 +185,7 @@
                             <div class="flex justify-between items-center">
                                 <span class="text-gray-600 font-medium">Email:</span>
                                 <div class="flex items-center gap-2">
-                                    <span class="font-mono text-sm bg-accent px-2 py-1 rounded border" x-text="credentials.email"></span>
+                                    <span class="font-mono text-sm bg-green-50 px-2 py-1 rounded border border-green-200" x-text="credentials.email"></span>
                                     <button 
                                         @click="copyToClipboard(credentials.email, 'Email del administrador')"
                                         class="text-purple-600 hover:text-purple-800 transition-colors"
@@ -202,7 +202,7 @@
                                 <div class="flex items-center gap-2">
                                     <div class="flex items-center gap-2">
                                         <span 
-                                            class="font-mono text-sm bg-accent px-3 py-2 rounded border select-all"
+                                            class="font-mono text-sm bg-yellow-50 px-3 py-2 rounded border border-yellow-200 select-all"
                                             :class="{ 'blur-sm': !showPassword }"
                                             x-text="credentials.password"
                                         ></span>
@@ -226,7 +226,7 @@
                             </div>
 
                             {{-- Password Strength Indicators --}}
-                            <div class="bg-accent rounded-lg p-3 border">
+                            <div class="bg-amber-50 rounded-lg p-3 border border-amber-200">
                                 <div class="text-xs text-gray-600 mb-2">Características de seguridad:</div>
                                 <div class="grid grid-cols-2 gap-2 text-xs">
                                     <div class="flex items-center gap-1">
@@ -326,7 +326,7 @@
                     <div class="flex gap-2">
                         <button 
                             @click="copyAllCredentials()"
-                            class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-accent rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                            class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
                         >
                             <x-solar-copy-outline class="w-4 h-4" />
                             Copiar Todo
@@ -334,24 +334,24 @@
                         <button 
                             @click="sendCredentialsByEmail()"
                             :disabled="emailSending"
-                            class="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 text-accent rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
+                            class="inline-flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm font-medium"
                         >
                             <x-solar-letter-outline x-show="!emailSending" class="w-4 h-4" />
-                            <div x-show="emailSending" class="w-4 h-4 border-2 border-accent border-t-transparent rounded-full animate-spin"></div>
+                            <div x-show="emailSending" class="w-4 h-4 border-2 border-gray-300 border-t-transparent rounded-full animate-spin"></div>
                             <span x-text="emailSending ? 'Enviando...' : 'Enviar por Email'"></span>
                         </button>
                     </div>
                     <div class="flex gap-2">
                         <button 
                             @click="downloadCredentials()"
-                            class="inline-flex items-center gap-2 px-4 py-2 bg-gray-600 text-accent rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium"
+                            class="inline-flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm font-medium"
                         >
                             <x-solar-download-outline class="w-4 h-4" />
                             Descargar
                         </button>
                         <button 
                             @click="closeModal()"
-                            class="inline-flex items-center gap-2 px-6 py-2 bg-green-600 text-accent rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+                            class="inline-flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
                         >
                             Entendido
                         </button>
