@@ -28,7 +28,7 @@
                     <div class="flex items-center space-x-4">
                         <!-- Icono de la categoría -->
                         <div class="w-12 h-12 bg-accent-100 rounded-lg p-2 flex items-center justify-center flex-shrink-0">
-                            @if($category->icon && $category->icon->image_path)
+                            @if($category->icon && $category->icon->image_url)
                                 <img src="{{ $category->icon->image_url }}" 
                                      alt="{{ $category->name }}" 
                                      class="w-full h-full object-contain">

@@ -67,11 +67,11 @@
                 <span class="text-small font-regular">Sedes</span>
             </a>
 
-            <!-- Menú -->
-            <a href="{{ route('tenant.categories', $store->slug) }}" 
-               class="flex flex-col items-center py-3 px-4 {{ request()->routeIs('tenant.categories', 'tenant.category') ? 'text-accent-75 bg-primary-300 rounded-xl' : 'text-secondary-300 hover:text-secondary-300 hover:bg-accent-100 hover:rounded-xl' }} transition-colors">
+            <!-- Catálogo -->
+            <a href="{{ route('tenant.catalog', $store->slug) }}" 
+               class="flex flex-col items-center py-3 px-4 {{ request()->routeIs('tenant.catalog') ? 'text-accent-75 bg-primary-300 rounded-xl' : 'text-secondary-300 hover:text-secondary-300 hover:bg-accent-100 hover:rounded-xl' }} transition-colors">
                 <x-lucide-shopping-basket class="w-6 h-6 mb-1" />
-                <span class="text-small font-regular">Categorías</span>
+                <span class="text-small font-regular">Catálogo</span>
             </a>
 
             <!-- Inicio -->

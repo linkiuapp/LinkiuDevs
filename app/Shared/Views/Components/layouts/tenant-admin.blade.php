@@ -23,12 +23,20 @@
                     return $envFavicon;
                 }
                 
+                // Temporalmente desactivado para evitar problemas con fileinfo
+                // TODO: Reactivar cuando se solucione el problema de finfo en producción
+                /*
                 // Finalmente, buscar el favicon más reciente en S3
                 if (config('filesystems.disks.s3.bucket')) {
-                    $files = Storage::disk('public')->files('system');
-                    $faviconFiles = array_filter($files, function($file) {
-                        return str_contains(basename($file), 'favicon_');
-                    });
+                    try {
+                        $files = Storage::disk('public')->files('system');
+                        $faviconFiles = array_filter($files, function($file) {
+                            return str_contains(basename($file), 'favicon_');
+                        });
+                    } catch (\Exception $e) {
+                        Log::error('Error accessing storage files: ' . $e->getMessage());
+                        $faviconFiles = [];
+                    }
                     
                     if (!empty($faviconFiles)) {
                         // Ordenar por fecha en el nombre del archivo (más reciente primero)
@@ -41,6 +49,7 @@
                         return $faviconFiles[0]; // Retornar el más reciente
                     }
                 }
+                */
                 
                 return null;
             } catch (\Exception $e) {
@@ -54,12 +63,17 @@
         
         if ($appFavicon) {
             try {
+                // Temporalmente simplificado para evitar problemas con fileinfo
+                $faviconSrc = asset('storage/' . $appFavicon);
+                /*
                 if (config('filesystems.disks.s3.bucket')) {
                     $faviconSrc = \Storage::disk('public')->url($appFavicon);
                 } else {
                     $faviconSrc = asset('storage/' . $appFavicon);
                 }
+                */
             } catch (\Exception $e) {
+                Log::error('Error generating favicon URL: ' . $e->getMessage());
                 $faviconSrc = asset('storage/' . $appFavicon);
             }
         }

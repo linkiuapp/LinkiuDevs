@@ -17,11 +17,15 @@ use Illuminate\Support\Facades\Storage;
         
         if ($appFavicon) {
             try {
+                // Temporalmente simplificado para evitar problemas con fileinfo
+                $faviconSrc = asset('storage/' . $appFavicon);
+                /*
                 if (config('filesystems.disks.s3.bucket')) {
                     $faviconSrc = Storage::disk('public')->url($appFavicon);
                 } else {
                     $faviconSrc = asset('storage/' . $appFavicon);
                 }
+                */
             } catch (\Exception $e) {
                 $faviconSrc = asset('storage/' . $appFavicon);
             }

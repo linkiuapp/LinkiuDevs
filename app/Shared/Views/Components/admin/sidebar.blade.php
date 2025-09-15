@@ -19,11 +19,15 @@ use Illuminate\Support\Facades\Storage;
                     $logoSrc = null;
                     if ($appLogo) {
                         try {
+                            // Temporalmente simplificado para evitar problemas con fileinfo
+                            $logoSrc = asset('storage/' . $appLogo);
+                            /*
                             if (config('filesystems.disks.s3.bucket')) {
                                 $logoSrc = Storage::disk('public')->url($appLogo);
                             } else {
                                 $logoSrc = asset('storage/' . $appLogo);
                             }
+                            */
                         } catch (\Exception $e) {
                             $logoSrc = asset('storage/' . $appLogo);
                         }

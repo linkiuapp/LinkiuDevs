@@ -29,7 +29,7 @@
                             <!-- Imagen del slider -->
                             <div class="w-[170px] h-[100px] bg-accent-100 rounded-lg overflow-hidden relative">
                                 @if($slider->image_path)
-                                    <img src="{{ Storage::disk('public')->url($slider->image_path) }}" 
+                                    <img src="{{ asset('storage/' . $slider->image_path) }}" 
                                          alt="{{ $slider->name }}" 
                                          class="w-[170px] h-[100px] object-cover object-center transition-transform duration-300 group-hover:scale-105">
                                 @endif
@@ -76,7 +76,7 @@
                                 <!-- Imagen del slider -->
                                 <div class="w-[170px] h-[100px] bg-accent-100 rounded-lg overflow-hidden relative">
                                     @if($slider->image_path)
-                                        <img src="{{ Storage::disk('public')->url($slider->image_path) }}" 
+                                        <img src="{{ asset('storage/' . $slider->image_path) }}" 
                                              alt="{{ $slider->name }}" 
                                              class="w-[170px] h-[100px] object-cover object-center transition-transform duration-300 group-hover:scale-105">
                                     @endif
@@ -232,24 +232,24 @@
         <h2 class="text-lg font-bold text-black-400 mb-4">Categorías</h2>
         
         @if($categories->count() > 0)
-            <div class="grid grid-cols-4 gap-4">
+            <div class="grid grid-cols-4 gap-3">
                 @foreach($categories as $category)
                     <a href="{{ route('tenant.category', ['store' => $store->slug, 'categorySlug' => $category->slug]) }}" 
-                       class="flex flex-col items-center p-3 bg-accent-50 rounded-lg border border-accent-200 hover:shadow-sm hover:border-primary-200 transition-all group">
+                       class="flex flex-col items-center group">
                         
-                                                 <!-- Icono de la categoría -->
-                         <div class="w-12 h-12 mb-2 flex items-center justify-center rounded-lg bg-accent-100 group-hover:bg-primary-50 transition-colors">
+                        <!-- Icono de la categoría con fondo colorido -->
+                        <div class="w-16 h-16 mb-2 flex items-center justify-center rounded-2xl bg-gradient-to-br from-accent-100 to-accent-200 group-hover:from-primary-50 group-hover:to-primary-100 transition-all duration-200 shadow-sm group-hover:shadow-md">
                              @if($category->icon && $category->icon->image_url)
                                  <img src="{{ $category->icon->image_url }}" 
                                       alt="{{ $category->name }}" 
-                                      class="w-8 h-8 object-contain">
+                                      class="w-10 h-10 object-contain">
                              @else
-                                 <x-solar-gallery-outline class="w-6 h-6 text-black-300 group-hover:text-primary-300" />
+                                 <x-solar-gallery-outline class="w-8 h-8 text-black-300 group-hover:text-primary-300" />
                              @endif
-                         </div>
+                        </div>
                         
                         <!-- Nombre de la categoría -->
-                        <span class="text-xs text-center text-black-400 font-medium group-hover:text-primary-300 transition-colors">
+                        <span class="text-xs text-center text-black-400 font-medium group-hover:text-primary-300 transition-colors leading-tight">
                             {{ $category->name }}
                         </span>
                     </a>

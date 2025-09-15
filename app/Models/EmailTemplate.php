@@ -63,7 +63,11 @@ class EmailTemplate extends Model
         ],
         'billing' => [
             'invoice_number', 'amount', 'due_date', 'store_name', 'plan_name',
-            'invoice_url', 'app_name', 'billing_email'
+            'invoice_url', 'app_name', 'billing_email', 'payment_date', 'period',
+            'days_to_pay', 'days_remaining', 'days_overdue', 'payment_instructions',
+            'urgency_message', 'suspension_warning', 'dashboard_url', 'support_email',
+            'suspension_date', 'suspension_reason', 'reactivation_instructions',
+            'data_preservation', 'support_phone', 'admin_name'
         ]
     ];
 
@@ -271,31 +275,9 @@ class EmailTemplate extends Model
                 'variables' => ['ticket_id', 'ticket_subject', 'customer_name', 'status', 'ticket_url'],
                 'is_active' => true
             ],
-            [
-                'template_key' => 'invoice_created',
-                'name' => 'Nueva Factura',
-                'context' => 'billing',
-                'subject' => 'Factura #{{invoice_number}} - {{store_name}}',
-                'body_html' => '
-                    <h1>Nueva factura generada</h1>
-                    <p>Hola,</p>
-                    <p>Se ha generado una nueva factura para la tienda <strong>{{store_name}}</strong>:</p>
-                    
-                    <ul>
-                        <li><strong>Número de factura:</strong> {{invoice_number}}</li>
-                        <li><strong>Monto:</strong> ${{amount}}</li>
-                        <li><strong>Fecha de vencimiento:</strong> {{due_date}}</li>
-                        <li><strong>Plan:</strong> {{plan_name}}</li>
-                    </ul>
-                    
-                    <p><a href="{{invoice_url}}">Ver factura completa</a></p>
-                    
-                    <p>Equipo de Facturación - {{app_name}}</p>
-                ',
-                'body_text' => 'Nueva factura generada\n\nHola,\n\nSe ha generado una nueva factura para la tienda {{store_name}}:\n\n- Número de factura: {{invoice_number}}\n- Monto: ${{amount}}\n- Fecha de vencimiento: {{due_date}}\n- Plan: {{plan_name}}\n\nVer factura completa: {{invoice_url}}\n\nEquipo de Facturación - {{app_name}}',
-                'variables' => ['invoice_number', 'amount', 'due_date', 'store_name', 'plan_name', 'invoice_url'],
-                'is_active' => true
-            ],
+            // ================================================================ 
+            // 💰 PLANTILLAS HERMOSAS PARA FACTURACIÓN Y BILLING
+            // ================================================================
             [
                 'template_key' => 'ticket_response',
                 'name' => 'Respuesta de Ticket',

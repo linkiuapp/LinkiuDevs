@@ -76,6 +76,69 @@ class StorefrontController extends Controller
     }
 
     /**
+     * Show catalog page with search functionality
+     */
+    public function catalog(Request $request)
+    {
+        // El middleware ya identificó la tienda
+        $store = view()->shared('currentStore');
+        $store->load('design');
+
+        // Si la tienda está inactiva, mostrar mensaje
+        if ($store->status !== 'active') {
+            return view('tenant::storefront.inactive', compact('store'));
+        }
+
+        // Obtener categorías para filtros
+        $categories = Category::where('store_id', $store->id)
+            ->active()
+            ->with('icon')
+            ->orderBy('name')
+            ->get();
+
+        // Query base de productos
+        $query = Product::where('store_id', $store->id)
+            ->where('is_active', true)
+            ->with(['mainImage', 'categories']);
+
+        // Aplicar búsqueda si existe
+        if ($search = $request->get('search')) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%')
+                  ->orWhere('sku', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Filtrar por categoría si existe
+        if ($categoryId = $request->get('category')) {
+            $query->whereHas('categories', function($q) use ($categoryId) {
+                $q->where('category_id', $categoryId);
+            });
+        }
+
+        // Ordenamiento
+        $sortBy = $request->get('sort', 'name');
+        switch ($sortBy) {
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'newest':
+                $query->orderBy('created_at', 'desc');
+                break;
+            default:
+                $query->orderBy('name', 'asc');
+        }
+
+        $products = $query->paginate(20);
+
+        return view('tenant::storefront.catalog', compact('store', 'products', 'categories'));
+    }
+
+    /**
      * Show cart page (for future implementation)
      */
     public function cart(Request $request)

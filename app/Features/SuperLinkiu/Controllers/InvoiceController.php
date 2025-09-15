@@ -9,9 +9,21 @@ use App\Shared\Models\Plan;
 use App\Shared\Models\Subscription;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Services\BillingAutomationService;
+use App\Services\BillingNotificationService;
 
 class InvoiceController extends Controller
 {
+    protected $billingService;
+    protected $notificationService;
+
+    public function __construct(
+        BillingAutomationService $billingService,
+        BillingNotificationService $notificationService
+    ) {
+        $this->billingService = $billingService;
+        $this->notificationService = $notificationService;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -236,13 +248,15 @@ class InvoiceController extends Controller
     {
         try {
             // Log para debugging
-            \Log::info('markAsPaid called', [
+            \Log::info('🔄 markAsPaid iniciado', [
                 'invoice_id' => $invoice->id,
+                'invoice_number' => $invoice->invoice_number,
                 'invoice_status' => $invoice->status,
-                'request_data' => $request->all()
+                'store_name' => $invoice->store->name,
+                'admin_user' => auth()->user()->name
             ]);
 
-            // Verificar que la factura no esté ya pagada
+            // Validaciones iniciales
             if ($invoice->isPaid()) {
                 return response()->json([
                     'success' => false,
@@ -250,7 +264,6 @@ class InvoiceController extends Controller
                 ], 400);
             }
 
-            // Verificar que la factura no esté cancelada
             if ($invoice->isCancelled()) {
                 return response()->json([
                     'success' => false,
@@ -260,93 +273,69 @@ class InvoiceController extends Controller
 
             $validated = $request->validate([
                 'paid_date' => 'nullable|date',
+                'payment_notes' => 'nullable|string|max:500'
             ]);
 
             $paidDate = isset($validated['paid_date']) && $validated['paid_date'] 
                 ? Carbon::parse($validated['paid_date']) 
                 : now();
             
-            // Marcar factura como pagada
+            // 1. Marcar factura como pagada
             $result = $invoice->markAsPaid($paidDate);
             
             if (!$result) {
-                \Log::error('Failed to mark invoice as paid', ['invoice_id' => $invoice->id]);
+                \Log::error('❌ Error al marcar factura como pagada', ['invoice_id' => $invoice->id]);
                 return response()->json([
                     'success' => false,
                     'message' => 'Error al actualizar el estado de la factura.',
                 ], 500);
             }
 
-            \Log::info('Invoice marked as paid successfully', [
+            // 2. Agregar notas de pago si se proporcionaron
+            if (!empty($validated['payment_notes'])) {
+                $currentMetadata = $invoice->metadata ?? [];
+                $currentMetadata['payment_notes'] = $validated['payment_notes'];
+                $currentMetadata['processed_by'] = auth()->user()->name;
+                $currentMetadata['processed_at'] = now()->toISOString();
+                $invoice->update(['metadata' => $currentMetadata]);
+            }
+
+            \Log::info('✅ Factura marcada como pagada exitosamente', [
                 'invoice_id' => $invoice->id,
+                'invoice_number' => $invoice->invoice_number,
                 'new_status' => $invoice->status
             ]);
 
-            // Si la factura está conectada a una suscripción, actualizarla
-            if ($invoice->subscription) {
-                $subscription = $invoice->subscription;
-                
-                // Si la suscripción está en período de gracia, reactivarla
-                if ($subscription->status === Subscription::STATUS_GRACE_PERIOD) {
-                    $subscription->update([
-                        'status' => Subscription::STATUS_ACTIVE,
-                        'grace_period_end' => null,
-                        'metadata' => array_merge($subscription->metadata ?? [], [
-                            'reactivated_by_payment' => true,
-                            'reactivated_at' => now(),
-                            'invoice_id' => $invoice->id,
-                        ])
-                    ]);
-                    
-                    \Log::info('Subscription reactivated by payment', [
-                        'subscription_id' => $subscription->id,
-                        'invoice_id' => $invoice->id
-                    ]);
-                }
+            // 3. Procesar confirmación de pago automática (usando BillingAutomationService)
+            $automationResults = $this->billingService->processPaymentConfirmation($invoice);
+            
+            \Log::info('🔧 Automatización de pago procesada', [
+                'invoice_id' => $invoice->id,
+                'automation_results' => $automationResults
+            ]);
 
-                // Extender el período actual si la factura cubre el próximo período
-                if ($subscription->status === Subscription::STATUS_ACTIVE && 
-                    $invoice->issue_date >= now()->subDays(7)) {
-                    
-                    $periodDays = match($invoice->period) {
-                        'monthly' => 30,
-                        'quarterly' => 90,
-                        'biannual' => 180,
-                        default => 30
-                    };
-
-                    $newPeriodEnd = $subscription->current_period_end->copy()->addDays($periodDays);
-                    $newBillingDate = $newPeriodEnd->copy()->addDay();
-
-                    $subscription->update([
-                        'current_period_end' => $newPeriodEnd,
-                        'next_billing_date' => $newBillingDate,
-                    ]);
-                    
-                    \Log::info('Subscription period extended', [
-                        'subscription_id' => $subscription->id,
-                        'new_period_end' => $newPeriodEnd->toDateString(),
-                        'new_billing_date' => $newBillingDate->toDateString()
-                    ]);
-                }
-            }
-
-            // Recargar la factura para obtener los datos actualizados
+            // 4. Recargar la factura para obtener los datos actualizados
             $invoice->refresh();
 
-            // Send invoice paid notification email
-            $this->sendInvoicePaidNotification($invoice);
+            // 5. Enviar notificación de pago recibido
+            $this->notificationService->sendPaymentReceivedNotification($invoice);
+
+            // 6. Si la tienda fue reactivada, enviar notificación de reactivación
+            if ($automationResults['store_reactivated'] ?? false) {
+                $this->notificationService->sendReactivationNotification($invoice->store);
+            }
 
             return response()->json([
                 'success' => true,
-                'message' => 'Factura marcada como pagada exitosamente.',
+                'message' => 'Factura procesada exitosamente.',
+                'details' => $this->getPaymentProcessingDetails($invoice, $automationResults),
                 'status' => $invoice->getStatusLabel(),
                 'status_color' => $invoice->getStatusColor(),
                 'paid_date' => $invoice->paid_date ? $invoice->paid_date->format('d/m/Y H:i') : null,
             ]);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
-            \Log::error('Validation error in markAsPaid', [
+            \Log::error('❌ Error de validación en markAsPaid', [
                 'invoice_id' => $invoice->id,
                 'errors' => $e->errors()
             ]);
@@ -357,7 +346,7 @@ class InvoiceController extends Controller
                 'errors' => $e->errors(),
             ], 422);
         } catch (\Exception $e) {
-            \Log::error('Error al marcar factura como pagada', [
+            \Log::error('💥 Error crítico al marcar factura como pagada', [
                 'invoice_id' => $invoice->id,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
@@ -369,6 +358,35 @@ class InvoiceController extends Controller
                 'error_details' => config('app.debug') ? $e->getMessage() : null,
             ], 500);
         }
+    }
+
+    /**
+     * Get payment processing details for response
+     */
+    private function getPaymentProcessingDetails(Invoice $invoice, array $automationResults): array
+    {
+        $details = [
+            'invoice_number' => $invoice->invoice_number,
+            'amount' => $invoice->getFormattedAmount(),
+            'store_name' => $invoice->store->name,
+            'actions_performed' => []
+        ];
+
+        if ($automationResults['subscription_updated'] ?? false) {
+            $details['actions_performed'][] = 'Suscripción actualizada';
+        }
+
+        if ($automationResults['store_reactivated'] ?? false) {
+            $details['actions_performed'][] = 'Tienda reactivada automáticamente';
+        }
+
+        if ($automationResults['next_invoice_scheduled'] ?? false) {
+            $details['actions_performed'][] = 'Próxima facturación programada';
+        }
+
+        $details['actions_performed'][] = 'Notificaciones enviadas';
+
+        return $details;
     }
 
     /**
@@ -503,7 +521,7 @@ class InvoiceController extends Controller
             if ($storeAdminEmail) {
                 \App\Services\EmailService::sendWithTemplate(
                     'invoice_created',
-                    [$storeAdminEmail],
+                    $storeAdminEmail,
                     [
                         'invoice_number' => $invoice->invoice_number,
                         'amount' => number_format($invoice->amount, 2),
@@ -519,7 +537,7 @@ class InvoiceController extends Controller
             if ($billingEmail && $billingEmail !== $storeAdminEmail) {
                 \App\Services\EmailService::sendWithTemplate(
                     'invoice_created',
-                    [$billingEmail],
+                    $billingEmail,
                     [
                         'invoice_number' => $invoice->invoice_number,
                         'amount' => number_format($invoice->amount, 2),
@@ -550,7 +568,7 @@ class InvoiceController extends Controller
             if ($storeAdminEmail) {
                 \App\Services\EmailService::sendWithTemplate(
                     'invoice_paid',
-                    [$storeAdminEmail],
+                    $storeAdminEmail,
                     [
                         'invoice_number' => $invoice->invoice_number,
                         'amount' => number_format($invoice->amount, 2),
@@ -565,7 +583,7 @@ class InvoiceController extends Controller
             if ($billingEmail && $billingEmail !== $storeAdminEmail) {
                 \App\Services\EmailService::sendWithTemplate(
                     'invoice_paid',
-                    [$billingEmail],
+                    $billingEmail,
                     [
                         'invoice_number' => $invoice->invoice_number,
                         'amount' => number_format($invoice->amount, 2),
