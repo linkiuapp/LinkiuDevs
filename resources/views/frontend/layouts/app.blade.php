@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $store->name ?? 'Linkiu Store' }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="store-slug" content="{{ $store->slug }}">
 
     @if($store->design && $store->design->is_published && $store->design->favicon_url)
         <link rel="icon" type="image/x-icon" href="{{ $store->design->favicon_url }}">
@@ -126,12 +127,31 @@
         }
     </script>
 
-    <!-- Carrito flotante (no en checkout) -->
-    @unless(request()->routeIs('tenant.checkout.create'))
+    <!-- Carrito flotante (solo en páginas de navegación) -->
+    @unless(request()->routeIs(['tenant.cart.index', 'tenant.checkout.*']))
         <x-cart-float :store="$store" />
     @endunless
 
     @stack('scripts')
+
+    <!-- Cart Debugging -->
+    <script>
+        console.log('🏪 Frontend layout loaded');
+        console.log('🛒 Checking cart initialization...');
+        console.log('📍 Current URL:', window.location.pathname);
+        console.log('🏷️ Store slug:', document.querySelector('meta[name="store-slug"]')?.content);
+        console.log('🔐 CSRF token:', document.querySelector('meta[name="csrf-token"]')?.content);
+        
+        // Verificar si el carrito está disponible después de 2 segundos
+        setTimeout(() => {
+            console.log('🛒 Cart available?', typeof window.cart);
+            if (window.cart) {
+                console.log('✅ Cart initialized successfully');
+            } else {
+                console.log('❌ Cart not initialized');
+            }
+        }, 2000);
+    </script>
 
 </body>
 </html> 

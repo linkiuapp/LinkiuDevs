@@ -166,18 +166,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Configurar datos del item
         itemElement.dataset.itemKey = item.key;
-        // Configurar imagen del producto
+        // Configurar imagen del producto (compatible con nuevo y viejo formato)
         const imageElement = itemElement.querySelector('.item-image');
-        if (item.product.main_image_url) {
-            imageElement.src = item.product.main_image_url;
+        const imageUrl = item.image_url || (item.product && item.product.main_image_url) || null;
+        if (imageUrl) {
+            imageElement.src = imageUrl;
         } else {
             imageElement.src = '{{ asset("assets/images/placeholder-product.svg") }}';
         }
-        itemElement.querySelector('.item-image').alt = item.product.name;
-        itemElement.querySelector('.item-name').textContent = item.product.name;
+        
+        // Configurar datos (compatible con nuevo y viejo formato)
+        const productName = item.product_name || (item.product && item.product.name) || 'Producto sin nombre';
+        const productPrice = item.product_price || (item.product && item.product.price) || 0;
+        
+        itemElement.querySelector('.item-image').alt = productName;
+        itemElement.querySelector('.item-name').textContent = productName;
         itemElement.querySelector('.item-variants').textContent = item.variant_display || '';
-        // Usar el precio unitario correcto (incluye modificadores de variantes)
-        const unitPrice = item.product_price + (item.variant_details?.precio_modificador || 0);
+        
+        // Usar el precio unitario correcto
+        const unitPrice = productPrice + (item.variant_details?.precio_modificador || 0);
         itemElement.querySelector('.item-price').textContent = `$${formatPrice(unitPrice)}`;
         itemElement.querySelector('.item-quantity').textContent = item.quantity;
 
@@ -241,12 +248,23 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     async function removeItem(itemKey) {
-        // Mostrar loading state
+        // ⚡ ELIMINACIÓN INSTANTÁNEA EN UI
         const itemElement = document.querySelector(`[data-item-key="${itemKey}"]`);
         if (itemElement) {
-            showItemLoading(itemElement, 'remove');
+            // Animar eliminación instantánea
+            itemElement.style.transform = 'translateX(-100%)';
+            itemElement.style.opacity = '0';
+            itemElement.style.transition = 'all 0.3s ease-out';
+            
+            // Remover del DOM después de la animación
+            setTimeout(() => {
+                itemElement.remove();
+                // Verificar si el carrito quedó vacío
+                checkIfCartEmpty();
+            }, 300);
         }
 
+        // Procesar eliminación en servidor en segundo plano
         try {
             const response = await fetch('{{ route("tenant.cart.remove", $store->slug) }}', {
                 method: 'DELETE',
@@ -259,19 +277,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const data = await response.json();
             if (data.success) {
-                loadCart();
+                // Recargar carrito para actualizar totales correctos
+                setTimeout(() => {
+                    loadCart();
+                }, 400);
                 // El carrito flotante se actualiza automáticamente vía cart.js
             } else {
+                // Si falla, mostrar error y recargar carrito para restaurar estado
                 showError(data.message || 'Error al eliminar producto');
+                setTimeout(() => {
+                    loadCart();
+                }, 500);
             }
         } catch (error) {
             console.error('Error removing item:', error);
             showError('Error de conexión');
-        } finally {
-            // Ocultar loading state
-            if (itemElement) {
-                hideItemLoading(itemElement, 'remove');
-            }
+            // Si falla, recargar carrito para restaurar estado
+            setTimeout(() => {
+                loadCart();
+            }, 500);
+        }
+    }
+    
+    // Función para verificar si el carrito quedó vacío después de eliminación
+    function checkIfCartEmpty() {
+        const remainingItems = document.querySelectorAll('#cart-items .cart-item');
+        if (remainingItems.length === 0) {
+            cartEmpty.classList.remove('hidden');
+            cartItems.classList.add('hidden');
+            cartSummary.classList.add('hidden');
+            cartActions.classList.add('hidden');
         }
     }
 

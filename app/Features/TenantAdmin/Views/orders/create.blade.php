@@ -188,7 +188,7 @@
                             <h4 class="text-sm font-medium text-warning-300">Sin Métodos de Envío</h4>
                             <div class="text-xs text-warning-300 mt-1">
                                 No hay métodos de envío configurados. 
-                                <a href="{{ route('tenant.admin.shipping-methods.index', $store->slug) }}" class="underline">
+                                <a href="{{ route('tenant.admin.simple-shipping.index', $store->slug) }}" class="underline">
                                     Configurar métodos de envío
                                 </a>
                             </div>
@@ -217,7 +217,7 @@
                          class="mt-3 p-3 bg-warning-50 border border-warning-200 rounded-lg">
                         <div class="text-sm text-warning-300">
                             Los métodos de envío no tienen zonas activas configuradas.
-                            <a href="{{ route('tenant.admin.shipping-methods.index', $store->slug) }}" class="underline">
+                            <a href="{{ route('tenant.admin.simple-shipping.index', $store->slug) }}" class="underline">
                                 Configurar zonas
                             </a>
                         </div>

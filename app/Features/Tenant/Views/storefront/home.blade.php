@@ -119,6 +119,47 @@
         </div>
     @endif
 
+    <!-- Categorías -->
+    <div>
+        <h2 class="text-lg font-bold text-black-400 mb-4">Categorías</h2>
+        
+        @if($categories->count() > 0)
+            <div class="grid grid-cols-4 gap-3">
+                @foreach($categories as $category)
+                    <a href="{{ route('tenant.category', ['store' => $store->slug, 'categorySlug' => $category->slug]) }}" 
+                       class="flex flex-col items-center group">
+                        
+                        <!-- Icono de la categoría con fondo colorido -->
+                        <div class="w-16 h-16 mb-2 flex items-center justify-center rounded-2xl bg-gradient-to-br from-accent-100 to-accent-200 group-hover:from-primary-50 group-hover:to-primary-100 transition-all duration-200 shadow-sm group-hover:shadow-md">
+                             @if($category->icon && $category->icon->image_url)
+                                 <img src="{{ $category->icon->image_url }}" 
+                                      alt="{{ $category->name }}" 
+                                      class="w-10 h-10 object-contain">
+                             @else
+                                 <x-solar-gallery-outline class="w-8 h-8 text-black-300 group-hover:text-primary-300" />
+                             @endif
+                        </div>
+                        
+                        <!-- Nombre de la categoría -->
+                        <span class="text-xs text-center text-black-400 font-medium group-hover:text-primary-300 transition-colors leading-tight">
+                            {{ $category->name }}
+                        </span>
+                    </a>
+                @endforeach
+            </div>
+        @else
+            <div class="text-center py-8 text-black-300">
+                <x-solar-gallery-outline class="w-12 h-12 mx-auto mb-3 text-black-200" />
+                <p class="text-sm">No hay categorías disponibles</p>
+                <a href="{{ route('tenant.categories', $store->slug) }}" 
+                   class="inline-flex items-center mt-3 px-4 py-2 bg-primary-300 text-accent-50 rounded-lg text-sm hover:bg-primary-200 transition-colors">
+                    <x-solar-gallery-outline class="w-4 h-4 mr-2" />
+                    Explorar
+                </a>
+            </div>
+        @endif
+    </div>
+
     <!-- Top 3 más vendidos -->
     <div>
         <h2 class="text-lg font-bold text-black-400 mb-4">Top 3 más vendidos</h2>
@@ -147,7 +188,10 @@
                         
                         <!-- Información del producto -->
                         <div class="flex-1 min-w-0">
-                            <h3 class="font-semibold text-black-400 text-sm">{{ $product->name }}</h3>
+                            <a href="{{ route('tenant.product', [$store->slug, $product->slug]) }}" 
+                               class="hover:text-primary-300 transition-colors">
+                                <h3 class="font-semibold text-black-400 text-sm">{{ $product->name }}</h3>
+                            </a>
                             <p class="text-xs text-black-300 mt-1 line-clamp-2">{{ $product->description }}</p>
                             <div class="mt-2 text-lg font-bold text-black-500">
                                 ${{ number_format($product->price, 0, ',', '.') }}
@@ -201,7 +245,10 @@
                         
                         <!-- Información del producto -->
                         <div class="flex-1 min-w-0">
-                            <h3 class="font-semibold text-black-400 text-sm">{{ $product->name }}</h3>
+                            <a href="{{ route('tenant.product', [$store->slug, $product->slug]) }}" 
+                               class="hover:text-primary-300 transition-colors">
+                                <h3 class="font-semibold text-black-400 text-sm">{{ $product->name }}</h3>
+                            </a>
                             <p class="text-xs text-black-300 mt-1 line-clamp-2">{{ $product->description }}</p>
                             <div class="mt-2 text-lg font-bold text-black-500">
                                 ${{ number_format($product->price, 0, ',', '.') }}
@@ -223,47 +270,6 @@
             <div class="text-center py-8 text-black-300">
                 <x-solar-box-outline class="w-12 h-12 mx-auto mb-3 text-black-200" />
                 <p class="text-sm">No hay productos nuevos disponibles</p>
-            </div>
-        @endif
-    </div>
-
-    <!-- Categorías -->
-    <div>
-        <h2 class="text-lg font-bold text-black-400 mb-4">Categorías</h2>
-        
-        @if($categories->count() > 0)
-            <div class="grid grid-cols-4 gap-3">
-                @foreach($categories as $category)
-                    <a href="{{ route('tenant.category', ['store' => $store->slug, 'categorySlug' => $category->slug]) }}" 
-                       class="flex flex-col items-center group">
-                        
-                        <!-- Icono de la categoría con fondo colorido -->
-                        <div class="w-16 h-16 mb-2 flex items-center justify-center rounded-2xl bg-gradient-to-br from-accent-100 to-accent-200 group-hover:from-primary-50 group-hover:to-primary-100 transition-all duration-200 shadow-sm group-hover:shadow-md">
-                             @if($category->icon && $category->icon->image_url)
-                                 <img src="{{ $category->icon->image_url }}" 
-                                      alt="{{ $category->name }}" 
-                                      class="w-10 h-10 object-contain">
-                             @else
-                                 <x-solar-gallery-outline class="w-8 h-8 text-black-300 group-hover:text-primary-300" />
-                             @endif
-                        </div>
-                        
-                        <!-- Nombre de la categoría -->
-                        <span class="text-xs text-center text-black-400 font-medium group-hover:text-primary-300 transition-colors leading-tight">
-                            {{ $category->name }}
-                        </span>
-                    </a>
-                @endforeach
-            </div>
-        @else
-            <div class="text-center py-8 text-black-300">
-                <x-solar-gallery-outline class="w-12 h-12 mx-auto mb-3 text-black-200" />
-                <p class="text-sm">No hay categorías disponibles</p>
-                <a href="{{ route('tenant.categories', $store->slug) }}" 
-                   class="inline-flex items-center mt-3 px-4 py-2 bg-primary-300 text-accent-50 rounded-lg text-sm hover:bg-primary-200 transition-colors">
-                    <x-solar-gallery-outline class="w-4 h-4 mr-2" />
-                    Explorar
-                </a>
             </div>
         @endif
     </div>

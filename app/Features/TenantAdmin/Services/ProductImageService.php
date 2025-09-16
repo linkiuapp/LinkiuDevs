@@ -37,16 +37,38 @@ class ProductImageService
     private function processImage(Product $product, UploadedFile $image, int $index, ?int $mainImageIndex = null): ?ProductImage
     {
         try {
-            // Validar que sea una imagen
-            if (!$image->isValid() || !str_starts_with($image->getMimeType(), 'image/')) {
+            // Validar que sea una imagen (sin usar finfo)
+            if (!$image->isValid()) {
+                return null;
+            }
+
+            // Validar extensión de archivo en lugar de MIME type
+            $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+            $extension = strtolower($image->getClientOriginalExtension());
+            if (!in_array($extension, $allowedExtensions)) {
                 return null;
             }
 
             // Generar nombre único para la imagen
             $filename = $this->generateUniqueFilename($image);
             
-            // Guardar en almacenamiento local
-            $path = Storage::disk('public')->putFileAs('products/' . $product->id . '/images', $image, $filename, 'public');
+            // Guardar en almacenamiento local (método directo sin Storage facade)
+            $directory = 'products/' . $product->id . '/images';
+            $publicPath = storage_path('app/public');
+            $fullDirectoryPath = $publicPath . '/' . $directory;
+            $fullFilePath = $fullDirectoryPath . '/' . $filename;
+            
+            // Crear directorio si no existe (método directo PHP)
+            if (!file_exists($fullDirectoryPath)) {
+                mkdir($fullDirectoryPath, 0755, true);
+            }
+            
+            // Copiar archivo directamente sin usar Storage facade
+            if (copy($image->getPathname(), $fullFilePath)) {
+                $path = $directory . '/' . $filename; // Path relativo para BD
+            } else {
+                throw new \Exception('Error copiando archivo de imagen');
+            }
             
             // Path para guardar en BD (será usado para generar URL)
             $relativePath = $path;

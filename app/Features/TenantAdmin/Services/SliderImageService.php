@@ -29,9 +29,23 @@ class SliderImageService
                 return null;
             }
             
-            // Guardar imagen en bucket S3
-            $path = 'sliders/' . $slider->store_id . '/' . $filename;
-            Storage::disk('public')->put($path, $processedImage, 'public');
+            // Guardar imagen en almacenamiento local (método directo sin Storage facade)
+            $directory = 'sliders/' . $slider->store_id;
+            $publicPath = storage_path('app/public');
+            $fullDirectoryPath = $publicPath . '/' . $directory;
+            $fullFilePath = $fullDirectoryPath . '/' . $filename;
+            
+            // Crear directorio si no existe (método directo PHP)
+            if (!file_exists($fullDirectoryPath)) {
+                mkdir($fullDirectoryPath, 0755, true);
+            }
+            
+            // Guardar imagen procesada directamente
+            if (file_put_contents($fullFilePath, $processedImage)) {
+                $path = $directory . '/' . $filename; // Path relativo para BD
+            } else {
+                throw new \Exception('Error guardando imagen de slider');
+            }
 
             return $path;
 
@@ -46,8 +60,15 @@ class SliderImageService
      */
     private function validateImage(UploadedFile $image): bool
     {
-        // Validar que sea una imagen
-        if (!$image->isValid() || !str_starts_with($image->getMimeType(), 'image/')) {
+        // Validar que sea una imagen (sin usar finfo)
+        if (!$image->isValid()) {
+            return false;
+        }
+
+        // Validar extensión de archivo en lugar de MIME type
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        $extension = strtolower($image->getClientOriginalExtension());
+        if (!in_array($extension, $allowedExtensions)) {
             return false;
         }
 
@@ -178,9 +199,11 @@ class SliderImageService
 
         try {
             $originalPath = $originalSlider->image_path;
+            $publicPath = storage_path('app/public');
+            $fullOriginalPath = $publicPath . '/' . $originalPath;
             
             // Verificar que el archivo original existe
-            if (!Storage::disk('public')->exists($originalPath)) {
+            if (!file_exists($fullOriginalPath)) {
                 return null;
             }
 
@@ -188,17 +211,20 @@ class SliderImageService
             $pathInfo = pathinfo($originalPath);
             $newFilename = $pathInfo['filename'] . '-copy-' . time() . '.' . $pathInfo['extension'];
             
-            // Crear directorio si no existe
+            // Crear directorio si no existe (método directo PHP)
             $directory = 'sliders/' . $newSlider->store_id;
-            if (!Storage::disk('public')->exists($directory)) {
-                Storage::disk('public')->makeDirectory($directory);
+            $fullDirectoryPath = $publicPath . '/' . $directory;
+            if (!file_exists($fullDirectoryPath)) {
+                mkdir($fullDirectoryPath, 0755, true);
             }
 
             $newPath = $directory . '/' . $newFilename;
+            $fullNewPath = $publicPath . '/' . $newPath;
             
-            // Copiar archivo
-            $fileContents = Storage::disk('public')->get($originalPath);
-            Storage::disk('public')->put($newPath, $fileContents);
+            // Copiar archivo directamente
+            if (!copy($fullOriginalPath, $fullNewPath)) {
+                throw new \Exception('Error copiando imagen de slider');
+            }
 
             return $newPath;
 

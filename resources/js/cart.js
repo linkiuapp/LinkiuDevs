@@ -43,12 +43,21 @@ class Cart {
     // Agregar producto al carrito
     async addProduct(product) {
         try {
+            const url = this.getCartAddUrl();
+            console.log('🛒 Adding product to cart:', product);
+            console.log('🌐 Cart URL:', url);
+            
+            const csrfToken = document.querySelector('meta[name="csrf-token"]');
+            if (!csrfToken) {
+                throw new Error('CSRF token not found');
+            }
+            
             // Enviar al servidor (única fuente de verdad)
-            const response = await fetch(this.getCartAddUrl(), {
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    'X-CSRF-TOKEN': csrfToken.content
                 },
                 body: JSON.stringify({
                     product_id: product.id,
@@ -57,19 +66,30 @@ class Cart {
                 })
             });
 
+            console.log('🌐 Response status:', response.status);
+            console.log('🌐 Response ok:', response.ok);
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('❌ Response error:', errorText);
+                throw new Error(`HTTP ${response.status}: ${errorText}`);
+            }
+            
             const data = await response.json();
+            console.log('📦 Response data:', data);
             
             if (data.success) {
                 // Solo mostrar feedback y actualizar UI con datos del servidor
                 this.showAddedFeedback(product.name);
                 this.updateCartDisplayFromServer(data);
             } else {
+                console.error('❌ Server error:', data.message);
                 this.showError(data.message || 'Error al agregar producto');
             }
         } catch (error) {
-            console.error('Error adding to cart:', error);
+            console.error('❌ Cart error:', error);
             const isNetworkError = !navigator.onLine || error.name === 'NetworkError' || error.message.includes('fetch');
-            this.showError('Error al agregar producto', isNetworkError);
+            this.showError('Error al agregar producto: ' + error.message, isNetworkError);
         }
     }
 
@@ -239,10 +259,18 @@ class Cart {
 
     // Obtener URL para agregar al carrito
     getCartAddUrl() {
+        // Intentar obtener el slug de la tienda desde el meta tag primero
+        const storeSlugFromMeta = document.querySelector('meta[name="store-slug"]');
+        if (storeSlugFromMeta) {
+            return `/${storeSlugFromMeta.content}/carrito/agregar`;
+        }
+        
+        // Fallback: obtener desde la URL
         const pathParts = window.location.pathname.split('/').filter(part => part);
         const storeSlug = pathParts[0] || '';
         
         if (!storeSlug) {
+            console.error('No se pudo determinar el slug de la tienda desde URL:', window.location.pathname);
             throw new Error('No se pudo determinar el slug de la tienda');
         }
         
@@ -449,26 +477,72 @@ class Cart {
     }
 }
 
-// Inicializar carrito cuando carga la página (solo si estamos en storefront)
-document.addEventListener('DOMContentLoaded', function() {
-    // Verificar que estamos en una página de storefront
-    const isStorefront = !window.location.pathname.includes('/admin') && 
-                        !window.location.pathname.includes('/superlinkiu') &&
-                        window.location.pathname !== '/' &&
-                        window.location.pathname !== '/login' &&
-                        window.location.pathname !== '/register';
+// Función para inicializar el carrito
+function initializeCart() {
+    console.log('🚀 Attempting to initialize cart...');
+    console.log('📄 Document ready state:', document.readyState);
+    console.log('🌐 Current URL:', window.location.href);
+    console.log('📍 Pathname:', window.location.pathname);
+    
+    // Verificar que estamos en una página de storefront usando el meta tag
+    const storeSlugMeta = document.querySelector('meta[name="store-slug"]');
+    const csrfToken = document.querySelector('meta[name="csrf-token"]');
+    const isAdminPage = window.location.pathname.includes('/admin');
+    const isSuperLinkiuPage = window.location.pathname.includes('/superlinkiu');
+    const isMainPage = window.location.pathname === '/';
+    const isAuthPage = window.location.pathname.includes('/login') || window.location.pathname.includes('/register');
+    
+    // Es storefront si tiene store-slug meta tag y NO es una página admin/auth
+    const isStorefront = storeSlugMeta && !isAdminPage && !isSuperLinkiuPage && !isMainPage && !isAuthPage;
+    
+    console.log('🔍 Cart initialization check:');
+    console.log('  - Store slug meta exists:', !!storeSlugMeta);
+    console.log('  - Store slug value:', storeSlugMeta?.content);
+    console.log('  - CSRF token exists:', !!csrfToken);
+    console.log('  - Is admin page:', isAdminPage);
+    console.log('  - Is SuperLinkiu page:', isSuperLinkiuPage);
+    console.log('  - Is main page:', isMainPage);
+    console.log('  - Is auth page:', isAuthPage);
+    console.log('  - Is storefront (final):', isStorefront);
     
     if (isStorefront) {
         try {
             window.cart = new Cart();
-            console.log('🛒 Cart initialized successfully');
+            console.log('✅ Cart initialized successfully');
+            console.log('🛒 Cart instance:', window.cart);
         } catch (error) {
             console.error('❌ Error initializing cart:', error);
         }
     } else {
         console.log('ℹ️ Cart not initialized (not in storefront context)');
+        console.log('   Reasons:');
+        if (!storeSlugMeta) console.log('   - No store-slug meta tag found');
+        if (isAdminPage) console.log('   - Is admin page');
+        if (isSuperLinkiuPage) console.log('   - Is SuperLinkiu page');
+        if (isMainPage) console.log('   - Is main page');
+        if (isAuthPage) console.log('   - Is auth page');
     }
-});
+}
+
+// Inicializar carrito de múltiples formas para asegurar que se ejecute
+console.log('📦 Cart.js loaded, setting up initialization...');
+
+// Método 1: Si el DOM ya está listo
+if (document.readyState === 'loading') {
+    console.log('📄 DOM still loading, waiting for DOMContentLoaded...');
+    document.addEventListener('DOMContentLoaded', initializeCart);
+} else {
+    console.log('📄 DOM already ready, initializing immediately...');
+    initializeCart();
+}
+
+// Método 2: Fallback con timeout
+setTimeout(() => {
+    if (!window.cart) {
+        console.log('⏰ Fallback: attempting cart initialization after timeout...');
+        initializeCart();
+    }
+}, 1000);
 
 // Exponer funciones globales si es necesario (solo si el carrito está inicializado)
 window.addToCart = function(productId, productName, productPrice, productImage) {

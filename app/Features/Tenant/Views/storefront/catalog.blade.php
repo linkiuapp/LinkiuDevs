@@ -10,153 +10,151 @@
             <span class="text-secondary-300 font-medium">Catálogo</span>
         </nav>
         
-        <div class="space-y-2">
-            <h1 class="text-h7 font-bold text-black-300">Catálogo de Productos</h1>
-            <p class="text-body-small font-regular text-black-200">Encuentra todos nuestros productos</p>
+        <div class="space-y-1">
+            <h1 class="text-lg font-semibold text-black-300">Catálogo</h1>
+            <p class="text-sm text-black-200">Encuentra todos nuestros productos</p>
         </div>
     </div>
 
-    <!-- Buscador Bonito -->
-    <div class="bg-accent-50 rounded-2xl p-6 border border-accent-200 shadow-sm">
-        <form method="GET" action="{{ route('tenant.catalog', $store->slug) }}" class="space-y-4">
-            <!-- Input de búsqueda principal -->
-            <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <x-solar-minimalistic-magnifer-outline class="h-5 w-5 text-black-300" />
+    <!-- Buscador con Auto-resultados -->
+    <div class="bg-accent-50 rounded-xl p-4">
+        <form method="GET" action="{{ route('tenant.catalog', $store->slug) }}">
+            <!-- Input con autocomplete -->
+            <div class="relative" id="search-container">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <x-solar-minimalistic-magnifer-outline class="h-4 w-4 text-black-300" />
                 </div>
                 <input type="text" 
                        name="search" 
+                       id="search-input"
                        value="{{ request('search') }}"
-                       placeholder="Buscar productos, categorías o SKU..."
-                       class="w-full pl-12 pr-4 py-3 bg-accent-100 border border-accent-200 rounded-xl text-black-400 placeholder-black-300 focus:outline-none focus:ring-2 focus:ring-primary-200 focus:border-transparent transition-all">
-            </div>
-
-            <!-- Filtros en una fila -->
-            <div class="flex flex-wrap gap-3 items-center">
-                <!-- Filtro por categoría -->
-                <select name="category" 
-                        class="px-3 py-2 bg-accent-100 border border-accent-200 rounded-lg text-sm text-black-400 focus:outline-none focus:ring-2 focus:ring-primary-200">
-                    <option value="">Todas las categorías</option>
-                    @foreach($categories as $category)
-                        <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
-                            {{ $category->name }}
-                        </option>
-                    @endforeach
-                </select>
-
-                <!-- Ordenar por -->
-                <select name="sort" 
-                        class="px-3 py-2 bg-accent-100 border border-accent-200 rounded-lg text-sm text-black-400 focus:outline-none focus:ring-2 focus:ring-primary-200">
-                    <option value="name" {{ request('sort') == 'name' ? 'selected' : '' }}>Alfabético</option>
-                    <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Más nuevos</option>
-                    <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Precio: menor a mayor</option>
-                    <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Precio: mayor a menor</option>
-                </select>
-
-                <!-- Botón buscar -->
-                <button type="submit" 
-                        class="px-4 py-2 bg-primary-300 text-accent-50 rounded-lg hover:bg-primary-200 transition-colors flex items-center gap-2">
-                    <x-solar-minimalistic-magnifer-outline class="w-4 h-4" />
-                    Buscar
-                </button>
-
-                <!-- Botón limpiar -->
-                @if(request()->hasAny(['search', 'category', 'sort']))
-                    <a href="{{ route('tenant.catalog', $store->slug) }}" 
-                       class="px-4 py-2 bg-secondary-300 text-accent-50 rounded-lg hover:bg-secondary-200 transition-colors flex items-center gap-2">
-                        <x-solar-close-circle-outline class="w-4 h-4" />
-                        Limpiar
-                    </a>
+                       placeholder="Buscar productos..."
+                       autocomplete="off"
+                       class="w-full pl-10 pr-3 py-2.5 bg-accent-100 border border-accent-200 rounded-lg text-sm text-black-400 placeholder-black-300 focus:outline-none focus:ring-1 focus:ring-primary-200 focus:border-transparent transition-all">
+                
+                <!-- Botón limpiar solo si hay búsqueda -->
+                @if(request('search'))
+                    <button type="button" 
+                            onclick="clearSearch()"
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                        <x-solar-close-circle-outline class="h-4 w-4 text-black-300 hover:text-black-400" />
+                    </button>
                 @endif
+
+                <!-- Dropdown de resultados -->
+                <div id="search-results" 
+                     class="absolute top-full left-0 right-0 mt-1 bg-white border border-accent-200 rounded-lg shadow-lg z-10 hidden max-h-64 overflow-y-auto">
+                </div>
             </div>
         </form>
     </div>
 
-    <!-- Resultados -->
-    @if(request('search') || request('category'))
-        <div class="bg-info-50 border border-info-200 rounded-lg p-4">
-            <div class="flex items-center gap-3">
-                <x-solar-info-circle-outline class="w-5 h-5 text-info-300 flex-shrink-0" />
-                <p class="text-sm text-info-300">
-                    @if(request('search'))
-                        Resultados para "<strong>{{ request('search') }}</strong>"
-                        @if(request('category'))
-                            en categoría "{{ $categories->find(request('category'))->name ?? 'N/A' }}"
-                        @endif
-                    @elseif(request('category'))
-                        Mostrando productos de "{{ $categories->find(request('category'))->name ?? 'N/A' }}"
-                    @endif
-                    - {{ $products->total() }} producto(s) encontrado(s)
-                </p>
+    <!-- Grid de Categorías -->
+    <div class="space-y-3">
+        <h2 class="text-base font-semibold text-black-400">Categorías</h2>
+        
+        @if($categories->count() > 0)
+            <div class="grid grid-cols-4 gap-3">
+                @foreach($categories as $category)
+                    <a href="{{ route('tenant.category', ['store' => $store->slug, 'categorySlug' => $category->slug]) }}" 
+                       class="flex flex-col items-center group">
+                        
+                        <!-- Icono de la categoría con fondo colorido -->
+                        <div class="w-16 h-16 mb-2 flex items-center justify-center rounded-2xl bg-gradient-to-br from-accent-100 to-accent-200 group-hover:from-primary-50 group-hover:to-primary-100 transition-all duration-200 shadow-sm group-hover:shadow-md">
+                             @if($category->icon && $category->icon->image_url)
+                                 <img src="{{ $category->icon->image_url }}" 
+                                      alt="{{ $category->name }}" 
+                                      class="w-10 h-10 object-contain">
+                             @else
+                                 <x-solar-gallery-outline class="w-8 h-8 text-black-300 group-hover:text-primary-300" />
+                             @endif
+                        </div>
+
+                        <!-- Nombre de la categoría -->
+                        <span class="text-xs text-center text-black-400 font-medium group-hover:text-primary-300 transition-colors leading-tight">
+                            {{ $category->name }}
+                        </span>
+                    </a>
+                @endforeach
             </div>
+        @else
+            <div class="text-center py-6 text-black-300">
+                <x-solar-gallery-outline class="w-10 h-10 mx-auto mb-2 text-black-200" />
+                <p class="text-sm">No hay categorías disponibles</p>
+            </div>
+        @endif
+    </div>
+
+    <!-- Resultados -->
+    @if(request('search'))
+        <div class="bg-info-50 border border-info-200 rounded-lg p-3">
+            <p class="text-xs text-info-300">
+                Resultados para "<strong>{{ request('search') }}</strong>" - {{ $products->total() }} productos
+            </p>
         </div>
     @endif
 
     <!-- Grid de Productos -->
     @if($products->count() > 0)
-        <div class="grid grid-cols-1 gap-4">
+        <div class="grid grid-cols-1 gap-3">
             @foreach($products as $product)
-                <div class="bg-accent-50 rounded-xl p-4 border border-accent-200 hover:shadow-md transition-all duration-200">
-                    <div class="flex items-center gap-4">
+                <a href="{{ route('tenant.product', [$store->slug, $product->slug]) }}" 
+                   class="bg-white rounded-lg p-3 border border-accent-200 hover:border-primary-200 hover:shadow-sm transition-all duration-200 block">
+                    <div class="flex items-center gap-3">
                         <!-- Imagen del producto -->
-                        <div class="w-20 h-20 bg-accent-100 rounded-xl flex-shrink-0 overflow-hidden">
+                        <div class="w-16 h-16 bg-accent-100 rounded-lg flex-shrink-0 overflow-hidden">
                             @if($product->main_image_url)
                                 <img src="{{ $product->main_image_url }}" 
                                      alt="{{ $product->name }}" 
                                      class="w-full h-full object-cover">
                             @else
                                 <div class="w-full h-full flex items-center justify-center text-black-200">
-                                    <x-solar-gallery-outline class="w-8 h-8" />
+                                    <x-solar-gallery-outline class="w-6 h-6" />
                                 </div>
                             @endif
                         </div>
 
                         <!-- Información del producto -->
                         <div class="flex-1 min-w-0">
-                            <h3 class="font-semibold text-black-400 text-base mb-1">{{ $product->name }}</h3>
+                            <h3 class="font-medium text-black-400 text-sm mb-1 line-clamp-1">{{ $product->name }}</h3>
                             
                             @if($product->description)
-                                <p class="text-sm text-black-300 mb-2 line-clamp-2">{{ $product->description }}</p>
+                                <p class="text-xs text-black-300 mb-2 line-clamp-1">{{ $product->description }}</p>
                             @endif
 
-                            <!-- Categorías -->
-                            @if($product->categories->count() > 0)
-                                <div class="flex flex-wrap gap-1 mb-2">
-                                    @foreach($product->categories->take(3) as $category)
-                                        <span class="px-2 py-1 bg-accent-200 text-black-300 rounded-full text-xs">
-                                            {{ $category->name }}
-                                        </span>
-                                    @endforeach
-                                    @if($product->categories->count() > 3)
-                                        <span class="px-2 py-1 bg-accent-200 text-black-300 rounded-full text-xs">
-                                            +{{ $product->categories->count() - 3 }}
-                                        </span>
-                                    @endif
-                                </div>
-                            @endif
-
-                            <!-- Precio -->
-                            <div class="text-xl font-bold text-primary-300">
+                            <!-- Precio prominente -->
+                            <div class="text-base font-bold text-primary-300 mb-1">
                                 ${{ number_format($product->price, 0, ',', '.') }}
                             </div>
 
-                            @if($product->sku)
-                                <p class="text-xs text-black-200 mt-1">SKU: {{ $product->sku }}</p>
+                            <!-- Categorías pequeñas -->
+                            @if($product->categories->count() > 0)
+                                <div class="flex flex-wrap gap-1">
+                                    @foreach($product->categories->take(2) as $category)
+                                        <span class="px-2 py-0.5 bg-primary-50 text-primary-300 rounded text-xs">
+                                            {{ $category->name }}
+                                        </span>
+                                    @endforeach
+                                    @if($product->categories->count() > 2)
+                                        <span class="text-xs text-black-200">+{{ $product->categories->count() - 2 }}</span>
+                                    @endif
+                                </div>
                             @endif
                         </div>
 
                         <!-- Botón agregar al carrito -->
                         <div class="flex-shrink-0">
-                            <button class="add-to-cart-btn bg-secondary-300 hover:bg-secondary-200 text-accent-50 w-12 h-12 rounded-full flex items-center justify-center transition-colors" 
+                            <button class="add-to-cart-btn bg-secondary-300 hover:bg-secondary-200 text-white w-10 h-10 rounded-lg flex items-center justify-center transition-colors" 
                                     data-product-id="{{ $product->id }}"
                                     data-product-name="{{ $product->name }}"
                                     data-product-price="{{ $product->price }}"
-                                    data-product-image="{{ $product->main_image_url }}">
-                                <x-solar-add-circle-outline class="w-6 h-6" />
+                                    data-product-image="{{ $product->main_image_url }}"
+                                    onclick="event.preventDefault(); event.stopPropagation();">
+                                <x-solar-cart-plus-outline class="w-5 h-5" />
                             </button>
                         </div>
                     </div>
-                </div>
+                </a>
             @endforeach
         </div>
 
@@ -168,29 +166,29 @@
         @endif
     @else
         <!-- Estado vacío -->
-        <div class="text-center py-12 space-y-4">
-            <div class="w-20 h-20 bg-accent-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <x-solar-box-outline class="w-10 h-10 text-black-200" />
+        <div class="text-center py-8 space-y-3">
+            <div class="w-16 h-16 bg-accent-100 rounded-full flex items-center justify-center mx-auto">
+                <x-solar-box-outline class="w-8 h-8 text-black-200" />
             </div>
-            <h3 class="text-lg font-semibold text-black-400">
-                @if(request()->hasAny(['search', 'category']))
+            <h3 class="text-base font-medium text-black-400">
+                @if(request('search'))
                     No encontramos productos
                 @else
                     No hay productos disponibles
                 @endif
             </h3>
-            <p class="text-black-300 max-w-sm mx-auto">
-                @if(request()->hasAny(['search', 'category']))
-                    Intenta con otros términos de búsqueda o revisa todas las categorías.
+            <p class="text-sm text-black-300 max-w-sm mx-auto">
+                @if(request('search'))
+                    Intenta con otros términos de búsqueda.
                 @else
-                    Esta tienda aún no tiene productos disponibles.
+                    Esta tienda aún no tiene productos.
                 @endif
             </p>
-            @if(request()->hasAny(['search', 'category']))
+            @if(request('search'))
                 <a href="{{ route('tenant.catalog', $store->slug) }}" 
-                   class="inline-flex items-center mt-4 px-4 py-2 bg-primary-300 text-accent-50 rounded-lg text-sm hover:bg-primary-200 transition-colors">
-                    <x-solar-refresh-outline class="w-4 h-4 mr-2" />
-                    Ver todos los productos
+                   class="inline-flex items-center mt-3 px-3 py-2 bg-primary-300 text-white rounded-lg text-sm hover:bg-primary-200 transition-colors">
+                    <x-solar-refresh-outline class="w-4 h-4 mr-1" />
+                    Ver todos
                 </a>
             @endif
         </div>
@@ -199,22 +197,84 @@
 
 @push('scripts')
 <script>
-    // Auto-submit al cambiar filtros
-    document.querySelector('select[name="category"]').addEventListener('change', function() {
-        this.form.submit();
-    });
-    
-    document.querySelector('select[name="sort"]').addEventListener('change', function() {
-        this.form.submit();
+    let searchTimeout;
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+
+    function clearSearch() {
+        searchInput.value = '';
+        searchResults.classList.add('hidden');
+        searchInput.form.submit();
+    }
+
+    function performSearch(query) {
+        if (query.length < 3) {
+            searchResults.classList.add('hidden');
+            return;
+        }
+
+        fetch(`{{ route('tenant.search.api', $store->slug) }}?q=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(products => {
+                if (products.length === 0) {
+                    searchResults.classList.add('hidden');
+                    return;
+                }
+
+                const html = products.map(product => `
+                    <a href="${product.url}" class="flex items-center gap-3 p-3 hover:bg-accent-50 transition-colors border-b border-accent-100 last:border-b-0">
+                        <div class="w-12 h-12 bg-accent-100 rounded-lg overflow-hidden flex-shrink-0">
+                            ${product.image ? 
+                                `<img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover">` :
+                                `<div class="w-full h-full flex items-center justify-center text-black-200">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>`
+                            }
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-medium text-sm text-black-400 line-clamp-1">${product.name}</h4>
+                            <p class="text-sm font-bold text-primary-300">$${product.price}</p>
+                        </div>
+                    </a>
+                `).join('');
+
+                searchResults.innerHTML = html;
+                searchResults.classList.remove('hidden');
+            })
+            .catch(error => {
+                console.error('Error en búsqueda:', error);
+                searchResults.classList.add('hidden');
+            });
+    }
+
+    // Eventos del input
+    searchInput.addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        const query = this.value.trim();
+        
+        searchTimeout = setTimeout(() => {
+            performSearch(query);
+        }, 300);
     });
 
-    // Limpiar input de búsqueda con Escape
-    document.querySelector('input[name="search"]').addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            this.value = '';
+    searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
             this.form.submit();
+        }
+        if (e.key === 'Escape') {
+            clearSearch();
+        }
+    });
+
+    // Cerrar dropdown al hacer click fuera
+    document.addEventListener('click', function(e) {
+        if (!document.getElementById('search-container').contains(e.target)) {
+            searchResults.classList.add('hidden');
         }
     });
 </script>
 @endpush
 @endsection
+

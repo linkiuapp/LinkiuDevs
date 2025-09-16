@@ -5,8 +5,6 @@ namespace App\Shared\Observers;
 use App\Shared\Models\Store;
 use App\Shared\Models\Subscription;
 use App\Shared\Models\Invoice;
-use App\Features\TenantAdmin\Models\ShippingMethod;
-use App\Features\TenantAdmin\Models\ShippingMethodConfig;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 

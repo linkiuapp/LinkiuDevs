@@ -232,14 +232,49 @@ class TicketController extends Controller
                 $path .= "/responses/{$responseId}";
             }
 
-            $filePath = $file->storeAs($path, $filename, 's3');
+            // Guardar archivo temporalmente en local y luego mover a S3 manualmente
+            $tempPath = sys_get_temp_dir() . '/' . $filename;
+            if (!move_uploaded_file($file->getPathname(), $tempPath)) {
+                throw new \Exception('Error moviendo archivo temporal');
+            }
+            
+            // Por ahora guardamos en local en lugar de S3 para evitar finfo
+            $localPath = storage_path('app/tickets/' . $path);
+            if (!file_exists($localPath)) {
+                mkdir($localPath, 0755, true);
+            }
+            
+            $finalPath = $localPath . '/' . $filename;
+            if (!copy($tempPath, $finalPath)) {
+                throw new \Exception('Error guardando archivo');
+            }
+            
+            // Limpiar archivo temporal
+            unlink($tempPath);
+            
+            $filePath = 'tickets/' . $path . '/' . $filename;
+
+            // Obtener MIME type de forma segura (sin finfo)
+            $extension = strtolower($file->getClientOriginalExtension());
+            $mimeTypes = [
+                'jpg' => 'image/jpeg',
+                'jpeg' => 'image/jpeg',
+                'png' => 'image/png',
+                'gif' => 'image/gif',
+                'pdf' => 'application/pdf',
+                'doc' => 'application/msword',
+                'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'txt' => 'text/plain',
+                'zip' => 'application/zip',
+            ];
+            $mimeType = $mimeTypes[$extension] ?? 'application/octet-stream';
 
             $attachments[] = [
                 'original_name' => $file->getClientOriginalName(),
                 'filename' => $filename,
                 'path' => $filePath,
                 'size' => $file->getSize(),
-                'mime_type' => $file->getMimeType(),
+                'mime_type' => $mimeType,
             ];
         }
 

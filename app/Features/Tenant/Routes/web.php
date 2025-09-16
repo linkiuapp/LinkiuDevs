@@ -23,6 +23,9 @@ Route::get('/verification-status', [StorefrontController::class, 'verificationSt
 // Catálogo de productos con buscador
 Route::get('/catalogo', [StorefrontController::class, 'catalog'])->name('catalog');
 
+// API para búsqueda en tiempo real
+Route::get('/api/search', [StorefrontController::class, 'searchProducts'])->name('search.api');
+
 // Rutas de productos
 Route::get('/producto/{productSlug}', [StorefrontController::class, 'product'])->name('product');
 
@@ -56,6 +59,13 @@ Route::prefix('checkout')->name('checkout.')->group(function () {
 // Order Routes
 Route::prefix('pedido')->name('order.')->group(function () {
     Route::get('/seguimiento', [OrderController::class, 'tracking'])->name('tracking');
+});
+
+// DEBUG Routes (temporal)
+Route::prefix('debug')->name('debug.')->group(function () {
+    Route::get('/cart', [OrderController::class, 'debugCart'])->name('cart');
+    Route::post('/cart/add', [OrderController::class, 'debugAddToCart'])->name('cart.add');
+    Route::match(['GET', 'POST'], '/shipping-cost', [OrderController::class, 'debugShippingCost'])->name('shipping-cost');
 });
 
 // Rutas de categorías

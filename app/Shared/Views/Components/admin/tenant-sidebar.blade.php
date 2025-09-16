@@ -141,20 +141,31 @@ use Illuminate\Support\Facades\Storage;
                     </span>
                 </a>
             </li>
-            <!-- Métodos de Envío -->
+            <!-- Configuración de Envíos (NUEVO SISTEMA) -->
             <li>
-                <a href="{{ route('tenant.admin.shipping-methods.index', ['store' => $store->slug]) }}" 
-                   class="item-sidebar {{ request()->routeIs('tenant.admin.shipping-methods.*') ? 'item-sidebar-active' : '' }}">
-                    <x-lucide-map class="w-4 h-4 mr-2" />
-                    Métodos de Envío
+                <a href="{{ route('tenant.admin.simple-shipping.index', ['store' => $store->slug]) }}" 
+                   class="item-sidebar {{ request()->routeIs('tenant.admin.simple-shipping.*') ? 'item-sidebar-active' : '' }}">
+                    <x-lucide-truck class="w-4 h-4 mr-2" />
+                    Gestión de Envíos
                     @php
-                        $shippingZonesCount = $store->shippingZones()->count();
-                        $maxShippingZones = $store->plan->max_delivery_zones ?? 1;
-                        $shippingPercent = $maxShippingZones > 0 ? ($shippingZonesCount / $maxShippingZones) * 100 : 0;
-                        $shippingBadgeColor = $shippingPercent >= 90 ? 'bg-error-300 text-accent-300' : ($shippingPercent >= 70 ? 'bg-warning-300 text-black-500' : 'bg-black-50 text-black-500');
+                        // Obtener zonas de envío actuales del nuevo sistema
+                        $simpleShipping = \App\Features\TenantAdmin\Models\SimpleShipping::where('store_id', $store->id)->first();
+                        $currentZones = $simpleShipping ? $simpleShipping->zones()->count() : 0;
+                        
+                        // Límites según el plan desde SuperAdmin
+                        $zoneLimits = [
+                            'explorer' => 2,
+                            'master' => 3, 
+                            'legend' => 4
+                        ];
+                        $planSlug = strtolower($store->plan->slug ?? 'explorer');
+                        $maxZones = $zoneLimits[$planSlug] ?? 2;
+                        
+                        $zonesPercent = $maxZones > 0 ? ($currentZones / $maxZones) * 100 : 0;
+                        $zonesBadgeColor = $zonesPercent >= 90 ? 'bg-error-300 text-accent-300' : ($zonesPercent >= 70 ? 'bg-warning-300 text-black-500' : 'bg-black-50 text-black-500');
                     @endphp
-                    <span class="ml-auto text-small {{ $shippingBadgeColor }} px-2 py-1 rounded-full font-medium tracking-widest">
-                        {{ $shippingZonesCount }}/{{ $maxShippingZones }}
+                    <span class="ml-auto text-small {{ $zonesBadgeColor }} px-2 py-1 rounded-full font-medium tracking-widest">
+                        {{ $currentZones }}/{{ $maxZones }}
                     </span>
                 </a>
             </li>
@@ -326,7 +337,9 @@ use Illuminate\Support\Facades\Storage;
             $categoriesLimit = $store->plan->max_categories ?? 1;
             $categoriesPercent = $categoriesLimit > 0 ? ($categoriesUsed / $categoriesLimit) * 100 : 0;
 
-            $zonesUsed = method_exists($store, 'shippingZones') ? $store->shippingZones()->count() : 0;
+            // Usar el nuevo sistema de envíos
+            $simpleShippingForPlan = $store->simpleShipping;
+            $zonesUsed = $simpleShippingForPlan ? $simpleShippingForPlan->zones()->count() : 0;
             $zonesLimit = $store->plan->max_delivery_zones ?? 1;
             $zonesPercent = $zonesLimit > 0 ? ($zonesUsed / $zonesLimit) * 100 : 0;
 

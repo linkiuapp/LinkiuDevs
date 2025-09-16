@@ -93,6 +93,179 @@
     
     <!-- Additional Head Content -->
     @stack('styles')
+    
+    <!-- 🔔 SISTEMA DE NOTIFICACIONES DE ESCRITORIO - RECREADO -->
+    <script>
+        // 📱 Variables globales para notificaciones
+        let lastOrderCount = 0;
+        let notificationInterval = null;
+        const storeSlug = '{{ $store->slug ?? "" }}';
+        
+        // 🚀 Inicializar sistema de notificaciones
+        function initDesktopNotifications() {
+            console.log('🔔 Inicializando notificaciones de escritorio...');
+            
+            // Solicitar permisos inmediatamente
+            if (Notification.permission === 'default') {
+                Notification.requestPermission().then(permission => {
+                    console.log('📱 Permiso de notificaciones:', permission);
+                    if (permission === 'granted') {
+                        showWelcomeNotification();
+                        startOrderPolling();
+                    }
+                });
+            } else if (Notification.permission === 'granted') {
+                console.log('✅ Permisos ya concedidos');
+                showWelcomeNotification();
+                startOrderPolling();
+            } else {
+                console.log('❌ Permisos denegados');
+            }
+        }
+        
+        // 👋 Notificación de bienvenida
+        function showWelcomeNotification() {
+            const notification = new Notification('🔔 Sistema de pedidos activado', {
+                body: 'Te notificaremos cuando lleguen nuevos pedidos',
+                icon: '/favicon.ico',
+                tag: 'welcome',
+                silent: true
+            });
+            
+            setTimeout(() => notification.close(), 3000);
+        }
+        
+        // ⏰ Iniciar polling cada 15 segundos (AGRESIVO)
+        function startOrderPolling() {
+            console.log('⏰ Iniciando polling de pedidos...');
+            
+            // Cargar conteo inicial
+            loadInitialCount();
+            
+            // Verificar cada 15 segundos - MÁS AGRESIVO
+            notificationInterval = setInterval(() => {
+                checkForNewOrders();
+            }, 15000);
+            
+            // También verificar cuando la pestaña vuelve a tener focus
+            window.addEventListener('focus', () => {
+                console.log('👁️ Pestaña enfocada - verificando pedidos...');
+                checkForNewOrders();
+            });
+            
+            // Verificar cuando la pestaña se vuelve visible
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) {
+                    console.log('👁️ Pestaña visible - verificando pedidos...');
+                    checkForNewOrders();
+                }
+            });
+        }
+        
+        // 📊 Cargar conteo inicial
+        async function loadInitialCount() {
+            if (!storeSlug) return;
+            
+            try {
+                const response = await fetch(`/${storeSlug}/admin/orders/api/count`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        lastOrderCount = data.count;
+                        console.log('📊 Conteo inicial de pedidos:', lastOrderCount);
+                    }
+                }
+            } catch (error) {
+                console.error('❌ Error cargando conteo inicial:', error);
+            }
+        }
+        
+        // 🔍 Verificar nuevos pedidos
+        async function checkForNewOrders() {
+            if (!storeSlug) return;
+            
+            const timestamp = new Date().toLocaleTimeString();
+            console.log(`🔍 ${timestamp} - Verificando pedidos... (Tab visible: ${!document.hidden})`);
+            
+            try {
+                const response = await fetch(`/${storeSlug}/admin/orders/api/count`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        const currentCount = data.count;
+                        console.log(`📊 ${timestamp} - Conteo actual: ${currentCount}, Anterior: ${lastOrderCount}`);
+                        
+                        // Si hay nuevos pedidos
+                        if (currentCount > lastOrderCount && lastOrderCount > 0) {
+                            const newOrdersCount = currentCount - lastOrderCount;
+                            console.log(`🚨 ${timestamp} - ¡${newOrdersCount} NUEVOS PEDIDOS DETECTADOS!`);
+                            showNewOrderNotification(newOrdersCount, data.latest_order);
+                        }
+                        
+                        lastOrderCount = currentCount;
+                    }
+                }
+            } catch (error) {
+                console.error(`❌ ${timestamp} - Error verificando pedidos:`, error);
+            }
+        }
+        
+        // 🔔 Mostrar notificación de nuevo pedido
+        function showNewOrderNotification(count, latestOrder) {
+            if (Notification.permission !== 'granted') return;
+            
+            const title = count === 1 ? '🔔 ¡Nuevo pedido!' : `🔔 ¡${count} nuevos pedidos!`;
+            let body = 'Revisa el panel de pedidos';
+            
+            if (latestOrder) {
+                const total = new Intl.NumberFormat('es-CO').format(latestOrder.total);
+                body = `Pedido #${latestOrder.order_number}\n💰 $${total}\n👤 ${latestOrder.customer_name}\n\n👆 Click para ver detalles`;
+            }
+            
+            const notification = new Notification(title, {
+                body: body,
+                icon: '/favicon.ico',
+                tag: 'new-order',
+                requireInteraction: true,
+                silent: false,
+                renotify: true,
+                vibrate: [200, 100, 200]
+            });
+            
+            // 🎵 Sonido de notificación
+            try {
+                const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmIePjuVvDY=');
+                audio.volume = 0.5;
+                audio.play().catch(() => {});
+            } catch (e) {
+                console.log('🔇 Sin sonido disponible');
+            }
+            
+            // 👆 Click para ir al pedido
+            notification.onclick = () => {
+                window.focus();
+                notification.close();
+                
+                if (latestOrder && latestOrder.id) {
+                    window.location.href = `/${storeSlug}/admin/orders/${latestOrder.id}`;
+                } else {
+                    window.location.href = `/${storeSlug}/admin/orders`;
+                }
+            };
+        }
+        
+        // 🚀 Inicializar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', () => {
+            initDesktopNotifications();
+        });
+        
+        // 🧹 Limpiar al salir
+        window.addEventListener('beforeunload', () => {
+            if (notificationInterval) {
+                clearInterval(notificationInterval);
+            }
+        });
+    </script>
 </head>
 <body class="bg-secondary-50 font-body">
     <!-- Sidebar del Admin de Tienda -->

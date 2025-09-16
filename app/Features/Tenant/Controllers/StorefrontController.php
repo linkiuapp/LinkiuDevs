@@ -64,15 +64,46 @@ class StorefrontController extends Controller
     }
 
     /**
-     * Show specific product page (for future implementation)
+     * Show specific product page
      */
-    public function product(Request $request, $productSlug)
+    public function product(Request $request, $store, $productSlug)
     {
         // El middleware ya identificó la tienda
         $store = view()->shared('currentStore');
+        $store->load('design');
 
-        // TODO: Implementar lógica de productos
-        return view('tenant::storefront.product', compact('store', 'productSlug'));
+        // Si la tienda está inactiva, mostrar mensaje
+        if ($store->status !== 'active') {
+            return view('tenant::storefront.inactive', compact('store'));
+        }
+
+        // Buscar el producto por slug
+        $product = Product::where('store_id', $store->id)
+            ->where('slug', $productSlug)
+            ->where('is_active', true)
+            ->with(['images', 'mainImage', 'categories.icon'])
+            ->first();
+
+        if (!$product) {
+            abort(404, 'Producto no encontrado');
+        }
+
+        // Productos relacionados (misma categoría)
+        $relatedProducts = [];
+        if ($product->categories->count() > 0) {
+            $categoryIds = $product->categories->pluck('id');
+            $relatedProducts = Product::where('store_id', $store->id)
+                ->where('is_active', true)
+                ->where('id', '!=', $product->id)
+                ->whereHas('categories', function($query) use ($categoryIds) {
+                    $query->whereIn('category_id', $categoryIds);
+                })
+                ->with('mainImage')
+                ->limit(4)
+                ->get();
+        }
+
+        return view('tenant::storefront.product', compact('store', 'product', 'relatedProducts'));
     }
 
     /**
@@ -136,6 +167,41 @@ class StorefrontController extends Controller
         $products = $query->paginate(20);
 
         return view('tenant::storefront.catalog', compact('store', 'products', 'categories'));
+    }
+
+    /**
+     * API for real-time product search
+     */
+    public function searchProducts(Request $request)
+    {
+        $store = view()->shared('currentStore');
+        $search = $request->get('q', '');
+
+        if (strlen($search) < 3) {
+            return response()->json([]);
+        }
+
+        $products = Product::where('store_id', $store->id)
+            ->where('is_active', true)
+            ->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%')
+                  ->orWhere('sku', 'like', '%' . $search . '%');
+            })
+            ->with('mainImage')
+            ->limit(5)
+            ->get()
+            ->map(function ($product) use ($store) {
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'price' => number_format($product->price, 0, ',', '.'),
+                    'image' => $product->main_image_url,
+                    'url' => route('tenant.product', [$store->slug, $product->slug])
+                ];
+            });
+
+        return response()->json($products);
     }
 
     /**

@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Shared\Models\Order;
 use App\Shared\Models\OrderItem;
 use App\Features\TenantAdmin\Models\Product;
-use App\Features\TenantAdmin\Models\ShippingMethod;
-use App\Features\TenantAdmin\Models\ShippingZone;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\JsonResponse;
@@ -131,7 +129,7 @@ class OrderController extends Controller
             'items.*.product_id' => 'required|exists:products,id',
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.variants' => 'nullable|array',
-            'shipping_zone_id' => 'nullable|exists:shipping_zones,id',
+            'shipping_zone_id' => 'nullable|exists:simple_shipping_zones,id',
             'payment_proof' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120' // 5MB
         ]);
 
@@ -141,8 +139,9 @@ class OrderController extends Controller
             // Calcular costos de envío
             $shippingCost = 0;
             if ($validated['delivery_type'] === 'domicilio' && isset($validated['shipping_zone_id'])) {
-                $zone = ShippingZone::find($validated['shipping_zone_id']);
-                if ($zone && $zone->store_id === $store->id) {
+                // Usar nuevo sistema de envío simple
+                $zone = \App\Features\TenantAdmin\Models\SimpleShippingZone::find($validated['shipping_zone_id']);
+                if ($zone && $zone->simpleShipping->store_id === $store->id) {
                     $shippingCost = $zone->cost;
                 }
             }
@@ -224,13 +223,11 @@ class OrderController extends Controller
             // TODO: 'statusHistory' cuando se implemente
         ]);
 
-        // Obtener métodos de envío para cambios
-        $shippingMethods = ShippingMethod::where('store_id', $store->id)
-            ->active()
-            ->with('activeZones')
-            ->get();
+        // Obtener configuración de envío simplificado
+        $simpleShipping = \App\Features\TenantAdmin\Models\SimpleShipping::getOrCreateForStore($store->id);
+        $simpleShipping->load('activeZones');
 
-        return view('tenant-admin::orders.show', compact('order', 'store', 'shippingMethods'));
+        return view('tenant-admin::orders.show', compact('order', 'store', 'simpleShipping'));
     }
 
     /**
@@ -261,11 +258,8 @@ class OrderController extends Controller
             ->orderBy('name')
             ->get();
 
-        $shippingMethods = ShippingMethod::where('store_id', $store->id)
-            ->active()
-            ->with('activeZones')
-            ->ordered()
-            ->get();
+        $simpleShipping = \App\Features\TenantAdmin\Models\SimpleShipping::getOrCreateForStore($store->id);
+        $simpleShipping->load('activeZones');
 
         $departments = [
             'Amazonas', 'Antioquia', 'Arauca', 'Atlántico', 'Bolívar', 'Boyacá', 
@@ -276,7 +270,7 @@ class OrderController extends Controller
             'Valle del Cauca', 'Vaupés', 'Vichada'
         ];
 
-        return view('tenant-admin::orders.edit', compact('order', 'products', 'shippingMethods', 'departments', 'store'));
+        return view('tenant-admin::orders.edit', compact('order', 'products', 'simpleShipping', 'departments', 'store'));
     }
 
     /**
@@ -456,18 +450,56 @@ class OrderController extends Controller
     }
 
     /**
+     * API: Get order count for notifications
+     */
+    public function getOrderCount(Request $request): JsonResponse
+    {
+        $store = $request->route('store');
+        
+        try {
+            $count = Order::byStore($store->id)->count();
+            
+            // Obtener el último pedido para notificaciones
+            $latestOrder = Order::byStore($store->id)
+                ->orderBy('created_at', 'desc')
+                ->first();
+            
+            return response()->json([
+                'success' => true,
+                'count' => $count,
+                'latest_order' => $latestOrder ? [
+                    'id' => $latestOrder->id,
+                    'order_number' => $latestOrder->order_number,
+                    'customer_name' => $latestOrder->customer_name,
+                    'total' => $latestOrder->total,
+                    'created_at' => $latestOrder->created_at->format('Y-m-d H:i:s')
+                ] : null
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al obtener conteo de pedidos',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
      * Get shipping cost for a zone
      */
     public function getShippingCost(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'zone_id' => 'required|exists:shipping_zones,id',
+            'zone_id' => 'required|exists:simple_shipping_zones,id',
             'subtotal' => 'required|numeric|min:0'
         ]);
 
         $store = $request->route('store');
-        $zone = ShippingZone::where('id', $validated['zone_id'])
-            ->where('store_id', $store->id)
+        $zone = \App\Features\TenantAdmin\Models\SimpleShippingZone::where('id', $validated['zone_id'])
+            ->whereHas('simpleShipping', function($query) use ($store) {
+                $query->where('store_id', $store->id);
+            })
             ->first();
 
         if (!$zone) {
@@ -536,8 +568,26 @@ class OrderController extends Controller
     private function handlePaymentProofUpload($file, string $orderNumber): string
     {
         $filename = $orderNumber . '_' . time() . '.' . $file->getClientOriginalExtension();
-        $file->storeAs('orders/payment-proofs', $filename, 'public');
-        return 'orders/payment-proofs/' . $filename; // Devolver path completo como en frontend
+        
+        // Guardar archivo evitando finfo (método directo PHP)
+        $directory = 'orders/payment-proofs';
+        $publicPath = storage_path('app/public');
+        $fullDirectoryPath = $publicPath . '/' . $directory;
+        $fullFilePath = $fullDirectoryPath . '/' . $filename;
+        
+        // Crear directorio si no existe
+        if (!file_exists($fullDirectoryPath)) {
+            mkdir($fullDirectoryPath, 0755, true);
+        }
+        
+        // Copiar archivo directamente
+        if (!copy($file->getPathname(), $fullFilePath)) {
+            throw new \Exception('Error guardando comprobante de pago');
+        }
+        
+        $fullPath = $directory . '/' . $filename;
+        
+        return $fullPath; // Devolver path completo como en frontend
     }
 
     /**

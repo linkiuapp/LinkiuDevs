@@ -8,18 +8,12 @@ console.log('🟢 Imports loaded successfully');
 
 import Pusher from 'pusher-js'
 
-// Sistema de carrito - Solo cargar en storefront
-if (window.location.pathname.includes('/admin') === false && 
-    window.location.pathname.includes('/superlinkiu') === false &&
-    window.location.pathname !== '/' &&
-    window.location.pathname !== '/login' &&
-    window.location.pathname !== '/register') {
-    import('./cart.js').then(() => {
-        console.log('🛒 Cart.js loaded for storefront');
-    }).catch(error => {
-        console.log('ℹ️ Cart.js not loaded (not in storefront):', error.message);
-    });
-}
+// Sistema de carrito - Cargar siempre, pero que cart.js decida si inicializar
+import('./cart.js').then(() => {
+    console.log('🛒 Cart.js loaded');
+}).catch(error => {
+    console.log('❌ Cart.js failed to load:', error.message);
+});
 
 console.log('🟢 Pusher imported successfully');
 

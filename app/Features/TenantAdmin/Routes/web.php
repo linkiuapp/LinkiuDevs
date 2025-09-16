@@ -12,7 +12,7 @@ use App\Features\TenantAdmin\Controllers\VariableController;
 use App\Features\TenantAdmin\Controllers\ProductController;
 use App\Features\TenantAdmin\Controllers\SliderController;
 use App\Features\TenantAdmin\Controllers\LocationController;
-use App\Features\TenantAdmin\Controllers\ShippingMethodController;
+use App\Features\TenantAdmin\Controllers\SimpleShippingController;
 use App\Features\TenantAdmin\Controllers\TicketController;
 use App\Features\TenantAdmin\Controllers\AnnouncementController;
 use App\Features\TenantAdmin\Controllers\OrderController;
@@ -165,22 +165,21 @@ Route::middleware(['auth', 'store.admin'])->group(function () {
         Route::post('/{location}/increment-whatsapp-clicks', [LocationController::class, 'incrementWhatsAppClicks'])->name('increment-whatsapp-clicks');
     });
 
-    // Shipping Methods Routes
-    Route::prefix('shipping-methods')->name('shipping-methods.')->group(function () {
-        Route::get('/', [ShippingMethodController::class, 'index'])->name('index');
-        Route::post('/toggle-active/{method}', [ShippingMethodController::class, 'toggleActive'])->name('toggle-active');
-        Route::put('/update-order', [ShippingMethodController::class, 'updateOrder'])->name('update-order');
-        Route::put('/update-pickup/{method}', [ShippingMethodController::class, 'updatePickup'])->name('update-pickup');
+
+    // Simple Shipping Routes (New System)
+    Route::prefix('envios')->name('simple-shipping.')->group(function () {
+        Route::get('/', [SimpleShippingController::class, 'index'])->name('index');
+        Route::put('/update', [SimpleShippingController::class, 'update'])->name('update');
         
-        // Shipping Zones Routes
-        Route::prefix('{method}/zones')->name('zones.')->group(function () {
-            Route::get('/create', [ShippingMethodController::class, 'createZone'])->name('create');
-            Route::post('/', [ShippingMethodController::class, 'storeZone'])->name('store');
-            Route::get('/{zone}/edit', [ShippingMethodController::class, 'editZone'])->name('edit');
-            Route::put('/{zone}', [ShippingMethodController::class, 'updateZone'])->name('update');
-            Route::delete('/{zone}', [ShippingMethodController::class, 'destroyZone'])->name('destroy');
-            Route::post('/{zone}/toggle-active', [ShippingMethodController::class, 'toggleZoneActive'])->name('toggle-active');
-        });
+        // Zones management
+        Route::post('/zones', [SimpleShippingController::class, 'createZone'])->name('zones.create');
+        Route::match(['PUT', 'POST'], '/zones/{zone_id}', [SimpleShippingController::class, 'updateZone'])->name('zones.update');
+        Route::match(['DELETE', 'POST'], '/zones/{zone_id}', [SimpleShippingController::class, 'deleteZone'])->name('zones.delete');
+        Route::post('/zones/reorder', [SimpleShippingController::class, 'reorderZones'])->name('zones.reorder');
+        
+        // API endpoints
+        Route::post('/calculate-cost', [SimpleShippingController::class, 'calculateCost'])->name('calculate-cost');
+        Route::get('/options', [SimpleShippingController::class, 'getOptions'])->name('options');
     });
 
     // Coupons Routes
@@ -232,6 +231,9 @@ Route::middleware(['auth', 'store.admin'])->group(function () {
         // Order Management Actions
         Route::post('/{order}/update-status', [OrderController::class, 'updateStatus'])->name('update-status');
         Route::post('/{order}/duplicate', [OrderController::class, 'duplicate'])->name('duplicate');
+        
+        // API para notificaciones en tiempo real
+        Route::get('/api/count', [OrderController::class, 'getOrderCount'])->name('api.count');
         Route::get('/{order}/download-payment-proof', [OrderController::class, 'downloadPaymentProof'])->name('download-payment-proof');
         
         // AJAX Routes

@@ -71,7 +71,7 @@
                     <h3 class="text-lg font-semibold text-black-500">Método de Envío</h3>
                 </div>
                 
-                <div class="space-y-3 mb-6">
+                <div id="shipping-methods-container" class="space-y-3 mb-6">
                     <!-- Los métodos de envío se cargan dinámicamente aquí -->
                     <div class="text-center py-4">
                         <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-300 mx-auto"></div>
@@ -79,8 +79,22 @@
                     </div>
                 </div>
                 
-                <!-- Address Fields (only for domicilio) -->
-                <div id="address-fields" class="hidden space-y-4 mb-6">
+                <!-- Address Fields for Local Shipping (only address) -->
+                <div id="address-fields-local" class="hidden space-y-4 mb-6">
+                    <div>
+                        <label for="customer_address" class="block text-sm font-medium text-black-500 mb-2">Dirección Completa *</label>
+                        <textarea 
+                            id="customer_address" 
+                            name="customer_address" 
+                            rows="2"
+                            class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-colors resize-none"
+                            placeholder="Calle, carrera, número, apartamento, referencias..."
+                        ></textarea>
+                    </div>
+                </div>
+
+                <!-- Address Fields for National Shipping (department + city + address) -->
+                <div id="address-fields-national" class="hidden space-y-4 mb-6">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label for="department" class="block text-sm font-medium text-black-500 mb-2">Departamento *</label>
@@ -109,9 +123,9 @@
                     </div>
                     
                     <div>
-                        <label for="customer_address" class="block text-sm font-medium text-black-500 mb-2">Dirección Completa *</label>
+                        <label for="customer_address_national" class="block text-sm font-medium text-black-500 mb-2">Dirección Completa *</label>
                         <textarea 
-                            id="customer_address" 
+                            id="customer_address_national" 
                             name="customer_address" 
                             rows="2"
                             class="w-full px-4 py-3 border border-accent-200 rounded-lg focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-colors resize-none"
@@ -213,6 +227,8 @@
                     <div id="coupon_error" class="hidden mt-1 text-xs text-error-300"></div>
                 </div>
                 
+                <!-- Sección de productos eliminada - ya está en "Resumen del Pedido" -->
+
                 <!-- Totals -->
                 <div class="border-t border-accent-200 pt-4 space-y-3">
                     <!-- Subtotal productos -->
@@ -274,10 +290,16 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('🚀 DOM LISTO');
     
     initCheckout();
-    loadOrderSummary();
+    loadOrderSummary(); // Esta es la función de la línea 1425+
     loadShippingMethods();
     loadPaymentMethods();
 });
+
+// Variables globales para totales
+let cartSubtotal = 0;
+let shippingCost = 0;
+let discountAmount = 0;
+let cartItems = [];
 
 // Inicializar todo
 function initCheckout() {
@@ -326,6 +348,7 @@ function setupEvents() {
     document.getElementById('department').addEventListener('change', enableStep2Button);
     document.getElementById('city').addEventListener('input', enableStep2Button);
     document.getElementById('customer_address').addEventListener('input', enableStep2Button);
+    document.getElementById('customer_address_national').addEventListener('input', enableStep2Button);
     
     // Payment method listeners se configuran en renderPaymentMethods()
     // Cash amount listeners se configuran en renderPaymentMethods()
@@ -389,18 +412,37 @@ function enableStep2Button() {
         return;
     }
     
-    // Para domicilio, validar campos de dirección
-    const department = document.getElementById('department').value.trim();
-    const city = document.getElementById('city').value.trim();
-    const address = document.getElementById('customer_address').value.trim();
+    // Para domicilio, validar campos según el tipo de envío
+    const shippingType = deliveryType.dataset.shippingType;
+    let isValid = false;
     
-    const isValid = department && city.length >= 2 && address.length >= 10;
+    if (shippingType === 'local') {
+        // Para envío local: solo validar dirección
+        const address = document.getElementById('customer_address').value.trim();
+        isValid = address.length >= 10;
+        
+        // Para local, calcular envío con ciudad de la tienda
+        if (isValid) {
+            calculateShippingCost(null, '{{ $store->city ?? "" }}');
+        }
+    } else if (shippingType === 'nacional') {
+        // Para envío nacional: validar departamento + ciudad + dirección
+        const department = document.getElementById('department').value.trim();
+        const city = document.getElementById('city').value.trim();
+        const address = document.getElementById('customer_address_national').value.trim();
+        isValid = department && city.length >= 2 && address.length >= 10;
+        
+        // Para nacional, calcular envío con departamento y ciudad
+        if (isValid) {
+            calculateShippingCost(department, city);
+        }
+    }
     
     btn.disabled = !isValid;
     
     if (isValid) {
         console.log('✅ Paso 2 habilitado - domicilio válido');
-        calculateShippingCost(department, city);
+        // El cálculo ya se hizo arriba según el tipo de envío
     } else {
         console.log('❌ Paso 2 deshabilitado - domicilio incompleto');
     }
@@ -517,30 +559,7 @@ function copyToClipboard(elementId) {
     });
 }
 
-// Cargar resumen de orden
-async function loadOrderSummary() {
-    console.log('📋 Cargando resumen de orden...');
-    
-    try {
-        const response = await fetch('{{ route("tenant.cart.get", $store->slug) }}');
-        const data = await response.json();
-        
-        if (data.success && data.items.length > 0) {
-            displayOrderProducts(data.items);
-            updateOrderTotals(data.total, 0, 0); // subtotal, shipping, discount
-        } else {
-            // Redirigir si no hay productos
-            window.location.href = '{{ route("tenant.cart.index", $store->slug) }}';
-        }
-    } catch (error) {
-        console.error('Error cargando carrito:', error);
-        document.getElementById('order-products').innerHTML = `
-            <div class="text-center py-4">
-                <p class="text-sm text-error-300">Error al cargar productos</p>
-            </div>
-        `;
-    }
-}
+// REMOVED - Función duplicada eliminada
 
 // Mostrar productos en el resumen
 function displayOrderProducts(items) {
@@ -553,14 +572,14 @@ function displayOrderProducts(items) {
     
     items.forEach((item, index) => {
         console.log(`📦 Producto ${index + 1}:`, {
-            name: item.product?.name,
-            rawPrice: item.price,
+            name: item.product_name || item.product?.name,
+            rawPrice: item.product_price || item.price,
             rawQuantity: item.quantity,
             variant: item.variant_details
         });
         
         // Asegurar que los precios sean números válidos
-        const basePrice = parseFloat(item.price) || 0;
+        const basePrice = parseFloat(item.product_price || item.price) || 0;
         const variantModifier = parseFloat(item.variant_details?.precio_modificador) || 0;
         const quantity = parseInt(item.quantity) || 0;
         
@@ -577,11 +596,11 @@ function displayOrderProducts(items) {
         
         html += `
             <div class="flex items-center gap-3 py-2 border-b border-accent-200 last:border-b-0">
-                <img src="${item.product.image_url || '{{ asset("assets/images/placeholder-product.svg") }}'}" 
-                     alt="${item.product.name}" 
+                <img src="${item.image_url || (item.product && item.product.main_image_url) || '{{ asset("assets/images/placeholder-product.svg") }}'}" 
+                     alt="${item.product_name || item.product?.name || 'Producto'}" 
                      class="w-12 h-12 object-cover rounded-lg">
                 <div class="flex-1 min-w-0">
-                    <h4 class="text-sm font-medium text-black-500 truncate">${item.product.name}</h4>
+                    <h4 class="text-sm font-medium text-black-500 truncate">${item.product_name || item.product?.name || 'Producto'}</h4>
                     ${item.variant_display ? `<p class="text-xs text-black-300">${item.variant_display}</p>` : ''}
                     <div class="flex items-center justify-between mt-1">
                         <span class="text-xs text-black-400">Cantidad: ${item.quantity}</span>
@@ -637,71 +656,7 @@ function updateOrderTotals(subtotal, shipping, discount) {
     console.log('💰 Totales actualizados:', { subtotal, shipping, discount, total });
 }
 
-// Calcular costo de envío usando API real
-async function calculateShippingCost(department, city) {
-    console.log('💰 Calculando envío REAL para:', { department, city });
-    
-    const shippingDisplay = document.getElementById('shipping-cost-display');
-    shippingDisplay.classList.remove('hidden');
-    shippingDisplay.textContent = 'Calculando...';
-    
-    try {
-        const subtotal = getCurrentSubtotal();
-        
-        const response = await fetch('{{ route("tenant.checkout.shipping-cost", $store->slug) }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            },
-            body: JSON.stringify({
-                department: department,
-                city: city,
-                subtotal: subtotal
-            })
-        });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            const costText = data.cost > 0 ? `${data.formatted_cost}` : 'GRATIS';
-            shippingDisplay.textContent = costText;
-            
-            // Mostrar información adicional si hay envío gratis
-            if (data.has_free_shipping && data.free_shipping_message) {
-                const additionalInfo = document.createElement('p');
-                additionalInfo.className = 'text-xs text-success-400 mt-1';
-                additionalInfo.textContent = data.free_shipping_message;
-                shippingDisplay.appendChild(additionalInfo);
-            }
-            
-            // Guardar información de la zona para el formulario
-            window.selectedShippingZone = {
-                zone_id: data.zone_id,
-                zone_name: data.zone_name,
-                cost: data.cost,
-                estimated_time: data.estimated_time
-            };
-            
-            updateOrderTotals(subtotal, data.cost, getCurrentDiscount());
-            
-            console.log('✅ Costo de envío calculado:', {
-                zone: data.zone_name,
-                cost: data.cost,
-                formatted: data.formatted_cost,
-                free_shipping: data.has_free_shipping
-            });
-            
-        } else {
-            shippingDisplay.textContent = 'No disponible';
-            console.error('Error en respuesta:', data.message);
-        }
-        
-    } catch (error) {
-        console.error('Error calculando envío:', error);
-        shippingDisplay.textContent = 'Error al calcular';
-    }
-}
+// FUNCIÓN PROBLEMÁTICA ELIMINADA COMPLETAMENTE - Solo usar la de línea 1583+
 
 // Obtener subtotal actual (helper)
 function getCurrentSubtotal() {
@@ -817,11 +772,181 @@ function renderShippingMethods() {
     // Re-configurar event listeners
     document.querySelectorAll('input[name="delivery_type"]').forEach(radio => {
         radio.addEventListener('change', (e) => {
-            console.log('📦 Delivery type:', e.target.value);
+            console.log('📦 Delivery type:', e.target.value, 'Shipping type:', e.target.dataset.shippingType);
+            
+            const addressFieldsLocal = document.getElementById('address-fields-local');
+            const addressFieldsNational = document.getElementById('address-fields-national');
+            
+            // Ocultar ambos campos primero
+            addressFieldsLocal.classList.add('hidden');
+            addressFieldsNational.classList.add('hidden');
+            
             if (e.target.value === 'domicilio') {
-                document.getElementById('address-fields').classList.remove('hidden');
-            } else {
-                document.getElementById('address-fields').classList.add('hidden');
+                const shippingType = e.target.dataset.shippingType;
+                
+                if (shippingType === 'local') {
+                    // Solo mostrar campo de dirección para local
+                    addressFieldsLocal.classList.remove('hidden');
+                    // Limpiar campos nacionales
+                    document.getElementById('department').value = '';
+                    document.getElementById('city').value = '';
+                    document.getElementById('customer_address_national').value = '';
+                } else if (shippingType === 'nacional') {
+                    // Mostrar departamento + ciudad + dirección para nacional
+                    addressFieldsNational.classList.remove('hidden');
+                    // Limpiar campo local
+                    document.getElementById('customer_address').value = '';
+                }
+            }
+            enableStep2Button();
+        });
+    });
+}
+
+// Cargar métodos de envío disponibles
+async function loadShippingMethods() {
+    console.log('🚚 Cargando métodos de envío...');
+    
+    try {
+        // Usar los métodos pasados desde el controlador por ahora
+        const shippingData = @json($shippingMethods ?? []);
+        console.log('📦 Métodos de envío desde servidor:', shippingData);
+        
+        shippingMethods = shippingData;
+        renderShippingMethods();
+        console.log('✅ Métodos de envío cargados:', shippingMethods.length);
+    } catch (error) {
+        console.error('❌ Error en loadShippingMethods:', error);
+    }
+}
+
+// Renderizar métodos de envío en el HTML
+function renderShippingMethods() {
+    console.log('🎨 Renderizando métodos de envío:', shippingMethods);
+    
+    const container = document.querySelector('#shipping-methods-container');
+    if (!container) {
+        console.error('❌ Container #shipping-methods-container no encontrado');
+        return;
+    }
+    
+    let html = '';
+    
+    // Siempre mostrar opción de pickup si está habilitado
+    let hasPickup = false;
+    let hasLocal = false;
+    let hasNational = false;
+    
+    shippingMethods.forEach(method => {
+        console.log('🔍 Procesando método:', method);
+        
+        if (method.type === 'pickup') {
+            hasPickup = true;
+            html += `
+                <label class="flex items-center p-4 border border-accent-200 rounded-lg cursor-pointer hover:bg-accent-50 transition-colors">
+                    <input 
+                        type="radio" 
+                        name="delivery_type" 
+                        value="pickup"
+                        data-shipping-type="pickup"
+                        class="mr-3 w-4 h-4 text-primary-500 border-accent-300 focus:ring-primary-300"
+                    >
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <span class="font-medium text-black-600">${method.icon || '🏪'} ${method.name || 'Recogida en Tienda'}</span>
+                            <span class="text-primary-500 font-medium">${method.formatted_cost || 'GRATIS'}</span>
+                        </div>
+                        <p class="text-sm text-black-400 mt-1">${method.instructions || 'Recoge tu pedido en nuestra tienda'}</p>
+                        <p class="text-sm text-black-300 mt-1">⏱️ Listo en: ${method.preparation_label || method.preparation_time || '1 hora'}</p>
+                    </div>
+                </label>
+            `;
+        }
+        
+        if (method.id === 'local' && method.type === 'domicilio') {
+            hasLocal = true;
+            html += `
+                <label class="flex items-center p-4 border border-accent-200 rounded-lg cursor-pointer hover:bg-accent-50 transition-colors">
+                    <input 
+                        type="radio" 
+                        name="delivery_type" 
+                        value="domicilio"
+                        data-shipping-type="local"
+                        data-cost="${method.cost}"
+                        class="mr-3 w-4 h-4 text-primary-500 border-accent-300 focus:ring-primary-300"
+                    >
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <span class="font-medium text-black-600">${method.icon || '🚚'} ${method.name || 'Envío Local'}</span>
+                            <span class="text-primary-500 font-medium">${method.formatted_cost}</span>
+                        </div>
+                        <p class="text-sm text-black-400 mt-1">${method.instructions || 'Entrega en tu ciudad'}</p>
+                        <p class="text-sm text-black-300 mt-1">⏱️ Tiempo: ${method.preparation_label || method.preparation_time || '2-4 horas'}</p>
+                    </div>
+                </label>
+            `;
+        }
+        
+        if (method.id === 'national' && method.type === 'domicilio') {
+            hasNational = true;
+            html += `
+                <label class="flex items-center p-4 border border-accent-200 rounded-lg cursor-pointer hover:bg-accent-50 transition-colors">
+                    <input 
+                        type="radio" 
+                        name="delivery_type" 
+                        value="domicilio"
+                        data-shipping-type="nacional"
+                        class="mr-3 w-4 h-4 text-primary-500 border-accent-300 focus:ring-primary-300"
+                    >
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            <span class="font-medium text-black-600">${method.icon || '🌍'} ${method.name || 'Envío Nacional'}</span>
+                            <span class="text-primary-500 font-medium">${method.formatted_cost || 'Según destino'}</span>
+                        </div>
+                        <p class="text-sm text-black-400 mt-1">${method.instructions || 'Envío a todo el país'}</p>
+                        <p class="text-sm text-black-300 mt-1">⏱️ Tiempo: ${method.preparation_label || '3-7 días hábiles'}</p>
+                    </div>
+                </label>
+            `;
+        }
+    });
+    
+    if (!html) {
+        html = '<p class="text-center text-black-400 py-8">No hay métodos de envío disponibles</p>';
+    }
+    
+    container.innerHTML = html;
+    
+    console.log('📊 Métodos renderizados - Pickup:', hasPickup, 'Local:', hasLocal, 'Nacional:', hasNational);
+    
+    // Re-configurar event listeners
+    document.querySelectorAll('input[name="delivery_type"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            console.log('📦 Delivery type:', e.target.value, 'Shipping type:', e.target.dataset.shippingType);
+            
+            const addressFieldsLocal = document.getElementById('address-fields-local');
+            const addressFieldsNational = document.getElementById('address-fields-national');
+            
+            // Ocultar ambos campos primero
+            addressFieldsLocal.classList.add('hidden');
+            addressFieldsNational.classList.add('hidden');
+            
+            if (e.target.value === 'domicilio') {
+                const shippingType = e.target.dataset.shippingType;
+                
+                if (shippingType === 'local') {
+                    // Solo mostrar campo de dirección para local
+                    addressFieldsLocal.classList.remove('hidden');
+                    // Limpiar campos nacionales
+                    document.getElementById('department').value = '';
+                    document.getElementById('city').value = '';
+                    document.getElementById('customer_address_national').value = '';
+                } else if (shippingType === 'nacional') {
+                    // Mostrar departamento + ciudad + dirección para nacional
+                    addressFieldsNational.classList.remove('hidden');
+                    // Limpiar campo local
+                    document.getElementById('customer_address').value = '';
+                }
             }
             enableStep2Button();
         });
@@ -1048,9 +1173,19 @@ async function submitOrder() {
             formData.append('delivery_type', deliveryType.value);
             
             if (deliveryType.value === 'domicilio') {
-                formData.append('department', document.getElementById('department').value);
-                formData.append('city', document.getElementById('city').value);
-                formData.append('customer_address', document.getElementById('customer_address').value);
+                const shippingType = deliveryType.dataset.shippingType;
+                
+                if (shippingType === 'local') {
+                    // Para envío local: solo enviar dirección, usar datos de la tienda para dept/ciudad
+                    formData.append('department', '{{ $store->department ?? "" }}');
+                    formData.append('city', '{{ $store->city ?? "" }}');
+                    formData.append('customer_address', document.getElementById('customer_address').value);
+                } else if (shippingType === 'nacional') {
+                    // Para envío nacional: enviar todos los datos
+                    formData.append('department', document.getElementById('department').value);
+                    formData.append('city', document.getElementById('city').value);
+                    formData.append('customer_address', document.getElementById('customer_address_national').value);
+                }
                 
                 // Agregar shipping_zone_id si está disponible
                 if (window.selectedShippingZone && window.selectedShippingZone.zone_id) {
@@ -1168,6 +1303,252 @@ function formatPrice(price) {
         minimumFractionDigits: 0,
         maximumFractionDigits: 0
     }).format(numPrice);
+}
+
+// Actualizar la visualización del resumen del pedido
+function updateOrderSummaryDisplay() {
+    console.log('🎨 Actualizando resumen de pedido...');
+    
+    // Sección de productos eliminada - no actualizar cart-items-list
+    // const cartItemsList = document.getElementById('cart-items-list');
+    // const cartItemsCount = document.getElementById('cart-items-count');
+    
+    if (cartItems.length === 0) {
+        // cartItemsList.innerHTML = '<p class="text-center text-black-300 py-4 text-sm">No hay productos en el carrito</p>';
+        // cartItemsCount.textContent = '0 productos';
+        console.log('⚠️ No hay productos en el carrito');
+    } else {
+        let itemsHtml = '';
+        let totalQuantity = 0;
+        
+        cartItems.forEach(item => {
+            totalQuantity += item.quantity;
+            // HTML eliminado - ya no se usa la sección de productos duplicada
+        });
+        
+        // cartItemsList.innerHTML = itemsHtml; // ELIMINADO
+        // cartItemsCount.textContent = `${totalQuantity} productos`; // ELIMINADO
+        console.log(`✅ ${totalQuantity} productos procesados para resumen`);
+    }
+    
+    // Actualizar subtotal
+    document.getElementById('summary-subtotal').textContent = '$' + formatPrice(cartSubtotal);
+    
+    // Actualizar desglose
+    document.getElementById('total-quantity').textContent = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+    document.getElementById('unique-products').textContent = cartItems.length;
+    document.getElementById('product-breakdown').classList.remove('hidden');
+    
+    // Actualizar total
+    updateTotalDisplay();
+    
+    console.log('✅ Resumen actualizado');
+}
+
+// Cargar resumen del pedido desde el carrito
+async function loadOrderSummary() {
+    console.log('📦 Cargando resumen del pedido...');
+    
+    try {
+        const response = await fetch('{{ route("tenant.cart.get", $store->slug) }}');
+        console.log('📡 Cart fetch response status:', response.status);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        console.log('📦 Cart data received:', data);
+        
+        if (data.success) {
+            cartItems = data.items || [];
+            cartSubtotal = data.subtotal || 0;
+            
+            console.log('✅ Carrito cargado:', { items: cartItems.length, subtotal: cartSubtotal });
+            
+            // Mostrar productos usando la función correcta
+            if (cartItems.length > 0) {
+                displayOrderProducts(cartItems);
+                updateOrderTotals(cartSubtotal, 0, 0); // subtotal, shipping, discount
+            } else {
+                // Redirigir si no hay productos
+                window.location.href = '{{ route("tenant.cart.index", $store->slug) }}';
+            }
+        } else {
+            console.error('❌ Error cargando carrito:', data.message);
+            // Redirigir si no hay productos
+            window.location.href = '{{ route("tenant.cart.index", $store->slug) }}';
+        }
+    } catch (error) {
+        console.error('❌ Error de conexión cargando carrito:', error);
+        cartItems = [];
+        cartSubtotal = 0;
+        updateOrderSummaryDisplay();
+    }
+}
+
+// Actualizar display del resumen
+function updateOrderSummaryDisplay() {
+    // Actualizar subtotal productos
+    document.getElementById('summary-subtotal').textContent = `$${formatPrice(cartSubtotal)}`;
+    
+    // Actualizar desglose de productos
+    const productBreakdown = document.getElementById('product-breakdown');
+    const totalQuantity = document.getElementById('total-quantity');
+    const uniqueProducts = document.getElementById('unique-products');
+    
+    if (cartItems.length > 0) {
+        const totalQty = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+        totalQuantity.textContent = totalQty;
+        uniqueProducts.textContent = cartItems.length;
+        productBreakdown.classList.remove('hidden');
+    } else {
+        productBreakdown.classList.add('hidden');
+    }
+    
+    // Actualizar total final
+    updateTotalDisplay();
+}
+
+// Obtener subtotal actual
+function getCurrentSubtotal() {
+    return cartSubtotal;
+}
+
+// Obtener costo de envío actual
+function getCurrentShipping() {
+    return shippingCost;
+}
+
+// Obtener descuento actual
+function getCurrentDiscount() {
+    return discountAmount;
+}
+
+// Actualizar display del total final
+function updateTotalDisplay() {
+    const total = getCurrentSubtotal() + getCurrentShipping() - getCurrentDiscount();
+    document.getElementById('summary-total').textContent = `$${formatPrice(total)}`;
+    
+    // Actualizar botón de envío
+    updateSubmitButtonText();
+}
+
+// Actualizar costo de envío
+function updateShippingCost(cost, isCalculating = false) {
+    shippingCost = parseFloat(cost) || 0;
+    const shippingDisplay = document.getElementById('summary-shipping');
+    
+    if (isCalculating) {
+        shippingDisplay.textContent = 'Calculando...';
+    } else if (shippingCost === 0) {
+        shippingDisplay.textContent = 'GRATIS';
+    } else {
+        shippingDisplay.textContent = `$${formatPrice(shippingCost)}`;
+    }
+    
+    updateTotalDisplay();
+}
+
+// Actualizar descuento por cupón
+function updateDiscountAmount(discount) {
+    discountAmount = parseFloat(discount) || 0;
+    const discountRow = document.getElementById('coupon-discount-row');
+    const discountDisplay = document.getElementById('summary-discount');
+    
+    if (discountAmount > 0) {
+        discountDisplay.textContent = `-$${formatPrice(discountAmount)}`;
+        discountRow.classList.remove('hidden');
+    } else {
+        discountRow.classList.add('hidden');
+    }
+    
+    updateTotalDisplay();
+}
+
+// Obtener subtotal actual del carrito
+function getCurrentSubtotal() {
+    return cartSubtotal || 0;
+}
+
+// Obtener costo de envío actual
+function getCurrentShipping() {
+    return shippingCost || 0;
+}
+
+// Obtener descuento actual
+function getCurrentDiscount() {
+    return discountAmount || 0;
+}
+
+// Actualizar el total final
+function updateTotalDisplay() {
+    const subtotal = getCurrentSubtotal();
+    const shipping = getCurrentShipping();
+    const discount = getCurrentDiscount();
+    
+    const total = subtotal + shipping - discount;
+    
+    document.getElementById('summary-total').textContent = '$' + formatPrice(Math.max(0, total));
+    
+    console.log('💰 Total actualizado:', { subtotal, shipping, discount, total });
+}
+
+// Calcular costo de envío
+async function calculateShippingCost(department, city) {
+    const currentSubtotal = getCurrentSubtotal();
+    
+    // Para envío local, puede que city venga en department y city sea vacío
+    const finalCity = city || department || '';
+    
+    console.log('🚚 Calculando costo de envío...', { 
+        originalDepartment: department, 
+        originalCity: city,
+        finalCity: finalCity,
+        subtotal: currentSubtotal,
+        cartItems: cartItems.length 
+    });
+    
+    if (!finalCity) {
+        console.log('❌ Ciudad requerida para calcular envío');
+        updateShippingCost(0);
+        return;
+    }
+    
+    if (currentSubtotal <= 0) {
+        console.log('⚠️ Subtotal del carrito es 0 o inválido:', currentSubtotal);
+    }
+    
+    // Mostrar estado calculando
+    updateShippingCost(0, true);
+    
+    try {
+        const response = await fetch('{{ route("tenant.debug.shipping-cost", $store->slug) }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({
+                city: finalCity,
+                department: department,
+                subtotal: getCurrentSubtotal()
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            console.log('✅ Costo de envío calculado:', data);
+            updateShippingCost(data.cost);
+        } else {
+            console.error('❌ Error calculando envío:', data.message);
+            updateShippingCost(0);
+        }
+    } catch (error) {
+        console.error('❌ Error de conexión calculando envío:', error);
+        updateShippingCost(0);
+    }
 }
 </script>
 @endpush

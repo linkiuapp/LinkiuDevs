@@ -2,7 +2,7 @@
 @section('title', 'Pedidos')
 
 @section('content')
-<div x-data="ordersManager" x-init="init()" class="space-y-4">
+<div x-data="ordersManager" x-init="init(); initNotifications()" class="space-y-4">
     
     <!-- Header con estadísticas -->
     <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
@@ -15,7 +15,7 @@
                     </p>
                 </div>
                 <div class="flex items-center gap-3">
-                    <button onclick="exportOrders()" class="text-black-300 hover:text-black-400 p-2 rounded-lg hover:bg-accent-100" title="Exportar">
+                    <button onclick="alert('Funcionalidad próximamente disponible')" class="text-black-300 hover:text-black-400 p-2 rounded-lg hover:bg-accent-100" title="Exportar (Próximamente)">
                         <x-solar-download-outline class="w-5 h-5" />
                     </button>
                     <a href="{{ route('tenant.admin.orders.create', $store->slug) }}" 
@@ -367,6 +367,10 @@
 
 @push('scripts')
 <script>
+// ===== NOTIFICACIONES GLOBALES =====
+// Las notificaciones se manejan automáticamente desde el layout principal
+</script>
+<script>
 document.addEventListener('alpine:init', () => {
     Alpine.data('ordersManager', () => ({
         showDeleteModal: false,
@@ -472,6 +476,159 @@ function exportOrders() {
 window.deleteOrder = function(orderId, orderNumber) {
     Alpine.store('ordersManager') || Alpine.$data(document.querySelector('[x-data="ordersManager"]')).deleteOrder(orderId, orderNumber);
 };
+
+// ===== NOTIFICACIONES GLOBALES =====
+// Las notificaciones se manejan automáticamente desde el layout principal
+            if (data.success) {
+                lastOrderCount = data.count;
+            }
+        }
+    } catch (error) {
+        console.error('Error cargando conteo inicial:', error);
+    }
+}
+
+// Verificar nuevos pedidos
+async function checkForNewOrders() {
+    try {
+        const response = await fetch('{{ route("tenant.admin.orders.api.count", $store->slug) }}');
+        
+        if (response.ok) {
+            const data = await response.json();
+            
+            if (data.success) {
+                const currentCount = data.count;
+                
+                // Si hay más pedidos que antes
+                if (currentCount > lastOrderCount) {
+                    const newOrders = currentCount - lastOrderCount;
+                    showNewOrderNotification(newOrders, data.latest_order);
+                    showNewOrderAlert(data.latest_order);
+                    
+                    // Actualizar la página automáticamente
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 4000);
+                }
+                
+                lastOrderCount = currentCount;
+            }
+        }
+    } catch (error) {
+        console.error('Error verificando nuevos pedidos:', error);
+    }
+}
+
+// Mostrar notificación de nuevo pedido
+function showNewOrderNotification(count, latestOrder) {
+    if (Notification.permission !== 'granted') return;
+    
+    const title = count === 1 ? '🔔 ¡Nuevo pedido!' : `🔔 ¡${count} pedidos nuevos!`;
+    const body = latestOrder ? 
+        `Pedido #${latestOrder.order_number} - $${formatPrice(latestOrder.total)}\nCliente: ${latestOrder.customer_name}\n\n👆 Click para ver detalles` :
+        'Revisa el panel de pedidos\n\n👆 Click para ver detalles';
+    
+    const notification = new Notification(title, {
+        body: body,
+        icon: '/favicon.ico',
+        tag: 'new-order',
+        requireInteraction: true // Mantener hasta que el usuario la cierre
+    });
+    
+    // Sonido opcional (si el navegador lo permite)
+    try {
+        const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmIePjuVvDY=');
+        audio.volume = 0.3;
+        audio.play().catch(() => {}); // Ignorar errores de audio
+    } catch (e) {}
+    
+    // Click en notificación para ir al pedido específico
+    notification.onclick = function() {
+        window.focus();
+        notification.close();
+        
+        // Si hay un pedido específico, ir a su vista de detalle
+        if (latestOrder && latestOrder.id) {
+            const orderUrl = `{{ route('tenant.admin.orders.index', $store->slug) }}`.replace('/orders', `/orders/${latestOrder.id}`);
+            window.location.href = orderUrl;
+        } else {
+            // Si no hay pedido específico, solo recargar la página
+            window.location.reload();
+        }
+    };
+}
+
+// Formatear precio
+function formatPrice(price) {
+    return new Intl.NumberFormat('es-CO', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(price);
+}
+
+// Mostrar alert flotante en la página para nuevo pedido
+function showNewOrderAlert(latestOrder) {
+    // Crear alert flotante
+    const alertDiv = document.createElement('div');
+    alertDiv.className = 'fixed top-4 right-4 bg-success-300 text-white p-4 rounded-lg shadow-lg z-50 max-w-sm transform transition-all duration-300';
+    alertDiv.style.transform = 'translateX(100%)';
+    
+    alertDiv.innerHTML = `
+        <div class="flex items-start gap-3">
+            <div class="flex-shrink-0">
+                <div class="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                    🔔
+                </div>
+            </div>
+            <div class="flex-1 min-w-0">
+                <h4 class="font-semibold text-sm">¡Nuevo pedido!</h4>
+                <p class="text-xs opacity-90 mt-1">
+                    ${latestOrder ? `#${latestOrder.order_number} - $${formatPrice(latestOrder.total)}` : 'Revisa el panel'}
+                </p>
+                <p class="text-xs opacity-75 mt-1">
+                    ${latestOrder ? latestOrder.customer_name : ''}
+                </p>
+            </div>
+            <div class="flex-shrink-0 flex flex-col gap-1">
+                ${latestOrder ? `<button onclick="goToOrder(${latestOrder.id})" class="text-xs bg-white bg-opacity-20 hover:bg-opacity-30 px-2 py-1 rounded text-white transition-colors">Ver</button>` : ''}
+                <button onclick="this.parentElement.parentElement.parentElement.remove()" class="text-xs text-white opacity-75 hover:opacity-100">✕</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(alertDiv);
+    
+    // Animación de entrada
+    setTimeout(() => {
+        alertDiv.style.transform = 'translateX(0)';
+    }, 100);
+    
+    // Auto-remover después de 8 segundos
+    setTimeout(() => {
+        if (alertDiv.parentElement) {
+            alertDiv.style.transform = 'translateX(100%)';
+            setTimeout(() => {
+                if (alertDiv.parentElement) {
+                    alertDiv.remove();
+                }
+            }, 300);
+        }
+    }, 8000);
+}
+
+// Ir a un pedido específico
+function goToOrder(orderId) {
+    const orderUrl = `{{ route('tenant.admin.orders.index', $store->slug) }}`.replace('/orders', `/orders/${orderId}`);
+    window.location.href = orderUrl;
+}
+
+
+// Detener polling al salir de la página
+window.addEventListener('beforeunload', () => {
+    if (pollingInterval) {
+        clearInterval(pollingInterval);
+    }
+});
 </script>
 @endpush
 @endsection

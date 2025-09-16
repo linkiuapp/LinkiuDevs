@@ -197,9 +197,33 @@ const CUSTOMER_PHONE = '{{ $order->customer_phone ?? '' }}';
 document.addEventListener('DOMContentLoaded', function() {
     loadOrderStatus();
     
+    // ✅ RESETEAR CARRITO DESPUÉS DE PEDIDO COMPLETADO
+    resetCartAfterOrder();
+    
     // Actualizar cada 30 segundos
     setInterval(loadOrderStatus, 30000);
 });
+
+// Función para resetear el carrito después de completar el pedido
+function resetCartAfterOrder() {
+    try {
+        // Si existe la función global clearCart (del cart.js)
+        if (typeof window.clearCart === 'function') {
+            window.clearCart();
+            console.log('🛒 Carrito reseteado después del pedido');
+        }
+        
+        // También limpiar localStorage por si acaso
+        localStorage.removeItem('cart_items');
+        localStorage.removeItem('cart_count');
+        
+        // Limpiar sessionStorage
+        sessionStorage.removeItem('cart_data');
+        
+    } catch (error) {
+        console.error('Error reseteando carrito:', error);
+    }
+}
 
 // Cargar estado del pedido
 async function loadOrderStatus() {
@@ -328,11 +352,36 @@ function copyOrderCode() {
     });
 }
 
-// Compartir con el negocio
+// Compartir con el negocio via WhatsApp
 function shareWithBusiness() {
-    const message = `¡Hola! Mi pedido ${document.getElementById('order-code').textContent} está confirmado. ¿Podrían darme más información?`;
-    const whatsappUrl = `https://wa.me/${STORE_PHONE}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+    const orderNumber = '{{ $order->order_number ?? "N/A" }}';
+    const customerName = '{{ $order->customer_name ?? "Cliente" }}';
+    const total = '{{ $order->total ?? 0 }}';
+    const storeName = '{{ $store->name ?? "Tienda" }}';
+    
+    let message = `🛍️ *Confirmación de Pedido*\n\n`;
+    message += `👋 ¡Hola ${storeName}! Soy *${customerName}*\n\n`;
+    message += `📋 *Pedido:* #${orderNumber}\n`;
+    message += `💰 *Total:* $${formatPrice(total)}\n\n`;
+    
+    @if(($order->delivery_type ?? '') === 'domicilio')
+        message += `🚚 *Tipo:* Domicilio\n`;
+        message += `📍 *Dirección:* {{ $order->customer_address ?? 'N/A' }}\n`;
+    @else
+        message += `🏪 *Tipo:* Recogida en tienda\n`;
+    @endif
+    
+    message += `📞 *Teléfono:* {{ $order->customer_phone ?? 'N/A' }}\n\n`;
+    message += `¿Podrían confirmar que recibieron mi pedido? ¡Gracias! 😊`;
+    
+    const whatsappNumber = STORE_PHONE || '{{ $store->phone ?? "" }}';
+    if (!whatsappNumber) {
+        alert('Número de WhatsApp no configurado para esta tienda');
+        return;
+    }
+    
+    const url = `https://wa.me/${whatsappNumber.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
 }
 
 // Compartir con un amigo

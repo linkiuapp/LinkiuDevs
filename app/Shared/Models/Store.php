@@ -210,29 +210,15 @@ class Store extends Model
         return $this->paymentMethods()->count();
     }
     
-    /**
-     * Get the shipping methods for this store.
-     */
-    public function shippingMethods()
-    {
-        return $this->hasMany(\App\Features\TenantAdmin\Models\ShippingMethod::class);
-    }
     
     /**
-     * Get the shipping zones for this store.
+     * Get the simple shipping configuration for this store.
      */
-    public function shippingZones()
+    public function simpleShipping()
     {
-        return $this->hasMany(\App\Features\TenantAdmin\Models\ShippingZone::class);
+        return $this->hasOne(\App\Features\TenantAdmin\Models\SimpleShipping::class);
     }
     
-    /**
-     * Get the shipping method config for this store.
-     */
-    public function shippingConfig()
-    {
-        return $this->hasOne(\App\Features\TenantAdmin\Models\ShippingMethodConfig::class);
-    }
 
     /**
      * Get all tickets for this store.
