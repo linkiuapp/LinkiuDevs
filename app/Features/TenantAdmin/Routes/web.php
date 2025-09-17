@@ -126,7 +126,13 @@ Route::middleware(['auth', 'store.admin'])->group(function () {
         Route::put('/{paymentMethod}', [PaymentMethodController::class, 'update'])->name('update');
         Route::delete('/{paymentMethod}', [PaymentMethodController::class, 'destroy'])->name('destroy');
         Route::post('/{paymentMethod}/toggle-active', [PaymentMethodController::class, 'toggleActive'])->name('toggle-active');
+        Route::post('/{paymentMethod}/set-default', [PaymentMethodController::class, 'setDefault'])->name('set-default');
         Route::post('/update-order', [PaymentMethodController::class, 'updateOrder'])->name('update-order');
+        
+        // Rutas simplificadas para métodos predefinidos
+        Route::post('/toggle-simple', [PaymentMethodController::class, 'toggleSimple'])->name('toggle-simple');
+        Route::post('/set-default-simple', [PaymentMethodController::class, 'setDefaultSimple'])->name('set-default-simple');
+        Route::post('/configure-simple', [PaymentMethodController::class, 'configureSimple'])->name('configure-simple');
         
         // Rutas para cuentas bancarias (anidadas bajo payment-methods)
         Route::prefix('{paymentMethod}/bank-accounts')->name('bank-accounts.')->group(function () {

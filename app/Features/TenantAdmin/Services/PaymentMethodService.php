@@ -7,6 +7,7 @@ use App\Features\TenantAdmin\Models\PaymentMethodConfig;
 use App\Shared\Models\Store;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\ValidationException;
 
 class PaymentMethodService
@@ -25,17 +26,22 @@ class PaymentMethodService
     }
 
     /**
-     * Get active payment methods for a store.
+     * Get active payment methods for a store with caching.
      *
      * @param Store $store
      * @return Collection
      */
     public function getActivePaymentMethods(Store $store): Collection
     {
-        return $store->paymentMethods()
-            ->active()
-            ->ordered()
-            ->get();
+        $cacheKey = "store_{$store->id}_active_payment_methods";
+        
+        return Cache::remember($cacheKey, 300, function () use ($store) {
+            return $store->paymentMethods()
+                ->active()
+                ->ordered()
+                ->with('bankAccounts')
+                ->get();
+        });
     }
 
     /**
@@ -279,6 +285,56 @@ class PaymentMethodService
             }
         }
         
+        // Clear cache after deletion
+        $this->clearPaymentMethodsCache($method->store_id);
+        
         return $method->delete();
+    }
+
+    /**
+     * Clear payment methods cache for a store.
+     *
+     * @param int $storeId
+     * @return void
+     */
+    public function clearPaymentMethodsCache(int $storeId): void
+    {
+        Cache::forget("store_{$storeId}_active_payment_methods");
+        Cache::forget("store_{$storeId}_default_payment_method");
+    }
+
+    /**
+     * Refresh cache for a store's payment methods.
+     *
+     * @param Store $store
+     * @return void
+     */
+    public function refreshPaymentMethodsCache(Store $store): void
+    {
+        $this->clearPaymentMethodsCache($store->id);
+        
+        // Pre-load cache
+        $this->getActivePaymentMethods($store);
+        $this->getDefaultMethod($store);
+    }
+
+    /**
+     * Get payment methods statistics for a store.
+     *
+     * @param Store $store
+     * @return array
+     */
+    public function getPaymentMethodStats(Store $store): array
+    {
+        $allMethods = $this->getAvailableMethods($store);
+        $activeMethods = $this->getActivePaymentMethods($store);
+        
+        return [
+            'total' => $allMethods->count(),
+            'active' => $activeMethods->count(),
+            'inactive' => $allMethods->count() - $activeMethods->count(),
+            'types' => $allMethods->groupBy('type')->map->count(),
+            'bank_accounts_total' => $allMethods->flatMap->bankAccounts->count(),
+        ];
     }
 }

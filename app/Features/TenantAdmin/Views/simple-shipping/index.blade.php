@@ -2,11 +2,11 @@
     @section('title', 'Configuración de Envíos')
     
     @section('content')
-<div x-data="shippingManager" x-init="init()" class="space-y-6">
+<div x-data="shippingManager" x-init="init()" class="space-y-4 lg:space-y-6">
     
     <!-- Header -->
     <div class="bg-accent-50 rounded-lg p-0 overflow-hidden">
-        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
+        <div class="border-b border-accent-100 bg-accent-50 py-3 lg:py-4 px-4 lg:px-6">
             <div class="flex items-center justify-between">
                 <div>
                     <h2 class="text-lg font-semibold text-black-500 mb-2">🚚 Configuración de Envíos</h2>
@@ -15,9 +15,6 @@
                     </p>
                 </div>
                 <div class="flex items-center gap-3">
-                    <button @click="testShippingCost()" class="text-black-300 hover:text-black-400 p-2 rounded-lg hover:bg-accent-100" title="Probar Cálculo">
-                        🧪
-                    </button>
                     <button @click="saveAll()" :disabled="saving" class="btn-primary flex items-center gap-2">
                         <x-solar-diskette-outline class="w-5 h-5" />
                         <span x-text="saving ? 'Guardando...' : 'Guardar Todo'"></span>
@@ -27,9 +24,12 @@
         </div>
     </div>
 
-    <!-- 🏪 RECOGIDA EN TIENDA -->
-    <div class="bg-white rounded-lg border border-accent-200 overflow-hidden">
-        <div class="bg-gradient-to-r from-primary-50 to-info-50 px-6 py-4 border-b border-accent-200">
+    <!-- Secciones principales en grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
+        
+        <!-- 🏪 RECOGIDA EN TIENDA -->
+        <div class="bg-white rounded-lg border border-accent-200 overflow-hidden">
+            <div class="bg-gradient-to-r from-primary-50 to-info-50 px-4 lg:px-6 py-3 lg:py-4 border-b border-accent-200">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
@@ -52,7 +52,7 @@
             </div>
         </div>
         
-        <div x-show="shipping.pickup_enabled" x-transition class="p-6 space-y-4">
+        <div x-show="shipping.pickup_enabled" x-transition class="p-4 lg:p-6 space-y-3 lg:space-y-4">
             <!-- Tiempo de preparación -->
             <div>
                 <label class="block text-sm font-medium text-black-400 mb-2">⏱️ Tiempo de preparación</label>
@@ -73,11 +73,11 @@
                 <p class="text-xs text-black-300 mt-1">Máximo 500 caracteres</p>
             </div>
         </div>
-    </div>
+        </div>
 
-    <!-- 🚚 ENVÍO LOCAL -->
-    <div class="bg-white rounded-lg border border-accent-200 overflow-hidden">
-        <div class="bg-gradient-to-r from-secondary-50 to-primary-50 px-6 py-4 border-b border-accent-200">
+        <!-- 🚚 ENVÍO LOCAL -->
+        <div class="bg-white rounded-lg border border-accent-200 overflow-hidden">
+            <div class="bg-gradient-to-r from-secondary-50 to-primary-50 px-4 lg:px-6 py-3 lg:py-4 border-b border-accent-200">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 bg-secondary-100 rounded-lg flex items-center justify-center">
@@ -100,7 +100,7 @@
             </div>
         </div>
         
-        <div x-show="shipping.local_enabled" x-transition class="p-6 space-y-4">
+        <div x-show="shipping.local_enabled" x-transition class="p-4 lg:p-6 space-y-3 lg:space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <!-- Ciudad principal -->
                 <div>
@@ -171,11 +171,13 @@
                           class="w-full px-3 py-2 border border-accent-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary-200 focus:border-transparent resize-none"></textarea>
             </div>
         </div>
-    </div>
+        </div>
+        
+    </div> <!-- Fin del grid -->
 
     <!-- 📦 ENVÍO NACIONAL -->
     <div class="bg-white rounded-lg border border-accent-200 overflow-hidden">
-        <div class="bg-gradient-to-r from-info-50 to-warning-50 px-6 py-4 border-b border-accent-200">
+        <div class="bg-gradient-to-r from-info-50 to-warning-50 px-4 lg:px-6 py-3 lg:py-4 border-b border-accent-200">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 bg-info-100 rounded-lg flex items-center justify-center">
@@ -199,7 +201,7 @@
             </div>
         </div>
         
-        <div x-show="shipping.national_enabled" x-transition class="p-6 space-y-6">
+        <div x-show="shipping.national_enabled" x-transition class="p-4 lg:p-6 space-y-4 lg:space-y-6">
             
             <!-- Envío gratis nacional -->
             <div class="bg-success-50 rounded-lg p-4 border border-success-200">
@@ -410,38 +412,6 @@
         </div>
     </div>
 
-    <!-- Zona de test -->
-    <div x-show="showTestArea" x-transition class="bg-info-50 rounded-lg p-4 border border-info-200">
-        <h4 class="text-base font-semibold text-info-400 mb-3">🧪 Probar Cálculo de Envío</h4>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-                <label class="block text-sm font-medium text-info-400 mb-2">Ciudad del cliente:</label>
-                <input type="text" 
-                       x-model="testCity" 
-                       placeholder="Ej: Bogotá"
-                       class="form-input border-info-300 focus:ring-info-300">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-info-400 mb-2">Subtotal del pedido:</label>
-                <div class="relative">
-                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-info-300">$</span>
-                    <input type="number" 
-                           x-model="testSubtotal" 
-                           placeholder="50000"
-                           min="0"
-                           class="form-input pl-8 border-info-300 focus:ring-info-300">
-                </div>
-            </div>
-            <div class="flex items-end">
-                <button @click="calculateTestCost()" class="btn-primary w-full">
-                    Calcular
-                </button>
-            </div>
-        </div>
-        <div x-show="testResult" x-transition class="mt-4 p-3 bg-white rounded border border-info-200">
-            <div x-html="testResult">            </div>
-        </div>
-    </div>
 
     <!-- Modal para mensajes de error -->
     <div x-show="showErrorModal" 
@@ -512,18 +482,12 @@ document.addEventListener('alpine:init', () => {
         
         // Estados de UI
         saving: false,
-        showTestArea: false,
         localFreeShippingEnabled: false,
         nationalFreeShippingEnabled: false,
         
         // Modal de error
         showErrorModal: false,
         errorMessage: '',
-        
-        // Test de envío
-        testCity: '',
-        testSubtotal: 50000,
-        testResult: '',
         
         init() {
             // Inicializar toggles de envío gratis
@@ -779,73 +743,6 @@ document.addEventListener('alpine:init', () => {
             }
         },
         
-        // Test shipping cost
-        testShippingCost() {
-            this.showTestArea = !this.showTestArea;
-            this.testResult = '';
-        },
-        
-        async calculateTestCost() {
-            if (!this.testCity?.trim()) {
-                alert('Ingresa una ciudad');
-                return;
-            }
-            
-            try {
-                const response = await fetch('{{ route("tenant.admin.simple-shipping.calculate-cost", $store->slug) }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: JSON.stringify({
-                        city: this.testCity,
-                        subtotal: this.testSubtotal
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    const shipping = data.shipping;
-                    
-                    if (shipping.available) {
-                        this.testResult = `
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 bg-success-100 rounded-full flex items-center justify-center">
-                                    <span class="text-success-400">✅</span>
-                                </div>
-                                <div>
-                                    <p class="font-semibold text-success-400">${shipping.location_label}</p>
-                                    <p class="text-sm text-black-400">
-                                        Costo: <strong>${this.formatPrice(shipping.cost)}</strong>
-                                        ${shipping.is_free ? ' (¡GRATIS!)' : ''}
-                                        | Tiempo: ${shipping.preparation_label}
-                                    </p>
-                                </div>
-                            </div>
-                        `;
-                    } else {
-                        this.testResult = `
-                            <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 bg-error-100 rounded-full flex items-center justify-center">
-                                    <span class="text-error-400">❌</span>
-                                </div>
-                                <div>
-                                    <p class="font-semibold text-error-400">Envío no disponible</p>
-                                    <p class="text-sm text-black-400">${shipping.message}</p>
-                                </div>
-                            </div>
-                        `;
-                    }
-                } else {
-                    this.testResult = `<p class="text-error-400">Error: ${data.message}</p>`;
-                }
-            } catch (error) {
-                console.error('Error calculating test cost:', error);
-                this.testResult = '<p class="text-error-400">Error al calcular el costo</p>';
-            }
-        },
         
         // Helpers
         formatPrice(price) {

@@ -54,6 +54,9 @@ class PaymentMethodController extends Controller
             // Toggle the active status (this includes validation to ensure at least one method remains active)
             $this->paymentMethodService->toggleActive($paymentMethod);
             
+            // Clear cache
+            $this->paymentMethodService->clearPaymentMethodsCache($store->id);
+            
             return response()->json([
                 'success' => true,
                 'message' => $paymentMethod->is_active ? 'Método de pago activado' : 'Método de pago desactivado',
@@ -130,6 +133,281 @@ class PaymentMethodController extends Controller
     }
     
     /**
+     * Set a payment method as default for the store.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $store
+     * @param  \App\Features\TenantAdmin\Models\PaymentMethod  $paymentMethod
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function setDefault(Request $request, $store, PaymentMethod $paymentMethod)
+    {
+        // Get current store from view shared data
+        $store = view()->shared('currentStore');
+        
+        // Ensure payment method belongs to current store
+        if ($paymentMethod->store_id !== $store->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Método de pago no encontrado'
+            ], 404);
+        }
+        
+        // Ensure payment method is active
+        if (!$paymentMethod->is_active) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se puede establecer como predeterminado un método inactivo'
+            ], 422);
+        }
+        
+        try {
+            // Set as default method
+            $this->paymentMethodService->setDefaultMethod($store, $paymentMethod->id);
+            
+            // Clear cache
+            $this->paymentMethodService->clearPaymentMethodsCache($store->id);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Método de pago establecido como predeterminado',
+                'default_method_id' => $paymentMethod->id
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al establecer método predeterminado: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+    
+    /**
+     * Toggle simple payment method (for predefined methods only).
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function toggleSimple(Request $request)
+    {
+        // Get current store from view shared data
+        $store = view()->shared('currentStore');
+        
+        $validator = Validator::make($request->all(), [
+            'type' => 'required|string|in:cash,bank_transfer,card_terminal,cash_on_delivery',
+            'is_active' => 'required|boolean'
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Datos inválidos',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+        
+        try {
+            // Find or create the payment method
+            $method = PaymentMethod::firstOrCreate(
+                [
+                    'store_id' => $store->id,
+                    'type' => $request->type
+                ],
+                [
+                    'name' => $this->getDefaultMethodName($request->type),
+                    'is_active' => false,
+                    'available_for_pickup' => true,
+                    'available_for_delivery' => $request->type !== 'cash_on_delivery',
+                    'sort_order' => $this->getNextSortOrder($store->id)
+                ]
+            );
+            
+            // Update active status
+            $method->update(['is_active' => $request->is_active]);
+            
+            // Clear cache
+            $this->paymentMethodService->clearPaymentMethodsCache($store->id);
+            
+            $message = $request->is_active ? 
+                "Método {$method->name} activado exitosamente" : 
+                "Método {$method->name} desactivado exitosamente";
+            
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'method_id' => $method->id
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al cambiar el estado del método: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+    
+    /**
+     * Set default payment method (simple version).
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function setDefaultSimple(Request $request)
+    {
+        // Get current store from view shared data
+        $store = view()->shared('currentStore');
+        
+        $validator = Validator::make($request->all(), [
+            'type' => 'required|string|in:cash,bank_transfer,card_terminal,cash_on_delivery'
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Tipo de método inválido'
+            ], 422);
+        }
+        
+        try {
+            // Find the method
+            $method = PaymentMethod::where('store_id', $store->id)
+                ->where('type', $request->type)
+                ->where('is_active', true)
+                ->first();
+            
+            if (!$method) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El método debe estar activo para ser predeterminado'
+                ], 422);
+            }
+            
+            // Set as default (this will automatically unset others)
+            $this->paymentMethodService->setDefaultMethod($store, $method->id);
+            
+            // Clear cache
+            $this->paymentMethodService->clearPaymentMethodsCache($store->id);
+            
+            return response()->json([
+                'success' => true,
+                'message' => "Método {$method->name} establecido como predeterminado"
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al establecer método predeterminado: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+    
+    /**
+     * Configure simple payment method.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function configureSimple(Request $request)
+    {
+        // Get current store from view shared data
+        $store = view()->shared('currentStore');
+        
+        $validator = Validator::make($request->all(), [
+            'type' => 'required|string|in:cash,bank_transfer,card_terminal,cash_on_delivery',
+            'config' => 'required|array'
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Datos inválidos',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+        
+        try {
+            // Find the method
+            $method = PaymentMethod::where('store_id', $store->id)
+                ->where('type', $request->type)
+                ->first();
+            
+            if (!$method) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Método de pago no encontrado'
+                ], 404);
+            }
+            
+            $config = $request->config;
+            
+            // Update basic config
+            $method->update([
+                'available_for_pickup' => $config['available_for_pickup'] ?? true,
+                'available_for_delivery' => $config['available_for_delivery'] ?? true
+            ]);
+            
+            // Handle method-specific config
+            $methodConfig = PaymentMethodConfig::getForStore($store->id);
+            
+            if ($request->type === 'cash' && isset($config['allow_change'])) {
+                $methodConfig->update(['cash_change_available' => $config['allow_change']]);
+            }
+            
+            if ($request->type === 'card_terminal') {
+                $acceptedCards = [];
+                if ($config['accept_visa'] ?? false) $acceptedCards[] = 'visa';
+                if ($config['accept_mastercard'] ?? false) $acceptedCards[] = 'mastercard';
+                if ($config['accept_american_express'] ?? false) $acceptedCards[] = 'amex';
+                
+                // Store in instructions field for now
+                $method->update(['instructions' => 'Tarjetas aceptadas: ' . implode(', ', $acceptedCards)]);
+            }
+            
+            // Clear cache
+            $this->paymentMethodService->clearPaymentMethodsCache($store->id);
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Configuración guardada exitosamente'
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al guardar la configuración: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+    
+    /**
+     * Get default method name by type.
+     *
+     * @param string $type
+     * @return string
+     */
+    private function getDefaultMethodName(string $type): string
+    {
+        return match($type) {
+            'cash' => 'Efectivo',
+            'bank_transfer' => 'Transferencia Bancaria',
+            'card_terminal' => 'Datáfono',
+            'cash_on_delivery' => 'Contra Entrega',
+            default => ucfirst($type)
+        };
+    }
+    
+    /**
+     * Get next sort order for payment methods.
+     *
+     * @param int $storeId
+     * @return int
+     */
+    private function getNextSortOrder(int $storeId): int
+    {
+        $maxOrder = PaymentMethod::where('store_id', $storeId)->max('sort_order') ?? 0;
+        return $maxOrder + 1;
+    }
+    
+    /**
      * Display a listing of the payment methods.
      * 
      * @param Request $request
@@ -182,7 +460,7 @@ class PaymentMethodController extends Controller
             'type' => [
                 'required',
                 'string',
-                Rule::in(['cash', 'bank_transfer', 'card_terminal']),
+                Rule::in(['cash', 'bank_transfer', 'card_terminal', 'digital_wallet', 'cash_on_delivery']),
             ],
             'name' => [
                 'required',
@@ -195,9 +473,6 @@ class PaymentMethodController extends Controller
             'available_for_delivery' => 'nullable|boolean',
             'is_default' => 'nullable|boolean',
             'cash_change_available' => 'nullable|boolean',
-            // ✅ CORREGIDO - Removed validaciones de campos que no existen en BD
-            // 'require_proof' => 'nullable|boolean',
-            // 'accepted_cards' => 'nullable|string|max:255',
         ]);
         
         if ($validator->fails()) {
@@ -216,9 +491,6 @@ class PaymentMethodController extends Controller
                 'store_id' => $store->id,
             ];
             
-            // ✅ CORREGIDO - Removed campos que no existen en BD
-            // Campos 'require_proof' y 'accepted_cards' no están en la tabla payment_methods
-            // Se pueden manejar en una tabla separada de configuración si es necesario
             
             // Create payment method
             $paymentMethod = $this->paymentMethodService->createPaymentMethod($data);
@@ -339,9 +611,6 @@ class PaymentMethodController extends Controller
             'available_for_delivery' => 'nullable|boolean',
             'is_default' => 'nullable|boolean',
             'cash_change_available' => 'nullable|boolean',
-            // ✅ CORREGIDO - Removed validaciones de campos que no existen en BD
-            // 'require_proof' => 'nullable|boolean',
-            // 'accepted_cards' => 'nullable|string|max:255',
         ]);
         
         if ($validator->fails()) {
@@ -358,9 +627,6 @@ class PaymentMethodController extends Controller
                 'available_for_delivery' => $request->has('available_for_delivery'),
             ];
             
-            // ✅ CORREGIDO - Removed campos que no existen en BD
-            // Campos 'require_proof' y 'accepted_cards' no están en la tabla payment_methods
-            // Se pueden manejar en una tabla separada de configuración si es necesario
             
             // Update payment method
             $this->paymentMethodService->updatePaymentMethod($paymentMethod, $data);

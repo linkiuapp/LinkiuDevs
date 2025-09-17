@@ -4,37 +4,50 @@
 
 @push('styles')
 <style>
-    /* Estilos para drag & drop */
-    .drag-handle {
-        cursor: grab;
-        transition: color 0.2s ease;
+    .payment-method-card {
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
     }
-    .drag-handle:hover {
-        color: #4F46E5; /* primary color */
+    .payment-method-card.active {
+        border-color: #10b981;
+        background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
     }
-    .dragging-active .drag-handle {
-        cursor: grabbing;
+    .payment-method-card.inactive {
+        opacity: 0.7;
+        background: #f9fafb;
     }
-    .sortable-drag {
-        opacity: 0.8;
-        background-color: #F9FAFB !important;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    .payment-method-card:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
-    .sortable-chosen {
-        background-color: #F3F4F6;
+    .toggle-switch {
+        transition: all 0.3s ease;
     }
-    .sortable-ghost {
-        background-color: #EFF6FF !important;
-        border: 1px dashed #4F46E5;
+    .bank-account-mini {
+        transition: all 0.2s ease;
+        border-left: 3px solid #e5e7eb;
     }
-    tr.sortable-chosen td {
-        background-color: #F3F4F6;
+    .bank-account-mini:hover {
+        border-left-color: #3b82f6;
+        background-color: #f8fafc;
+    }
+    .config-badge {
+        background: #f3f4f6;
+        color: #6b7280;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 500;
+    }
+    .config-badge.active {
+        background: #d1fae5;
+        color: #065f46;
     }
 </style>
 @endpush
 
 @section('content')
-<div class="container-fluid" x-data="paymentMethodManagement">
+<div class="container-fluid" x-data="paymentMethodsSimple">
     {{-- Sistema de Notificaciones --}}
     <div x-show="showNotification" 
          x-transition:enter="transition ease-out duration-300"
@@ -43,7 +56,7 @@
          x-transition:leave="transition ease-in duration-300"
          x-transition:leave-start="opacity-100 transform scale-100"
          x-transition:leave-end="opacity-0 transform scale-90"
-         class="fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg"
+         class="fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-md"
          :class="{
             'bg-success-50 text-success-300 border border-success-100': notificationType === 'success',
             'bg-error-50 text-error-300 border border-error-100': notificationType === 'error',
@@ -57,12 +70,9 @@
                 <template x-if="notificationType === 'error'">
                     <x-solar-close-circle-outline class="w-5 h-5" />
                 </template>
-                <template x-if="notificationType === 'warning'">
-                    <x-solar-danger-triangle-outline class="w-5 h-5" />
-                </template>
             </div>
-            <div x-text="notificationMessage"></div>
-            <button @click="showNotification = false" class="ml-auto">
+            <div x-text="notificationMessage" class="flex-1"></div>
+            <button @click="hideNotification()" class="ml-auto hover:opacity-70">
                 <x-solar-close-circle-outline class="w-4 h-4" />
             </button>
         </div>
@@ -71,406 +81,595 @@
     {{-- Loading Overlay --}}
     <div x-show="isLoading" 
          class="fixed inset-0 bg-black-400 bg-opacity-50 z-50 flex items-center justify-center">
-        <div class="bg-accent-50 p-4 rounded-lg shadow-lg flex items-center gap-3">
+        <div class="bg-accent-50 p-6 rounded-lg shadow-lg flex items-center gap-4">
             <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary-200"></div>
-            <span class="text-black-400">Actualizando orden...</span>
+            <span class="text-black-400 font-medium">Procesando...</span>
         </div>
     </div>
 
     {{-- Header --}}
-    <div class="flex justify-between items-center mb-6">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div>
             <h1 class="text-2xl font-bold text-black-400">Métodos de Pago</h1>
-            <p class="text-sm text-black-300">Configura los métodos de pago disponibles para tus clientes</p>
+            <p class="text-sm text-black-300 mt-1">Activa y configura los métodos de pago para tus clientes</p>
         </div>
+    </div>
+
+    {{-- Información rápida --}}
+    <div class="bg-gradient-to-r from-primary-50 to-accent-50 rounded-lg p-4 mb-6 border border-primary-100">
         <div class="flex items-center gap-3">
-            <a href="{{ route('tenant.admin.payment-methods.create', ['store' => $store->slug]) }}" 
-                class="btn-primary px-4 py-2 rounded-lg flex items-center gap-2">
-                <x-solar-add-circle-outline class="w-5 h-5" />
-                Nuevo Método
-            </a>
-        </div>
-    </div>
-
-    {{-- Información de métodos de pago --}}
-    <div class="bg-accent-50 rounded-lg p-6 mb-6 border border-accent-100">
-        <div class="flex items-start gap-4">
-            <div class="rounded-full bg-primary-50 p-3 flex-shrink-0">
-                <x-solar-info-circle-outline class="w-6 h-6 text-primary-200" />
+            <div class="rounded-full bg-primary-100 p-2">
+                <x-solar-info-circle-outline class="w-5 h-5 text-primary-200" />
             </div>
-            <div>
-                <h3 class="text-lg font-semibold text-black-400 mb-1">Gestión de Métodos de Pago</h3>
-                <p class="text-sm text-black-300 mb-2">
-                    Configura los métodos de pago que tus clientes podrán utilizar al realizar sus compras. 
-                    Puedes activar o desactivar métodos, cambiar su orden de visualización y configurar opciones específicas para cada uno.
-                </p>
-                <div class="flex flex-wrap gap-2 mt-2">
-                    <div class="bg-accent-100 px-3 py-1 rounded-lg flex items-center gap-2">
-                        <x-solar-sort-outline class="w-4 h-4 text-black-300" />
-                        <span class="text-xs text-black-300">Arrastra para reordenar</span>
-                    </div>
-                    <div class="bg-accent-100 px-3 py-1 rounded-lg flex items-center gap-2">
-                        <x-solar-eye-outline class="w-4 h-4 text-primary-200" />
-                        <span class="text-xs text-black-300">Ver detalles</span>
-                    </div>
-                    <div class="bg-accent-100 px-3 py-1 rounded-lg flex items-center gap-2">
-                        <x-solar-pen-2-outline class="w-4 h-4 text-warning-200" />
-                        <span class="text-xs text-black-300">Editar método</span>
-                    </div>
-                    <div class="bg-accent-100 px-3 py-1 rounded-lg flex items-center gap-2">
-                        <x-solar-server-path-outline class="w-4 h-4 text-success-200" />
-                        <span class="text-xs text-black-300">Activar/Desactivar</span>
-                    </div>
-                </div>
+            <div class="flex-1">
+                <h3 class="text-sm font-semibold text-black-400">Gestión Simplificada</h3>
+                <p class="text-xs text-black-300">Activa los métodos que necesites y configura sus opciones específicas. Solo uno puede ser predeterminado.</p>
             </div>
         </div>
     </div>
 
-    {{-- Lista de métodos de pago --}}
-    <div class="bg-accent-50 rounded-lg p-0 overflow-hidden mb-6 shadow-sm">
-        <div class="border-b border-accent-100 bg-accent-50 py-4 px-6">
-            <h2 class="text-lg font-semibold text-black-400 mb-0">Métodos de Pago Disponibles</h2>
-        </div>
-        <div class="p-6">
-            @if($paymentMethods->isEmpty())
-                <div class="text-center py-8">
-                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-50 mb-4">
-                        <x-solar-card-outline class="w-8 h-8 text-primary-200" />
+    {{-- Métodos de Pago Predefinidos --}}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
+        
+        {{-- 1. TRANSFERENCIA BANCARIA --}}
+        @php
+            $bankTransferMethod = $paymentMethods->firstWhere('type', 'bank_transfer');
+            $isDefaultBank = $defaultMethod && $bankTransferMethod && $defaultMethod->id === $bankTransferMethod->id;
+        @endphp
+        
+        <div class="payment-method-card bg-accent-50 rounded-lg p-4 lg:p-6 shadow-sm {{ $bankTransferMethod && $bankTransferMethod->is_active ? 'active' : 'inactive' }}">
+            {{-- Header --}}
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-primary-50 flex items-center justify-center">
+                        <x-solar-card-transfer-outline class="w-6 h-6 text-primary-200" />
                     </div>
-                    <h3 class="text-lg font-semibold text-black-400 mb-2">No hay métodos de pago configurados</h3>
-                    <p class="text-sm text-black-300 mb-4">Configura los métodos de pago para tus clientes</p>
-                    <a href="{{ route('tenant.admin.payment-methods.create', ['store' => $store->slug]) }}" class="btn-primary px-4 py-2 rounded-lg inline-flex items-center gap-2">
-                        <x-solar-add-circle-outline class="w-5 h-5" />
-                        Configurar Métodos de Pago
-                    </a>
-                </div>
-            @else
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-accent-100">
-                        <thead class="bg-accent-100">
-                            <tr>
-                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-black-300 uppercase tracking-wider">
-                                    Orden
-                                </th>
-                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-black-300 uppercase tracking-wider">
-                                    Método
-                                </th>
-                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-black-300 uppercase tracking-wider">
-                                    Estado
-                                </th>
-                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-black-300 uppercase tracking-wider">
-                                    Disponibilidad
-                                </th>
-                                <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-black-300 uppercase tracking-wider">
+                    <div>
+                        <h3 class="text-lg font-semibold text-black-400 flex items-center gap-2">
+                            Transferencia Bancaria
+                            @if($isDefaultBank)
+                                <span class="bg-primary-100 text-primary-300 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                                    <x-solar-star-bold class="w-3 h-3" />
                                     Predeterminado
-                                </th>
-                                <th scope="col" class="px-4 py-3 text-right text-xs font-semibold text-black-300 uppercase tracking-wider">
-                                    Acciones
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-accent-50 divide-y divide-accent-100">
-                            @foreach($paymentMethods as $method)
-                                <tr data-method-id="{{ $method->id }}">
-                                    <td class="px-4 py-3 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <span class="drag-handle cursor-move mr-2 text-black-300">
-                                                <x-solar-sort-outline class="w-5 h-5" />
-                                            </span>
-                                            <span class="text-sm text-black-400">{{ $method->sort_order }}</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-primary-50 flex items-center justify-center">
-                                                @if($method->isCash())
-                                                    <x-solar-wallet-money-outline class="w-5 h-5 text-primary-200" />
-                                                @elseif($method->isBankTransfer())
-                                                    <x-solar-card-transfer-outline class="w-5 h-5 text-primary-200" />
-                                                @elseif($method->isCardTerminal())
-                                                    <x-solar-card-outline class="w-5 h-5 text-primary-200" />
-                                                @endif
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-black-400">{{ $method->name }}</div>
-                                                <div class="text-xs text-black-300">
-                                                    @if($method->isCash())
-                                                        Efectivo
-                                                    @elseif($method->isBankTransfer())
-                                                        Transferencia Bancaria
-                                                    @elseif($method->isCardTerminal())
-                                                        Datáfono
-                                                    @endif
-                                                </div>
-                                                @if($method->instructions)
-                                                    <div class="text-xs text-black-200 mt-1 max-w-xs truncate">
-                                                        {{ Str::limit($method->instructions, 50) }}
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3 whitespace-nowrap">
-                                        <button @click="toggleActive({{ $method->id }}, {{ $method->is_active ? 'true' : 'false' }})" 
-                                                class="flex items-center gap-2 focus:outline-none">
-                                            @if($method->is_active)
-                                                <span class="badge-soft-success">Activo</span>
-                                            @else
-                                                <span class="badge-soft-secondary">Inactivo</span>
-                                            @endif
-                                            <x-solar-toggle-{{ $method->is_active ? 'on' : 'off' }}-outline class="w-5 h-5 {{ $method->is_active ? 'text-success-200' : 'text-black-200' }}" />
-                                        </button>
-                                    </td>
-                                    <td class="px-4 py-3 whitespace-nowrap">
-                                        <div class="text-sm text-black-400">
-                                            @if($method->available_for_pickup && $method->available_for_delivery)
-                                                <span class="badge-soft-info">Pickup y Delivery</span>
-                                            @elseif($method->available_for_pickup)
-                                                <span class="badge-soft-info">Solo Pickup</span>
-                                            @elseif($method->available_for_delivery)
-                                                <span class="badge-soft-info">Solo Delivery</span>
-                                            @else
-                                                <span class="badge-soft-secondary">No disponible</span>
-                                            @endif
-                                        </div>
-                                    </td>
-                                    <td class="px-4 py-3 whitespace-nowrap">
-                                        <button @click="setDefaultMethod({{ $method->id }})" class="focus:outline-none">
-                                            @if($defaultMethod && $defaultMethod->id === $method->id)
-                                                <span class="badge-soft-primary flex items-center gap-1">
-                                                    <x-solar-star-bold class="w-4 h-4" />
-                                                    Predeterminado
-                                                </span>
-                                            @else
-                                                <span class="text-sm text-black-300 hover:text-primary-200 flex items-center gap-1">
-                                                    <x-solar-star-outline class="w-4 h-4" />
-                                                    Establecer
-                                                </span>
-                                            @endif
-                                        </button>
-                                    </td>
-                                    <td class="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
-                                        <div class="flex justify-end gap-2">
-                                            <a href="{{ route('tenant.admin.payment-methods.show', ['store' => $store->slug, 'paymentMethod' => $method->id]) }}" 
-                                               class="text-primary-200 hover:text-primary-300" title="Ver detalles">
-                                                <x-solar-eye-outline class="w-5 h-5" />
-                                            </a>
-                                            <a href="{{ route('tenant.admin.payment-methods.edit', ['store' => $store->slug, 'paymentMethod' => $method->id]) }}" 
-                                               class="text-warning-200 hover:text-warning-300" title="Editar método">
-                                                <x-solar-pen-2-outline class="w-5 h-5" />
-                                            </a>
-                                            @if($method->isBankTransfer())
-                                                <a href="{{ route('tenant.admin.payment-methods.bank-accounts.index', ['store' => $store->slug, 'paymentMethod' => $method->id]) }}" 
-                                                class="text-info-200 hover:text-info-300" title="Gestionar cuentas bancarias">
-                                                    <x-solar-card-transfer-outline class="w-5 h-5" />
-                                                </a>
-                                            @endif
-                                        </div>
-                                    </td>
-                                </tr>
+                                </span>
+                            @endif
+                        </h3>
+                        <p class="text-sm text-black-300">Pago mediante transferencia a cuentas bancarias</p>
+                    </div>
+                </div>
+                
+                {{-- Toggle principal --}}
+                <button @click="toggleMethod('bank_transfer', {{ $bankTransferMethod ? ($bankTransferMethod->is_active ? 'true' : 'false') : 'false' }})" 
+                        class="toggle-switch focus:outline-none">
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm {{ $bankTransferMethod && $bankTransferMethod->is_active ? 'text-success-300' : 'text-black-300' }}">
+                            {{ $bankTransferMethod && $bankTransferMethod->is_active ? 'Activo' : 'Inactivo' }}
+                        </span>
+                        <div class="relative inline-block w-12 h-6 transition duration-200 ease-in-out {{ $bankTransferMethod && $bankTransferMethod->is_active ? 'bg-success-200' : 'bg-black-200' }} rounded-full">
+                            <span class="absolute left-0 inline-block w-5 h-5 mt-0.5 ml-0.5 transition duration-200 ease-in-out transform bg-white rounded-full {{ $bankTransferMethod && $bankTransferMethod->is_active ? 'translate-x-6' : 'translate-x-0' }}"></span>
+                        </div>
+                    </div>
+                </button>
+            </div>
+            
+            @if($bankTransferMethod && $bankTransferMethod->is_active)
+                {{-- Configuraciones --}}
+                <div class="border-t border-accent-200 pt-4 mb-4">
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="config-badge {{ $bankTransferMethod->available_for_pickup ? 'active' : '' }}">
+                            {{ $bankTransferMethod->available_for_pickup ? '✓' : '✗' }} Pickup
+                        </span>
+                        <span class="config-badge {{ $bankTransferMethod->available_for_delivery ? 'active' : '' }}">
+                            {{ $bankTransferMethod->available_for_delivery ? '✓' : '✗' }} Domicilio
+                        </span>
+                        @if(!$isDefaultBank)
+                            <button @click="setAsDefault('bank_transfer')" class="text-xs text-primary-200 hover:text-primary-300 flex items-center gap-1">
+                                <x-solar-star-outline class="w-3 h-3" />
+                                Hacer predeterminado
+                            </button>
+                        @endif
+                    </div>
+                    
+                    <div class="flex gap-3">
+                        <button @click="configureMethod('bank_transfer')" 
+                                class="text-sm bg-primary-100 text-primary-300 px-3 py-1 rounded-lg hover:bg-primary-200 hover:text-white transition-colors">
+                            ⚙️ Configurar
+                        </button>
+                        <button @click="manageBankAccounts()" 
+                                class="text-sm bg-accent-100 text-black-400 px-3 py-1 rounded-lg hover:bg-accent-200 transition-colors">
+                            🏦 Gestionar Cuentas ({{ $bankTransferMethod->bankAccounts->count() }})
+                        </button>
+                    </div>
+                </div>
+                
+                {{-- Vista previa de cuentas bancarias --}}
+                @if($bankTransferMethod->bankAccounts->isNotEmpty())
+                    <div class="bg-white rounded-lg p-2">
+                        <h5 class="text-xs font-medium text-black-300 mb-1">Cuentas configuradas:</h5>
+                        <div class="space-y-1 max-h-16 overflow-y-auto">
+                            @foreach($bankTransferMethod->bankAccounts->take(2) as $account)
+                                <div class="bank-account-mini bg-accent-50 rounded p-2 text-xs">
+                                    <div class="flex justify-between items-center">
+                                        <span class="font-medium">{{ $account->bank_name }}</span>
+                                        <span class="text-black-300">•••{{ substr($account->account_number, -4) }}</span>
+                                    </div>
+                                </div>
                             @endforeach
-                        </tbody>
-                    </table>
+                            @if($bankTransferMethod->bankAccounts->count() > 2)
+                                <div class="text-center">
+                                    <span class="text-xs text-black-300">+{{ $bankTransferMethod->bankAccounts->count() - 2 }} más</span>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @else
+                    <div class="bg-white rounded-lg p-2 text-center">
+                        <p class="text-xs text-black-300 mb-1">No hay cuentas bancarias configuradas</p>
+                        <button @click="manageBankAccounts()" class="text-xs text-primary-200 hover:text-primary-300">
+                            + Agregar primera cuenta
+                        </button>
+                    </div>
+                @endif
+            @endif
+        </div>
+
+        {{-- 2. EFECTIVO --}}
+        @php
+            $cashMethod = $paymentMethods->firstWhere('type', 'cash');
+            $isDefaultCash = $defaultMethod && $cashMethod && $defaultMethod->id === $cashMethod->id;
+        @endphp
+        
+        <div class="payment-method-card bg-accent-50 rounded-lg p-4 lg:p-6 shadow-sm {{ $cashMethod && $cashMethod->is_active ? 'active' : 'inactive' }}">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-primary-50 flex items-center justify-center">
+                        <x-solar-wallet-money-outline class="w-6 h-6 text-primary-200" />
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-black-400 flex items-center gap-2">
+                            Efectivo
+                            @if($isDefaultCash)
+                                <span class="bg-primary-100 text-primary-300 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                                    <x-solar-star-bold class="w-3 h-3" />
+                                    Predeterminado
+                                </span>
+                            @endif
+                        </h3>
+                        <p class="text-sm text-black-300">Pago en efectivo al momento de entrega</p>
+                    </div>
+                </div>
+                
+                <button @click="toggleMethod('cash', {{ $cashMethod ? ($cashMethod->is_active ? 'true' : 'false') : 'false' }})" 
+                        class="toggle-switch focus:outline-none">
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm {{ $cashMethod && $cashMethod->is_active ? 'text-success-300' : 'text-black-300' }}">
+                            {{ $cashMethod && $cashMethod->is_active ? 'Activo' : 'Inactivo' }}
+                        </span>
+                        <div class="relative inline-block w-12 h-6 transition duration-200 ease-in-out {{ $cashMethod && $cashMethod->is_active ? 'bg-success-200' : 'bg-black-200' }} rounded-full">
+                            <span class="absolute left-0 inline-block w-5 h-5 mt-0.5 ml-0.5 transition duration-200 ease-in-out transform bg-white rounded-full {{ $cashMethod && $cashMethod->is_active ? 'translate-x-6' : 'translate-x-0' }}"></span>
+                        </div>
+                    </div>
+                </button>
+            </div>
+            
+            @if($cashMethod && $cashMethod->is_active)
+                <div class="border-t border-accent-200 pt-4">
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="config-badge {{ $cashMethod->available_for_pickup ? 'active' : '' }}">
+                            {{ $cashMethod->available_for_pickup ? '✓' : '✗' }} Pickup
+                        </span>
+                        <span class="config-badge {{ $cashMethod->available_for_delivery ? 'active' : '' }}">
+                            {{ $cashMethod->available_for_delivery ? '✓' : '✗' }} Domicilio
+                        </span>
+                        <span class="config-badge active">✓ Permitir cambio</span>
+                        @if(!$isDefaultCash)
+                            <button @click="setAsDefault('cash')" class="text-xs text-primary-200 hover:text-primary-300 flex items-center gap-1">
+                                <x-solar-star-outline class="w-3 h-3" />
+                                Hacer predeterminado
+                            </button>
+                        @endif
+                    </div>
+                    
+                    <button @click="configureMethod('cash')" 
+                            class="text-sm bg-primary-100 text-primary-300 px-3 py-1 rounded-lg hover:bg-primary-200 hover:text-white transition-colors">
+                        ⚙️ Configurar
+                    </button>
+                </div>
+            @endif
+        </div>
+
+        {{-- 3. DATÁFONO --}}
+        @php
+            $cardMethod = $paymentMethods->firstWhere('type', 'card_terminal');
+            $isDefaultCard = $defaultMethod && $cardMethod && $defaultMethod->id === $cardMethod->id;
+        @endphp
+        
+        <div class="payment-method-card bg-accent-50 rounded-lg p-4 lg:p-6 shadow-sm {{ $cardMethod && $cardMethod->is_active ? 'active' : 'inactive' }}">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-primary-50 flex items-center justify-center">
+                        <x-solar-card-outline class="w-6 h-6 text-primary-200" />
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-black-400 flex items-center gap-2">
+                            Datáfono
+                            @if($isDefaultCard)
+                                <span class="bg-primary-100 text-primary-300 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                                    <x-solar-star-bold class="w-3 h-3" />
+                                    Predeterminado
+                                </span>
+                            @endif
+                        </h3>
+                        <p class="text-sm text-black-300">Pago con tarjeta de crédito o débito</p>
+                    </div>
+                </div>
+                
+                <button @click="toggleMethod('card_terminal', {{ $cardMethod ? ($cardMethod->is_active ? 'true' : 'false') : 'false' }})" 
+                        class="toggle-switch focus:outline-none">
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm {{ $cardMethod && $cardMethod->is_active ? 'text-success-300' : 'text-black-300' }}">
+                            {{ $cardMethod && $cardMethod->is_active ? 'Activo' : 'Inactivo' }}
+                        </span>
+                        <div class="relative inline-block w-12 h-6 transition duration-200 ease-in-out {{ $cardMethod && $cardMethod->is_active ? 'bg-success-200' : 'bg-black-200' }} rounded-full">
+                            <span class="absolute left-0 inline-block w-5 h-5 mt-0.5 ml-0.5 transition duration-200 ease-in-out transform bg-white rounded-full {{ $cardMethod && $cardMethod->is_active ? 'translate-x-6' : 'translate-x-0' }}"></span>
+                        </div>
+                    </div>
+                </button>
+            </div>
+            
+            @if($cardMethod && $cardMethod->is_active)
+                <div class="border-t border-accent-200 pt-4">
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="config-badge {{ $cardMethod->available_for_pickup ? 'active' : '' }}">
+                            {{ $cardMethod->available_for_pickup ? '✓' : '✗' }} Pickup
+                        </span>
+                        <span class="config-badge {{ $cardMethod->available_for_delivery ? 'active' : '' }}">
+                            {{ $cardMethod->available_for_delivery ? '✓' : '✗' }} Domicilio
+                        </span>
+                        <span class="config-badge active">💳 Visa, Mastercard</span>
+                        @if(!$isDefaultCard)
+                            <button @click="setAsDefault('card_terminal')" class="text-xs text-primary-200 hover:text-primary-300 flex items-center gap-1">
+                                <x-solar-star-outline class="w-3 h-3" />
+                                Hacer predeterminado
+                            </button>
+                        @endif
+                    </div>
+                    
+                    <button @click="configureMethod('card_terminal')" 
+                            class="text-sm bg-primary-100 text-primary-300 px-3 py-1 rounded-lg hover:bg-primary-200 hover:text-white transition-colors">
+                        ⚙️ Configurar
+                    </button>
+                </div>
+            @endif
+        </div>
+
+        {{-- 4. CONTRA ENTREGA --}}
+        @php
+            $codMethod = $paymentMethods->firstWhere('type', 'cash_on_delivery');
+            $isDefaultCod = $defaultMethod && $codMethod && $defaultMethod->id === $codMethod->id;
+        @endphp
+        
+        <div class="payment-method-card bg-accent-50 rounded-lg p-4 lg:p-6 shadow-sm {{ $codMethod && $codMethod->is_active ? 'active' : 'inactive' }}">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-lg bg-primary-50 flex items-center justify-center">
+                        <x-solar-delivery-outline class="w-6 h-6 text-primary-200" />
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-black-400 flex items-center gap-2">
+                            Contra Entrega
+                            @if($isDefaultCod)
+                                <span class="bg-primary-100 text-primary-300 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                                    <x-solar-star-bold class="w-3 h-3" />
+                                    Predeterminado
+                                </span>
+                            @endif
+                        </h3>
+                        <p class="text-sm text-black-300">El cliente paga al recibir el producto</p>
+                    </div>
+                </div>
+                
+                <button @click="toggleMethod('cash_on_delivery', {{ $codMethod ? ($codMethod->is_active ? 'true' : 'false') : 'false' }})" 
+                        class="toggle-switch focus:outline-none">
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm {{ $codMethod && $codMethod->is_active ? 'text-success-300' : 'text-black-300' }}">
+                            {{ $codMethod && $codMethod->is_active ? 'Activo' : 'Inactivo' }}
+                        </span>
+                        <div class="relative inline-block w-12 h-6 transition duration-200 ease-in-out {{ $codMethod && $codMethod->is_active ? 'bg-success-200' : 'bg-black-200' }} rounded-full">
+                            <span class="absolute left-0 inline-block w-5 h-5 mt-0.5 ml-0.5 transition duration-200 ease-in-out transform bg-white rounded-full {{ $codMethod && $codMethod->is_active ? 'translate-x-6' : 'translate-x-0' }}"></span>
+                        </div>
+                    </div>
+                </button>
+            </div>
+            
+            @if($codMethod && $codMethod->is_active)
+                <div class="border-t border-accent-200 pt-4">
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <span class="config-badge">✗ Pickup</span>
+                        <span class="config-badge {{ $codMethod->available_for_delivery ? 'active' : '' }}">
+                            {{ $codMethod->available_for_delivery ? '✓' : '✗' }} Domicilio
+                        </span>
+                        @if(!$isDefaultCod)
+                            <button @click="setAsDefault('cash_on_delivery')" class="text-xs text-primary-200 hover:text-primary-300 flex items-center gap-1">
+                                <x-solar-star-outline class="w-3 h-3" />
+                                Hacer predeterminado
+                            </button>
+                        @endif
+                    </div>
+                    
+                    <button @click="configureMethod('cash_on_delivery')" 
+                            class="text-sm bg-primary-100 text-primary-300 px-3 py-1 rounded-lg hover:bg-primary-200 hover:text-white transition-colors">
+                        ⚙️ Configurar
+                    </button>
                 </div>
             @endif
         </div>
     </div>
-    
-    {{-- Instrucciones para el usuario --}}
-    <div class="bg-accent-50 rounded-lg p-6 border border-accent-100">
-        <h3 class="text-lg font-semibold text-black-400 mb-3">¿Cómo configurar tus métodos de pago?</h3>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="flex flex-col">
-                <div class="rounded-full bg-primary-50 p-3 w-12 h-12 flex items-center justify-center mb-3">
-                    <span class="text-primary-300 font-bold">1</span>
+
+    {{-- Información adicional --}}
+    <div class="mt-8 bg-accent-50 rounded-lg p-4 border border-accent-200">
+        <div class="flex items-start gap-3">
+            <x-solar-lightbulb-minimalistic-outline class="w-5 h-5 text-warning-200 mt-1 flex-shrink-0" />
+            <div>
+                <h4 class="text-sm font-semibold text-black-400 mb-1">Consejos para configurar métodos de pago</h4>
+                <ul class="text-xs text-black-300 space-y-1">
+                    <li>• <strong>Transferencia:</strong> Agrega al menos una cuenta bancaria activa</li>
+                    <li>• <strong>Efectivo:</strong> Ideal para pickup y entregas locales</li>
+                    <li>• <strong>Datáfono:</strong> Perfecto para ventas presenciales</li>
+                    <li>• <strong>Contra entrega:</strong> Genera confianza pero solo para domicilios</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    {{-- Modals simples aquí (configuración y cuentas bancarias) --}}
+    {{-- Modal de configuración --}}
+    <div x-show="showConfigModal" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         class="fixed inset-0 z-50 flex items-center justify-center bg-black-400 bg-opacity-50">
+        <div x-show="showConfigModal"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 scale-95"
+             x-transition:enter-end="opacity-100 scale-100"
+             class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md mx-4">
+            <h3 class="text-lg font-semibold text-black-400 mb-4" x-text="'Configurar ' + currentMethodName"></h3>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" x-model="methodConfig.available_for_pickup" class="rounded">
+                        <span class="text-sm">Disponible para Pickup</span>
+                    </label>
                 </div>
-                <h4 class="text-md font-semibold text-black-400 mb-1">Crear métodos de pago</h4>
-                <p class="text-sm text-black-300">
-                    Agrega los métodos de pago que deseas ofrecer a tus clientes. Puedes configurar efectivo, transferencia bancaria y datáfono.
-                </p>
+                <div>
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" x-model="methodConfig.available_for_delivery" class="rounded">
+                        <span class="text-sm">Disponible para Domicilio</span>
+                    </label>
+                </div>
+                
+                {{-- Configuraciones específicas por método --}}
+                <div x-show="currentMethodType === 'cash'">
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" x-model="methodConfig.allow_change" class="rounded">
+                        <span class="text-sm">Permitir que el cliente solicite cambio</span>
+                    </label>
+                </div>
+                
+                <div x-show="currentMethodType === 'card_terminal'">
+                    <label class="block text-sm font-medium mb-2">Tarjetas Aceptadas:</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" x-model="methodConfig.accept_visa" class="rounded">
+                            <span class="text-sm">Visa</span>
+                        </label>
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" x-model="methodConfig.accept_mastercard" class="rounded">
+                            <span class="text-sm">Mastercard</span>
+                        </label>
+                        <label class="flex items-center gap-2">
+                            <input type="checkbox" x-model="methodConfig.accept_american_express" class="rounded">
+                            <span class="text-sm">American Express</span>
+                        </label>
+                    </div>
+                </div>
             </div>
             
-            <div class="flex flex-col">
-                <div class="rounded-full bg-primary-50 p-3 w-12 h-12 flex items-center justify-center mb-3">
-                    <span class="text-primary-300 font-bold">2</span>
-                </div>
-                <h4 class="text-md font-semibold text-black-400 mb-1">Configurar opciones</h4>
-                <p class="text-sm text-black-300">
-                    Personaliza cada método con instrucciones específicas y configura su disponibilidad para pickup o delivery.
-                </p>
-            </div>
-            
-            <div class="flex flex-col">
-                <div class="rounded-full bg-primary-50 p-3 w-12 h-12 flex items-center justify-center mb-3">
-                    <span class="text-primary-300 font-bold">3</span>
-                </div>
-                <h4 class="text-md font-semibold text-black-400 mb-1">Ordenar y activar</h4>
-                <p class="text-sm text-black-300">
-                    Arrastra los métodos para cambiar su orden de visualización y activa o desactiva según tus necesidades.
-                </p>
+            <div class="flex gap-3 mt-6">
+                <button @click="showConfigModal = false" 
+                        class="flex-1 px-4 py-2 border border-accent-200 text-black-400 rounded-lg hover:bg-accent-50">
+                    Cancelar
+                </button>
+                <button @click="saveMethodConfig()" 
+                        class="flex-1 px-4 py-2 bg-primary-200 text-white rounded-lg hover:bg-primary-300">
+                    Guardar
+                </button>
             </div>
         </div>
     </div>
 </div>
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 <script>
 document.addEventListener('alpine:init', () => {
-    Alpine.data('paymentMethodManagement', () => ({
+    Alpine.data('paymentMethodsSimple', () => ({
+        // Estados
+        isLoading: false,
         showNotification: false,
         notificationMessage: '',
         notificationType: 'success',
-        isLoading: false,
-        sortable: null,
+        showConfigModal: false,
+        currentMethodType: '',
+        currentMethodName: '',
+        
+        // Configuración del método actual
+        methodConfig: {
+            available_for_pickup: true,
+            available_for_delivery: true,
+            allow_change: true,
+            accept_visa: true,
+            accept_mastercard: true,
+            accept_american_express: false
+        },
         
         init() {
-            this.$nextTick(() => {
-                this.initSortable();
-            });
+            // Inicialización
         },
         
-        initSortable() {
-            const tbody = this.$el.querySelector('tbody');
-            if (!tbody) return;
-            
-            this.sortable = new Sortable(tbody, {
-                animation: 150,
-                handle: '.drag-handle',
-                ghostClass: 'bg-primary-50',
-                dragClass: 'sortable-drag',
-                chosenClass: 'sortable-chosen',
-                onStart: (evt) => {
-                    // Add a class to the body to indicate dragging is in progress
-                    document.body.classList.add('dragging-active');
-                },
-                onEnd: (evt) => {
-                    // Remove the class when dragging ends
-                    document.body.classList.remove('dragging-active');
-                    this.updateOrder();
-                }
-            });
-        },
-        
-        updateOrder() {
-            const rows = this.$el.querySelectorAll('tbody tr');
-            if (!rows.length) return;
-            
+        // Toggle activar/desactivar método
+        async toggleMethod(type, isActive) {
             this.isLoading = true;
             
-            // Get all method IDs in the current order
-            const methodIds = Array.from(rows).map(row => {
-                return parseInt(row.dataset.methodId);
-            });
-            
-            // Send the order to the server
-            fetch('{{ route("tenant.admin.payment-methods.update-order", ["store" => $store->slug]) }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({ methods: methodIds })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error en la respuesta del servidor: ' + response.status);
-                }
-                return response.json();
-            })
-            .then(data => {
-                this.isLoading = false;
+            try {
+                const response = await fetch(`{{ route("tenant.admin.payment-methods.toggle-simple", ["store" => $store->slug]) }}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ 
+                        type: type,
+                        is_active: !isActive
+                    })
+                });
+                
+                const data = await response.json();
+                
                 if (data.success) {
-                    this.showNotificationMessage(data.message, 'success');
-                    
-                    // Update the displayed order numbers
-                    this.updateDisplayedOrderNumbers(methodIds);
+                    const methodName = this.getMethodName(type);
+                    const action = !isActive ? 'activado' : 'desactivado';
+                    this.showNotificationMessage(`${methodName} ${action} exitosamente`, 'success');
+                    setTimeout(() => window.location.reload(), 300);
                 } else {
-                    this.showNotificationMessage(data.message, 'error');
+                    this.showNotificationMessage(data.message || 'Error al cambiar estado del método', 'error');
                 }
-            })
-            .catch(error => {
+            } catch (error) {
+                this.showNotificationMessage('Error de conexión. Intenta nuevamente', 'error');
+            } finally {
                 this.isLoading = false;
-                this.showNotificationMessage('Error al actualizar el orden: ' + error, 'error');
-            });
+            }
         },
         
-        updateDisplayedOrderNumbers(methodIds) {
-            // Update the displayed order numbers in the UI
-            const rows = this.$el.querySelectorAll('tbody tr');
-            rows.forEach((row, index) => {
-                const orderSpan = row.querySelector('td:first-child .text-sm');
-                if (orderSpan) {
-                    orderSpan.textContent = index + 1;
-                }
-            });
-        },
-        
-        toggleActive(id, isActive) {
+        // Establecer como predeterminado
+        async setAsDefault(type) {
             this.isLoading = true;
             
-            fetch(`{{ route("tenant.admin.payment-methods.toggle-active", ["store" => $store->slug, "paymentMethod" => ":id"]) }}`.replace(':id', id), {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                this.isLoading = false;
+            try {
+                const response = await fetch(`{{ route("tenant.admin.payment-methods.set-default-simple", ["store" => $store->slug]) }}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ type: type })
+                });
+                
+                const data = await response.json();
+                
                 if (data.success) {
-                    this.showNotificationMessage(data.message, 'success');
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1000);
+                    const methodName = this.getMethodName(type);
+                    this.showNotificationMessage(`${methodName} establecido como predeterminado`, 'success');
+                    setTimeout(() => window.location.reload(), 300);
                 } else {
-                    this.showNotificationMessage(data.message, 'error');
+                    this.showNotificationMessage(data.message || 'Error al establecer predeterminado', 'error');
                 }
-            })
-            .catch(error => {
+            } catch (error) {
+                this.showNotificationMessage('Error de conexión. Intenta nuevamente', 'error');
+            } finally {
                 this.isLoading = false;
-                this.showNotificationMessage('Error al cambiar el estado: ' + error, 'error');
-            });
+            }
         },
         
-        setDefaultMethod(id) {
+        // Configurar método
+        configureMethod(type) {
+            this.currentMethodType = type;
+            this.currentMethodName = this.getMethodName(type);
+            
+            // Cargar configuración actual
+            this.loadMethodConfig(type);
+            this.showConfigModal = true;
+        },
+        
+        // Obtener nombre del método
+        getMethodName(type) {
+            const names = {
+                'bank_transfer': 'Transferencia Bancaria',
+                'cash': 'Efectivo',
+                'card_terminal': 'Datáfono',
+                'cash_on_delivery': 'Contra Entrega'
+            };
+            return names[type] || type;
+        },
+        
+        // Cargar configuración del método
+        loadMethodConfig(type) {
+            // Aquí cargarías la configuración actual desde el servidor
+            // Por ahora usar valores por defecto
+        },
+        
+        // Guardar configuración
+        async saveMethodConfig() {
             this.isLoading = true;
             
-            // Esta es una simulación, necesitarías implementar esta ruta en el controlador
-            fetch(`{{ route("tenant.admin.payment-methods.edit", ["store" => $store->slug, "paymentMethod" => ":id"]) }}`.replace(':id', id), {
-                method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-            .then(response => {
-                this.isLoading = false;
-                if (response.ok) {
-                    window.location.href = `{{ route("tenant.admin.payment-methods.edit", ["store" => $store->slug, "paymentMethod" => ":id"]) }}`.replace(':id', id);
+            try {
+                const response = await fetch(`{{ route("tenant.admin.payment-methods.configure-simple", ["store" => $store->slug]) }}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        type: this.currentMethodType,
+                        config: this.methodConfig
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    this.showNotificationMessage('Configuración guardada exitosamente', 'success');
+                    this.showConfigModal = false;
+                    setTimeout(() => window.location.reload(), 300);
                 } else {
-                    this.showNotificationMessage('Error al acceder a la edición del método', 'error');
+                    this.showNotificationMessage(data.message || 'Error al guardar configuración', 'error');
                 }
-            })
-            .catch(error => {
+            } catch (error) {
+                this.showNotificationMessage('Error al guardar la configuración', 'error');
+            } finally {
                 this.isLoading = false;
-                this.showNotificationMessage('Error: ' + error, 'error');
-            });
+            }
         },
         
+        // Gestionar cuentas bancarias
+        manageBankAccounts() {
+            // Encontrar el ID del método de transferencia bancaria
+            @if($bankTransferMethod)
+                window.location.href = '{{ route("tenant.admin.payment-methods.bank-accounts.index", ["store" => $store->slug, "paymentMethod" => $bankTransferMethod->id]) }}';
+            @else
+                this.showNotificationMessage('Primero activa el método de transferencia bancaria', 'warning');
+            @endif
+        },
+        
+        // Notificaciones
         showNotificationMessage(message, type = 'success') {
             this.notificationMessage = message;
             this.notificationType = type;
             this.showNotification = true;
             
             setTimeout(() => {
-                this.showNotification = false;
-            }, 5000);
+                this.hideNotification();
+            }, 3000);
+        },
+        
+        hideNotification() {
+            this.showNotification = false;
         }
     }));
 });
 </script>
 @endpush
+
 @endsection
 </x-tenant-admin-layout>

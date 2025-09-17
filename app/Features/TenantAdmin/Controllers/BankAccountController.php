@@ -80,10 +80,10 @@ class BankAccountController extends Controller
             abort(404);
         }
         
-        // Ensure payment method is bank transfer type
-        if (!$paymentMethod->isBankTransfer()) {
+        // Ensure payment method supports bank accounts (bank_transfer or digital_wallet)
+        if (!$paymentMethod->isBankTransfer() && !$paymentMethod->isDigitalWallet()) {
             return redirect()->route('tenant.admin.payment-methods.show', ['store' => $store->slug, 'paymentMethod' => $paymentMethod->id])
-                ->with('error', 'Solo los métodos de transferencia bancaria pueden tener cuentas asociadas.');
+                ->with('error', 'Solo los métodos de transferencia bancaria y billeteras digitales pueden tener cuentas asociadas.');
         }
         
         // Get bank accounts for this payment method
@@ -131,10 +131,10 @@ class BankAccountController extends Controller
             abort(404);
         }
         
-        // Ensure payment method is bank transfer type
-        if (!$paymentMethod->isBankTransfer()) {
+        // Ensure payment method supports bank accounts (bank_transfer or digital_wallet)
+        if (!$paymentMethod->isBankTransfer() && !$paymentMethod->isDigitalWallet()) {
             return redirect()->route('tenant.admin.payment-methods.show', ['store' => $store->slug, 'paymentMethod' => $paymentMethod->id])
-                ->with('error', 'Solo los métodos de transferencia bancaria pueden tener cuentas asociadas.');
+                ->with('error', 'Solo los métodos de transferencia bancaria y billeteras digitales pueden tener cuentas asociadas.');
         }
         
         // Check if store can create more bank accounts based on plan limits (Requirements 2.1, 2.2, 2.3, 2.4)
@@ -146,8 +146,10 @@ class BankAccountController extends Controller
         
         // Define account types
         $accountTypes = [
-            'savings' => 'Cuenta de Ahorros',
-            'checking' => 'Cuenta Corriente'
+            'ahorros' => 'Cuenta de Ahorros',
+            'corriente' => 'Cuenta Corriente',
+            'nequi' => 'Nequi',
+            'daviplata' => 'Daviplata'
         ];
         
         return view('tenant-admin::bank-accounts.create', compact(
@@ -175,10 +177,10 @@ class BankAccountController extends Controller
             abort(404);
         }
         
-        // Ensure payment method is bank transfer type
-        if (!$paymentMethod->isBankTransfer()) {
+        // Ensure payment method supports bank accounts (bank_transfer or digital_wallet)
+        if (!$paymentMethod->isBankTransfer() && !$paymentMethod->isDigitalWallet()) {
             return redirect()->route('tenant.admin.payment-methods.show', ['store' => $store->slug, 'paymentMethod' => $paymentMethod->id])
-                ->with('error', 'Solo los métodos de transferencia bancaria pueden tener cuentas asociadas.');
+                ->with('error', 'Solo los métodos de transferencia bancaria y billeteras digitales pueden tener cuentas asociadas.');
         }
         
         // Check plan limits before proceeding (Requirements 2.1, 2.2, 2.3, 2.4)
@@ -191,7 +193,7 @@ class BankAccountController extends Controller
         // Validate request
         $validator = Validator::make($request->all(), [
             'bank_name' => 'required|string|max:100',
-            'account_type' => 'required|string|in:savings,checking',
+            'account_type' => 'required|string|in:ahorros,corriente,nequi,daviplata',
             'account_number' => 'required|string|min:10|max:20',
             'account_holder' => 'required|string|max:100',
             'document_number' => 'nullable|string|max:20',
@@ -269,8 +271,10 @@ class BankAccountController extends Controller
         
         // Define account types
         $accountTypes = [
-            'savings' => 'Cuenta de Ahorros',
-            'checking' => 'Cuenta Corriente'
+            'ahorros' => 'Cuenta de Ahorros',
+            'corriente' => 'Cuenta Corriente',
+            'nequi' => 'Nequi',
+            'daviplata' => 'Daviplata'
         ];
         
         return view('tenant-admin::bank-accounts.edit', compact(
@@ -323,7 +327,7 @@ class BankAccountController extends Controller
         // Validate request
         $validator = Validator::make($request->all(), [
             'bank_name' => 'required|string|max:100',
-            'account_type' => 'required|string|in:savings,checking',
+            'account_type' => 'required|string|in:ahorros,corriente,nequi,daviplata',
             'account_number' => 'required|string|min:10|max:20',
             'account_holder' => 'required|string|max:100',
             'document_number' => 'nullable|string|max:20',
