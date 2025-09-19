@@ -18,6 +18,8 @@ use App\Features\TenantAdmin\Models\ProductVariable;
 use App\Features\TenantAdmin\Models\Slider;
 use App\Shared\Models\Location;
 use App\Features\TenantAdmin\Models\PaymentMethod;
+use App\Shared\Models\PlanChangeRequest;
+use App\Services\PlanUsageService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -44,38 +46,55 @@ class BillingController extends Controller
         // Obtener planes disponibles
         $availablePlans = Plan::active()->orderBy('price')->get();
 
-        // Calcular uso actual vs límites
-        $usage = $this->calculateUsage($store);
-        $limits = $this->getPlanLimits($subscription->plan);
-        $percentages = $this->calculatePercentages($usage, $limits);
+        // Usar el nuevo PlanUsageService para calcular uso
+        $planUsageService = new PlanUsageService();
+        $usage = $planUsageService->calculateUsage($store);
+        $limits = $planUsageService->getPlanLimits($store);
+        $percentages = $planUsageService->getUsagePercentages($store);
+        
+        // Preparar datos en el formato que espera la vista
+        $planUsage = [];
+        foreach ($usage as $resource => $current) {
+            $planUsage[$resource] = [
+                'current' => $current,
+                'limit' => $limits[$resource] ?? 0,
+                'percentage' => round($percentages[$resource] ?? 0, 1)
+            ];
+        }
+        
+        // Calcular porcentaje general
+        $planUsage['overall_percentage'] = $planUsageService->getOverallUsagePercentage($store);
 
         // Obtener facturas recientes
-        $recentInvoices = Invoice::where('store_id', $store->id)
+        $invoices = Invoice::where('store_id', $store->id)
             ->with('plan')
             ->orderBy('created_at', 'desc')
-            ->limit(5)
+            ->limit(10)
             ->get();
 
         // Obtener próxima facturación
         $nextInvoice = $this->getNextInvoiceInfo($subscription);
 
-        // Obtener historial de cambios recientes
-        $recentChanges = SubscriptionHistory::where('store_id', $store->id)
-            ->with(['oldPlan', 'newPlan', 'changedByUser'])
-            ->orderBy('changed_at', 'desc')
-            ->limit(10)
-            ->get();
+        // Obtener solicitudes de cambio pendientes
+        try {
+            $pendingRequests = PlanChangeRequest::forStore($store->id)
+                ->with(['currentPlan', 'requestedPlan'])
+                ->pending()
+                ->orderBy('requested_at', 'desc')
+                ->get();
+        } catch (\Exception $e) {
+            // Tabla no existe aún, devolver colección vacía
+            $pendingRequests = collect();
+        }
 
         return view('tenant-admin::billing.index', compact(
             'store',
             'subscription',
             'availablePlans',
-            'usage',
-            'limits',
-            'percentages',
-            'recentInvoices',
+            'planUsage',
+            'invoices',
             'nextInvoice',
-            'recentChanges'
+            'pendingRequests'
         ));
     }
 
@@ -377,6 +396,82 @@ class BillingController extends Controller
                 'created_from_legacy_store' => true,
                 'auto_created_at' => now()
             ]
+        ]);
+    }
+
+    /**
+     * Request plan change
+     */
+    public function requestPlanChange(Request $request): JsonResponse
+    {
+        $store = $request->route('store');
+        
+        $validated = $request->validate([
+            'plan_id' => 'required|exists:plans,id',
+            'reason' => 'nullable|string|max:1000',
+            'password' => 'required|string'
+        ]);
+
+        // Verificar contraseña
+        if (!Hash::check($validated['password'], auth()->user()->password)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Contraseña incorrecta'
+            ], 422);
+        }
+
+        $subscription = $store->subscription;
+        if (!$subscription) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se encontró suscripción activa'
+            ], 422);
+        }
+
+        $newPlan = Plan::find($validated['plan_id']);
+        if ($newPlan->id === $subscription->plan_id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ya tienes este plan activo'
+            ], 422);
+        }
+
+        // Verificar si ya hay una solicitud pendiente
+        $existingRequest = PlanChangeRequest::forStore($store->id)
+            ->pending()
+            ->first();
+
+        if ($existingRequest) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ya tienes una solicitud de cambio pendiente'
+            ], 422);
+        }
+
+        // Determinar tipo de cambio
+        $isUpgrade = $newPlan->price > $subscription->plan->price;
+        $type = $isUpgrade ? PlanChangeRequest::TYPE_UPGRADE : PlanChangeRequest::TYPE_DOWNGRADE;
+
+        // Crear solicitud
+        $request = PlanChangeRequest::create([
+            'store_id' => $store->id,
+            'current_plan_id' => $subscription->plan_id,
+            'requested_plan_id' => $newPlan->id,
+            'type' => $type,
+            'status' => PlanChangeRequest::STATUS_PENDING,
+            'reason' => $validated['reason'],
+            'requested_at' => now(),
+        ]);
+
+        $message = $isUpgrade 
+            ? "Solicitud de upgrade a Plan {$newPlan->name} enviada exitosamente. Será procesada dentro de 24-48 horas."
+            : "Solicitud de downgrade a Plan {$newPlan->name} enviada exitosamente. Se aplicará al final del período actual.";
+
+        return response()->json([
+            'success' => true,
+            'message' => $message,
+            'request_id' => $request->id,
+            'type' => $type,
         ]);
     }
 } 

@@ -253,13 +253,18 @@ Route::middleware(['auth', 'store.admin'])->group(function () {
         // Plan management
         Route::post('/change-plan', [BillingController::class, 'changePlan'])->name('change-plan');
         Route::post('/change-billing-cycle', [BillingController::class, 'changeBillingCycle'])->name('change-billing-cycle');
+        Route::post('/request-plan-change', [BillingController::class, 'requestPlanChange'])->name('request-plan-change');
         
         // Subscription management
         Route::post('/cancel-subscription', [BillingController::class, 'cancelSubscription'])->name('cancel-subscription');
         Route::post('/reactivate-subscription', [BillingController::class, 'reactivateSubscription'])->name('reactivate-subscription');
-        
-        // Invoice downloads
-        Route::get('/invoices/{invoice}/download', [BillingController::class, 'downloadInvoice'])->name('download-invoice');
+    });
+
+    // Invoice Routes
+    Route::prefix('invoices')->name('invoices.')->group(function () {
+        Route::get('/{invoice}', [\App\Features\TenantAdmin\Controllers\InvoiceController::class, 'show'])->name('show');
+        Route::get('/{invoice}/download', [\App\Features\TenantAdmin\Controllers\InvoiceController::class, 'downloadPdf'])->name('download');
+        Route::get('/{invoice}/preview', [\App\Features\TenantAdmin\Controllers\InvoiceController::class, 'preview'])->name('preview');
     });
 
     // Ruta para manejar bajada de plan

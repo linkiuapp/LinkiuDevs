@@ -210,6 +210,22 @@ class Store extends Model
         return $this->paymentMethods()->count();
     }
     
+    /**
+     * Get the bank accounts for this store.
+     */
+    public function bankAccounts()
+    {
+        return $this->hasMany(\App\Features\TenantAdmin\Models\BankAccount::class);
+    }
+    
+    /**
+     * Get the bank accounts count accessor.
+     */
+    public function getBankAccountsCountAttribute()
+    {
+        return $this->bankAccounts()->count();
+    }
+    
     
     /**
      * Get the simple shipping configuration for this store.

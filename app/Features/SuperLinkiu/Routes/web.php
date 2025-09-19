@@ -9,6 +9,7 @@ use App\Features\SuperLinkiu\Controllers\TicketController;
 use App\Features\SuperLinkiu\Controllers\AnnouncementController;
 use App\Features\SuperLinkiu\Controllers\EmailController;
 use App\Features\SuperLinkiu\Controllers\ProfileController;
+use App\Features\SuperLinkiu\Controllers\BillingSettingController;
 use Illuminate\Support\Facades\Route;
 
 // Rutas de SuperLinkiu
@@ -155,6 +156,13 @@ Route::prefix('superlinkiu')->name('superlinkiu.')->middleware('web')->group(fun
         Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
         Route::delete('/profile/avatar', [ProfileController::class, 'deleteAvatar'])->name('profile.delete-avatar');
         Route::patch('/profile/app-settings', [ProfileController::class, 'updateAppSettings'])->name('profile.update-app-settings');
+
+        // Billing Settings
+        Route::prefix('billing-settings')->name('billing-settings.')->group(function () {
+            Route::get('/', [BillingSettingController::class, 'index'])->name('index');
+            Route::put('/', [BillingSettingController::class, 'update'])->name('update');
+            Route::post('/remove-logo', [BillingSettingController::class, 'removeLogo'])->name('remove-logo');
+        });
 
 
 
@@ -334,6 +342,7 @@ Route::prefix('superlinkiu')->name('superlinkiu.')->middleware('web')->group(fun
         return view('superlinkiu::components.email.compose');
     })->name('components.email.compose');
 
-    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+        // Logout (dentro del middleware auth)
+        Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     });
 }); 

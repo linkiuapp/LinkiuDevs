@@ -18,16 +18,40 @@ class Plan extends Model
         'prices',
         'currency',
         'duration_in_days',
+        'image_url',
+        
+        // PRODUCTOS
         'max_products',
-        'max_slider',
-        'max_active_promotions',
-        'max_active_coupons',
         'max_categories',
-        'max_sedes',
-        'max_admins',
+        'max_variables',
+        'max_product_images',
+        
+        // DISEÑO Y MARKETING
+        'max_sliders',
+        'max_active_coupons',
+        'max_active_promotions',
+        
+        // ENVÍOS Y LOGÍSTICA
+        'max_locations',
         'max_delivery_zones',
+        
+        // PAGOS
+        'max_payment_methods',
+        'max_bank_accounts',
+        
+        // VENTAS Y PEDIDOS
+        'order_history_months',
+        
+        // ADMINISTRACIÓN
+        'max_admins',
+        'max_tickets_per_month',
         'support_level',
         'support_response_time',
+        
+        // ANALÍTICAS
+        'analytics_retention_days',
+        
+        // CONFIGURACIÓN
         'is_active',
         'is_public',
         'is_featured',

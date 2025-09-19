@@ -5,8 +5,46 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Broadcast;
 
-// Rutas públicas - Web principal
+// Redirección de linkiu.bio a linkiu.com.co
 Route::get('/', function () {
+    // Solo redirigir si es linkiu.bio
+    if (request()->getHost() === 'linkiu.bio') {
+        return redirect('https://linkiu.com.co', 301);
+    }
+    
+    return view('welcome');
+});
+
+// Redirección para otras rutas principales
+Route::get('/home', function () {
+    if (request()->getHost() === 'linkiu.bio') {
+        return redirect('https://linkiu.com.co/home', 301);
+    }
+    
+    return view('welcome');
+});
+
+Route::get('/about', function () {
+    if (request()->getHost() === 'linkiu.bio') {
+        return redirect('https://linkiu.com.co/about', 301);
+    }
+    
+    return view('welcome');
+});
+
+Route::get('/contact', function () {
+    if (request()->getHost() === 'linkiu.bio') {
+        return redirect('https://linkiu.com.co/contact', 301);
+    }
+    
+    return view('welcome');
+});
+
+Route::get('/services', function () {
+    if (request()->getHost() === 'linkiu.bio') {
+        return redirect('https://linkiu.com.co/services', 301);
+    }
+    
     return view('welcome');
 });
 

@@ -99,46 +99,127 @@
                     <h2 class="text-3xl text-black-500 mb-0">Límites del Plan</h2>
                 </div>
                 <div class="p-6">
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div class="text-center p-3 bg-accent-100 rounded-lg">
-                            <x-solar-box-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
-                            <p class="text-sm text-black-400">Productos</p>
-                            <p class="text-lg font-bold text-black-500">{{ $plan->max_products }}</p>
+                    <!-- 📦 PRODUCTOS Y CATÁLOGO -->
+                    <div class="mb-6">
+                        <h4 class="text-base font-semibold text-black-500 mb-3">📦 Productos y Catálogo</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="text-center p-3 bg-accent-100 rounded-lg">
+                                <x-solar-box-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
+                                <p class="text-sm text-black-400">Productos totales</p>
+                                <p class="text-lg font-bold text-black-500">{{ $plan->max_products ?? 0 }}</p>
+                            </div>
+                            <div class="text-center p-3 bg-accent-100 rounded-lg">
+                                <x-solar-folder-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
+                                <p class="text-sm text-black-400">Categorías</p>
+                                <p class="text-lg font-bold text-black-500">{{ $plan->max_categories ?? 0 }}</p>
+                            </div>
+                            <div class="text-center p-3 bg-accent-100 rounded-lg">
+                                <x-solar-settings-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
+                                <p class="text-sm text-black-400">Variables de producto</p>
+                                <p class="text-lg font-bold text-black-500">{{ $plan->max_variables ?? 0 }}</p>
+                            </div>
+                            <div class="text-center p-3 bg-accent-100 rounded-lg">
+                                <x-solar-gallery-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
+                                <p class="text-sm text-black-400">Imágenes por producto</p>
+                                <p class="text-lg font-bold text-black-500">{{ $plan->max_product_images ?? 0 }}</p>
+                            </div>
                         </div>
-                        <div class="text-center p-3 bg-accent-100 rounded-lg">
-                            <x-solar-gallery-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
-                            <p class="text-sm text-black-400">Sliders</p>
-                            <p class="text-lg font-bold text-black-500">{{ $plan->max_slider }}</p>
+                    </div>
+
+                    <!-- 🎨 DISEÑO Y MARKETING -->
+                    <div class="mb-6">
+                        <h4 class="text-base font-semibold text-black-500 mb-3">🎨 Diseño y Marketing</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
+                            <div class="text-center p-3 bg-accent-100 rounded-lg">
+                                <x-solar-gallery-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
+                                <p class="text-sm text-black-400">Sliders homepage</p>
+                                <p class="text-lg font-bold text-black-500">{{ $plan->max_sliders ?? $plan->max_slider ?? 0 }}</p>
+                            </div>
+                            <div class="text-center p-3 bg-accent-100 rounded-lg">
+                                <x-solar-ticket-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
+                                <p class="text-sm text-black-400">Cupones activos</p>
+                                <p class="text-lg font-bold text-black-500">{{ $plan->max_active_coupons ?? 0 }}</p>
+                            </div>
                         </div>
-                        <div class="text-center p-3 bg-accent-100 rounded-lg">
-                            <x-solar-tag-price-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
-                            <p class="text-sm text-black-400">Promociones</p>
-                            <p class="text-lg font-bold text-black-500">{{ $plan->max_active_promotions }}</p>
+                    </div>
+
+                    <!-- 🚚 ENVÍOS Y LOGÍSTICA -->
+                    <div class="mb-6">
+                        <h4 class="text-base font-semibold text-black-500 mb-3">🚚 Envíos y Logística</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
+                            <div class="text-center p-3 bg-accent-100 rounded-lg">
+                                <x-solar-buildings-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
+                                <p class="text-sm text-black-400">Sedes físicas</p>
+                                <p class="text-lg font-bold text-black-500">{{ $plan->max_locations ?? $plan->max_sedes ?? 0 }}</p>
+                            </div>
+                            <div class="text-center p-3 bg-accent-100 rounded-lg">
+                                <x-solar-map-point-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
+                                <p class="text-sm text-black-400">Zonas de envío nacional</p>
+                                <p class="text-lg font-bold text-black-500">{{ $plan->max_delivery_zones ?? 0 }}</p>
+                            </div>
                         </div>
-                        <div class="text-center p-3 bg-accent-100 rounded-lg">
-                            <x-solar-ticket-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
-                            <p class="text-sm text-black-400">Cupones</p>
-                            <p class="text-lg font-bold text-black-500">{{ $plan->max_active_coupons }}</p>
+                    </div>
+
+                    <!-- 💰 PAGOS -->
+                    <div class="mb-6">
+                        <h4 class="text-base font-semibold text-black-500 mb-3">💰 Pagos</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
+                            <div class="text-center p-3 bg-accent-100 rounded-lg">
+                                <x-solar-card-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
+                                <p class="text-sm text-black-400">Métodos de pago activos</p>
+                                <p class="text-lg font-bold text-black-500">{{ $plan->max_payment_methods ?? 0 }}</p>
+                            </div>
+                            <div class="text-center p-3 bg-accent-100 rounded-lg">
+                                <x-solar-card-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
+                                <p class="text-sm text-black-400">Cuentas bancarias</p>
+                                <p class="text-lg font-bold text-black-500">{{ $plan->max_bank_accounts ?? 0 }}</p>
+                            </div>
                         </div>
-                        <div class="text-center p-3 bg-accent-100 rounded-lg">
-                            <x-solar-folder-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
-                            <p class="text-sm text-black-400">Categorías</p>
-                            <p class="text-lg font-bold text-black-500">{{ $plan->max_categories }}</p>
+                    </div>
+
+                    <!-- 📊 VENTAS Y PEDIDOS -->
+                    <div class="mb-6">
+                        <h4 class="text-base font-semibold text-black-500 mb-3">📊 Ventas y Pedidos</h4>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="text-center p-3 bg-accent-100 rounded-lg">
+                                <x-solar-history-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
+                                <p class="text-sm text-black-400">Meses de historial de pedidos</p>
+                                <p class="text-lg font-bold text-black-500">{{ $plan->order_history_months ?? 0 }}</p>
+                            </div>
                         </div>
-                        <div class="text-center p-3 bg-accent-100 rounded-lg">
-                            <x-solar-buildings-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
-                            <p class="text-sm text-black-400">Sedes</p>
-                            <p class="text-lg font-bold text-black-500">{{ $plan->max_sedes }}</p>
+                    </div>
+
+                    <!-- 👥 ADMINISTRACIÓN -->
+                    <div class="mb-6">
+                        <h4 class="text-base font-semibold text-black-500 mb-3">👥 Administración</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            <div class="text-center p-3 bg-accent-100 rounded-lg">
+                                <x-solar-users-group-rounded-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
+                                <p class="text-sm text-black-400">Usuarios administradores</p>
+                                <p class="text-lg font-bold text-black-500">{{ $plan->max_admins ?? 0 }}</p>
+                            </div>
+                            <div class="text-center p-3 bg-accent-100 rounded-lg">
+                                <x-solar-chat-round-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
+                                <p class="text-sm text-black-400">Tickets mensuales</p>
+                                <p class="text-lg font-bold text-black-500">{{ $plan->max_tickets_per_month ?? 0 }}</p>
+                            </div>
+                            <div class="text-center p-3 bg-accent-100 rounded-lg">
+                                <x-solar-shield-check-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
+                                <p class="text-sm text-black-400">Nivel de soporte</p>
+                                <p class="text-lg font-bold text-black-500">{{ ucfirst($plan->support_level ?? 'basic') }}</p>
+                            </div>
                         </div>
-                        <div class="text-center p-3 bg-accent-100 rounded-lg">
-                            <x-solar-users-group-rounded-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
-                            <p class="text-sm text-black-400">Admins</p>
-                            <p class="text-lg font-bold text-black-500">{{ $plan->max_admins }}</p>
-                        </div>
-                        <div class="text-center p-3 bg-accent-100 rounded-lg">
-                            <x-solar-map-point-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
-                            <p class="text-sm text-black-400">Zonas Reparto</p>
-                            <p class="text-lg font-bold text-black-500">{{ $plan->max_delivery_zones }}</p>
+                    </div>
+
+                    <!-- 📈 ANALÍTICAS -->
+                    <div class="mb-6">
+                        <h4 class="text-base font-semibold text-black-500 mb-3">📈 Analíticas</h4>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="text-center p-3 bg-accent-100 rounded-lg">
+                                <x-solar-chart-outline class="w-8 h-8 mx-auto mb-2 text-primary-300" />
+                                <p class="text-sm text-black-400">Días de retención de analytics</p>
+                                <p class="text-lg font-bold text-black-500">{{ $plan->analytics_retention_days ?? 0 }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -46,26 +46,9 @@
                         <div class="flex items-center gap-6">
                             <!-- Imagen del Plan -->
                             <div class="flex-shrink-0">
-                                @php
-                                    $planImage = $subscription->plan->image_url;
-                                    if (!$planImage || !filter_var($planImage, FILTER_VALIDATE_URL)) {
-                                        // Determinar imagen por defecto según el nombre del plan
-                                        $planName = strtolower($subscription->plan->name ?? '');
-                                        if (str_contains($planName, 'explorer')) {
-                                            $planImage = asset('assets/images/img_plan_explorer.png');
-                                        } elseif (str_contains($planName, 'master')) {
-                                            $planImage = asset('assets/images/img_plan_master.png');
-                                        } elseif (str_contains($planName, 'legend')) {
-                                            $planImage = asset('assets/images/img_plan_legend.png');
-                                        } else {
-                                            $planImage = asset('assets/images/img_plan_explorer.png'); // Por defecto
-                                        }
-                                    }
-                                @endphp
-                                <img src="{{ $planImage }}" 
+                                <img src="{{ $subscription->plan->image_url ?? asset('assets/images/img_plan_default.png') }}" 
                                      alt="Plan {{ $subscription->plan->name }}"
-                                     class="w-20 h-20 rounded-lg object-cover border-2 border-primary-100"
-                                     loading="lazy">
+                                     class="w-20 h-20 rounded-lg object-cover border-2 border-primary-100">
                             </div>
                             
                             <!-- Info del Plan -->
@@ -272,16 +255,16 @@
                                 <div class="flex justify-between items-center">
                                     <span class="text-sm text-black-500">Cupones activos</span>
                                     <span class="text-sm font-medium text-black-400">
-                                        {{ $planUsage['active_coupons']['current'] ?? 0 }}/{{ $planUsage['active_coupons']['limit'] ?? 0 }}
-                                        ({{ $planUsage['active_coupons']['percentage'] ?? 0 }}%)
+                                        {{ $planUsage['coupons']['current'] ?? 0 }}/{{ $planUsage['coupons']['limit'] ?? 0 }}
+                                        ({{ $planUsage['coupons']['percentage'] ?? 0 }}%)
                                     </span>
                                 </div>
                                 <div class="w-full bg-accent-200 rounded-full h-3">
                                     <div class="h-3 rounded-full transition-all duration-300 
-                                        @if(($planUsage['active_coupons']['percentage'] ?? 0) >= 90) bg-error-300
-                                        @elseif(($planUsage['active_coupons']['percentage'] ?? 0) >= 70) bg-warning-300
+                                        @if(($planUsage['coupons']['percentage'] ?? 0) >= 90) bg-error-300
+                                        @elseif(($planUsage['coupons']['percentage'] ?? 0) >= 70) bg-warning-300
                                         @else bg-warning-300 @endif" 
-                                         style="width: {{ $planUsage['active_coupons']['percentage'] ?? 0 }}%"></div>
+                                         style="width: {{ $planUsage['coupons']['percentage'] ?? 0 }}%"></div>
                                 </div>
                             </div>
                         </div>
@@ -407,16 +390,16 @@
                                 <div class="flex justify-between items-center">
                                     <span class="text-sm text-black-500">Tickets este mes</span>
                                     <span class="text-sm font-medium text-black-400">
-                                        {{ $planUsage['tickets_this_month']['current'] ?? 0 }}/{{ $planUsage['tickets_this_month']['limit'] ?? 0 }}
-                                        ({{ $planUsage['tickets_this_month']['percentage'] ?? 0 }}%)
+                                        {{ $planUsage['tickets']['current'] ?? 0 }}/{{ $planUsage['tickets']['limit'] ?? 0 }}
+                                        ({{ $planUsage['tickets']['percentage'] ?? 0 }}%)
                                     </span>
                                 </div>
                                 <div class="w-full bg-accent-200 rounded-full h-3">
                                     <div class="h-3 rounded-full transition-all duration-300 
-                                        @if(($planUsage['tickets_this_month']['percentage'] ?? 0) >= 90) bg-error-300
-                                        @elseif(($planUsage['tickets_this_month']['percentage'] ?? 0) >= 70) bg-warning-300
+                                        @if(($planUsage['tickets']['percentage'] ?? 0) >= 90) bg-error-300
+                                        @elseif(($planUsage['tickets']['percentage'] ?? 0) >= 70) bg-warning-300
                                         @else bg-warning-300 @endif" 
-                                         style="width: {{ $planUsage['tickets_this_month']['percentage'] ?? 0 }}%"></div>
+                                         style="width: {{ $planUsage['tickets']['percentage'] ?? 0 }}%"></div>
                                 </div>
                             </div>
 
@@ -431,31 +414,6 @@
                                 <div class="w-full bg-accent-200 rounded-full h-3">
                                     <div class="h-3 rounded-full bg-primary-300" style="width: 100%"></div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 📈 ANALÍTICAS -->
-                    <div class="bg-accent-50 rounded-lg p-6">
-                        <h5 class="text-base font-semibold text-black-500 mb-4 flex items-center gap-2">
-                            <x-solar-chart-outline class="w-5 h-5 text-info-300" />
-                            📈 Analíticas
-                        </h5>
-                        <div class="grid grid-cols-1 gap-6">
-                            <!-- Retención de analytics -->
-                            <div class="space-y-3">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-sm text-black-500">Días de retención de analytics</span>
-                                    <span class="text-sm font-medium text-black-400">
-                                        {{ $store->plan->analytics_retention_days ?? 30 }} días
-                                    </span>
-                                </div>
-                                <div class="w-full bg-accent-200 rounded-full h-3">
-                                    <div class="h-3 rounded-full bg-info-300" style="width: 100%"></div>
-                                </div>
-                                <p class="text-xs text-black-300">
-                                    Los datos de analíticas se conservan durante {{ $store->plan->analytics_retention_days ?? 30 }} días
-                                </p>
                             </div>
                         </div>
                     </div>
@@ -511,10 +469,10 @@
                                             {{ $invoice->created_at->format('d/m/Y') }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-black-400">
-                                            {{ $invoice->plan->name ?? $invoice->plan_name ?? 'N/A' }}
+                                            {{ $invoice->plan_name }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-black-400">
-                                            {{ $invoice->billing_period ?? 'Mensual' }}
+                                            {{ $invoice->billing_period }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-black-500">
                                             ${{ number_format($invoice->amount, 0, ',', '.') }} COP
@@ -524,30 +482,16 @@
                                                 @if($invoice->status === 'paid') bg-success-100 text-success-300
                                                 @elseif($invoice->status === 'pending') bg-warning-100 text-warning-300
                                                 @else bg-error-100 text-error-300 @endif">
-                                                @if($invoice->status === 'paid')
-                                                    Pagada
-                                                @elseif($invoice->status === 'pending') 
-                                                    Pendiente
-                                                @elseif($invoice->status === 'overdue')
-                                                    Vencida
-                                                @else
-                                                    {{ ucfirst($invoice->status ?? 'Desconocido') }}
-                                                @endif
+                                                {{ ucfirst($invoice->status_label) }}
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-black-400">
-                                            <div class="flex items-center gap-3">
-                                                <a href="{{ route('tenant.admin.invoices.download', ['store' => $store->slug, 'invoice' => $invoice]) }}" 
-                                                   class="text-primary-300 hover:text-primary-400 transition-colors" 
-                                                   title="Descargar PDF">
-                                                    <x-solar-download-minimalistic-outline class="w-4 h-4" />
-                                                </a>
-                                                <button onclick="viewInvoice({{ $invoice->id }})" 
-                                                        class="text-info-300 hover:text-info-400 transition-colors"
-                                                        title="Ver factura">
-                                                    <x-solar-eye-outline class="w-4 h-4" />
-                                                </button>
-                                            </div>
+                                            <button class="text-primary-300 hover:text-primary-400 mr-3">
+                                                <x-solar-download-minimalistic-outline class="w-4 h-4" />
+                                            </button>
+                                            <button class="text-info-300 hover:text-info-400">
+                                                <x-solar-eye-outline class="w-4 h-4" />
+                                            </button>
                                         </td>
                                     </tr>
                                     @empty
@@ -599,8 +543,6 @@
                         <h4 class="text-lg font-semibold text-black-500">Solicitar Cambio de Plan</h4>
                         <div class="text-sm text-black-300">
                             Upgrade o downgrade disponible
-                            <!-- Debug button (temporal) -->
-                            <button @click="debugModal()" class="ml-2 text-xs bg-red-100 px-2 py-1 rounded">Debug</button>
                         </div>
                     </div>
 
@@ -710,26 +652,13 @@
     </div>
 
     <!-- Modal para solicitar cambio de plan -->
-    <div x-show="showChangePlanModal === true" 
-         x-cloak
-         x-transition
-         @click.self="showChangePlanModal = false; resetModalData()"
-         @keydown.escape.window="showChangePlanModal = false; resetModalData()"
-         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-         style="display: none !important;"
-         :style="showChangePlanModal ? 'display: flex !important;' : 'display: none !important;'">
-        <div class="bg-accent-50 rounded-lg p-6 w-full max-w-md mx-4" @click.stop>
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-black-500">
-                    Solicitar Cambio de Plan
-                </h3>
-                <button @click="showChangePlanModal = false; resetModalData()" 
-                        class="text-black-300 hover:text-black-500 transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
+    <div x-show="showChangePlanModal" 
+         x-cloak 
+         class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-accent-50 rounded-lg p-6 w-full max-w-md mx-4">
+            <h3 class="text-lg font-semibold text-black-500 mb-4">
+                Solicitar Cambio de Plan
+            </h3>
             
             <div class="space-y-4">
                 <div>
@@ -759,11 +688,11 @@
             </div>
             
             <div class="flex justify-end gap-3 mt-6">
-                <button type="button" @click="showChangePlanModal = false; resetModalData()" 
+                <button @click="showChangePlanModal = false; resetModalData()" 
                         class="px-4 py-2 bg-accent-100 hover:bg-accent-200 text-black-400 rounded-lg transition-colors">
                     Cancelar
                 </button>
-                <button type="button" @click="submitPlanChangeRequest()" 
+                <button @click="submitPlanChangeRequest()" 
                         :disabled="!selectedPlanId || !password || isLoading"
                         class="px-4 py-2 bg-primary-200 hover:bg-primary-300 text-accent-50 rounded-lg transition-colors disabled:opacity-50">
                     <span x-show="!isLoading">Enviar Solicitud</span>
@@ -776,8 +705,8 @@
 
     @push('scripts')
     <script>
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('billingManager', () => ({
+    function billingManager() {
+        return {
             activeTab: 'plan',
             
             // Modal states
@@ -789,7 +718,6 @@
             changeReason: '',
             password: '',
             isLoading: false,
-            
             
             // Select plan for change
             selectPlanForChange(planId, planName) {
@@ -852,80 +780,8 @@
             showToast(message, type = 'info') {
                 // Simple alert for now - can be enhanced later
                 alert(`${type.toUpperCase()}: ${message}`);
-            },
-            
-            // Debug method
-            debugModal() {
-                console.log('Modal state:', this.showChangePlanModal);
-                console.log('Selected plan:', this.selectedPlanId, this.selectedPlanName);
             }
-        }));
-    });
-
-    // Function to view invoice in modal
-    function viewInvoice(invoiceId) {
-        const storeSlug = '{{ $store->slug }}';
-        const previewUrl = `/${storeSlug}/admin/invoices/${invoiceId}/preview`;
-        const downloadUrl = `/${storeSlug}/admin/invoices/${invoiceId}/download`;
-        
-        // Create modal overlay
-        const modal = document.createElement('div');
-        modal.className = 'fixed inset-0 z-50 overflow-y-auto';
-        modal.innerHTML = `
-            <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-                <div class="fixed inset-0 transition-opacity" onclick="closeInvoiceModal()">
-                    <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
-                </div>
-                <div class="inline-block w-full max-w-4xl px-4 pt-5 pb-4 overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:max-w-5xl sm:w-full sm:p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-lg font-medium text-gray-900">Vista previa de factura</h3>
-                        <button onclick="closeInvoiceModal()" class="text-gray-400 hover:text-gray-600">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
-                    </div>
-                    <div id="invoice-content" class="max-h-96 overflow-y-auto">
-                        <div class="flex items-center justify-center p-8">
-                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
-                            <span class="ml-2">Cargando factura...</span>
-                        </div>
-                    </div>
-                    <div class="flex justify-end gap-3 mt-6 pt-4 border-t">
-                        <button onclick="closeInvoiceModal()" class="btn-secondary">Cerrar</button>
-                        <a href="${downloadUrl}" class="btn-primary">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                            Descargar PDF
-                        </a>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        document.body.appendChild(modal);
-        
-        // Load invoice content
-        fetch(previewUrl)
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('invoice-content').innerHTML = html;
-            })
-            .catch(error => {
-                document.getElementById('invoice-content').innerHTML = `
-                    <div class="text-center text-red-600 p-8">
-                        <p>Error al cargar la factura. Por favor, intenta nuevamente.</p>
-                    </div>
-                `;
-            });
-    }
-
-    function closeInvoiceModal() {
-        const modal = document.querySelector('.fixed.inset-0.z-50');
-        if (modal) {
-            modal.remove();
-        }
+        };
     }
     </script>
     @endpush

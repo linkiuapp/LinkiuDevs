@@ -99,6 +99,12 @@ use Illuminate\Support\Facades\Storage;
                             Facturación
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('superlinkiu.billing-settings.index') }}" class="item-sidebar {{ request()->routeIs('superlinkiu.billing-settings.*') ? 'item-sidebar-active' : '' }}">
+                            <x-solar-settings-outline class="w-4 h-4 mr-2" />
+                            Configurar Facturas
+                        </a>
+                    </li>
                 </ul>
             </li>
 
